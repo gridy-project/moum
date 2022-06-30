@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import Router from "./Router";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { defaultTheme } from "./shared/theme";
+import reset from "./public/css/reset.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <GlobalStyle />
+      <Router />
+    </ThemeProvider>
   );
 }
+
+const GlobalStyle = createGlobalStyle`
+${reset}; // Reset CSS
+
+body, button, input, textarea {
+  font-family: ${(props) => props.theme.fontFamily.default}, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+`;
 
 export default App;
