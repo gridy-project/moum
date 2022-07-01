@@ -12,10 +12,10 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/search" element={<Search />} />
-        <Route path="/mypage" element={<MyPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="/write" element={<Write />} />
         <Route path="/moum" element={<Moum />} />
         <Route path="/" element={<Intro />} />
