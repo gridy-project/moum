@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const instance = axios.create({
-  baseURL: "http://whitewise.shop/"
+  baseURL: "http://54.180.163.60/"
 });
 
 instance.interceptors.request.use(

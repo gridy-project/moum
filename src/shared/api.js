@@ -4,9 +4,9 @@ export const login = async (data) => {
   return await instance.post(`/user/login`, data);
 };
 
-export const loginGoogle = async (credential) => {
+export const loginGoogle = async (code) => {
   return await instance.post(`/user/social`, {}, {
-    headers: { Credential: credential }
+    headers: { Code: code }
   });
 };
 
