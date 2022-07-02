@@ -1,9 +1,64 @@
+import { React, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+
 import Header from "../components/common/Header";
 import MoumProfile from "../components/Moum/MoumProfile";
 import searchIcon from "../public/img/icon-search-mono.png";
+import { addDataDB, getDataDB, modifyDataDB, removeDataDB } from "../redux/modules/postSlice";
 
 function Moum() {
+  const dispatch = useDispatch();
+
+  const postList = useSelector((state) => state.post.list);
+
+  const titletRef = useRef();
+  const contentRef = useRef();
+  const statusRef = useRef();
+  const boardTypeRef = useRef();
+
+  useEffect(() => {
+    dispatch(getDataDB());
+    console.log(postList, "dlr");
+  }, []);
+
+  const addBoard = (e) => {
+    e.preventDefault();
+
+    const data = {
+      title: titletRef.current.value,
+      content: contentRef.current.value,
+      status: statusRef.current.value,
+      boardType: boardTypeRef.current.value
+    }
+
+    dispatch(addDataDB(data));
+    titletRef.current.value = "";
+    contentRef.current.value = "";
+    statusRef.current.value = "";
+    boardTypeRef.current.value = "";
+  }
+
+  const modifyBoard = (id) => {
+    const data = {
+      title: titletRef.current.value,
+      content: contentRef.current.value,
+      status: statusRef.current.value,
+      boardType: boardTypeRef.current.value,
+    }
+
+    dispatch(modifyDataDB(id, data));
+
+    titletRef.current.value = "";
+    contentRef.current.value = "";
+    statusRef.current.value = "";
+    boardTypeRef.current.value = "";
+  }
+
+  const removeBoard = (id) => {
+    dispatch(removeDataDB(id));
+  }
+
   return (
     <Container>
       <Header />
@@ -40,9 +95,30 @@ function Moum() {
             </div>
           </MoumHeader>
           <MoumList>
-            {/* <Piece>
-              
-            </Piece> */}
+            {postList.boardList?.map((v, i) => {
+              return (
+                <div key={i}>
+                  <div>{v.title}</div>
+                  <div>{v.content}</div>
+                  <div>{v.explanation}</div>
+                  <div>{v.imgPath}</div>
+                  <button onClick={() => { modifyBoard(v.id) }}>수정</button>
+                  <button onClick={() => { removeBoard(v.id) }}>삭제</button>
+                </div>
+              )
+            })}
+            <form onSubmit={addBoard}>
+              <input type="text" ref={titletRef} />
+              <input type="text" ref={contentRef} />
+              <select ref={statusRef}>
+                <option value="PUBLIC">PUBLIC</option>
+                <option value="PRIVATE">PRIVATE</option>
+              </select>
+              <select ref={boardTypeRef}>
+                <option value="MEMO">MEMO</option>
+              </select>
+              <button>추가</button>
+            </form>
           </MoumList>
         </MoumFiles>
       </Content>
