@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 // import { login, loginRefresh } from "../shared/api";
 import { setToken } from "../shared/localStorage";
 import { instance } from "../shared/axios";
+import SocialLogin from "../components/Login/SocialLogin";
 
 function Login() {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ function Login() {
             <span onClick={() => navigate("/register")}>회원가입</span><br /><br />
             <button className="login-button"><img src="kakao.png" alt="kakao"></img>카카오 계정으로 로그인</button><br />
             <button className="login-button"><img src="google.png" alt="google"></img>구글 계정으로 로그인</button>
+            <SocialLogin loginSuccess={onLoginSuccess} />
           </Information>
         </Rightbox>
       </Container>
