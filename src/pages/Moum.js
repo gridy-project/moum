@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from "react";
+import { React, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -19,7 +19,6 @@ function Moum() {
 
   useEffect(() => {
     dispatch(getDataDB());
-    console.log(postList, "dlr");
   }, []);
 
   const addBoard = (e) => {
@@ -95,15 +94,15 @@ function Moum() {
             </div>
           </MoumHeader>
           <MoumList>
-            {postList.boardList?.map((v, i) => {
+            {postList.boardList?.map((post, i) => {
               return (
                 <div key={i}>
-                  <div>{v.title}</div>
-                  <div>{v.content}</div>
-                  <div>{v.explanation}</div>
-                  <div>{v.imgPath}</div>
-                  <button onClick={() => { modifyBoard(v.id) }}>수정</button>
-                  <button onClick={() => { removeBoard(v.id) }}>삭제</button>
+                  <div>{post.title}</div>
+                  <div>{post.content}</div>
+                  <div>{post.explanation}</div>
+                  <div>{post.imgPath}</div>
+                  <button onClick={() => { modifyBoard(post.id) }}>수정</button>
+                  <button onClick={() => { removeBoard(post.id) }}>삭제</button>
                 </div>
               )
             })}

@@ -16,10 +16,8 @@ export const addDataDB = (data) => {
   return async (dispatch) => {
     try {
       const response = await instance.post("/board", data);
-      console.log(response)
       dispatch(addData({ id: response.data, ...data }));
     } catch (err) {
-      console.log(err);
       window.alert(err.response.data.message);
     }
   };
@@ -27,10 +25,9 @@ export const addDataDB = (data) => {
 export const removeDataDB = (id) => {
   return async (dispatch) => {
     try {
-      const response = await instance.delete(`/board/${id}`);
+      await instance.delete(`/board/${id}`);
       dispatch(removeData(id));
     } catch (err) {
-      console.log(err);
       window.alert(err.response.data.message);
     }
   }
@@ -39,8 +36,7 @@ export const removeDataDB = (id) => {
 export const modifyDataDB = (id, data) => {
   return async (dispatch) => {
     try {
-      console.log(id)
-      const response = await instance.put(`/board/${id}`, data);
+      await instance.put(`/board/${id}`, data);
       dispatch(modifyData({ id, data }));
     } catch (err) {
       console.log(err);
