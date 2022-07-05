@@ -7,9 +7,20 @@ import axios from "axios";
 function MyPage() {
   const imageRef = useRef(null);
   const [imageUrls, setImageUrls] = useState([]);
+  const [imageSrc, setImageSrc] = useState('');
+
+
+  // 이미지 미리보기
+  const previewImage = (e) => {
+    const reader = new FileReader(); // 이미지 미리보기
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = () => {
+      setImageSrc(reader.result);
+    };
+  }
 
   // 이미지 1장 업로드
-  const imageUpload = (e) => {
+  const uploadImage = (e) => {
     const formData = new FormData();
     formData.append("image", imageRef.current.files[0]);
 
@@ -27,6 +38,7 @@ function MyPage() {
       });
   };
 
+
   return (
     <div>
       <Header />
@@ -41,13 +53,13 @@ function MyPage() {
               <Image>
                 <div>
                   <img
-                    src={imageUrls.imageUrl}
-                    alt="test"
+                    src={imageSrc}
+                    alt="previewImg"
                   />
                 </div>
               </Image>
               <FileBox>
-                <label htmlFor="file" onChange={imageUpload}>
+                <label htmlFor="file">
                   <CameraBtn>
                     <CameraFilled style={{
                       color: "#8B95A1",
@@ -56,9 +68,9 @@ function MyPage() {
                     }} />
                     <input
                       type="file"
-                      multiple
                       id="file"
                       ref={imageRef}
+                      onChange={previewImage}
                     />
                   </CameraBtn>
                 </label>
