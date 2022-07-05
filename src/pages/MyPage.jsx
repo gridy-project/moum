@@ -1,9 +1,44 @@
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Header from "../components/common/Header"
 import { CameraFilled } from '@ant-design/icons'
-
+import axios from "axios";
 
 function MyPage() {
+  const imageRef = useRef(null);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [imageSrc, setImageSrc] = useState('');
+
+
+  // 이미지 미리보기
+  const previewImage = (e) => {
+    const reader = new FileReader(); // 이미지 미리보기
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = () => {
+      setImageSrc(reader.result);
+    };
+  }
+
+  // 이미지 1장 업로드
+  const uploadImage = (e) => {
+    const formData = new FormData();
+    formData.append("image", imageRef.current.files[0]);
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post("http://3.35.55.104/image", formData, config)
+      .then((response) => {
+        const url = response.data;
+        setImageUrls({ imageUrl: url });
+      });
+  };
+
+
   return (
     <div>
       <Header />
@@ -15,14 +50,31 @@ function MyPage() {
         <ContentBox>
           <Content>
             <ImageArea>
-              <Image></Image>
-              <CameraBtn>
-                <CameraFilled style={{
-                  color: "#8B95A1",
-                  width: "21.27px",
-                  height: "19.95px"
-                }} />
-              </CameraBtn>
+              <Image>
+                <div>
+                  <img
+                    src={imageSrc}
+                    alt="previewImg"
+                  />
+                </div>
+              </Image>
+              <FileBox>
+                <label htmlFor="file">
+                  <CameraBtn>
+                    <CameraFilled style={{
+                      color: "#8B95A1",
+                      width: "21.27px",
+                      height: "19.95px"
+                    }} />
+                    <input
+                      type="file"
+                      id="file"
+                      ref={imageRef}
+                      onChange={previewImage}
+                    />
+                  </CameraBtn>
+                </label>
+              </FileBox>
             </ImageArea>
             <TextArea>
               <NicknameArticle>
@@ -112,6 +164,19 @@ position:absolute;
 top:87px;
 left:113px;
 `;
+
+// File
+const FileBox = styled.div`
+input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+`;
+
 const CameraBtn = styled.div`
 width:53px;
 height: 53px;
