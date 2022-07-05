@@ -29,7 +29,7 @@ function Header() {
 }
 
 const Container = styled.div`
-  width: 1280px;
+  width: 1200px;
   height: 200px;
   margin: 0 auto;
   display: flex;
@@ -41,15 +41,18 @@ const Logo = styled.div`
   font-size: 36px;
   font-weight: bold;
   align-items: center;
+  height: 100%;
 
   a {
     display: flex;
+    font-size: 21px;
+    align-items: center;
 
     span {
       display: block;
-      width: 36px;
-      height: 36px;
-      background-color: #999;
+      width: 22px;
+      height: 22px;
+      background-color: #9152FF;;
       border-radius: 5px;
       margin-right: 10px;
     }
@@ -60,13 +63,13 @@ const marginLeft = "40px";
 const Menu = styled.div`
   display: flex;
   align-items: center;
-  font-weight: bold;
 
   nav {
     ul {
       display: flex;
       li {
-        font-size: 18px;
+        font-size: 16px;
+        font-weight: bold;
       }
       li + li {
         margin-left: ${marginLeft};
