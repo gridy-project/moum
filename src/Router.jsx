@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyPage from "./pages/MyPage";
@@ -7,10 +7,19 @@ import Moum from "./pages/Moum";
 import NotFound from "./pages/NotFound";
 import Write from "./pages/Write";
 import Intro from "./pages/Intro";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { refresh } from "./api/auth";
 
 function Router() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    refresh(dispatch);
+  }, [dispatch, navigate]);
+
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -21,7 +30,6 @@ function Router() {
         <Route path="/" element={<Intro />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
   );
 }
 

@@ -2,16 +2,16 @@ const ACCESS_TOKEN = "accessToken";
 const REFRESH_TOKEN = "refreshToken";
 
 const setToken = (accessTokenString, refreshTokenString) => {
-    localStorage.setItem(ACCESS_TOKEN, accessTokenString);
-    localStorage.setItem(REFRESH_TOKEN, refreshTokenString);
+  localStorage.setItem(ACCESS_TOKEN, accessTokenString);
+  localStorage.setItem(REFRESH_TOKEN, refreshTokenString);
 }
 
 const getAccessToken = () => {
-  localStorage.getItem(ACCESS_TOKEN);
+  return localStorage.getItem(ACCESS_TOKEN);
 }
 
 const getRefreshToken = () => {
-  localStorage.getItem(REFRESH_TOKEN);
+  return localStorage.getItem(REFRESH_TOKEN);
 }
 
 const removeToken = () => {
