@@ -1,11 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { setToken } from "../shared/localStorage";
 import SocialLogin from "../components/Login/SocialLogin";
-import { JWT_REFRESH_TIME, refresh, signIn } from "../api/auth";
 import { useDispatch } from "react-redux";
-import { setLoginStatus } from "../redux/modules/userSlice";
+import { runLogin } from "../redux/modules/userSlice";
 
 function Login() {
   const navigate = useNavigate();
@@ -17,26 +15,15 @@ function Login() {
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    let id = idRef.current.value;
-    let pw = pwRef.current.value; 
+    let username = idRef.current.value;
+    let password = pwRef.current.value; 
 
-    if (id === "" || pw === "") {
+    if (username === "" || password === "") {
       alert("아이디, 비밀번호를 모두 입력해주세요.");
       return;
     }
 
-    loginAsync(id, pw);
-  };
-
-  // 로그인
-  const loginAsync = async (username, password) => {
-    const {accessToken, refreshToken} = await signIn({ username, password });
-    if (accessToken) {
-      setToken(accessToken, refreshToken);
-      dispatch(setLoginStatus(true));
-      navigate("/moum");
-      setTimeout(() => {refresh(dispatch)}, JWT_REFRESH_TIME); // 59분마다 리프레시
-    }
+    dispatch(runLogin({username, password}, navigate));
   };
 
   return (

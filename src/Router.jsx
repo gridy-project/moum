@@ -9,15 +9,14 @@ import Write from "./pages/Write";
 import Intro from "./pages/Intro";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { refresh } from "./api/auth";
+import { runRefresh } from "./redux/modules/userSlice";
 
 function Router() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    refresh(dispatch);
-  }, [dispatch, navigate]);
+    dispatch(runRefresh());
+  }, [dispatch]);
 
   return (
       <Routes>
