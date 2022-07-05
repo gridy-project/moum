@@ -1,26 +1,28 @@
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 import iconUserMono from "../../public/img/icon-user-mono.png";
 import notificationBing from "../../public/img/notification-bing.png";
 
 function Header() {
+  const navigate = useNavigate();
   return (
     <Container>
-      <Logo><span></span>moum</Logo>
+      <Logo><Link to="/"><span></span>moum</Link></Logo>
       <Menu>
         <nav>
           <ul>
-            <li>moum 소개</li>
-            <li>나의 모음</li>
-            <li>전체 모음</li>
+            <li><Link to="/">moum 소개</Link></li>
+            <li><Link to="/moum">나의 모음</Link></li>
+            <li><Link to="/search">전체 모음</Link></li>
           </ul>
         </nav>
         <div className="icon-mono">
-          <img src={iconUserMono} alt="profile" />
+          <Link to="/mypage"><img src={iconUserMono} alt="profile" /></Link>
         </div>
         <div className="icon-notification">
           <img src={notificationBing} alt="notification" />
         </div>
-        <button>로그인</button>
+        <button onClick={() => { navigate("/login") }}>로그인</button>
       </Menu>
     </Container>
   );
@@ -40,13 +42,17 @@ const Logo = styled.div`
   font-weight: bold;
   align-items: center;
 
-  span {
-    display: block;
-    width: 36px;
-    height: 36px;
-    background-color: #999;
-    border-radius: 5px;
-    margin-right: 10px;
+  a {
+    display: flex;
+
+    span {
+      display: block;
+      width: 36px;
+      height: 36px;
+      background-color: #999;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
   }
 `;
 
@@ -96,6 +102,12 @@ const Menu = styled.div`
     border-radius: 10px;
     font-weight: bold;
     font-size: 18px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #ddd;
+    color: #444;
   }
 `;
 
