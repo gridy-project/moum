@@ -1,7 +1,9 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { loginGoogle } from '../../shared/api';
+import { JWT_REFRESH_TIME, refresh, signInWithGoogle } from "../../api/auth";
+import { setToken } from '../../shared/localStorage';
 
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;
@@ -14,14 +16,16 @@ function SocialLogin ({loginSuccess}) {
 
 export default SocialLogin;
 
-function SocialLoginButton ({loginSuccess}) {
+function SocialLoginButton () {
+  const navigate = useNavigate();
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (data) => {
       try {
-        const response = await loginGoogle(data.code);
-        loginSuccess(response);
-        console.log("로그인 성공");
+        const {accessToken, refreshToken} = await signInWithGoogle(data.code);
+        setToken(accessToken, refreshToken);
+        navigate("/moum");
+        setTimeout(refresh, JWT_REFRESH_TIME); // 59분마다 재발급
       } catch (err) {
         console.log(err);
       }

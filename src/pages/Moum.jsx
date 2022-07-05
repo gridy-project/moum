@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Header from "../components/common/Header";
 import MoumProfile from "../components/Moum/MoumProfile";
 import searchIcon from "../public/img/icon-search-mono.png";
+import { setBackground } from "../redux/modules/optionSlice";
 import { addDataDB, getDataDB, modifyDataDB, removeDataDB } from "../redux/modules/postSlice";
 
 function Moum() {
@@ -18,8 +19,12 @@ function Moum() {
   const boardTypeRef = useRef();
 
   useEffect(() => {
+    dispatch(setBackground("#F5F5F5")); // 이 페이지에서만 회색 배경
     dispatch(getDataDB());
-  }, []);
+    return (() => {
+      dispatch(setBackground("#FFFFFF")); // 페이지가 사라질 때 흰색 배경으로 복구
+    });
+  }, [dispatch]);
 
   const addBoard = (e) => {
     e.preventDefault();
@@ -60,7 +65,9 @@ function Moum() {
 
   return (
     <Container>
-      <Header />
+      <Title>
+        <Header />
+      </Title>
       <Content>
         <MoumProfile />
         <MoumFiles>
@@ -129,6 +136,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const Title = styled.div`
+  width: 100%;
+  height: 500px;
+  background-color: #E5D6FF;
+  border-radius: 0 0 60px 60px;
 `;
 
 const Content = styled.div`

@@ -1,105 +1,83 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-// import { login, loginRefresh } from "../shared/api";
 import { setToken } from "../shared/localStorage";
-import { instance } from "../shared/axios";
 import SocialLogin from "../components/Login/SocialLogin";
+import { JWT_REFRESH_TIME, refresh, signIn } from "../api/auth";
+import { useDispatch } from "react-redux";
+import { setLoginStatus } from "../redux/modules/userSlice";
 
 function Login() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const idRef = React.useRef();
-  const pwRef = React.useRef();
+  const idRef = React.useRef(null);
+  const pwRef = React.useRef(null);
 
-  const loginDispatch = () => {
+
+  const loginSubmit = (e) => {
+    e.preventDefault();
     let id = idRef.current.value;
-    let pw = pwRef.current.value;
+    let pw = pwRef.current.value; 
 
     if (id === "" || pw === "") {
       alert("아이디, 비밀번호를 모두 입력해주세요.");
       return;
     }
-    dispatch(loginRequest(id, pw));
+
+    loginAsync(id, pw);
   };
 
   // 로그인
-  const loginRequest = (username, password) => {
-    return async function () {
-      try {
-        const response = await instance.post("/user/login", {
-          username,
-          password,
-        });
-        onLoginSuccess(response);
-        alert("로그인 되었습니다");
-        console.log(response);
-      } catch (error) {
-        alert("아이디와 비밀번호를 확인해주세요");
-        console.log(error);
-      }
-    };
-  };
-
-  // 토큰 재발급 refresh Token
-  const onSilentRefresh = () => {
-    instance
-      .post("/user/refresh")
-      .then(onLoginSuccess)
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  // 토큰 재발급 타이머
-  const onLoginSuccess = (response) => {
-    const JWT_EXPIRY_TIME = 3600 * 1000;
-    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000); // 60분 - 1분(밀리세컨드) = 만료하기 1분 전 로그인 연장
-    setToken(response.data.accessToken, response.data.refreshToken);
-    console.log(response.data);
+  const loginAsync = async (username, password) => {
+    const {accessToken, refreshToken} = await signIn({ username, password });
+    if (accessToken) {
+      setToken(accessToken, refreshToken);
+      dispatch(setLoginStatus(true));
+      navigate("/moum");
+      setTimeout(() => {refresh(dispatch)}, JWT_REFRESH_TIME); // 59분마다 리프레시
+    }
   };
 
   return (
-    <All>
-      <Container>
+    <Container>
+      <Wrap>
         <Leftbox>
           <Title>
             <h1>moum</h1>
             <p>모음에 가입하고 더 많은 정보를 쉽게 모아봐요.</p>
           </Title>
           <Imgbox>
-            <p> img </p>
+            <p>img</p>
           </Imgbox>
         </Leftbox>
         <Rightbox>
           <Information>
-            <input type="text" ref={idRef} className="id-pw" placeholder="  이메일" /><br />
-            <input type="password" ref={pwRef} className="id-pw" placeholder="  비밀번호" /><br />
-            <input type="checkbox" className="checkbox" /> 로그인 상태 유지<br />
-            <button className="login-button" onClick={() => loginDispatch()}>로그인</button><br />
-            <br /><span>비밀번호 찾기</span>|
-            <span>아이디 찾기</span>|
-            <span onClick={() => navigate("/register")}>회원가입</span><br /><br />
-            <button className="login-button"><img src="kakao.png" alt="kakao"></img>카카오 계정으로 로그인</button><br />
+            <form onSubmit={loginSubmit}>
+              <input type="text" ref={idRef} className="id-pw" placeholder="  이메일" />
+              <input type="password" ref={pwRef} className="id-pw" placeholder="  비밀번호" />
+              <input type="checkbox" className="checkbox" /> 로그인 상태 유지
+              <button className="login-button">로그인</button>
+            </form>
+            <span>아이디 찾기</span>|<span>비밀번호 찾기</span>|<span onClick={() => navigate("/register")}>회원가입</span>
+            <button className="login-button"><img src="kakao.png" alt="kakao"></img>카카오 계정으로 로그인</button>
             <button className="login-button"><img src="google.png" alt="google"></img>구글 계정으로 로그인</button>
-            <SocialLogin loginSuccess={onLoginSuccess} />
+            <SocialLogin />
           </Information>
         </Rightbox>
-      </Container>
-    </All>
-
+      </Wrap>
+    </Container>
   );
 }
 
-const All = styled.div`
+const Container = styled.div`
 width: 100%;
 height: 100vh;
 display: flex;
 align-items: center;
 justify-content: center;
 `;
-const Container = styled.div`
+const Wrap = styled.div`
 width: 1700px;
 height: 800px;
 border : 1px solid black;

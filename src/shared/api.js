@@ -1,15 +1,5 @@
 import { instance } from "./axios";
 
-export const login = async (data) => {
-  return await instance.post(`/user/login`, data);
-};
-
-export const loginGoogle = async (code) => {
-  return await instance.post(`/user/social`, {}, {
-    headers: { Code: code }
-  });
-};
-
 export const register = async (data) => {
   return await instance.post(`/user/signup`, data)
 };
