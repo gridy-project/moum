@@ -1,14 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Header from "../components/common/Header"
 import { CameraFilled } from '@ant-design/icons'
 import axios from "axios";
 
+import Header from "../components/common/Header"
+import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB } from "../redux/modules/profileSlice"
+
 function MyPage() {
+  const dispatch = useDispatch();
+
   const imageRef = useRef(null);
+  const passwordRef = useRef(null);
+  const newPasswordRef = useRef(null);
+  const deletePwdRef = useRef(null);
+
   const [imageUrls, setImageUrls] = useState([]);
   const [imageSrc, setImageSrc] = useState('');
 
+  const profileList = useSelector((state) => state.profile.list)
 
   // 이미지 미리보기
   const previewImage = (e) => {
@@ -38,6 +48,31 @@ function MyPage() {
       });
   };
 
+// ========================================== 계정 관리
+
+useEffect(() => {
+  dispatch(getProfileDB());
+},[])
+
+// 비밀번호 변경
+const modifyPassword = () => {
+  const id = profileList.id
+  const data = {
+    password : passwordRef.current.value,
+    newPassword : newPasswordRef.current.value
+  }  
+  dispatch(modifyPasswordeDB(id, data))
+}
+
+// 회원 탈퇴
+ const RemoveAccount = () => {
+    const id = profileList.id
+    const data = {
+      nickname: profileList.nickname,
+      password: deletePwdRef.current.value
+    }
+    dispatch(deleteProfileDB(id, data));
+  }
 
   return (
     <div>
@@ -78,7 +113,7 @@ function MyPage() {
             </ImageArea>
             <TextArea>
               <NicknameArticle>
-                <Nickname>닉네임</Nickname>
+                <Nickname>{profileList.nickname}</Nickname>
                 <NicknameBtn>닉네임 변경하기</NicknameBtn>
               </NicknameArticle>
               <DescArticle>
@@ -89,17 +124,21 @@ function MyPage() {
               </DescArticle>
               <EmailArticle>
                 <EmailTitle>계정 이메일</EmailTitle>
-                <Email>hanghae@gamil.com</Email>
+                <Email>{profileList.username}</Email>
               </EmailArticle>
               <PwdArticle>
                 <PwdTitle>비밀번호</PwdTitle>
                 <PwdArea>
                   <Pwd>**********</Pwd>
                   <PwdBtn>비밀번호 변경하기</PwdBtn>
+                    <input type="password" ref={passwordRef}/>
+                    <input type="password" ref={newPasswordRef}/>
+                    <button onClick={modifyPassword}>변경</button>       
                 </PwdArea>
               </PwdArticle>
               <DeleteAccountArticle>
-                <DeleteAccount>계정 탈퇴하기</DeleteAccount>
+                <DeleteAccount onClick={RemoveAccount}>계정 탈퇴하기</DeleteAccount>
+                <input type="password" ref={deletePwdRef}/>
               </DeleteAccountArticle>
             </TextArea>
           </Content>
@@ -299,5 +338,6 @@ const DeleteAccount = styled.p`
 color:#8B8B8B;
 font-size:14px;
 text-decoration:underline;
+cursor: pointer;
 `;
 export default MyPage;
