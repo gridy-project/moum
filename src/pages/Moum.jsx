@@ -1,6 +1,7 @@
 import { React, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import Container from "../components/common/Container";
 
 import Header from "../components/common/Header";
 import MoumProfile from "../components/Moum/MoumProfile";
@@ -63,42 +64,57 @@ function Moum() {
     dispatch(removeDataDB(id));
   }
 
+  const makePiece = (e) => {
+
+  }
+
   return (
     <Container>
       <Title>
         <Header />
+        <div className="desc">
+          <em>간편한 정보 아카이빙, moum</em>
+          <p>링크, 글, 이미지 조각을 모아두고 쉽게 찾을 수 있어요.</p>
+        </div>
+        <form className="maker" onSubmit={makePiece}>
+          <div>
+            {/* <div className="selected-type">링크</div> */}
+            <select className="select-type">
+              <option value="LINK">링크</option>
+              <option value="MEMO">메모</option>
+            </select>
+            {/* <ul class="select-type">
+              <li>링크</li>
+              <li>글</li>
+            </ul> */}
+          </div>
+          <input type="text" />
+          <button>바로 생성하기</button>
+        </form>
       </Title>
       <Content>
         <MoumProfile />
-        <MoumFiles>
+        <PieceBoard>
           <MoumHeader>
-            <div className="search">
-              <div className="box-left">
-                <form onSubmit={(e) => { e.preventDefault() }}>
-                  <input type="text" />
-                  <button><img src={searchIcon} alt="search" /></button>
-                </form>
-                <div>전체 파일 | <span>58</span>개</div>
-              </div>
-              <div className="box-right">
-                <button >Add Folder</button>
-              </div>
-            </div>
-            <div className="select">
-              <div className="category">
-                <ul>
-                  <li>카테고리 전체</li>
-                  <li>음식</li>
-                  <li>운동</li>
-                  <li>뉴스</li>
-                  <li>여행</li>
-                </ul>
-              </div>
-              <div className="view-type">
-                <select name="" id="">최신순</select>
-                <select name="" id="">폴더와 파일 보기</select>
-              </div>
-            </div>
+            <CategoryGroup>
+              <div className="category-title">카테고리</div>
+              <ul className="category-list">
+                <Category isActive={true}>전체</Category>
+                <Category>음식</Category>
+                <Category>여행</Category>
+                <Category>운동</Category>
+              </ul>
+            </CategoryGroup>
+            <SortGroup>
+              <select>
+                <option>최신 조각순</option>
+                <option>사용자 지정순</option>
+              </select>
+              <form>
+                <input type="text" />
+                <button>검색</button>
+              </form>
+            </SortGroup>
           </MoumHeader>
           <MoumList>
             {postList.boardList?.map((post, i) => {
@@ -113,6 +129,20 @@ function Moum() {
                 </div>
               )
             })}
+            <div>링크타입</div>
+            <form onSubmit={addBoard}>
+              <input type="text" ref={titletRef} />
+              <input type="text" ref={contentRef} />
+              <select ref={statusRef}>
+                <option value="PUBLIC">PUBLIC</option>
+                <option value="PRIVATE">PRIVATE</option>
+              </select>
+              <select ref={boardTypeRef}>
+                <option value="MEMO">MEMO</option>
+              </select>
+              <button>추가</button>
+            </form>
+            <div>메모타입</div>
             <form onSubmit={addBoard}>
               <input type="text" ref={titletRef} />
               <input type="text" ref={contentRef} />
@@ -126,112 +156,147 @@ function Moum() {
               <button>추가</button>
             </form>
           </MoumList>
-        </MoumFiles>
+        </PieceBoard>
       </Content>
     </Container>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 const Title = styled.div`
   width: 100%;
   height: 500px;
   background-color: #E5D6FF;
   border-radius: 0 0 60px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .desc {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    em {
+      font-size: 36px;
+      color: #5B2EDA;
+    }
+
+    p {
+      padding-top: 20px;
+      font-size: 20px;
+      color: #9975FF;
+    }
+  }
+
+  form.maker {
+    margin-top: 90px;
+    width: 620px;
+    height: 50px;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
+    border-radius: 25px;
+
+    > div {
+      flex-shrink: 0;
+      width: 80px;
+      height: 70%;
+      border-right: 1px solid #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      select {
+        border: none;
+        width: 60%;
+        height: 100%;
+      }
+      /* div.selected-type {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      ul.select-type {
+        display: none;
+        li {
+
+        }
+      } */
+    }
+
+    input {
+      border: none;
+      width: 100%;
+    }
+
+    button {
+      flex-shrink: 0;
+      width: 150px;
+      font-size: 16px;
+      border: none;
+      background: transparent;
+      color: #721EFC;
+      cursor: pointer;
+    }
+  }
 `;
 
 const Content = styled.div`
   width: 1200px;
 `;
 
-const MoumFiles = styled.div`
+const PieceBoard = styled.div`
+  margin-top: 80px;
 `;
 
 const MoumHeader = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 70px;
+`;
+
+const CategoryGroup = styled.div`
+  .category-title {
+    font-size: 22px;
+    color: #111111;
+    font-weight: bold;
+  }
+
+  .category-list {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+  }
+`;
+
+const Category = styled.li`
+  padding: 0 15px;
   height: 40px;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  ${({isActive}) => isActive ? css`
+    border: 1px solid #721EFC;
+    color: #721EFC;
+  ` : css`
+    border: 1px solid #C8C8C8;
+    color: #555555;
+  `}
 
-  .search {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-
-
-    .box-left {
-      display: flex;
-      align-items: center;
-      form {
-        width: 250px;
-        height: 40px;
-        display: flex;
-        justify-content: space-between;
-        box-shadow: 0px 3px 16px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 20px;
-        overflow: hidden;
-        
-        input {
-          width: 100%;
-          border: none;
-          outline: none;
-          padding: 0 20px;
-        }
-
-        button {
-          flex-shrink: 0;
-          border: none;
-          width: 45px;
-          background-color: #ABABAB;
-          box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-          border-radius: 20px;
-        }
-      }
-
-      div {
-        margin-left: 20px;
-      }
-    }
-
-    .box-right {
-      button {
-        height: 100%;
-        border: none;
-        border-radius: 5px;
-        font-size: 12px;
-        padding: 0 20px;
-      }
-    }
-  }
-
-  .select {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    .category {
-      ul {
-        display: flex;
-        li {
-
-        }
-      }
-    }
-
-    .view-type {
-
-    }
+  & + & {
+    margin-left: 10px;
   }
 `;
 
-const MoumList = styled.div`
-
+const SortGroup = styled.div`
 `;
+
+const MoumList = styled.div``;
 
 export default Moum;

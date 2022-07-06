@@ -2,54 +2,60 @@ import styled from "styled-components";
 
 function MoumProfile() {
   return (
-    <Container>
-      <Image>
-        <div>
-          <img src="" alt="" />
-        </div>
-      </Image>
-      <Content>
-        <em>계정 이름</em>
-        <p>계정에 대한 설명글이 나오는 영역</p>
-        <div>
-          <span className="nickname">닉네임</span>
-          <span className="follower">팔로워 <strong>30명</strong></span>
-          <span className="following">팔로잉 <strong>2명</strong></span>
-        </div>
-      </Content>
-      <ButtonWrap>
-        <button>새로 작성하기</button>
-      </ButtonWrap>
-    </Container>
+    <Wrap>
+      <Box>
+        <Image>
+          <div>
+            <img src="" alt="" />
+          </div>
+        </Image>
+        <Content>
+          <em>계정 이름</em>
+          <p>계정에 대한 설명글이 나오는 영역</p>
+        </Content>
+        <Follow>
+          <div className="counter">
+            <div className="follower"><em>팔로워</em><strong>30명</strong></div>
+            <div className="following"><em>팔로잉</em><strong>2명</strong></div>
+            <div className="moum"><em>전체 모음</em><strong>2명</strong></div>
+            <div className="piece"><em>전체 조각</em><strong>2명</strong></div>
+          </div>
+        </Follow>
+      </Box>
+    </Wrap>
   );
 }
 
-const Container = styled.div`
+const Wrap = styled.div`
+  margin-top: 60px;
   width: 100%;
-  height: 160px;
+  height: 120px;
   border-radius: 10px;
-  background-color: #EEEEEE;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+`;
+
+const Box = styled.div`
+  width: 100%;
+  height: 85px;
   display: flex;
   align-items: center;
 `;
 
 const Image = styled.div`
-  width: 150px;
+  width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
 
   div {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    background-color: #FFFFFF;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-
-    img {
-
-    }
+    background-color: #D2BAFF;
   }
 `;
 
@@ -60,65 +66,57 @@ const Content = styled.div`
 
   em {
     font-size: 24px;
-    margin-bottom: 10px;
+    color: #111111;
   }
 
   p {
     font-size: 18px;
-    margin-bottom: 20px;
-  }
-
-  div {
-    span {
-      font-size: 14px;
-      color: #999999;
-      strong{
-        font-weight: bold;
-      }
-    }
-
-    span:nth-of-type(1) {
-      margin-right: 10px;
-      color: #333333;
-    }
-
-    span:nth-of-type(2) {
-      margin-right: 10px;
-    }
-
-    span:nth-of-type(3) {
-      position: relative;
-      margin-left: 10px;
-    }
-
-    span:nth-of-type(3)::before {
-      position: absolute;
-      content: '';
-      width: 2px;
-      height: 15px;
-      background-color: #DDDDDD;
-      left: -10px;
-      top: 0px;
-    }
+    margin-top: 10px;
+    color: #777777;
   }
 `;
 
-const ButtonWrap = styled.div`
+const Follow = styled.div`
+  width: 350px;
   height: 100%;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
 
-  button {
-    width: 150px;
-    height: 50px;
-    border-radius: 25px;
-    margin: 35px;
-    font-size: 18px;
-    background-color: #888888;
-    border: none;
-    color: #FFFFFF;
+  .counter {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    div {
+      width: 25%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+
+      em {
+        font-size: 14px;
+        color: #777777;
+      }
+
+      strong {
+        font-weight: bold;
+        margin-top: 15px;
+        color: #303030;
+      }
+    }
+
+    div + div::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 40px;
+      background-color: #E5D6FF;
+      left: 0;
+    }
   }
 `;
 
