@@ -62,7 +62,7 @@ const profileSlice = createSlice({
       state.list = action.payload;
     },
     modifyProfile: (state, action) => {
-      state.list.boardList = state.list.boardList.filter(
+      state.list = state.list.filter(
         (post) => {
           if (post.id === action.payload) {
             return false;
@@ -76,7 +76,7 @@ const profileSlice = createSlice({
       state.list.push(action.payload);
     },
     modifyPassword: (state, action) => {
-      state.list.boardList = state.list.boardList.filter(
+      state.list = state.list.filter(
         (post) => {
           if (post.id === action.payload) {
             return false;
