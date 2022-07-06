@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import iconUserMono from "../../public/img/icon-user-mono.png";
 import notificationBing from "../../public/img/notification-bing.png";
@@ -20,23 +20,18 @@ function Header() {
           <Menu>
             <nav>
               <ul>
-                <li><Link to="/">moum 소개</Link></li>
-                <li><Link to="/moum">나의 모음</Link></li>
-                <li><Link to="/search">전체 모음</Link></li>
+                <Item><Link to="/">moum 소개</Link></Item>
+                <Item isActive={true}><Link to="/moum">나의 모음</Link></Item>
+                <Item><Link to="/search">전체 모음</Link></Item>
+                <Item><Link to="/mypage">마이페이지</Link></Item>
               </ul>
             </nav>
-            <div className="icon-mono">
-              <Link to="/mypage"><img src={iconUserMono} alt="profile" /></Link>
-            </div>
-            <div className="icon-notification">
-              <img src={notificationBing} alt="notification" />
-            </div>
             {isLogin ? 
               (
                 <button onClick={() => {
                   removeToken();
                   dispatch(setLoginStatus(false));
-                  navigate("/")
+                  navigate("/");
                 }}>로그아웃</button>
               ) : (
                 <button onClick={() => { navigate("/login") }}>로그인</button>
@@ -52,7 +47,6 @@ function Header() {
 const Container = styled.div`
   width: 1200px;
   height: 200px;
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
 `;
@@ -88,10 +82,11 @@ const Menu = styled.div`
   nav {
     ul {
       display: flex;
+
       li {
         font-size: 16px;
-        font-weight: bold;
       }
+
       li + li {
         margin-left: ${marginLeft};
       }
@@ -102,29 +97,14 @@ const Menu = styled.div`
     margin-left: ${marginLeft};
   }
 
-  div.icon-mono {
-
-  }
-
-  div.icon-notification {
-    width: 40px;
-    height: 40px;
-    background-color: #ddd;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-  }
-
   button {
     margin-left: ${marginLeft};
-    width: 140px;
-    height: 50px;
-    border: none;
-    background-color: #626262;
-    color: #FFFFFF;
+    width: 120px;
+    height: 40px;
+    border: 1px solid #777777;
+    background-color: #E5D6FF;
+    color: #949494;
     border-radius: 10px;
-    font-weight: bold;
     font-size: 18px;
     cursor: pointer;
   }
@@ -133,6 +113,12 @@ const Menu = styled.div`
     background-color: #ddd;
     color: #444;
   }
+`;
+
+const Item = styled.li`
+  ${({isActive}) => isActive && css`
+    color: #721EFC;
+  `};
 `;
 
 
