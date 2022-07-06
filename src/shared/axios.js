@@ -1,6 +1,8 @@
 import axios from "axios";
 import { refresh } from "../api/auth";
-import { getAccessToken, getRefreshToken, removeToken, setToken } from "./localStorage";
+import { getAccessToken, getRefreshToken, setToken } from "./localStorage";
+
+// library : sweetAlert
 
 export const instance = axios.create({
   baseURL: "http://3.35.55.104/"
@@ -20,28 +22,33 @@ instance.interceptors.request.use(
   }
 );
 
+// 로그인 컴포넌트 -> 인터셉터가 아니라 API 요청 에러가 나온경우 처리를 하는 방향을 생각해보기
 instance.interceptors.response.use(
   (config) => {
     return config;
   },
   async (error) => {
 
-    // const {
-    //   config,
-    //   response: { status },
-    // } = error;
-    // if (status === 500) {
-    //   if (error.response.data.code === 'expired') {
-    //     const originalRequest = config;
-    //     const token = getRefreshToken();
-    //     const { result, data } = await refresh(token);
-    //     // 새로운 토큰 저장
-    //     dispatch(userSlice.actions.setAccessToken(data.data.accessToken));
-    //     originalRequest.headers.authorization = `Bearer ${data.data.accessToken}`;
-    //     // 419로 요청 실패했던 요청 새로운 토큰으로 재요청
-    //     return axios(originalRequest);
-    //   }
-    // }
+    const {
+      config,
+      response: { status },
+    } = error;
+    if (status === 403) { // 액세스 토큰이 실패한 경우, 토큰이 없는 경우
+      if (error.response.data.message.slice(0, 11) === 'JWT expired') {
+        const originalRequest = config;
+        const token = getRefreshToken();
+        if (token) {
+          const { result, data } = await refresh(token);
+          if (result) {
+            console.log("SUCCESS");
+            setToken(data.accessToken, data.refreshToken);
+            return instance(originalRequest);
+          }
+        } else {
+          window.location.replace("/");
+        }
+      }
+    }
     return Promise.reject(error);
   },
 );

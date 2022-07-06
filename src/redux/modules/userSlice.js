@@ -5,12 +5,12 @@ import { getRefreshToken, removeToken, setToken } from "../../shared/localStorag
 export function runLogin({ username, password }, navigate) {
   return async (dispatch) => {
     const { result, data } = await signIn({ username, password });
-    if (result === "SUCCESS") {
+    if (result) {
       alert("로그인 성공");
       setToken(data.accessToken, data.refreshToken);
       dispatch(setLoginStatus(true));
       navigate("/moum");
-    } else if (result === "FAILED") {
+    } else {
       dispatch(setLoginStatus(false));
       alert("로그인 실패");
     }
@@ -20,12 +20,12 @@ export function runLogin({ username, password }, navigate) {
 export function runLoginSocial({ code }, navigate) {
   return async (dispatch) => {
     const { result, data } = await signInWithGoogle(code);
-    if (result === "SUCCESS") {
+    if (result) {
       alert("로그인 성공");
       setToken(data.accessToken, data.refreshToken);
       dispatch(setLoginStatus(true));
       navigate("/moum");
-    } else if (result === "FAILED") {
+    } else {
       alert("로그인 실패");
       dispatch(setLoginStatus(false));
     }
@@ -40,11 +40,11 @@ export function runRefresh() {
     if (token) {
       const { result, data } = await refresh(token);
 
-      if (result === "SUCCESS") {
+      if (result) {
         console.log("토큰 갱신 성공");
         setToken(data.accessToken, data.refreshToken);
         dispatch(setLoginStatus(true));
-      } else if (result === "FAILED") {
+      } else {
         console.log("토큰 갱신 실패");
         removeToken();
         dispatch(setLoginStatus(false));
