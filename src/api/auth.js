@@ -1,7 +1,7 @@
 import { instance } from "../shared/axios";
 
-const SUCCESS = "SUCCESS";
-const FAILED = "FAILED";
+const SUCCESS = true;
+const FAILED = false;
 export const signIn = async (data) => {
   try {
     const response = await instance.post(`/user/login`, data);
