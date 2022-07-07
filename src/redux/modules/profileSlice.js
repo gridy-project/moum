@@ -28,8 +28,6 @@ export const modifyProfileDB = (id, data) => {
 export const modifyPasswordeDB = (id, data) => {
   return async (dispatch) => {
     try {
-      console.log(id);
-      console.log(data);
       await instance.put(`/user/pw/update/${id}`, data);
       dispatch(modifyPassword({ id, data }));
     } catch (err) {
@@ -39,12 +37,11 @@ export const modifyPasswordeDB = (id, data) => {
   }
 }
 
-export const deleteProfileDB = (id, data) => {
+export const deleteProfileDB = (id) => {
   return async (dispatch) => {
     try {
-      const response = await instance.delete(`/user/getout/${id}`, data);
+      const response = await instance.delete(`/user/getout/${id}`);
       dispatch(deleteProfile(response.data));
-      console.log(response.data)
     } catch (err) {
       console.log(err.response.data);
     }
@@ -55,14 +52,14 @@ export const deleteProfileDB = (id, data) => {
 const profileSlice = createSlice({
   name: "profile",
   initialState: {
-    list: {}
+    info: {}
   },
   reducers: {
     setProfile: (state, action) => {
-      state.list = action.payload;
+      state.info = action.payload;
     },
     modifyProfile: (state, action) => {
-      state.list = state.list.filter(
+      state.info = state.info.filter(
         (post) => {
           if (post.id === action.payload) {
             return false;
@@ -73,10 +70,10 @@ const profileSlice = createSlice({
       )
     },
     deleteProfile: (state, action) => {
-      state.list.push(action.payload);
+      state.info.push(action.payload);
     },
     modifyPassword: (state, action) => {
-      state.list = state.list.filter(
+      state.info = state.info.filter(
         (post) => {
           if (post.id === action.payload) {
             return false;

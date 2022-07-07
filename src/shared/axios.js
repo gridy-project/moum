@@ -5,7 +5,7 @@ import { getAccessToken, getRefreshToken, setToken } from "./localStorage";
 // library : sweetAlert
 
 export const instance = axios.create({
-  baseURL: "http://3.35.55.104/"
+  baseURL: "http://13.124.160.57/"
 });
 
 instance.interceptors.request.use(
