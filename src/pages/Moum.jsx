@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect, useRef, useState } from "react";
+import { React, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import Container from "../components/common/Container";
@@ -6,30 +6,32 @@ import Container from "../components/common/Container";
 import Header from "../components/common/Header";
 import MoumProfile from "../components/Moum/MoumProfile";
 import { setBackground } from "../redux/modules/optionSlice";
-import { addPieceSimpleThunk, addPieceThunk, getPieceThunk, } from "../redux/modules/moumSlice";
-import { instance } from "../shared/axios";
-import { typeCategory } from "../shared/type";
+import { addPieceSimpleThunk, getPieceThunk, } from "../redux/modules/moumSlice";
 import LinkPieceCard from "../components/card/LinkPieceCard";
 import { getProfileDB } from "../redux/modules/profileSlice";
+import useHandleChange from "../hooks/useHandleChange";
+import useLoginStatus from "../hooks/useLoginStatus";
+import { useNavigate } from "react-router-dom";
 
 function Moum() {
   const dispatch = useDispatch();
 
+  // Custom Hook
+  const checkLogin = useLoginStatus();
+  const [input, setInput, handleChange] = useHandleChange({
+    type: "",
+    content: ""
+  })
+
   const moum = useSelector((state) => state.moum);
   const user = useSelector((state) => state.profile.list);
 
-  const [input, setInput] = useState({
-    subject: "",
-    link: "",
-    content: "",
-    share: "NONE",
-    type: "NONE",
-    category: "기타",
-  });
-  const handleChange = useCallback((name) => (e) => setInput((current) => ({...current, [name]: e.target.value})), []);
+  useEffect(() => {
+    checkLogin();
+  }, [checkLogin]);
 
   useEffect(() => {
-    dispatch(setBackground("#F5F5F5")); // 이 페이지에서만 회색 배경
+    dispatch(setBackground("#F6F5FB")); // 이 페이지에서만 회색 배경
     dispatch(getPieceThunk());
     dispatch(getProfileDB());
     return (() => {
@@ -37,30 +39,10 @@ function Moum() {
     });
   }, [dispatch]);
 
-  useEffect(() => {console.log(moum)}, [moum])
-  useEffect(() => {console.log(user)}, [user])
-
-  const addPiece = (e) => {
-    e.preventDefault();
-    dispatch(addPieceThunk(input));
-  }
 
   const addPieceSimple = (e) => {
     e.preventDefault();
     dispatch(addPieceSimpleThunk(input));
-  }
-
-  const getOG = async (e) => {
-    e.preventDefault();
-    // e.stopPropagation();
-
-    try {
-      const response = await instance.post("/image/og", {url: input.link});
-      const {image, title, description} = response.data;
-      setInput((current) => ({...current, image, subject: title, content: description}));
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   return (
@@ -108,16 +90,9 @@ function Moum() {
             </SortGroup>
           </MoumHeader>
           <MoumList>
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
+            {moum.boardList.map((piece) => {
+              return <LinkPieceCard key={piece.id} piece={piece} />
+            })}
             {/* {postList.boardList?.map((post, i) => {
               return (
                 <div key={i}>
@@ -131,44 +106,6 @@ function Moum() {
               )
             })} */}
           </MoumList>
-          <div>
-            <div>링크타입</div>
-            <form onSubmit={addPiece}>
-              제목<input type="text" onChange={handleChange("subject")} value={input.subject} />
-              링크<input type="text" onChange={handleChange("link")} value={input.link} />
-              <button onClick={getOG}>OG가져오기</button>
-              내용<input type="text" onChange={handleChange("content")} value={input.content} />
-              <select onChange={handleChange("share")} value={input.share}>
-                <option value="NONE">공유선택</option>
-                <option value="PUBLIC">공개</option>
-                <option value="PRIVATE">비공개</option>
-              </select>
-              <select onChange={handleChange("type")} value={input.type}>
-                <option value="NONE">타입선택</option>
-                <option value="LINK">링크</option>
-                <option value="MEMO">메모</option>
-              </select>
-              <select onChange={handleChange("category")} value={input.category}>
-                {typeCategory.map((opt) => {
-                  return <option key={opt.value} value={opt.value}>{opt.text}</option>
-                })}
-              </select>
-              <button>추가</button>
-            </form>
-            {/* <div>메모타입</div>
-            <form>
-              <input type="text" ref={titletRef} />
-              <input type="text" ref={contentRef} />
-              <select ref={statusRef}>
-                <option value="PUBLIC">PUBLIC</option>
-                <option value="PRIVATE">PRIVATE</option>
-              </select>
-              <select ref={boardTypeRef}>
-                <option value="MEMO">MEMO</option>
-              </select>
-              <button>추가</button>
-            </form> */}
-          </div>
         </PieceBoard>
       </Content>
     </Container>
