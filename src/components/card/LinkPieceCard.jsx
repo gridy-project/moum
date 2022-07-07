@@ -2,20 +2,20 @@ import styled from "styled-components";
 import noImage from "../../public/img/Image.png";
 import more from "../../public/img/Menu.png";
 
-function LinkPieceCard() {
+function LinkPieceCard({piece}) {
   return (
     <Box>
       <div className="card-image">
-        <img src={noImage} alt="noImage" />
+        <img src={piece.imgPath || noImage} alt="noImage" />
         <div className="menu"><img src={more} alt="" /></div>
       </div>
       <div className="card-content">
         <div className="card-header">
           <div className="icon-box"></div>
-          <div className="category">카테고리</div>
+          <div className="category">{piece.category}</div>
         </div>
-        <div className="card-title">이 부분은 링크 제목이 표시되는 영역입니다.</div>
-        <div className="card-description">메모를 남길 수 있는 영역</div>
+        <div className="card-title">{piece.title}</div>
+        <div className="card-description">{piece.explanation}</div>
       </div>
     </Box>
   );
@@ -41,6 +41,17 @@ const Box = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    .menu {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .card-content {

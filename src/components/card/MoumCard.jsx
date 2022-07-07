@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import noImage from "../../public/img/Image.png";
 import more from "../../public/img/Menu.png";
 
 function MoumCard() {
@@ -13,9 +12,6 @@ function MoumCard() {
         <div className="card-title">파일이 들어있는 폴더 이름</div>
         <div className="card-description">파일 10개</div>
       </div>
-      <div className="card-image">
-        <img src={noImage} alt="noImage" />
-      </div>
     </Container>
   );
 }
@@ -23,7 +19,7 @@ function MoumCard() {
 const Container = styled.div`
   width: 280px;
   height: 360px;
-  background-color: #ABABAB;
+  background-color: #9E67FF;
   border-radius: 15px;
   border: none;
   display: flex;
@@ -49,7 +45,7 @@ const Container = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 12.5px;
+      border-radius: 12.ㄴ5px;
     }
   }
 
