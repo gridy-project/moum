@@ -39,7 +39,7 @@ export const addPieceThunk = (data) => {
         boardType: data.type,
         category: data.category,
       }
-      const response = await instance.post("/board/detail", moum);
+      const response = await instance.post("/board", moum);
       // dispatch(addData({ id: response.data, ...data }));
       console.log(response);
     } catch (err) {
@@ -87,13 +87,13 @@ export const getPieceThunk = () => {
 const moumSlice = createSlice({
   name: "post",
   initialState: {
-    list: {
-      boardList: [],
-    }
+    boardList: [],
+    folderList: []
   },
   reducers: {
     setMoum: (state, action) => {
-      state.list = action.payload;
+      state.boardList = action.payload.boardList;
+      state.folderList = action.payload.folderList;
     },
     // addData: (state, action) => {
     //   state.list.boardList.push(action.payload);
