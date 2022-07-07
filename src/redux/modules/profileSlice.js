@@ -55,7 +55,7 @@ export const deleteProfileDB = (id, data) => {
 const profileSlice = createSlice({
   name: "profile",
   initialState: {
-    list: []
+    list: {}
   },
   reducers: {
     setProfile: (state, action) => {

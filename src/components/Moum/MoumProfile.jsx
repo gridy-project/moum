@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
-function MoumProfile() {
+function MoumProfile({user}) {
   return (
     <Wrap>
       <Box>
         <Image>
           <div>
-            <img src="" alt="" />
+            <img src={user?.imgPath} alt="" />
           </div>
         </Image>
         <Content>
-          <em>계정 이름</em>
-          <p>계정에 대한 설명글이 나오는 영역</p>
+          <em>{user?.nickname}</em>
+          <p>{user?.information || "설명이 없습니다"}</p>
         </Content>
         <Follow>
           <div className="counter">

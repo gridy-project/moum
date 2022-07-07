@@ -4,31 +4,44 @@ import more from "../../public/img/Menu.png";
 
 function LinkPieceCard() {
   return (
-    <Container>
+    <Box>
+      <div className="card-image">
+        <img src={noImage} alt="noImage" />
+        <div className="menu"><img src={more} alt="" /></div>
+      </div>
       <div className="card-content">
         <div className="card-header">
+          <div className="icon-box"></div>
           <div className="category">카테고리</div>
-          <div className="menu"><img src={more} alt="" /></div>
         </div>
         <div className="card-title">이 부분은 링크 제목이 표시되는 영역입니다.</div>
         <div className="card-description">메모를 남길 수 있는 영역</div>
       </div>
-      <div className="card-image">
-        <img src={noImage} alt="noImage" />
-      </div>
-    </Container>
+    </Box>
   );
 }
 
-const Container = styled.div`
+const Box = styled.div`
   width: 280px;
-  height: 360px;
-  background-color: #F5F5F5;
+  height: 310px;
+  background-color: #FFFFFF;
   border-radius: 15px;
   border: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    background-color: #D9D9D9;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .card-content {
 
@@ -37,19 +50,24 @@ const Container = styled.div`
   .card-header {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    padding: 20px;
+    padding: 25px 15px 20px;
     flex-shrink: 0;
 
-    .category {
-      width: 70px;
-      height: 25px;
-      font-size: 12px;
+    .icon-box {
+      width: 20px;
+      height: 20px;
       background-color: #D9D9D9;
+      border-radius: 5px;
+    }
+
+    .category {
+      height: 25px;
+      font-size: 14px;
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 12.5px;
+      margin-left: 5px;
     }
   }
 
@@ -64,17 +82,7 @@ const Container = styled.div`
     margin-bottom: 20px;
     padding: 0 20px;
     line-height: 1.2;
-  }
-
-  .card-image {
-    width: 100%;
-    height: 100%;
-    background-color: #D9D9D9;
-    border-radius: 0 0 15px 15px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: #595959;
   }
 `;
 
