@@ -57,10 +57,12 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     isLogin: false,
+    isLoad: false
   },
   reducers: {
     setLoginStatus: (state, action) => {
       state.isLogin = action.payload;
+      state.isLoad = true;
     }
   },
 });
