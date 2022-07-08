@@ -13,17 +13,17 @@ export const getProfileDB = () => {
   };
 };
 
-// export const uploadPhotoDB = (id, formdata, config) => {
-//   return async (dispatch) => {
-//     try {
-//       const response = await instance.post(`/user/profilePhoto/${id}`, formData, config);
-//       const url = response.data.url;
-//       dispatch(uploadPhoto(response.data))
-//     } catch (err) {
-//       console.log(err.response.data)
-//     }
-//   }
-// }
+export const uploadPhotoDB = (id, formData, config) => {
+  return async (dispatch) => {
+    try {
+      const response = await instance.post(`/user/profilePhoto/${id}`, formData, config);
+      const imageUrl = response.data.url;
+      dispatch(uploadPhoto({ imgPath: imageUrl }))
+    } catch (err) {
+      // console.log(err.response.data)
+    }
+  }
+}
 
 export const modifyProfileDB = (id, data) => {
   return async (dispatch) => {
@@ -94,9 +94,9 @@ const profileSlice = createSlice({
     setProfile: (state, action) => {
       state.info = action.payload;
     },
-    // uploadPhoto: (state, action) => {
-    //   state.info.push(action.payload);
-    // },
+    uploadPhoto: (state, action) => {
+      state.info = { ...state.info, ...action.payload };
+    },
     modifyProfile: (state, action) => {
       state.info = state.info.filter(
         (post) => {
@@ -148,5 +148,5 @@ const profileSlice = createSlice({
 });
 
 
-export const { setProfile, modifyProfile, modifyPassword, modifyNickname, modifyDesc, deleteProfile } = profileSlice.actions;
+export const { setProfile, uploadPhoto, modifyProfile, modifyPassword, modifyNickname, modifyDesc, deleteProfile } = profileSlice.actions;
 export default profileSlice.reducer;
