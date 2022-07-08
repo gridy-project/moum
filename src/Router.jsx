@@ -5,11 +5,11 @@ import MyPage from "./pages/MyPage";
 import Search from "./pages/Search";
 import Moum from "./pages/Moum";
 import NotFound from "./pages/NotFound";
-import Write from "./pages/Write";
 import Intro from "./pages/Intro";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { runRefresh } from "./redux/modules/userSlice";
+import Test from "./pages/Test";
 
 function Router() {
   const dispatch = useDispatch();
@@ -24,8 +24,8 @@ function Router() {
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/write" element={<Write />} />
         <Route path="/moum" element={<Moum />} />
+        <Route path="/test" element={<Test />} />
         <Route path="/" element={<Intro />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

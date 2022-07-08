@@ -1,43 +1,15 @@
-import { instance } from "../shared/axios";
+import { instance, requestAxios } from "./axios";
 
-const SUCCESS = true;
-const FAILED = false;
-export const signIn = async (data) => {
-  try {
-    const response = await instance.post(`/user/login`, data);
-    return { result: SUCCESS, data: response.data };
-  } catch (err) {
-    return { result: FAILED, data: err.response.data };
-  }
-};
-
-export const signUp = async (data) => {
-  try {
-    const response = await instance.post(`/user/login`, data);
-    return { result: SUCCESS, data: response.data };
-  } catch (err) {
-    return { result: FAILED, data: err.response.data };
-  }
-}
-
-export const signInWithGoogle = async (code) => {
-  try {
-    const response = await instance.post(`/user/social`, {}, {
-      headers: { Code: code }
-    });
-    return { result: SUCCESS, data: response.data };
-  } catch (err) {
-    return { result: FAILED, data: err.response.data };
-  }
-};
-
-export const refresh = async (refreshToken) => {
-  try {
-    const response = await instance.post(`/user/refresh`, {}, {
-      headers: { RefreshToken: `Bearer ${refreshToken}` }
-    });
-    return { result: SUCCESS, data: response.data };
-  } catch (err) {
-    return { result: FAILED, data: err.response.data };
-  }
-}
+export const signIn = (data) => requestAxios(() => instance.post(`/user/login`, data));
+export const signUp = (data) => requestAxios(() => instance.post(`/user/login`, data));
+export const signInWithGoogle = (code) => requestAxios(
+  () => instance.post(`/user/social`, {}, { headers: { Code: code } })
+);
+export const refresh = (refreshToken) => requestAxios(
+  () => instance.post(`/user/refresh`, {}, {
+    headers: { RefreshToken: `Bearer ${refreshToken}` }
+  })
+);
+export const register = (data) => requestAxios(() => instance.post(`/user/signup`, data));
+export const checkEmail = (email) => requestAxios(() => instance.get(`/user/emailDupCheck/${email}`));
+export const checkNickname = (nickname) => requestAxios(() => instance.get(`/user/nameDupCheck/${nickname}`));

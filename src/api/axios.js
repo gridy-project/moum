@@ -1,11 +1,22 @@
 import axios from "axios";
-import { refresh } from "../api/auth";
-import { getAccessToken, getRefreshToken, setToken } from "./localStorage";
+import { refresh } from "./auth";
+import { getAccessToken, getRefreshToken, setToken } from "../shared/localStorage";
 
 // library : sweetAlert
 
+const SUCCESS = true;
+const FAILED = false;
+export const requestAxios = async (func) => {
+  try {
+    const response = await func();
+    return { result: SUCCESS, data: response.data };
+  } catch (err) {
+    return { result: FAILED, data: err.response.data };
+  }
+}
+
 export const instance = axios.create({
-  baseURL: "http://3.35.55.104/"
+  baseURL: "http://13.124.160.57/"
 });
 
 instance.interceptors.request.use(
@@ -22,7 +33,6 @@ instance.interceptors.request.use(
   }
 );
 
-// 로그인 컴포넌트 -> 인터셉터가 아니라 API 요청 에러가 나온경우 처리를 하는 방향을 생각해보기
 instance.interceptors.response.use(
   (config) => {
     return config;
@@ -48,6 +58,9 @@ instance.interceptors.response.use(
           window.location.replace("/");
         }
       }
+    } else if (status === 500) {
+      console.log(error);
+      // window.location.replace("/");
     }
     return Promise.reject(error);
   },
