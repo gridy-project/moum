@@ -2,11 +2,16 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import axios from "axios";
+import Modal from "react-modal";
 
 import Header from "../components/common/Header";
-import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB } from "../redux/modules/profileSlice";
+import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB, modifyNicknameDB, modifyDescDB } from "../redux/modules/profileSlice";
 import pen from "../public/img/pen.png";
 import { act } from "react-dom/test-utils";
+import Container from "../components/common/Container";
+import {instance} from "../api/axios"
+
+Modal.setAppElement("#root");
 
 function MyPage() {
 	const dispatch = useDispatch();
@@ -15,9 +20,14 @@ function MyPage() {
 	const passwordRef = useRef(null);
 	const newPasswordRef = useRef(null);
 	const deletePwdRef = useRef(null);
+	const nicknameRef = useRef(null);
+	const descInfoRef = useRef(null);
 
 	const [imageUrls, setImageUrls] = useState([]);
 	const [imageSrc, setImageSrc] = useState("");
+	const [descText, setDescText] = useState("");
+	const [nicknameModalIsOpen, setNicknameModalIsOpen] = useState(false);
+	const [passwordModalIsOpen, setPasswordModalIsOpen] = useState(false);
 
 	const [active, setActive] = useState(false);
 
@@ -25,22 +35,7 @@ function MyPage() {
 
 	const actived = active ? false : true;
 
-	// 이미지 1장 업로드
-	const uploadImage = (e) => {
-		const formData = new FormData();
-		formData.append("image", imageRef.current.files[0]);
 
-		const config = {
-			headers: {
-				"content-type": "multipart/form-data",
-			},
-		};
-
-		axios.post("http://13.124.160.57/image", formData, config).then((response) => {
-			const url = response.data;
-			setImageUrls({ imageUrl: url });
-		});
-	};
 
 	// ========================================== 계정 관리
 
@@ -48,8 +43,18 @@ function MyPage() {
 		dispatch(getProfileDB());
 	}, []);
 
+	// 닉네임 변경
+	const updateNickname = () => {
+		const id = profileList.id;
+		const data = {
+			nickname: nicknameRef.current.value,
+		};
+		console.log(id);
+		dispatch(modifyPasswordeDB(id, data));
+	};
+
 	// 비밀번호 변경
-	const modifyPassword = () => {
+	const updatePassword = () => {
 		const id = profileList.id;
 		const data = {
 			password: passwordRef.current.value,
@@ -58,14 +63,27 @@ function MyPage() {
 		dispatch(modifyPasswordeDB(id, data));
 	};
 
+	// 계정 설명 수정
+	const updateDesc = (e) => {
+		e.preventDefault();
+		const id = profileList.id;
+		const data = {
+			information: descInfoRef.current.value,
+		};
+		dispatch(modifyPasswordeDB(id, data));
+		actived ? descInfoRef.current.blur() : descInfoRef.current.focus();
+	};
+
 	// 회원 탈퇴
 	const RemoveAccount = () => {
 		const id = profileList.id;
 		dispatch(deleteProfileDB(id));
 	};
 
+	// ==============================================
+
 	return (
-		<div>
+		<Container>
 			<Header />
 			<Wrap>
 				<TitleWrap>
@@ -76,32 +94,70 @@ function MyPage() {
 					<Content>
 						<ImageArea>
 							<ImageBox>
-								<Image>
+								<label htmlFor="file">
+									<Image>
 									<div>
-										<img src={imageSrc} alt="previewImg" />
+										<img src={profileList.imgPath} alt="previewImg" style={{
+												width: "187px",
+												height: "180px",
+												borderRadius: "100%"
+										}}/>
 									</div>
 								</Image>
 								<FileBox>
 									<FileLabel htmlFor="file">
 										<FileImagePhoto src={pen} alt="펜 사진" />
 										<FileImageBtn>
-											<input type="file" id="file" ref={imageRef}/>
+											<input type="file" id="file" ref={imageRef} />
 										</FileImageBtn>
 									</FileLabel>
 								</FileBox>
+								</label>							
 							</ImageBox>
 						</ImageArea>
 						<TextArea>
 							<NicknameArticle>
 								<Nickname>{profileList.nickname}</Nickname>
-								<NicknameBtn>닉네임 변경하기</NicknameBtn>
+								<NicknameBtn onClick={() => setNicknameModalIsOpen(true)}>닉네임 변경하기</NicknameBtn>
+								<Modal
+									isOpen={nicknameModalIsOpen}
+									onRequestClose={() => setNicknameModalIsOpen(false)}
+									style={{
+										overlay: {
+											position: "fixed",
+											top: 0,
+											left: 0,
+											right: 0,
+											bottom: 0,
+											backgroundColor: "rgba(255, 255, 255, 0.75)",
+										},
+										content: {
+											color: "#111",
+											width: "500px",
+											height: "500px",
+											top: "15%",
+											left: "35%",
+										},
+									}}
+								>
+									<h1>닉네임 변경하기</h1>
+									<br />
+									<p>변경할 닉네임</p>
+									<input type="text" ref={nicknameRef} />
+									<button onClick={updateNickname}>변경</button>
+									<div>
+										<button onClick={() => setNicknameModalIsOpen(false)}>X</button>
+									</div>
+								</Modal>
 							</NicknameArticle>
 							<DescArticle>
-								<Desc>계정 설명</Desc>
-								<DescInput placeholder="나의 계정/모음/채널에 대해 설명해주세요." isActive={active} />
-								<DescBtn isActive={active} onClick={() => setActive(!active)}>
-									{actived ? "수정하기" : "적용하기"}
-								</DescBtn>
+								<form onSubmit={updateDesc}>
+									<Desc>계정 설명</Desc>
+									<DescTextarea placeholder="나의 계정/모음/채널에 대해 설명해주세요." isActive={active} ref={descInfoRef} />
+									<DescBtn isActive={active} onClick={() => setActive(!active)}>
+										{actived ? "수정하기" : "적용하기"}
+									</DescBtn>
+								</form>
 							</DescArticle>
 							<EmailArticle>
 								<EmailTitle>계정 이메일</EmailTitle>
@@ -110,8 +166,44 @@ function MyPage() {
 							<PwdArticle>
 								<PwdTitle>비밀번호</PwdTitle>
 								<PwdArea>
-									<PwdBtn>비밀번호 변경하기</PwdBtn>
+									<PwdBtn onClick={() => setPasswordModalIsOpen(true)}>비밀번호 변경하기</PwdBtn>
 								</PwdArea>
+								<Modal
+									isOpen={passwordModalIsOpen}
+									onRequestClose={() => setPasswordModalIsOpen(false)}
+									style={{
+										overlay: {
+											position: "fixed",
+											top: 0,
+											left: 0,
+											right: 0,
+											bottom: 0,
+											backgroundColor: "rgba(255, 255, 255, 0.75)",
+										},
+										content: {
+											color: "#111",
+											width: "500px",
+											height: "500px",
+											top: "15%",
+											left: "35%",
+										},
+									}}
+								>
+									<h1>비밀번호 변경하기</h1>
+									<br />
+									<div>
+										<p>기존 비밀번호</p>
+										<input type="password" ref={passwordRef} />
+									</div>
+									<div>
+										<p>변경 비밀번호</p>
+										<input type="password" ref={newPasswordRef} />
+									</div>
+									<button onClick={updatePassword}>변경</button>
+									<div>
+										<button onClick={() => setPasswordModalIsOpen(false)}>X</button>
+									</div>
+								</Modal>
 							</PwdArticle>
 							<DeleteAccountArticle>
 								<DeleteAccount onClick={RemoveAccount}>계정 탈퇴하기</DeleteAccount>
@@ -120,7 +212,7 @@ function MyPage() {
 					</Content>
 				</ContentBox>
 			</Wrap>
-		</div>
+		</Container>
 	);
 }
 
@@ -252,7 +344,7 @@ const Desc = styled.p`
 	margin-bottom: 16px;
 `;
 
-const DescInput = styled.textarea`
+const DescTextarea = styled.textarea`
 	width: 410px;
 	height: 80px;
 	padding: 20px 16px;
