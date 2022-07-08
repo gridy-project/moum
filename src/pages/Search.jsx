@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import FollowerCard from "../components/card/FollowerCard";
-import LinkPieceCard from "../components/card/LinkPieceCard";
 import MoumCard from "../components/card/MoumCard";
 import Header from "../components/common/Header";
 import searchIcon from "../public/img/icon-search-mono.png";

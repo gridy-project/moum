@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { instance } from "../shared/axios";
+import { register } from "../api/auth";
 
 function Register() {
   const navigate = useNavigate();
@@ -35,19 +35,31 @@ function Register() {
       return;
     }
 
-    register({username, nickname, password, imgPath: null});
+    if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test(password) === false) {
+      alert("비밀번호는 1개 이상의 숫자, 1개 이상의 문자로 조합해야 하며 최소 4자 이상 입력해야 합니다.");
+      return;
+    }
+
+    register({username, nickname, password, imgPath: null}).then(
+      ({result, data}) => {
+        if (result) {
+          alert("회원가입 성공");
+          navigate("/login");
+        }
+      }
+    );
   };
 
   // 회원가입
-  const register = async function (data) {
-    try {
-      const response = await instance.post("/user/signup", data);
-      console.log(response);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const register = async function (data) {
+  //   try {
+  //     const response = await instance.post("/user/signup", data);
+  //     console.log(response);
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <Container>
