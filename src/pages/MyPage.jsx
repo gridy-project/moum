@@ -5,7 +5,7 @@ import axios from "axios";
 import Modal from "react-modal";
 
 import Header from "../components/common/Header";
-import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB, modifyNicknameDB, modifyDescDB } from "../redux/modules/profileSlice";
+import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB, modifyNicknameDB, modifyDescDB, uploadPhotoDB } from "../redux/modules/profileSlice";
 import pen from "../public/img/pen.png";
 import { act } from "react-dom/test-utils";
 import Container from "../components/common/Container";
@@ -35,7 +35,22 @@ function MyPage() {
 
 	const actived = active ? false : true;
 
+	// 프로필 이미지 1장 업로드
+	const uploadImage = (e) => {
+		const formData = new FormData();
+		const id = profileList.id;
 
+		formData.append("profilePhoto", imageRef.current.files[0]);
+
+		const config = {
+			headers: {
+				"content-type": "multipart/form-data",
+			},
+		};
+
+		dispatch(uploadPhotoDB(id, formData, config))
+
+	};
 
 	// ========================================== 계정 관리
 
@@ -94,7 +109,7 @@ function MyPage() {
 					<Content>
 						<ImageArea>
 							<ImageBox>
-								<label htmlFor="file">
+								<label htmlFor="file" onChange={uploadImage}>
 									<Image>
 									<div>
 										<img src={profileList.imgPath} alt="previewImg" style={{
@@ -112,7 +127,8 @@ function MyPage() {
 										</FileImageBtn>
 									</FileLabel>
 								</FileBox>
-								</label>							
+								</label>
+								
 							</ImageBox>
 						</ImageArea>
 						<TextArea>
