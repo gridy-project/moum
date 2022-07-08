@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import more from "../../public/img/Menu.png";
+import more from "../../public/img/menu.png";
 
 function MoumCard() {
   return (

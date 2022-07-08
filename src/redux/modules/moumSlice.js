@@ -1,86 +1,69 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { instance } from "../../shared/axios"
+import { instance } from "../../api/axios"
+import { getMoumAll } from "../../api/moum";
+import { addPieceSimple, modifyPiece, removePiece } from "../../api/piece";
 
-export const addPieceSimpleThunk = (data) => {
+export const addPieceSimpleThunk = (moum) => {
   return async (dispatch) => {
-    try {
-      const moum = {
-        link: data.link,
-        status: "PUBLIC",
-        boardType: data.type,
-      }
+    const { result, data } = await addPieceSimple({
+      link: moum.content,
+      status: "PRIVATE",
+      boardType: moum.type,
+      category: "기타",
+    });
 
-      const response = await instance.post("/board/simple", moum);
-      console.log(response);
-    } catch (err) {
-      console.log(err.response);
-    }
-  }
-}
-
-export const addPieceThunk = (data) => {
-  return async (dispatch) => {
-    if (data.share === "NONE") {
-      alert("공유 설정을 선택해주세요");
-      return;
-    }
-    if (data.type === "NONE") {
-      alert("조각의 타입을 선택해주세요");
-      return;
-    }
-
-    try {
-      const moum = {
-        title: data.subject,
-        link: data.link,
-        explanation: data.content,
-        imgPath: data.image,
-        status: data.share,
-        boardType: data.type,
-        category: data.category,
-      }
-      const response = await instance.post("/board", moum);
-      // dispatch(addData({ id: response.data, ...data }));
-      console.log(response);
-    } catch (err) {
-      console.log(err.response);
+    if (result) {
+      console.log("추가 성공");
+    } else {
+      console.log("추가 실패");
     }
   }
 }
 
 export const getPieceThunk = () => {
   return async (dispatch) => {
-    try {
-      const response = await instance.get("/board");
-      dispatch(setMoum(response.data));
-    } catch (err) {
-      console.log(err);
+    const { result, data } = await getMoumAll();
+    if (result) {
+      dispatch(setMoumRedux(data));
+    } else {
+      console.log("불러오기 실패");
     }
   };
 };
 
-// export const removeDataDB = (id) => {
-//   return async (dispatch) => {
-//     try {
-//       await instance.delete(`/board/${id}`);
-//       dispatch(removeData(id));
-//     } catch (err) {
-//       window.alert(err.response.data.message);
-//     }
-//   }
-// }
+export const removePieceThunk = (id) => {
+  return async (dispatch) => {
+    const { result, data } = await removePiece(id);
+    if (result) {
+      dispatch(removePieceRedux(id));
+    } else {
+      console.log("삭제 실패");
+    }
+  }
+}
 
-// export const modifyDataDB = (id, data) => {
-//   return async (dispatch) => {
-//     try {
-//       await instance.put(`/board/${id}`, data);
-//       dispatch(modifyData({ id, data }));
-//     } catch (err) {
-//       console.log(err);
-//       window.alert(err.response.data.message);
-//     }
-//   }
-// }
+export const modifyPieceThunk = (piece) => {
+  return async (dispatch) => {
+    const passData = {
+      link: piece.link,
+      status: piece.share,
+      boardType: piece.type,
+      category: piece.category,
+      title: piece.subject,
+      explanation: piece.content,
+      imgPath: piece.image
+    }
+
+    const { result, data } = await modifyPiece(piece.id, passData);
+
+    if (result) {
+      console.log("변경 성공");
+      dispatch(modifyPieceRedux({ id: piece.id, passData }));
+    } else {
+      console.log("변경 실패");
+    }
+  }
+}
 
 //Reducer
 
@@ -91,41 +74,35 @@ const moumSlice = createSlice({
     folderList: []
   },
   reducers: {
-    setMoum: (state, action) => {
+    setMoumRedux: (state, action) => {
       state.boardList = action.payload.boardList;
       state.folderList = action.payload.folderList;
     },
     // addData: (state, action) => {
     //   state.list.boardList.push(action.payload);
     // },
-    // removeData: (state, action) => {
-    //   state.list.boardList = state.list.boardList.filter(
-    //     (post) => {
-    //       if (post.id === action.payload) {
-    //         return false;
-    //       } else {
-    //         return true;
-    //       }
-    //     }
-    //   )
-    // },
-    // modifyData: (state, action) => {
-    //   state.list.boardList = state.list.boardList.map(
-    //     (post) => {
-    //       if (post.id === action.payload.id) {
-    //         return {
-    //           ...post,
-    //           title: action.payload.data.title,
-    //           content: action.payload.data.content
-    //         }
-    //       } else {
-    //         return post;
-    //       }
-    //     }
-    //   );
-    // }
+    removePieceRedux: (state, action) => {
+      state.boardList = state.boardList.filter((post) => {
+        if (post.id === action.payload) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    },
+    modifyPieceRedux: (state, action) => {
+      state.boardList = state.boardList.map(
+        (post) => {
+          if (post.id === action.payload.id) {
+            return { id: post.id, ...action.payload.passData }
+          } else {
+            return post;
+          }
+        }
+      );
+    }
   }
 });
 
-export const { setMoum } = moumSlice.actions;
+export const { setMoumRedux, removePieceRedux, modifyPieceRedux } = moumSlice.actions;
 export default moumSlice.reducer;

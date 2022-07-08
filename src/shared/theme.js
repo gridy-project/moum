@@ -6,7 +6,7 @@ const hoverColor = {
 };
 
 const fontFamily = {
-  default: "NEXON Lv1 Gothic OTF",
+  default: "Pretendard",
 };
 
 export const defaultTheme = {

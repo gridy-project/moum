@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { instance } from "../../shared/axios"
+import { instance } from "../../api/axios"
 
 // Middleware
 export const getProfileDB = () => {
