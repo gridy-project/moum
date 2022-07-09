@@ -1,10 +1,17 @@
+// module
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+
+// component
 import FollowerCard from "../components/card/FollowerCard";
 import MoumCard from "../components/card/MoumCard";
 import Header from "../components/common/Header";
-import searchIcon from "../public/img/icon-search-mono.png";
+
+// image
+import searchIcon from "../public/img/icon-search-white.png";
+
+// redux
 import { setBackground } from "../redux/modules/optionSlice";
 
 function Search() {

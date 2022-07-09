@@ -1,19 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { instance } from "../../api/axios"
 import { getMoumAll } from "../../api/moum";
 import { addPieceSimple, modifyPiece, removePiece } from "../../api/piece";
+import { getUserInfo, getUserInfoForMoum } from "../../api/user";
 
 export const addPieceSimpleThunk = (moum) => {
   return async (dispatch) => {
-    const { result, data } = await addPieceSimple({
-      link: moum.content,
-      status: "PRIVATE",
-      boardType: moum.type,
-      category: "기타",
-    });
+    const { result } = await addPieceSimple(moum);
 
     if (result) {
-      console.log("추가 성공");
     } else {
       console.log("추가 실패");
     }
@@ -26,18 +20,18 @@ export const getPieceThunk = () => {
     if (result) {
       dispatch(setMoumRedux(data));
     } else {
-      console.log("불러오기 실패");
+      console.log("조각 불러오기 실패");
     }
   };
 };
 
 export const removePieceThunk = (id) => {
   return async (dispatch) => {
-    const { result, data } = await removePiece(id);
+    const { result } = await removePiece(id);
     if (result) {
       dispatch(removePieceRedux(id));
     } else {
-      console.log("삭제 실패");
+      console.log("조각 삭제 실패");
     }
   }
 }
@@ -54,13 +48,27 @@ export const modifyPieceThunk = (piece) => {
       imgPath: piece.image
     }
 
-    const { result, data } = await modifyPiece(piece.id, passData);
+    const { result } = await modifyPiece(piece.id, passData);
 
     if (result) {
-      console.log("변경 성공");
       dispatch(modifyPieceRedux({ id: piece.id, passData }));
     } else {
-      console.log("변경 실패");
+      console.log("조각 변경 실패");
+    }
+  }
+}
+
+export const getUserInfoMineThunk = () => {
+  return async (dispatch) => {
+    const { result, data } = await getUserInfo();
+    if (result) {
+      dispatch(setUserInfo(data));
+      const { result: result2, data: data2 } = await getUserInfoForMoum(data.id);
+      if (result2) {
+        dispatch(setUserInfoMore(data2));
+      }
+    } else {
+      console.log("유저 정보 조회 실패");
     }
   }
 }
@@ -68,41 +76,36 @@ export const modifyPieceThunk = (piece) => {
 //Reducer
 
 const moumSlice = createSlice({
-  name: "post",
+  name: "moum",
   initialState: {
+    folderId: 0,
     boardList: [],
-    folderList: []
+    folderList: [],
+    userInfo: {},
+    userInfoMore: {}
   },
   reducers: {
     setMoumRedux: (state, action) => {
       state.boardList = action.payload.boardList;
       state.folderList = action.payload.folderList;
     },
-    // addData: (state, action) => {
-    //   state.list.boardList.push(action.payload);
-    // },
     removePieceRedux: (state, action) => {
-      state.boardList = state.boardList.filter((post) => {
-        if (post.id === action.payload) {
-          return false;
-        } else {
-          return true;
-        }
-      })
+      state.boardList = state.boardList.filter((post) => (post.id !== action.payload));
     },
     modifyPieceRedux: (state, action) => {
       state.boardList = state.boardList.map(
-        (post) => {
-          if (post.id === action.payload.id) {
-            return { id: post.id, ...action.payload.passData }
-          } else {
-            return post;
-          }
-        }
+        (post) => (post.id === action.payload.id) ?
+          { id: post.id, ...action.payload.passData } : post
       );
+    },
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+    },
+    setUserInfoMore: (state, action) => {
+      state.userInfoMore = action.payload;
     }
   }
 });
 
-export const { setMoumRedux, removePieceRedux, modifyPieceRedux } = moumSlice.actions;
+export const { setMoumRedux, removePieceRedux, modifyPieceRedux, setUserInfo, setUserInfoMore } = moumSlice.actions;
 export default moumSlice.reducer;

@@ -1,16 +1,34 @@
+// module
 import styled from "styled-components";
-import more from "../../public/img/menu.png";
 
-function MoumCard() {
+// image
+import more from "../../public/img/menu-white.png";
+import moum from "../../public/img/moum-background.png";
+import iconPrivate from "../../public/img/icon-private.png";
+import iconPieceCount from "../../public/img/icon-piece-count.png";
+import iconScrapCount from "../../public/img/icon-scrap-count.png";
+
+function MoumCard({moum}) {
   return (
     <Container>
       <div className="card-content">
         <div className="card-header">
-          <div className="category">카테고리</div>
+          <img src={iconPrivate} alt="private" />
           <div className="menu"><img src={more} alt="" /></div>
         </div>
-        <div className="card-title">파일이 들어있는 폴더 이름</div>
-        <div className="card-description">파일 10개</div>
+        <div className="card-title">{moum.name}</div>
+      </div>
+      <div className="card-info">
+        <div className="piece-count">
+          <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
+          <Text>전체 조각</Text>
+          <Count>10개</Count>
+        </div>
+        <div className="scrap-count">
+          <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>
+          <Text>스크랩</Text>
+          <Count>1,000회</Count>
+        </div>
       </div>
     </Container>
   );
@@ -18,24 +36,33 @@ function MoumCard() {
 
 const Container = styled.div`
   width: 280px;
-  height: 360px;
-  background-color: #9E67FF;
+  height: 310px;
+  background-image: url(${moum});
+  background-size: 100%;
+  background-repeat: no-repeat;
   border-radius: 15px;
   border: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  position: relative;
 
-  .card-content {
-
+  .menu {
+    position: absolute;
+    right: 25px;
+    top: 50px;
   }
 
   .card-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px 20px;
     flex-shrink: 0;
+
+    > img {
+      margin-top: 10px;
+    }
 
     .category {
       width: 70px;
@@ -74,6 +101,35 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
   }
+
+  .card-info {
+    color: #FFFFFF;
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+
+    .piece-count, .scrap-count {
+      display: flex;
+    }
+
+    .scrap-count {
+      margin-top: 10px;
+    }
+  }
+`;
+
+const Icon = styled.div`
+  width: 20px;
+`;
+const Text = styled.div`
+  width: 60px;
+  font-size: 14px;
+  margin-left: 5px;
+`;
+const Count = styled.div`
+  font-size: 14px;
+  margin-left: 10px;
+  letter-spacing: 1px;
 `;
 
 export default MoumCard;

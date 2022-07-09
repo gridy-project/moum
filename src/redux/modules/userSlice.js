@@ -19,7 +19,6 @@ export function runLogin({ username, password }, navigate) {
 
 export function runLoginSocial({ code }, navigate) {
   return async (dispatch) => {
-    console.log("test");
     const { result, data } = await signInWithGoogle(code);
     if (result) {
       alert("로그인 성공");

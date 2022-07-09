@@ -30,6 +30,7 @@ function Register() {
       return;
     }
 
+    // 이메일 정규식 교체 : ^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$
     if (/^([0-9a-zA-Z_\\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/.test(username) === false) {
       alert("이메일을 다시 확인해 주세요");
       return;

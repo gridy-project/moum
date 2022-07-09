@@ -1,14 +1,37 @@
+import { useState } from "react";
 import styled, { css } from "styled-components";
 
 function MoumCategoryGroup () {
+  const [category, setCategory] = useState(
+    [
+      {
+        name: "전체",
+        isActive: true
+      }, 
+      {
+        name: "카페",
+        isActive: false
+      }, 
+      {
+        name: "건강",
+        isActive: false
+      }, 
+      {
+        name: "식당",
+        isActive: false
+      }
+    ]
+  );
   return (
     <CategoryGroup>
       <div className="category-title">카테고리</div>
       <ul className="category-list">
-        <Category isActive={true}>전체</Category>
-        <Category>음식</Category>
-        <Category>여행</Category>
-        <Category>운동</Category>
+        {
+          category
+          .map((v) => {
+            return <Category key={v.name} isActive={v.isActive}>{v.name}</Category>
+          })
+        }
       </ul>
     </CategoryGroup>
   );

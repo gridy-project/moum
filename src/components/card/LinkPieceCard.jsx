@@ -1,10 +1,18 @@
+// module
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
+
+// image
 import noImage from "../../public/img/Image.png";
-import more from "../../public/img/menu.png";
+import more from "../../public/img/menu-black.png";
+
+// redux
 import { removePieceThunk } from "../../redux/modules/moumSlice";
 import { setMoumModifyData, setMoumModifyState } from "../../redux/modules/shareSlice";
+
+// mapping
+import { mappingServerToPiece } from "../../mapping/piece";
 
 function LinkPieceCard({piece}) {
   const dispatch = useDispatch();
@@ -16,16 +24,7 @@ function LinkPieceCard({piece}) {
   }
 
   const setModify = () => {
-    dispatch(setMoumModifyData({
-      id: piece.id,
-      subject: piece.title,
-      link: piece.link,
-      content: piece.explanation,
-      image: piece.imgPath,
-      share: piece.status,
-      type: piece.boardType,
-      category: piece.category
-    }));
+    dispatch(setMoumModifyData(mappingServerToPiece(piece)));
     dispatch(setMoumModifyState(true));
   }
 
@@ -37,7 +36,7 @@ function LinkPieceCard({piece}) {
           <div className="menu" onClick={(e) => {e.preventDefault(); setButtonState(current => !current)}}><img src={more} alt="" /></div>
         </div>
         <div className="card-content">
-          <div className="card-header">
+          <div className="card-header"> 
             <div className="icon-box"></div>
             <div className="category">{piece.category}</div>
           </div>
