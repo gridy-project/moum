@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../api/axios"
 
 // Middleware
-// 내 정보 내려주기
+// 프로필 보기
 export const getProfileDB = () => {
   return async (dispatch) => {
     try {
@@ -32,11 +32,11 @@ export const modifyNicknameDB = (data) => {
   return async (dispatch) => {
     console.log(data)
     try {
-      const response = await instance.put("/user/updateName/", data, { headers: { "Content-Type": "application/json" } });
+      await instance.put("/user/updateName/", data, { headers: { "Content-Type": "application/json" } });
       dispatch(modifyNickname(data));
     } catch (err) {
       console.log(err);
-      // window.alert(err.response.data.message);
+      window.alert(err.response.data.message);
     }
   }
 }

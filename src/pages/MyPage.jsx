@@ -10,7 +10,7 @@ import pen from "../public/img/pen.png";
 import { act } from "react-dom/test-utils";
 import Container from "../components/common/Container";
 import { instance } from "../api/axios";
-import $ from "jquery";
+
 
 Modal.setAppElement("#root");
 
