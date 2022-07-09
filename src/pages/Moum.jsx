@@ -1,10 +1,10 @@
-// Module
-import { React, useCallback, useEffect } from "react";
+// module
+import { React, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Container from "../components/common/Container";
 
-// Custom Hook
+// custom hook
 import useLoginStatus from "../hooks/useLoginStatus";
 
 // Components
@@ -14,11 +14,11 @@ import LinkPieceCard from "../components/card/LinkPieceCard";
 import MoumFastCreateForm from "../components/Moum/MoumFastCreateForm";
 import MoumCategoryGroup from "../components/Moum/MoumCategoryGroup";
 import MoumModifyPopup from "../components/Moum/MoumModifyPopup";
+import MoumCard from "../components/card/MoumCard";
 
-// Redux
+// redux
 import { setBackground } from "../redux/modules/optionSlice";
 import { getPieceThunk } from "../redux/modules/moumSlice";
-import { getProfileDB } from "../redux/modules/profileSlice";
 import MoumSortGroup from "../components/Moum/MoumSortGroup";
 import useHandleChange from "../hooks/useHandleChange";
 import { addMoum } from "../api/moum";
@@ -34,7 +34,6 @@ function Moum() {
   });
 
   const {boardList, folderList} = useSelector((state) => state.moum);
-  const user = useSelector((state) => state.profile.list);
 
   useEffect(() => {
     checkLogin();
@@ -43,7 +42,6 @@ function Moum() {
   useEffect(() => {
     dispatch(setBackground("#F6F5FB")); // 이 페이지에서만 회색 배경
     dispatch(getPieceThunk());
-    dispatch(getProfileDB());
     return (() => {
       dispatch(setBackground("#FFFFFF")); // 페이지가 사라질 때 흰색 배경으로 복구
     });
@@ -79,13 +77,16 @@ function Moum() {
         <MoumFastCreateForm />
       </Title>
       <Content>
-        <MoumProfile user={user}/>
+        <MoumProfile />
         <PieceBoard>
           <MoumHeader>
             <MoumCategoryGroup />
             <MoumSortGroup />
           </MoumHeader>
           <MoumList>
+            {folderList.map((moum) => {
+              return <MoumCard key={moum.id} moum={moum} />
+            })}
             {boardList.map((piece) => {
               return <LinkPieceCard key={piece.id} piece={piece} />
             })}

@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import iconUserMono from "../../public/img/icon-user-mono.png";
-import notificationBing from "../../public/img/notification-bing.png";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "../../shared/localStorage";
 import { setLoginStatus } from "../../redux/modules/userSlice";

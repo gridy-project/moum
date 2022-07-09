@@ -1,7 +1,18 @@
+// module
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+
+// custom hook
 import useHandleChange from "../../hooks/useHandleChange";
+
+// mapping
+import { mappingPieceToServerSimple } from "../../mapping/piece";
+
+// redux
 import { addPieceSimpleThunk } from "../../redux/modules/moumSlice";
+
+// image
+import arrowSave from "../../public/img/arrow-moum-save.png"
 
 function MoumFastCreateForm () {
   const dispatch = useDispatch();
@@ -12,6 +23,7 @@ function MoumFastCreateForm () {
 
   const addPieceSimple = (e) => {
     e.preventDefault();
+    console.log("작동");
 
     if (input.type === "NONE") {
       alert("타입을 선택해주세요");
@@ -23,7 +35,7 @@ function MoumFastCreateForm () {
       return;
     }
 
-    dispatch(addPieceSimpleThunk(input));
+    dispatch(addPieceSimpleThunk(mappingPieceToServerSimple(input)));
   }
 
   return (
@@ -35,13 +47,13 @@ function MoumFastCreateForm () {
           <option value="MEMO">메모</option>
         </select>
       </div>
-      <input type="text" onChange={handleChange("content")} value={input.content}/>
-      <button>바로 생성하기</button>
+      <input type="text" placeholder="링크를 입력하세요." onChange={handleChange("content")} value={input.content}/>
+      <button>저장하기<img src={arrowSave} alt="save" /></button>
     </Form>
   );
 }
 
-const Form = styled.div`
+const Form = styled.form`
   margin-top: 90px;
   width: 620px;
   height: 50px;
@@ -65,35 +77,35 @@ const Form = styled.div`
       width: 60%;
       height: 100%;
     }
-    /* div.selected-type {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    ul.select-type {
-      display: none;
-      li {
-
-      }
-    } */
   }
 
   input {
     border: none;
     width: 100%;
+    height: 40px;
+    margin: 0 20px;
+    outline: none;
+    font-size: 16px;
+    &::placeholder {
+      color: #B7B7B7;
+    }
   }
 
   button {
     flex-shrink: 0;
-    width: 150px;
+    width: 115px;
+    height: 100%;
+    border-radius: 25px;
     font-size: 16px;
     border: none;
-    background: transparent;
-    color: #721EFC;
+    background: #9152FF;
+    color: #FFFFFF;
+    box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
     cursor: pointer;
+
+    img {
+      margin-left: 5px;
+    }
   }
 `;
 

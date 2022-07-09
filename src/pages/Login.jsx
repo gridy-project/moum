@@ -13,7 +13,7 @@ function Login() {
   const pwRef = React.useRef(null);
 
 
-  const loginSubmit = (e) => {
+  const loginSubmit = async (e) => {
     e.preventDefault();
     let username = idRef.current.value;
     let password = pwRef.current.value; 

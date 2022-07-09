@@ -1,24 +1,41 @@
+// module
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-function MoumProfile({user}) {
+// redux
+import { getUserInfoMineThunk } from "../../redux/modules/moumSlice";
+
+function MoumProfile() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.moum.userInfo);
+  const userMore = useSelector((state) => state.moum.userInfoMore);
+
+  useEffect(() => {
+    dispatch(getUserInfoMineThunk());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log(userMore);
+  }, [userMore]);
   return (
     <Wrap>
       <Box>
         <Image>
           <div>
-            <img src={user?.imgPath} alt="" />
+            {user.imgPath && <img src={user?.imgPath} alt="유저 이미지" />}
           </div>
         </Image>
         <Content>
           <em>{user?.nickname}</em>
-          <p>{user?.information || "설명이 없습니다"}</p>
+          {user?.information && <p>user?.information</p>}
         </Content>
         <Follow>
           <div className="counter">
-            <div className="follower"><em>팔로워</em><strong>30명</strong></div>
-            <div className="following"><em>팔로잉</em><strong>2명</strong></div>
-            <div className="moum"><em>전체 모음</em><strong>2명</strong></div>
-            <div className="piece"><em>전체 조각</em><strong>2명</strong></div>
+            <div className="follower"><em>팔로워</em><strong>{userMore.followerCnt}명</strong></div>
+            <div className="following"><em>팔로잉</em><strong>{userMore.followingCnt}명</strong></div>
+            <div className="moum"><em>전체 모음</em><strong>{userMore.folderCnt}명</strong></div>
+            <div className="piece"><em>전체 조각</em><strong>{userMore.boardCnt}명</strong></div>
           </div>
         </Follow>
       </Box>
