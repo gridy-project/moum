@@ -3,7 +3,10 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SocialLogin from "../components/Login/SocialLogin";
 import { useDispatch } from "react-redux";
-import { runLogin } from "../redux/modules/userSlice";
+import { instance } from "../api/axios";
+import { useMutation } from "react-query";
+import { setToken } from "../shared/localStorage";
+import { setLoginStatus } from "../redux/modules/userSlice";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,6 +14,23 @@ function Login() {
 
   const idRef = React.useRef(null);
   const pwRef = React.useRef(null);
+
+  // 회원가입
+  const {mutate: login} = useMutation("user/login", async (data) => {
+    const response = await instance.post(`/user/login`, data);
+    return response.data;
+  }, {
+    onSuccess: data => {
+      alert("로그인 성공");
+      setToken(data.accessToken, data.refreshToken);
+      dispatch(setLoginStatus(true));
+      navigate("/moum");
+    },
+    onError: err => {
+      alert("로그인 실패");
+      dispatch(setLoginStatus(false));
+    }
+  });
 
 
   const loginSubmit = async (e) => {
@@ -23,7 +43,7 @@ function Login() {
       return;
     }
 
-    dispatch(runLogin({username, password}, navigate));
+    login({username, password});
   };
 
   return (
@@ -41,8 +61,8 @@ function Login() {
         <Rightbox>
           <Information>
             <form onSubmit={loginSubmit}>
-              <input type="text" ref={idRef} className="id-pw" placeholder="  이메일" />
-              <input type="password" ref={pwRef} className="id-pw" placeholder="  비밀번호" />
+              <input type="text" ref={idRef} className="id-pw" placeholder="이메일" autoComplete="email" />
+              <input type="password" ref={pwRef} className="id-pw" placeholder="비밀번호" autoComplete="password" />
               <input type="checkbox" className="checkbox" /> 로그인 상태 유지
               <button className="login-button">로그인</button>
             </form>

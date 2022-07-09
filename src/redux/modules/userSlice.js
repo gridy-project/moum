@@ -1,21 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { refresh, signIn, signInWithGoogle } from "../../api/auth";
+import { refresh, signInWithGoogle } from "../../api/auth";
 import { getRefreshToken, removeToken, setToken } from "../../shared/localStorage";
-
-export function runLogin({ username, password }, navigate) {
-  return async (dispatch) => {
-    const { result, data } = await signIn({ username, password });
-    if (result) {
-      alert("로그인 성공");
-      setToken(data.accessToken, data.refreshToken);
-      dispatch(setLoginStatus(true));
-      navigate("/moum");
-    } else {
-      dispatch(setLoginStatus(false));
-      alert("로그인 실패");
-    }
-  }
-}
 
 export function runLoginSocial({ code }, navigate) {
   return async (dispatch) => {
@@ -69,3 +54,5 @@ const userSlice = createSlice({
 
 export const { setLoginStatus } = userSlice.actions;
 export default userSlice.reducer;
+
+

@@ -2,28 +2,31 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { useQuery } from "react-query";
 
 // redux
 import { getUserInfoMineThunk } from "../../redux/modules/moumSlice";
+import useGetReactQuery from "../../hooks/useGetReactQuery";
+import { instance } from "../../api/axios";
 
 function MoumProfile() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.moum.userInfo);
-  const userMore = useSelector((state) => state.moum.userInfoMore);
+  const {data: user, isLoading} = useGetReactQuery("user", async () => {
+    const response = await instance.get(`/user/myProfile`);
+    return response.data;
+  });
 
   useEffect(() => {
     dispatch(getUserInfoMineThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(userMore);
-  }, [userMore]);
   return (
+    isLoading ? (<div>isLoading</div>) :
     <Wrap>
       <Box>
         <Image>
           <div>
-            {user.imgPath && <img src={user?.imgPath} alt="유저 이미지" />}
+            {user.imgPath && <img src={user.imgPath} alt="유저 이미지" />}
           </div>
         </Image>
         <Content>
@@ -32,10 +35,10 @@ function MoumProfile() {
         </Content>
         <Follow>
           <div className="counter">
-            <div className="follower"><em>팔로워</em><strong>{userMore.followerCnt}명</strong></div>
-            <div className="following"><em>팔로잉</em><strong>{userMore.followingCnt}명</strong></div>
-            <div className="moum"><em>전체 모음</em><strong>{userMore.folderCnt}명</strong></div>
-            <div className="piece"><em>전체 조각</em><strong>{userMore.boardCnt}명</strong></div>
+            <div className="follower"><em>팔로워</em><strong>{user.followerCnt}명</strong></div>
+            <div className="following"><em>팔로잉</em><strong>{user.followingCnt}명</strong></div>
+            <div className="moum"><em>전체 모음</em><strong>{user.folderCnt}명</strong></div>
+            <div className="piece"><em>전체 조각</em><strong>{user.boardCnt}명</strong></div>
           </div>
         </Follow>
       </Box>

@@ -10,6 +10,3 @@ export const refresh = (refreshToken) => requestAxios(
     headers: { RefreshToken: `Bearer ${refreshToken}` }
   })
 );
-export const register = (data) => requestAxios(() => instance.post(`/user/signup`, data));
-export const checkEmail = (email) => requestAxios(() => instance.get(`/user/emailDupCheck/${email}`));
-export const checkNickname = (nickname) => requestAxios(() => instance.get(`/user/nameDupCheck/${nickname}`));

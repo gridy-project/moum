@@ -11,6 +11,7 @@ export const requestAxios = async (func) => {
     const response = await func();
     return { result: SUCCESS, data: response.data };
   } catch (err) {
+    console.log(err);
     return { result: FAILED, data: err.response.data };
   }
 }
@@ -43,23 +44,24 @@ instance.interceptors.response.use(
       config,
       response: { status },
     } = error;
-    if (status === 403) { // 액세스 토큰이 실패한 경우, 토큰이 없는 경우
-      if (error.response.data.message.slice(0, 11) === 'JWT expired') {
-        const originalRequest = config;
-        const token = getRefreshToken();
-        if (token) {
-          const { result, data } = await refresh(token);
-          if (result) {
-            console.log("SUCCESS");
-            setToken(data.accessToken, data.refreshToken);
-            return instance(originalRequest);
-          }
-        } else {
-          window.location.replace("/");
+    if (status === 402) {
+      window.location.replace("/");
+    }
+    if (status === 403 || status === 401) { // 만료된 토큰 : 403 , 변질된 토큰 : 401, 토큰 없음 : 402
+      const originalRequest = config;
+      const token = getRefreshToken();
+      if (token) {
+        const { result, data } = await refresh(token);
+        if (result) {
+          console.log("SUCCESS");
+          setToken(data.accessToken, data.refreshToken);
+          return instance(originalRequest);
         }
+      } else {
+        window.location.replace("/");
       }
     } else if (status === 500) {
-      console.log(error);
+      // console.log(error);
       // window.location.replace("/");
     }
     return Promise.reject(error);

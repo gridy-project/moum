@@ -1,5 +1,5 @@
 // module
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 // custom hook
@@ -15,6 +15,7 @@ import { addPieceSimpleThunk } from "../../redux/modules/moumSlice";
 import arrowSave from "../../public/img/arrow-moum-save.png"
 
 function MoumFastCreateForm () {
+  const {folderId} = useSelector((state) => state.moum);
   const dispatch = useDispatch();
   const {input, handleChange} = useHandleChange({
     type: "NONE",
@@ -35,7 +36,7 @@ function MoumFastCreateForm () {
       return;
     }
 
-    dispatch(addPieceSimpleThunk(mappingPieceToServerSimple(input)));
+    dispatch(addPieceSimpleThunk(folderId, mappingPieceToServerSimple(input)));
   }
 
   return (
