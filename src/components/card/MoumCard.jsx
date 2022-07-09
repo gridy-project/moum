@@ -7,10 +7,20 @@ import moum from "../../public/img/moum-background.png";
 import iconPrivate from "../../public/img/icon-private.png";
 import iconPieceCount from "../../public/img/icon-piece-count.png";
 import iconScrapCount from "../../public/img/icon-scrap-count.png";
+import { useDispatch } from "react-redux";
+import { getPieceInFolderThunk } from "../../redux/modules/moumSlice";
 
 function MoumCard({moum}) {
+  const dispatch = useDispatch();
+  const runFolder = (e) => {
+    console.log(moum);
+    dispatch(getPieceInFolderThunk(moum.id));
+  }
+  function comma(x) {
+	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
   return (
-    <Container>
+    <Container onClick={runFolder}>
       <div className="card-content">
         <div className="card-header">
           <img src={iconPrivate} alt="private" />
@@ -27,7 +37,7 @@ function MoumCard({moum}) {
         <div className="scrap-count">
           <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>
           <Text>스크랩</Text>
-          <Count>1,000회</Count>
+          <Count>{comma(moum.sharedCount)}회</Count>
         </div>
       </div>
     </Container>
@@ -46,6 +56,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
+  cursor: pointer;
 
   .menu {
     position: absolute;

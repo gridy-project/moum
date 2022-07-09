@@ -2,27 +2,34 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { instance } from "../api/axios";
 
 // component
 import FollowerCard from "../components/card/FollowerCard";
 import MoumCard from "../components/card/MoumCard";
 import Header from "../components/common/Header";
+import useGetReactQuery from "../hooks/useGetReactQuery";
+import LinkPieceCard from "../components/card/LinkPieceCard";
 
 // image
 import searchIcon from "../public/img/icon-search-white.png";
 
-// redux
-import { setBackground } from "../redux/modules/optionSlice";
-
 function Search() {
   const dispatch = useDispatch();
+  const {data: followUserList, isLoading : followUserListLoading} = useGetReactQuery("search/followUserList", async () => {
+    const response = await instance.get("/followinguser/0/4");
+    return response.data;
+  });
 
-  useEffect(() => {
-    dispatch(setBackground("#F6F5FB")); // 이 페이지에서만 회색 배경
-    return (() => {
-      dispatch(setBackground("#FFFFFF")); // 페이지가 사라질 때 흰색 배경으로 복구
-    });
-  }, [dispatch]);
+  const {data: bestMoum, isLoading : bestMoumLoading} = useGetReactQuery("search/bestMoum", async () => {
+    const response = await instance.get("/BestFolders/0/4");
+    return response.data;
+  });
+
+  const {data: latestPiece, isLoading : latestPieceLoading} = useGetReactQuery("search/latestPiece", async () => {
+    const response = await instance.get("/newboards/0/4");
+    return response.data;
+  });
 
   return (
     <Container>
@@ -34,36 +41,40 @@ function Search() {
         </button>
       </SearchForm>
       <Content>
+        { followUserList.length > 0 && 
         <Follower>
           <em>내가 팔로우한 계정</em>
           <FollowerList>
+
             <FollowerCard />
             <FollowerCard />
             <FollowerCard />
             <FollowerCard />
           </FollowerList>
         </Follower>
+        }
         <Latest>
-          <em>최근 인기 폴더</em>
+          <em>스크랩 많은 인기 모음</em>
           <LatestList>
-            <MoumCard />
-            <MoumCard />
-            <MoumCard />
-            <MoumCard />
+            {
+              bestMoumLoading ? <div>isLoading</div> :
+              bestMoum.content.map((moum) => {
+                return <MoumCard key={moum.id} moum={moum}/>
+              })
+            }
           </LatestList>
         </Latest>
+        { latestPiece.content.length > 0 && 
         <Favorite>
-          <em>추천 파일 리스트</em>
+          <em>최근 올라온 조각</em>
           <FavoriteList>
-            {/* <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard />
-            <LinkPieceCard /> */}
+            { latestPieceLoading ? <div>isLoading</div> :
+              latestPiece.content.map(piece => {
+                return <LinkPieceCard key={piece.id} piece={piece} />
+              })
+            }
           </FavoriteList>
-        </Favorite>
+        </Favorite>}
       </Content>
     </Container>
   )

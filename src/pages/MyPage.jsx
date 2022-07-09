@@ -39,6 +39,7 @@ function MyPage() {
 	const uploadImage = (e) => {
 		const formData = new FormData();
 		const id = profileList.id;
+		console.log(id);
 
 		formData.append("profilePhoto", imageRef.current.files[0]);
 

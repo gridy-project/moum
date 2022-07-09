@@ -11,7 +11,8 @@ const GlobalStyle = createGlobalStyle`
 ${reset}; // Reset CSS
 
 html, body {
-  background-color: ${props => props.bgColor};
+  /* background-color: ${props => props.bgColor}; */
+  background-color: #F6F5FB;
 }
 
 body, button, input, textarea {

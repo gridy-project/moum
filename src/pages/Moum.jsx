@@ -1,5 +1,5 @@
 // module
-import { React, useEffect } from "react";
+import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Container from "../components/common/Container";
@@ -7,7 +7,7 @@ import Container from "../components/common/Container";
 // custom hook
 import useLoginStatus from "../hooks/useLoginStatus";
 
-// Components
+// components
 import Header from "../components/common/Header";
 import MoumProfile from "../components/Moum/MoumProfile";
 import LinkPieceCard from "../components/card/LinkPieceCard";
@@ -20,53 +20,31 @@ import MoumCard from "../components/card/MoumCard";
 import { setBackground } from "../redux/modules/optionSlice";
 import { getPieceThunk } from "../redux/modules/moumSlice";
 import MoumSortGroup from "../components/Moum/MoumSortGroup";
-import useHandleChange from "../hooks/useHandleChange";
-import { addMoum } from "../api/moum";
+import MoumFastFolderCreateForm from "../components/Moum/MoumFastFolderCreateForm";
+import { instance } from "../api/axios";
+import useGetReactQuery from "../hooks/useGetReactQuery";
 
 function Moum() {
   const dispatch = useDispatch();
+  const [folderId, setFolderId] = useState(0);
+  const {data: moum, isLoading} = useGetReactQuery(["moum", folderId], async () => {
+    const response = await instance.get("/board");
+    return response.data;
+  });
 
   // Custom Hook
   const checkLogin = useLoginStatus();
-  const {input, handleChange} = useHandleChange({
-    name: "",
-    share: "NONE"
-  });
-
-  const {boardList, folderList} = useSelector((state) => state.moum);
 
   useEffect(() => {
     checkLogin();
   }, [checkLogin]);
 
   useEffect(() => {
-    dispatch(setBackground("#F6F5FB")); // 이 페이지에서만 회색 배경
-    dispatch(getPieceThunk());
-    return (() => {
-      dispatch(setBackground("#FFFFFF")); // 페이지가 사라질 때 흰색 배경으로 복구
-    });
-  }, [dispatch]);
-
-  useEffect(() => {
-    console.log(boardList);
-    console.log(folderList);
-  }, [boardList, folderList]);
-
-  const submitAddFolder = async (e) => {
-    e.preventDefault();
-    const moum = {
-      name: input.name,
-      status: input.share
-    }
-    const {result} = await addMoum(moum);
-    if (result) {
-      alert("폴더 생성 성공");
-    } else {
-      alert("폴더 생성 실패");
-    }
-  };
+    console.log(moum);
+  }, [!isLoading])
 
   return (
+    isLoading ? <div>isLoading</div> :
     <Container>
       <Title>
         <Header />
@@ -83,34 +61,26 @@ function Moum() {
             <MoumCategoryGroup />
             <MoumSortGroup />
           </MoumHeader>
+          {folderId !== 0 && <button onClick={() => {dispatch(getPieceThunk())}}>홈으로</button>}
           <MoumList>
-            {folderList.map((moum) => {
+            {folderId === 0 ? moum.folderList.map((moum) => {
               return <MoumCard key={moum.id} moum={moum} />
-            })}
-            {boardList.map((piece) => {
+            }) : moum.boardList.map((piece) => {
               return <LinkPieceCard key={piece.id} piece={piece} />
             })}
+            {
+              moum.boardList.map((piece) => {
+                return <LinkPieceCard key={piece.id} piece={piece} />
+              })
+            }
           </MoumList>
         </PieceBoard>
-        <MakeFolder onSubmit={submitAddFolder}>
-          폴더명<input type="text" onChange={handleChange("name")} value={input.name} />
-          공유설정
-          <select onChange={handleChange("share")} value={input.share}>
-            <option value="NONE">공유 설정</option>
-            <option value="PUBLIC">공개</option>
-            <option value="PRIVATE">비공개</option>
-          </select>
-          <button>폴더 생성</button>
-        </MakeFolder>
+        <MoumFastFolderCreateForm />
       </Content>
       <MoumModifyPopup />
     </Container>
   )
 }
-
-const MakeFolder = styled.form`
-
-`;
 
 const Title = styled.div`
   width: 100%;
