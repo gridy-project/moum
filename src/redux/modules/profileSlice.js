@@ -33,7 +33,7 @@ export const modifyNicknameDB = (data) => {
     console.log(data)
     try {
       const response = await instance.put("/user/updateName/", data, { headers: { "Content-Type": "application/json" } });
-      dispatch(modifyNickname(data)); // {nickname : "~~~"}
+      dispatch(modifyNickname(data));
     } catch (err) {
       console.log(err);
       // window.alert(err.response.data.message);
@@ -62,12 +62,6 @@ export const modifyPasswordeDB = (data) => {
     try {
       await instance.put("/user/pw/update/", data);
       dispatch(modifyPassword(data));
-      /*
-    {
-      password: “기존 비밀번호”,
-      newPassword: “신규 비밀번호”
-    }
-    */
     } catch (err) {
       console.log(err);
       // window.alert(err.response.data.message);

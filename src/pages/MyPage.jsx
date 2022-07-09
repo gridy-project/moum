@@ -9,7 +9,8 @@ import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB, modi
 import pen from "../public/img/pen.png";
 import { act } from "react-dom/test-utils";
 import Container from "../components/common/Container";
-import {instance} from "../api/axios"
+import { instance } from "../api/axios";
+import $ from "jquery";
 
 Modal.setAppElement("#root");
 
@@ -26,6 +27,8 @@ function MyPage() {
 	const [imageUrls, setImageUrls] = useState([]);
 	const [imageSrc, setImageSrc] = useState("");
 	const [descText, setDescText] = useState("");
+	const [len, setLen] = useState(0);
+
 	const [nicknameModalIsOpen, setNicknameModalIsOpen] = useState(false);
 	const [passwordModalIsOpen, setPasswordModalIsOpen] = useState(false);
 
@@ -47,8 +50,7 @@ function MyPage() {
 			},
 		};
 
-		dispatch(uploadPhotoDB(formData, config))
-
+		dispatch(uploadPhotoDB(formData, config));
 	};
 
 	// ========================================== 계정 관리
@@ -62,7 +64,7 @@ function MyPage() {
 		const data = {
 			nickname: nicknameRef.current.value,
 		};
-	dispatch(modifyNicknameDB(data));
+		dispatch(modifyNicknameDB(data));
 	};
 
 	// 비밀번호 변경
@@ -87,10 +89,18 @@ function MyPage() {
 	// 회원 탈퇴
 	const RemoveAccount = () => {
 		dispatch(deleteProfileDB());
-	
 	};
 
 	// ==============================================
+
+		// 글자 수 세기 / 제한
+		const descTextChange = (e) => {
+			setLen(e.target.value.length);
+			if (descInfoRef.current.value.length > 40){
+				descInfoRef.current.value = descInfoRef.current.value.slice(0,39);
+			}
+		}
+
 
 	return (
 		<Container>
@@ -106,26 +116,29 @@ function MyPage() {
 							<ImageBox>
 								<label htmlFor="file" onChange={uploadImage}>
 									<Image>
-									<div>
-										{profileList.imgPath && 
-										<img src={profileList.imgPath} alt="previewImg" style={{
-												width: "187px",
-												height: "180px",
-												borderRadius: "100%"
-										}}/>}
-									
-									</div>
-								</Image>
-								<FileBox>
-									<FileLabel htmlFor="file">
-										<FileImagePhoto src={pen} alt="펜 사진" />
-										<FileImageBtn>
-											<input type="file" id="file" ref={imageRef} />
-										</FileImageBtn>
-									</FileLabel>
-								</FileBox>
+										<div>
+											{profileList.imgPath && (
+												<img
+													src={profileList.imgPath}
+													alt="previewImg"
+													style={{
+														width: "187px",
+														height: "180px",
+														borderRadius: "100%",
+													}}
+												/>
+											)}
+										</div>
+									</Image>
+									<FileBox>
+										<FileLabel htmlFor="file">
+											<FileImagePhoto src={pen} alt="펜 사진" />
+											<FileImageBtn>
+												<input type="file" id="file" ref={imageRef} />
+											</FileImageBtn>
+										</FileLabel>
+									</FileBox>
 								</label>
-								
 							</ImageBox>
 						</ImageArea>
 						<TextArea>
@@ -166,11 +179,19 @@ function MyPage() {
 							<DescArticle>
 								<form onSubmit={updateDesc}>
 									<Desc>계정 설명</Desc>
-									<DescTextarea 
-									placeholder= {
-										profileList.information === null ? "나의 계정/모음/채널에 대해 설명해주세요." : profileList.information}
-									isActive={active} 
-									ref={descInfoRef}
+									{actived === false && (
+										<DescNumber>
+											<p id="textCount">{len}자 / 40자</p>
+										</DescNumber>
+									)}
+									<DescTextarea
+										id="tesxtArea"
+										maxLength="40"
+										spellcheck="false"
+										placeholder={profileList.information === null ? "나의 계정/모음/채널에 대해 설명해주세요." : profileList.information}
+										isActive={active}
+										ref={descInfoRef}
+										onChange={descTextChange}
 									/>
 									<DescBtn isActive={active} onClick={() => setActive(!active)}>
 										{actived ? "수정하기" : "적용하기"}
@@ -355,13 +376,25 @@ const NicknameBtn = styled.button`
 `;
 
 // Desc
-const DescArticle = styled.div``;
+const DescArticle = styled.div`
+	position: relative;
+`;
 
 const Desc = styled.p`
 	font-size: 20px;
 	margin-bottom: 16px;
 `;
 
+const DescNumber = styled.div`
+	width: 80px;
+	height: 12px;
+	color: #b7b7b7;
+	font-size: 12px;
+	display: flex;
+	position: absolute;
+	right: 65px;
+	top: 10px;
+`;
 const DescTextarea = styled.textarea`
 	width: 410px;
 	height: 80px;
