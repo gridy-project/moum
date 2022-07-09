@@ -38,7 +38,6 @@ function MyPage() {
 	// 프로필 이미지 1장 업로드
 	const uploadImage = (e) => {
 		const formData = new FormData();
-		const id = profileList.id;
 
 		formData.append("profilePhoto", imageRef.current.files[0]);
 
@@ -48,7 +47,7 @@ function MyPage() {
 			},
 		};
 
-		dispatch(uploadPhotoDB(id, formData, config))
+		dispatch(uploadPhotoDB(formData, config))
 
 	};
 
@@ -60,39 +59,35 @@ function MyPage() {
 
 	// 닉네임 변경
 	const updateNickname = () => {
-		const id = profileList.id;
 		const data = {
 			nickname: nicknameRef.current.value,
 		};
-		console.log(id);
-		dispatch(modifyPasswordeDB(id, data));
+	dispatch(modifyNicknameDB(data));
 	};
 
 	// 비밀번호 변경
 	const updatePassword = () => {
-		const id = profileList.id;
 		const data = {
 			password: passwordRef.current.value,
 			newPassword: newPasswordRef.current.value,
 		};
-		dispatch(modifyPasswordeDB(id, data));
+		dispatch(modifyPasswordeDB(data));
 	};
 
 	// 계정 설명 수정
 	const updateDesc = (e) => {
 		e.preventDefault();
-		const id = profileList.id;
 		const data = {
 			information: descInfoRef.current.value,
 		};
-		dispatch(modifyPasswordeDB(id, data));
+		dispatch(modifyDescDB(data));
 		actived ? descInfoRef.current.blur() : descInfoRef.current.focus();
 	};
 
 	// 회원 탈퇴
 	const RemoveAccount = () => {
-		const id = profileList.id;
-		dispatch(deleteProfileDB(id));
+		dispatch(deleteProfileDB());
+	
 	};
 
 	// ==============================================
@@ -112,11 +107,13 @@ function MyPage() {
 								<label htmlFor="file" onChange={uploadImage}>
 									<Image>
 									<div>
+										{profileList.imgPath && 
 										<img src={profileList.imgPath} alt="previewImg" style={{
 												width: "187px",
 												height: "180px",
 												borderRadius: "100%"
-										}}/>
+										}}/>}
+									
 									</div>
 								</Image>
 								<FileBox>
@@ -169,7 +166,12 @@ function MyPage() {
 							<DescArticle>
 								<form onSubmit={updateDesc}>
 									<Desc>계정 설명</Desc>
-									<DescTextarea placeholder="나의 계정/모음/채널에 대해 설명해주세요." isActive={active} ref={descInfoRef} />
+									<DescTextarea 
+									placeholder= {
+										profileList.information === null ? "나의 계정/모음/채널에 대해 설명해주세요." : profileList.information}
+									isActive={active} 
+									ref={descInfoRef}
+									/>
 									<DescBtn isActive={active} onClick={() => setActive(!active)}>
 										{actived ? "수정하기" : "적용하기"}
 									</DescBtn>
