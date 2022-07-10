@@ -1,5 +1,5 @@
-import { instance, requestAxios } from "./axios";
+import { instance } from "./axios";
 
-export const getMoumAll = () => requestAxios(() => instance.get("/board"));
-export const getPieceInFolder = (id) => requestAxios(() => instance.get(`/folder/${id}`));
-export const addMoum = (data) => requestAxios(() => instance.post("/folder", data));
+export const getMoumAll = () => instance.get("/board");
+export const getPieceInFolder = (id) => instance.get(`/folder/${id}`);
+export const addMoumAxios = (data) => instance.post("/folder", data);

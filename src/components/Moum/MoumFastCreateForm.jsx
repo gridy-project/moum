@@ -1,25 +1,34 @@
 // module
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useMutation } from "react-query";
 import styled from "styled-components";
+import { instance } from "../../api/axios";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";
-
-// mapping
 import { mappingPieceToServerSimple } from "../../mapping/piece";
-
-// redux
-import { addPieceSimpleThunk } from "../../redux/modules/moumSlice";
 
 // image
 import arrowSave from "../../public/img/arrow-moum-save.png"
+import fastCreateBottom from "./images/fast-create-select-bottom.png";
 
 function MoumFastCreateForm () {
-  const {folderId} = useSelector((state) => state.moum);
-  const dispatch = useDispatch();
-  const {input, handleChange} = useHandleChange({
-    type: "NONE",
+  const {input, setInput, handleChange} = useHandleChange({
+    type: "LINK",
     content: ""
+  });
+
+  const {mutate: addPiece} = useMutation("piece", async (data) => {
+    const response = await instance.post("/board", data);
+    return response.data;
+  }, {
+    onSuccess: data => {
+      console.log(data);
+      alert("파일 추가 성공");
+    },
+    onError: err => {
+      alert("파일 추가 실패");
+    }
   });
 
   const addPieceSimple = (e) => {
@@ -36,23 +45,84 @@ function MoumFastCreateForm () {
       return;
     }
 
-    dispatch(addPieceSimpleThunk(folderId, mappingPieceToServerSimple(input)));
+    const mapping = mappingPieceToServerSimple(input);
+    addPiece(mapping);
+
+    // dispatch(addPieceSimpleThunk(folderId, mappingPieceToServerSimple(input)));
   }
+
+  const [toggle, setToggle] = useState(false);
+  const [type, setType] = useState({value: "LINK", text: "링크"});
 
   return (
     <Form className="maker" onSubmit={addPieceSimple}>
-      <div>
-        <select className="select-type" onChange={handleChange("type")} value={input.type}>
-          <option value="NONE">선택</option>
-          <option value="LINK">링크</option>
-          <option value="MEMO">메모</option>
-        </select>
-      </div>
+      <SelectWrap>
+        <SelectBox onClick={() => {setToggle((current) => !current)}}>
+          <span>{type.text}</span>
+          <img src={fastCreateBottom} alt="toggle" />
+        </SelectBox>
+        <SelectBoxOption toggle={toggle}>
+          <Option onClick={
+            () => {
+              setType({value: "LINK", text: "링크"});
+              setInput(current => ({...current, type: "LINK"}));
+              setToggle((current) => !current);
+            }}>링크</Option>
+          <Option onClick={
+            () => {
+              setType({value: "MEMO", text: "메모"});
+              setInput(current => ({...current, type: "MEMO"}));
+              setToggle((current) => !current);
+            }}>메모</Option>
+        </SelectBoxOption>
+      </SelectWrap>
       <input type="text" placeholder="링크를 입력하세요." onChange={handleChange("content")} value={input.content}/>
       <button>저장하기<img src={arrowSave} alt="save" /></button>
     </Form>
   );
 }
+
+const SelectWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+`;
+
+const SelectBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    margin-left: 8px;
+  }
+`;
+
+const SelectBoxOption = styled.div`
+  position: absolute;
+  top: 50px;
+  width: 80px;
+  height: 80px;
+  box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
+  background-color: #FFFFFF;
+  padding: 6px;
+  border-radius: 12px;
+  display: ${props => props.toggle ? "block" : "none"};
+`;
+
+const Option = styled.div`
+  width: 100%;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .3s;
+
+  &:hover {
+    background-color: #F1EAFF;
+  }
+`;
 
 const Form = styled.form`
   margin-top: 90px;

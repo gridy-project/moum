@@ -26,9 +26,9 @@ function MoumModifyPopup () {
 
   const modifySubmit = (e) => {
     e.preventDefault();
-    dispatch(modifyPieceThunk(input));
-    dispatch(setMoumModifyState(false));
-    dispatch(setMoumModifyData({}));
+    // dispatch(modifyPieceThunk(input));
+    // dispatch(setMoumModifyState(false));
+    // dispatch(setMoumModifyData({}));
     setInput({
       subject: "",
       content: "",

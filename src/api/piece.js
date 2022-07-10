@@ -1,6 +1,7 @@
 import { instance, requestAxios } from "./axios";
 
-export const addPieceSimple = (data) => requestAxios(() => instance.post("/board", data));
-export const addPieceSimpleInFolder = (id, data) => requestAxios(() => instance.put("/folder", { folderId: id, ...data }));
-export const removePiece = (id) => requestAxios(() => instance.delete(`/board/${id}`));
-export const modifyPiece = (id, data) => requestAxios(() => instance.put(`/board/${id}`, data));
+// React Query 적용중
+export const addPieceSimple = (data) => instance.post("/board", data);
+export const addPieceSimpleInFolder = (id, data) => instance.put("/folder", { folderId: id, ...data });
+export const removePiece = (id) => () => instance.delete(`/board/${id}`);
+export const modifyPiece = (id, data) => instance.put(`/board/${id}`, data);
