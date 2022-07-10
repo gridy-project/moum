@@ -9,7 +9,7 @@ export const mappingPieceToServerSimple = (server) => {
   } else if (server.type === "MEMO") {
     return {
       content: server.content,
-      // status: "PRIVATE",
+      status: "PRIVATE",
       boardType: server.type,
       // category: "기타",
     }

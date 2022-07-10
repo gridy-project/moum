@@ -17,19 +17,22 @@ import MoumModifyPopup from "../components/Moum/MoumModifyPopup";
 import MoumCard from "../components/card/MoumCard";
 
 // redux
-import { setBackground } from "../redux/modules/optionSlice";
-import { getPieceThunk } from "../redux/modules/moumSlice";
 import MoumSortGroup from "../components/Moum/MoumSortGroup";
 import MoumFastFolderCreateForm from "../components/Moum/MoumFastFolderCreateForm";
 import { instance } from "../api/axios";
 import useGetReactQuery from "../hooks/useGetReactQuery";
 
 function Moum() {
-  const dispatch = useDispatch();
   const [folderId, setFolderId] = useState(0);
-  const {data: moum, isLoading} = useGetReactQuery(["moum", folderId], async () => {
-    const response = await instance.get("/board");
-    return response.data;
+  const {data: moum, isLoading} = useGetReactQuery(["moum", folderId], async ({queryKey}) => {
+    const [_, id] = queryKey;
+    if (id === 0) {
+      const response = await instance.post("/folders/all");
+      return response.data;
+    } else {
+      const response = await instance.post(`/boards/${id}/all`, [{category: "전체"}]);
+      return response.data;
+    }
   });
 
   // Custom Hook
@@ -40,7 +43,9 @@ function Moum() {
   }, [checkLogin]);
 
   useEffect(() => {
-    console.log(moum);
+    if (moum) {
+      console.log(moum);
+    }
   }, [!isLoading])
 
   return (
@@ -61,18 +66,13 @@ function Moum() {
             <MoumCategoryGroup />
             <MoumSortGroup />
           </MoumHeader>
-          {folderId !== 0 && <button onClick={() => {dispatch(getPieceThunk())}}>홈으로</button>}
+          {folderId !== 0 && <button onClick={() => {setFolderId(0)}}>홈으로</button>}
           <MoumList>
-            {folderId === 0 ? moum.folderList.map((moum) => {
-              return <MoumCard key={moum.id} moum={moum} />
+            {folderId === 0 ? moum.map((moum) => {
+              return <MoumCard key={moum.id} moum={moum} onClick={() => {setFolderId(moum.id)}} />
             }) : moum.boardList.map((piece) => {
               return <LinkPieceCard key={piece.id} piece={piece} />
             })}
-            {
-              moum.boardList.map((piece) => {
-                return <LinkPieceCard key={piece.id} piece={piece} />
-              })
-            }
           </MoumList>
         </PieceBoard>
         <MoumFastFolderCreateForm />

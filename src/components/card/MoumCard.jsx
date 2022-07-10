@@ -1,5 +1,5 @@
 // module
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 // image
 import more from "../../public/img/menu-white.png";
@@ -9,12 +9,39 @@ import iconPieceCount from "../../public/img/icon-piece-count.png";
 import iconScrapCount from "../../public/img/icon-scrap-count.png";
 import { useDispatch } from "react-redux";
 import { getPieceInFolderThunk } from "../../redux/modules/moumSlice";
+import { useState } from "react";
+import { useMutation } from "react-query";
+import { instance } from "../../api/axios";
+import { queryClient } from "../..";
 
-function MoumCard({moum}) {
+function MoumCard({moum, onClick}) {
   const dispatch = useDispatch();
+  const [buttonState, setButtonState] = useState(false);
   const runFolder = (e) => {
-    console.log(moum);
-    dispatch(getPieceInFolderThunk(moum.id));
+    onClick();
+  }
+
+  const {mutate: remove} = useMutation("folder/remove", async (id) => {
+    const response = await instance.delete(`/folder/${id}`);
+    return response.data;
+  }, {
+    onSuccess: data => {
+      queryClient.invalidateQueries("moum");
+    },
+    onError: err => {
+      console.log(err);
+    }
+  });
+
+  const removeFolder = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    remove(moum.id)
+  }
+  const modifyFolder = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
   }
   function comma(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -24,7 +51,11 @@ function MoumCard({moum}) {
       <div className="card-content">
         <div className="card-header">
           <img src={iconPrivate} alt="private" />
-          <div className="menu"><img src={more} alt="" /></div>
+          <div className="menu" onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setButtonState((current) => !current);
+          }}><img src={more} alt="" /></div>
         </div>
         <div className="card-title">{moum.name}</div>
       </div>
@@ -40,13 +71,17 @@ function MoumCard({moum}) {
           <Count>{comma(moum.sharedCount)}회</Count>
         </div>
       </div>
+      <CardOption isActive={buttonState}>
+        <div onClick={modifyFolder}>수정하기</div>
+        <div onClick={removeFolder}>삭제하기</div>
+      </CardOption>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 280px;
-  height: 310px;
+  width: 282px;
+  height: 314px;
   background-image: url(${moum});
   background-size: 100%;
   background-repeat: no-repeat;
@@ -141,6 +176,39 @@ const Count = styled.div`
   font-size: 14px;
   margin-left: 10px;
   letter-spacing: 1px;
+`;
+
+const CardOption = styled.div`
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: #FFFFFF;
+  right: -50px;
+  top: 80px;
+  border: 1px solid #ddd;
+  z-index: 1;
+  display: none;
+
+  ${props => props.isActive && css`
+    display: block;
+  `};
+
+  div {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  div:hover {
+    background-color: #ddd;
+  }
+
+  div + div {
+    border-top: 1px solid #ddd;
+  }
 `;
 
 export default MoumCard;

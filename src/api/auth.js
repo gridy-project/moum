@@ -1,7 +1,7 @@
 import { instance, requestAxios } from "./axios";
 
-export const signIn = (data) => requestAxios(() => instance.post(`/user/login`, data));
-export const signUp = (data) => requestAxios(() => instance.post(`/user/login`, data));
+export const signIn = (data) => instance.post(`/user/login`, data);
+export const signUp = (data) => instance.post(`/user/login`, data);
 export const signInWithGoogle = (code) => requestAxios(
   () => instance.post(`/user/social`, {}, { headers: { Code: code } })
 );

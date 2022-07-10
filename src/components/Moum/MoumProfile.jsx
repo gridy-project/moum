@@ -17,7 +17,7 @@ function MoumProfile() {
   });
 
   useEffect(() => {
-    dispatch(getUserInfoMineThunk());
+    // dispatch(getUserInfoMineThunk());
   }, [dispatch]);
 
   return (

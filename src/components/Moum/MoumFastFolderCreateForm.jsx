@@ -1,11 +1,25 @@
+import { useMutation } from "react-query";
 import styled from "styled-components";
-import { addMoum } from "../../api/moum";
+import { addMoum, addMoumAxios } from "../../api/moum";
+import { addPieceSimple } from "../../api/piece";
 import useHandleChange from "../../hooks/useHandleChange";
 
 function MoumFastFolderCreateForm () {
   const {input, handleChange} = useHandleChange({
     name: "",
     share: "NONE"
+  });
+
+  const {mutate: addMoum} = useMutation("user/login", async (data) => {
+    const response = await addMoumAxios(data);
+    return response.data;
+  }, {
+    onSuccess: data => {
+      alert("폴더 추가 성공");
+    },
+    onError: err => {
+      alert("폴더 추가 실패");
+    }
   });
 
   const submitAddFolder = async (e) => {
@@ -16,16 +30,8 @@ function MoumFastFolderCreateForm () {
       status: input.share
     }
 
-    const {result} = await addMoum(moum);
-
-    if (result) {
-      alert("폴더 생성 성공");
-    } else {
-      alert("폴더 생성 실패");
-    }
+    addMoum(moum);
   };
-
-
 
   return (
     <MakeFolder onSubmit={submitAddFolder}>

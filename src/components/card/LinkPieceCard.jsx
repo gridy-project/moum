@@ -7,25 +7,18 @@ import styled, { css } from "styled-components";
 import noImage from "../../public/img/Image.png";
 import more from "../../public/img/menu-black.png";
 
-// redux
-import { removePieceThunk } from "../../redux/modules/moumSlice";
-import { setMoumModifyData, setMoumModifyState } from "../../redux/modules/shareSlice";
-
-// mapping
-import { mappingServerToPiece } from "../../mapping/piece";
-
 function LinkPieceCard({piece}) {
   const dispatch = useDispatch();
   const [buttonState, setButtonState] = useState(false);
 
   const onClickRemove = (e) => {
-    dispatch(removePieceThunk(piece.id));
+    // dispatch(removePieceThunk(piece.id));
     setButtonState(false);
   }
 
   const setModify = () => {
-    dispatch(setMoumModifyData(mappingServerToPiece(piece)));
-    dispatch(setMoumModifyState(true));
+    // dispatch(setMoumModifyData(mappingServerToPiece(piece)));
+    // dispatch(setMoumModifyState(true));
   }
 
   return (
@@ -55,8 +48,8 @@ function LinkPieceCard({piece}) {
 const Box = styled.div`
   position: relative;
   a {
-    width: 280px;
-    height: 310px;
+    width: 282px;
+    height: 314px;
     background-color: #FFFFFF;
     border-radius: 15px;
     border: none;
