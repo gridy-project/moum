@@ -1,22 +1,18 @@
-import { useRef, useState } from "react";
 import styled from "styled-components";
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 function Test () {
-  const [len, setLen] = useState(0);
-  const text = useRef(null);
-
-  const change = (e) => {
-    setLen(e.target.value.length);
-  }
-
   return (
     <Container>
-      <input type="text" onChange={change} maxLength="40" ref={text} />
-      <div>{len}자/40자</div>
+      <Scrollbars style={{width: 500, height: 500, overflowX: "hidden"}}>
+        <p style={{wordWrap: "break-word"}}></p>
+      </Scrollbars>
     </Container>
   )
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+
+`;
 
 export default Test;

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
 import styled from "styled-components";
+
 import { instance } from "../../api/axios";
 
 // custom hook
@@ -12,18 +13,17 @@ import { mappingPieceToServerSimple } from "../../mapping/piece";
 import arrowSave from "../../public/img/arrow-moum-save.png"
 import fastCreateBottom from "./images/fast-create-select-bottom.png";
 
-function MoumFastCreateForm () {
+function MoumTitleCreateForm () {
   const {input, setInput, handleChange} = useHandleChange({
     type: "LINK",
     content: ""
   });
 
-  const {mutate: addPiece} = useMutation("piece", async (data) => {
+  const {mutate: addPiece} = useMutation(async (data) => {
     const response = await instance.post("/board", data);
     return response.data;
   }, {
     onSuccess: data => {
-      console.log(data);
       alert("파일 추가 성공");
     },
     onError: err => {
@@ -181,4 +181,4 @@ const Form = styled.form`
 `;
 
 
-export default MoumFastCreateForm;
+export default MoumTitleCreateForm;

@@ -1,7 +1,6 @@
 import { useMutation } from "react-query";
 import styled from "styled-components";
-import { addMoum, addMoumAxios } from "../../api/moum";
-import { addPieceSimple } from "../../api/piece";
+import { addMoumAxios } from "../../api/moum";
 import useHandleChange from "../../hooks/useHandleChange";
 
 function MoumFastFolderCreateForm () {

@@ -1,30 +1,37 @@
 import styled, { css } from "styled-components";
 import { getSelectMoumCategory } from "../../shared/type";
 
-function MoumCategory ({category}) {
-  return <Category isActive={category.isActive}>
-    <span>
-      <img src={
-        category.isActive ? 
-        getSelectMoumCategory(category.name).imageActive : 
-        getSelectMoumCategory(category.name).image} alt={category.name}
-      />
-    </span>{category.name}
-  </Category>
+function MoumCategory ({category, _onClick}) {
+  return (
+    <Category isActive={category.isActive} onClick={_onClick}>
+      <span>
+        <img src={
+          category.isActive ? 
+          getSelectMoumCategory(category.name).imageActive : 
+          getSelectMoumCategory(category.name).image} alt={category.name}
+        />
+      </span>
+      <span>
+        {category.name}
+      </span>
+    </Category>
+  )
 }
 
 const Category = styled.li`
-  padding: 0 15px;
-  height: 40px;
+  padding: 15px 18px;
   background-color: #FFFFFF;
   display: flex;
   align-items: center;
-  border-radius: 20px;
+  justify-content: center;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: border .3s, color .3s;
   ${({isActive}) => isActive ? css`
-    border: 1px solid #721EFC;
+    border: 2px solid #721EFC;
     color: #721EFC;
   ` : css`
-    border: 1px solid #C8C8C8;
+    border: 2px solid #C8C8C8;
     color: #555555;
   `}
 
@@ -33,7 +40,12 @@ const Category = styled.li`
   }
 
   span {
-    margin-right: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  span + span {
+    margin-left: 5px;
   }
 `;
 

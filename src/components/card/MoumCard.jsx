@@ -1,5 +1,7 @@
 // module
 import styled, { css } from "styled-components";
+import { useState } from "react";
+import { useMutation } from "react-query";
 
 // image
 import more from "../../public/img/menu-white.png";
@@ -7,15 +9,10 @@ import moum from "../../public/img/moum-background.png";
 import iconPrivate from "../../public/img/icon-private.png";
 import iconPieceCount from "../../public/img/icon-piece-count.png";
 import iconScrapCount from "../../public/img/icon-scrap-count.png";
-import { useDispatch } from "react-redux";
-import { getPieceInFolderThunk } from "../../redux/modules/moumSlice";
-import { useState } from "react";
-import { useMutation } from "react-query";
 import { instance } from "../../api/axios";
-import { queryClient } from "../..";
+import queryClient from "../../shared/query";
 
 function MoumCard({moum, onClick}) {
-  const dispatch = useDispatch();
   const [buttonState, setButtonState] = useState(false);
   const runFolder = (e) => {
     onClick();
