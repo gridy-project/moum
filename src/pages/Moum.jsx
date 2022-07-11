@@ -22,11 +22,11 @@ import MoumTitleCreateForm from "../components/Moum/MoumTitleCreateForm";
 function Moum() {
 
   // Custom Hook
-  const checkLogin = useLoginStatus();
+  // const checkLogin = useLoginStatus();
 
-  useEffect(() => {
-    checkLogin();
-  }, [checkLogin]);
+  // useEffect(() => { 
+  //   // checkLogin();
+  // }, [checkLogin]);
 
   return (
     <Container>

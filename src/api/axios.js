@@ -1,6 +1,6 @@
 import axios from "axios";
 import { refresh } from "./auth";
-import { getAccessToken, getRefreshToken, setToken } from "../shared/localStorage";
+import { getAccessToken, getRefreshToken, removeToken, setToken } from "../shared/localStorage";
 
 // library : sweetAlert
 
@@ -56,12 +56,15 @@ instance.interceptors.response.use(
           console.log("SUCCESS");
           setToken(data.accessToken, data.refreshToken);
           return instance(originalRequest);
+        } else {
+          removeToken();
+          window.location.replace("/");
         }
       } else {
         window.location.replace("/");
       }
     } else if (status === 500) {
-
+      console.log("ERROR 500");
     }
     return Promise.reject(error);
   },
