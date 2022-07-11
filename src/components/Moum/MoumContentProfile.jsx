@@ -1,15 +1,13 @@
 // module
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useQuery } from "react-query";
 
 // redux
-import { getUserInfoMineThunk } from "../../redux/modules/moumSlice";
 import useGetReactQuery from "../../hooks/useGetReactQuery";
 import { instance } from "../../api/axios";
 
-function MoumProfile() {
+function MoumContentProfile() {
   const dispatch = useDispatch();
   const {data: user, isLoading} = useGetReactQuery("user", async () => {
     const response = await instance.get(`/user/myProfile`);
@@ -21,7 +19,8 @@ function MoumProfile() {
   }, [dispatch]);
 
   return (
-    isLoading ? (<div>isLoading</div>) :
+    isLoading ? (
+    <div>isLoading</div>) :
     <Wrap>
       <Box>
         <Image>
@@ -140,4 +139,4 @@ const Follow = styled.div`
   }
 `;
 
-export default MoumProfile;
+export default MoumContentProfile;

@@ -1,6 +1,4 @@
 // module
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { instance } from "../api/axios";
 
@@ -15,7 +13,6 @@ import LinkPieceCard from "../components/card/LinkPieceCard";
 import searchIcon from "../public/img/icon-search-white.png";
 
 function Search() {
-  const dispatch = useDispatch();
   const {data: followUserList, isLoading : followUserListLoading} = useGetReactQuery("search/followUserList", async () => {
     const response = await instance.get("/followinguser/0/4");
     return response.data;
@@ -45,7 +42,12 @@ function Search() {
         <Follower>
           <em>내가 팔로우한 계정</em>
           <FollowerList>
-
+            {
+              followUserListLoading ? <div>isLoading</div> : 
+              bestMoum.content.map((moum) => {
+                return <MoumCard key={moum.id} moum={moum}/>
+              })
+            }
             <FollowerCard />
             <FollowerCard />
             <FollowerCard />

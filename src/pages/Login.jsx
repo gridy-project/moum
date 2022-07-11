@@ -15,7 +15,7 @@ function Login() {
   const idRef = React.useRef(null);
   const pwRef = React.useRef(null);
 
-  // 회원가입
+  // 로그인
   const {mutate: login} = useMutation("user/login", async (data) => {
     const response = await instance.post(`/user/login`, data);
     return response.data;

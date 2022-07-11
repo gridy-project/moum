@@ -17,7 +17,7 @@ export const requestAxios = async (func) => {
 }
 
 export const instance = axios.create({
-  baseURL: "http://13.124.160.57/"
+  baseURL: "http://13.125.137.133/"
 });
 
 instance.interceptors.request.use(
@@ -61,8 +61,7 @@ instance.interceptors.response.use(
         window.location.replace("/");
       }
     } else if (status === 500) {
-      // console.log(error);
-      // window.location.replace("/");
+
     }
     return Promise.reject(error);
   },

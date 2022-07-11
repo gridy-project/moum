@@ -1,20 +1,19 @@
 // module
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
 
 // image
 import noImage from "../../public/img/Image.png";
 import more from "../../public/img/menu-black.png";
+import PieceCategory from "../Moum/PieceCategory";
+import privateLock from "../Moum/images/private-lock.png";
+import { useMutation } from "react-query";
+import { removePiece } from "../../api/piece";
+import PieceCardOption from "./PieceCardOption";
 
 function LinkPieceCard({piece}) {
-  const dispatch = useDispatch();
   const [buttonState, setButtonState] = useState(false);
 
-  const onClickRemove = (e) => {
-    // dispatch(removePieceThunk(piece.id));
-    setButtonState(false);
-  }
 
   const setModify = () => {
     // dispatch(setMoumModifyData(mappingServerToPiece(piece)));
@@ -26,21 +25,26 @@ function LinkPieceCard({piece}) {
       <a href={piece.link} target="blank">
         <div className="card-image">
           <img src={piece.imgPath || noImage} alt="noImage" />
-          <div className="menu" onClick={(e) => {e.preventDefault(); setButtonState(current => !current)}}><img src={more} alt="" /></div>
+          <div className="menu" onClick={
+            (e) => {
+              e.preventDefault();
+              setButtonState(current => !current);
+            }
+          }>
+            <img src={more} alt="" />
+          </div>
         </div>
         <div className="card-content">
-          <div className="card-header"> 
-            <div className="icon-box"></div>
-            <div className="category">{piece.category}</div>
+          <div className="card-header">
+            {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
+            <PieceCategory category={piece.category} />
           </div>
+          
           <div className="card-title">{piece.title}</div>
-          <div className="card-description">{piece.explanation}</div>
+          <div className="card-description"><span>{piece.explanation}</span></div>
         </div>
       </a>
-      <CardOption isActive={buttonState}>
-        <div onClick={() => {setButtonState(false); setModify();}}>수정하기</div>
-        <div onClick={onClickRemove}>삭제하기</div>
-      </CardOption>
+      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} />
     </Box>
   );
 }
@@ -48,7 +52,7 @@ function LinkPieceCard({piece}) {
 const Box = styled.div`
   position: relative;
   a {
-    width: 282px;
+    width: 100%;
     height: 314px;
     background-color: #FFFFFF;
     border-radius: 15px;
@@ -70,10 +74,10 @@ const Box = styled.div`
     position: relative;
     .menu {
       position: absolute;
-      right: 20px;
-      top: 20px;
-      width: 30px;
-      height: 30px;
+      right: 12px;
+      top: 12px;
+      width: 28px;
+      height: 28px;
       background-color: #FFFFFF;
       border-radius: 8px;
       display: flex;
@@ -98,32 +102,24 @@ const Box = styled.div`
   .card-header {
     width: 100%;
     display: flex;
-    padding: 25px 15px 20px;
+    padding: 12px 16px 16px;
     flex-shrink: 0;
     align-items: center;
-
-    .icon-box {
-      width: 20px;
-      height: 20px;
-      background-color: #D9D9D9;
-      border-radius: 5px;
-    }
-
-    .category {
-      height: 25px;
-      font-size: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 12.5px;
-      margin-left: 5px;
-    }
   }
 
   .card-title {
+    flex-shrink: 0;
     padding: 0 20px;
-    font-size: 18px;
-    line-height: 1.2;
+    font-size: 16px;
+    line-height: 24px;
+    width: 100%;
+    height: 48px;
+    display:-webkit-box; 
+    word-wrap:break-word; 
+    -webkit-line-clamp:2; 
+    -webkit-box-orient:vertical; 
+    overflow:hidden; 
+    text-overflow:ellipsis;
   }
 
   .card-description {
@@ -132,40 +128,26 @@ const Box = styled.div`
     padding: 0 20px;
     line-height: 1.2;
     color: #595959;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    span {
+      width: 100%;
+      white-space: nowrap;
+    }
   }
 `;
 
-const CardOption = styled.div`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background-color: #FFFFFF;
-  right: -50px;
-  top: 60px;
-  border: 1px solid #ddd;
-  z-index: 1;
-  display: none;
-
-  ${props => props.isActive && css`
-    display: block;
-  `};
-
-  div {
-    width: 100%;
-    height: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  div:hover {
-    background-color: #ddd;
-  }
-
-  div + div {
-    border-top: 1px solid #ddd;
-  }
+const PrivateIcon = styled.div`
+  width: 28px;
+  height: 28px;
+  padding-bottom: 2px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #9152FF;
+  margin-right: 8px;
 `;
 
 export default LinkPieceCard;

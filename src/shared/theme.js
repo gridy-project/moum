@@ -1,8 +1,27 @@
-const color = {
-  red: "#FF0000",
+const purple = {
+  100: "#F7F3FD",
+  200: "#E8E1FC",
+  300: "#E0D6FF",
+  400: "#D2BAFF",
+  500: "#C9AAFF",
+  600: "#BE9AFF",
+  700: "#AC7DFF",
+  800: "#9E67FF",
+  900: "#9152FF",
+  1000: "#721EFC"
 };
 
-const hoverColor = {
+const black = {
+  100: "#FFFFFF",
+  200: "#F5F5F5",
+  300: "#ECECEC",
+  400: "#B7B7B7",
+  500: "#949494",
+  600: "#8B8B8B",
+  700: "#777777",
+  800: "#555555",
+  900: "#303030",
+  1000: "#111111",
 };
 
 const fontFamily = {
@@ -10,8 +29,8 @@ const fontFamily = {
 };
 
 export const defaultTheme = {
-  color,
-  hoverColor,
+  purple,
+  black,
   fontFamily,
 };
 
