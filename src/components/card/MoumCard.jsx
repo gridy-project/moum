@@ -11,14 +11,79 @@ import iconPieceCount from "../../public/img/icon-piece-count.png";
 import iconScrapCount from "../../public/img/icon-scrap-count.png";
 import { instance } from "../../api/axios";
 import queryClient from "../../shared/query";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { pageMoumSelectedFolderId } from "../../atoms/moum";
+import { globalPopup, popupState } from "../../atoms/popup";
+import { useRef } from "react";
+import { useEffect } from "react";
 
-function MoumCard({moum, onClick}) {
-  const [buttonState, setButtonState] = useState(false);
-  const runFolder = (e) => {
-    onClick();
+function MoumModifyPopup ({moum}) {
+  const setPopupState = useSetRecoilState(popupState);
+  const resetGlobalPopup = useResetRecoilState(globalPopup);
+
+  const onClose = (e) => {
+    setPopupState(false);
+    resetGlobalPopup();
   }
 
-  const {mutate: remove} = useMutation("folder/remove", async (id) => {
+  const ref = {
+    name: useRef(null),
+    share: useRef(null)
+  }
+
+  const {mutate: modify} = useMutation(async ({id, data}) => {
+    const response = await instance.put(`/folder/${id}`, data);
+    return response.data;
+  }, {
+    onSuccess: data => {
+      queryClient.invalidateQueries("moum");
+    },
+    onError: err => {
+      console.log(err);
+    }
+  });
+
+  useEffect(() => {
+    console.log(moum);
+    ref.name.current.value = moum.name;
+    ref.share.current.value = moum.status;
+  }, []);
+
+  const onModify = (e) => {
+    modify({id: moum.id, data: {
+      name: ref.name.current.value,
+      status: ref.share.current.value
+    }});
+    setPopupState(false);
+    resetGlobalPopup();
+  }
+
+  return (
+    <div>
+      <button onClick={onClose}>팝업 닫기</button>
+      <form onSubmit={onModify}>
+        <input type="text" placeholder="폴더 이름" ref={ref.name} />
+        <select ref={ref.share}>
+          <option value="NONE">공유 설정</option>
+          <option value="PUBLIC">공개</option>
+          <option value="PRIVATE">비공개</option>
+        </select>
+        <button>수정하기</button>
+      </form>
+    </div>
+  )
+}
+
+function MoumCard({moum}) {
+  const setPopupState = useSetRecoilState(popupState);
+  const setGlobalPopup = useSetRecoilState(globalPopup);
+  const setSelectedFolderId = useSetRecoilState(pageMoumSelectedFolderId);
+  const [buttonState, setButtonState] = useState(false);
+  const runFolder = (e) => {
+    setSelectedFolderId(moum.id);
+  }
+
+  const {mutate: remove} = useMutation(async (id) => {
     const response = await instance.delete(`/folder/${id}`);
     return response.data;
   }, {
@@ -32,29 +97,35 @@ function MoumCard({moum, onClick}) {
 
   const removeFolder = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    remove(moum.id)
+    e.stopPropagation(); 
+    setButtonState(false);
+    remove(moum.id);
   }
+
   const modifyFolder = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
+    setButtonState(false);
+    setPopupState(true);
+    setGlobalPopup(<MoumModifyPopup moum={moum} />);
   }
+
   function comma(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
+
   return (
     <Container onClick={runFolder}>
       <div className="card-content">
         <div className="card-header">
-          <img src={iconPrivate} alt="private" />
+          {moum.status === "PRIVATE" && <img src={iconPrivate} alt="private" />}
           <div className="menu" onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             setButtonState((current) => !current);
           }}><img src={more} alt="" /></div>
         </div>
-        <div className="card-title">{moum.name}</div>
+        <div className={`card-title ${moum.status === "PUBLIC" && `no-image`}`}>{moum.name}</div>
       </div>
       <div className="card-info">
         <div className="piece-count">
@@ -119,11 +190,17 @@ const Container = styled.div`
     }
   }
 
+
+
   .card-title {
     padding: 20px 20px 0;
     font-size: 20px;
     line-height: 1.2;
     color: #FFFFFF;
+  }
+
+  .card-title.no-image {
+    padding: 62px 20px 0;
   }
 
   .card-description {

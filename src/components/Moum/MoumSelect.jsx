@@ -9,10 +9,7 @@ import { pageMoumSelectedFolderId } from "../../atoms/moum";
 function MoumSelect () {
   const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
   const {data: moum, isLoading} = useGetReactQuery("moum", async () => {
-    const response = await instance.post("/folders/all");
-    if (selectedFolderId === 0 && response.data.length > 0) {
-      setSelectedFolderId(response.data[0].id);
-    }
+    const response = await instance.post("/folders/0/all");
     return response.data;
   });
   const onClick = (id) => {

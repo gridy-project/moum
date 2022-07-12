@@ -11,7 +11,6 @@ import Moum from "./pages/Moum";
 import NotFound from "./pages/NotFound";
 import Intro from "./pages/Intro";
 import Test from "./pages/Test";
-import Popup from "./components/common/Popup";
 
 function Router() {
   const dispatch = useDispatch();

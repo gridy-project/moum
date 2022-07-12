@@ -1,10 +1,7 @@
 // module
-import { React, useEffect, useState } from "react";
+import { React } from "react";
 import styled from "styled-components";
 import Container from "../components/common/Container";
-
-// custom hook
-import useLoginStatus from "../hooks/useLoginStatus";
 
 // components
 import Header from "../components/common/Header";
@@ -12,22 +9,17 @@ import MoumContentProfile from "../components/Moum/MoumContentProfile";
 import MoumCategoryGroup from "../components/Moum/MoumCategoryGroup";
 
 // redux
-import MoumFastFolderCreateForm from "../components/Moum/MoumFastFolderCreateForm";
 import MoumSelect from "../components/Moum/MoumSelect";
 import MoumOptionGroup from "../components/Moum/MoumSortGroup";
 import PieceList from "../components/Moum/PieceList";
 import MoumTitleContent from "../components/Moum/MoumTitleContent";
 import MoumTitleCreateForm from "../components/Moum/MoumTitleCreateForm";
+import { useRecoilValue } from "recoil";
+import { pageMoumSelectedFolderId } from "../atoms/moum";
+import MoumList from "../components/Moum/MoumList";
 
 function Moum() {
-
-  // Custom Hook
-  // const checkLogin = useLoginStatus();
-
-  // useEffect(() => { 
-  //   // checkLogin();
-  // }, [checkLogin]);
-
+  const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
   return (
     <Container>
       <Title>
@@ -40,20 +32,12 @@ function Moum() {
         <PieceBoard>
           <MoumHeader>
             <MoumCategoryGroup />
-            <MoumSelect />
+            {selectedFolderId !== 0 && <MoumSelect />}
             <MoumOptionGroup />
           </MoumHeader>
-          {/* {folderId !== 0 && <button onClick={() => {setFolderId(0)}}>홈으로</button>} */}
-          <PieceList />
-            {/* {folderId === 0 ? moum.map((moum) => {
-              return <MoumCard key={moum.id} moum={moum} onClick={() => {setFolderId(moum.id)}} />
-            }) : moum.boardList.map((piece) => {
-              return <LinkPieceCard key={piece.id} piece={piece} />
-            })} */}
+          {selectedFolderId === 0 ? <MoumList /> : <PieceList />}
         </PieceBoard>
-        <MoumFastFolderCreateForm />
       </Content>
-      {/* <MoumModifyPopup /> */}
     </Container>
   )
 }
@@ -70,7 +54,7 @@ const Title = styled.div`
 
 const Content = styled.div`
   width: 1200px;
-  padding-bottom: 100px;
+  padding-bottom: 70px;
 `;
 
 const PieceBoard = styled.div`

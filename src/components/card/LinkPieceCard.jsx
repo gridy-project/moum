@@ -7,18 +7,11 @@ import noImage from "../../public/img/Image.png";
 import more from "../../public/img/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 import privateLock from "../Moum/images/private-lock.png";
-import { useMutation } from "react-query";
-import { removePiece } from "../../api/piece";
 import PieceCardOption from "./PieceCardOption";
+import LinkPieceModifyPopup from "../card/LinkPieceModifyPopup";
 
 function LinkPieceCard({piece}) {
   const [buttonState, setButtonState] = useState(false);
-
-
-  const setModify = () => {
-    // dispatch(setMoumModifyData(mappingServerToPiece(piece)));
-    // dispatch(setMoumModifyState(true));
-  }
 
   return (
     <Box>
@@ -44,7 +37,7 @@ function LinkPieceCard({piece}) {
           <div className="card-description"><span>{piece.explanation}</span></div>
         </div>
       </a>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} />
+      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
     </Box>
   );
 }

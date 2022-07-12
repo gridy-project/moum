@@ -9,12 +9,8 @@ import MemoPieceCard from "../card/MemoPieceCard";
 function PieceList () {
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {data: piece, isLoading} = useGetReactQuery(["piece", folderId], async () => {
-    if (folderId !== 0) {
-      const response = await instance.post(`/boards/${folderId}/all`, [{category: "전체"}]);
-      return response.data;
-    } else {
-      return [];
-    }
+    const response = await instance.post(`/boards/0/${folderId}/all`, [{category: "전체"}]);
+    return response.data;
   });
 
   return (
