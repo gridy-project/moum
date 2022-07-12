@@ -3,9 +3,10 @@ import styled, { css } from "styled-components";
 import { removePiece } from "../../api/piece";
 import {useSetRecoilState} from "recoil";
 import { globalPopup, popupState } from "../../atoms/popup";
-import MoumModifyPopup from "../Moum/MoumModifyPopup";
+import LinkPieceModifyPopup from "./LinkPieceModifyPopup";
+import MemoPieceModifyPopup from "./MemoPieceModifyPopup";
 
-function PieceCardOption ({isActive, setActive, piece}) {
+function PieceCardOption ({isActive, setActive, piece, type}) {
   const setPopupState = useSetRecoilState(popupState);
   const setPopup = useSetRecoilState(globalPopup);
   const {mutate: remove} = useMutation(async (id) => {
@@ -13,7 +14,6 @@ function PieceCardOption ({isActive, setActive, piece}) {
     return response.data;
   }, {
     onSuccess: data => {
-      // queryClient.invalidateQueries("piece");
       alert("삭제 성공");
     },
     onError: err => {
@@ -22,14 +22,19 @@ function PieceCardOption ({isActive, setActive, piece}) {
   });
 
   const onClickModify = (e) => {
-    setPopup(<MoumModifyPopup piece={piece}></MoumModifyPopup>);
+    console.log(type);
+    if (type === "LINK") {
+      setPopup(<LinkPieceModifyPopup piece={piece} />);
+    } else if (type === "MEMO") {
+      console.log(type);
+      setPopup(<MemoPieceModifyPopup piece={piece} />);
+    }
     setPopupState(true);
     setActive(false);
   }
 
   const onClickRemove = (e) => {
     remove(piece.id);
-
     setActive(false);
   }
 

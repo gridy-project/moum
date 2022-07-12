@@ -44,7 +44,7 @@ instance.interceptors.response.use(
       config,
       response: { status },
     } = error;
-    if (status === 402) {
+    if (status === 402) { // 토큰 없음 : 402
       window.location.replace("/");
     }
     if (status === 403 || status === 401) { // 만료된 토큰 : 403 , 변질된 토큰 : 401, 토큰 없음 : 402

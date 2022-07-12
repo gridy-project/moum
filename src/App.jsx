@@ -3,7 +3,7 @@ import { ThemeProvider } from "styled-components";
 import { defaultTheme } from "./shared/theme";
 import MyGlobalStyle from "./components/common/MyGlobalStyle";
 import { BrowserRouter } from "react-router-dom";
-import Popup from "./components/common/Popup";
+import Popup from "./components/popup/Popup";
 
 function App() {
   return (

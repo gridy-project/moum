@@ -59,6 +59,7 @@ import studyPieceCategory from "../public/img/piece-card-category/study.png";
 import tripPieceCategory from "../public/img/piece-card-category/trip.png";
 
 export const typeCategory = [
+  "카테고리",
   "디자인",
   "쇼핑",
   "건강",

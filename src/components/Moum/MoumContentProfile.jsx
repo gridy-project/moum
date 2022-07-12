@@ -10,7 +10,10 @@ import { instance } from "../../api/axios";
 function MoumContentProfile() {
   const dispatch = useDispatch();
   const {data: user, isLoading} = useGetReactQuery("user", async () => {
-    const response = await instance.get(`/user/myProfile`);
+    console.log("test");
+    // const response = await instance.get(`/user/myProfile`);
+    const response = {};
+    console.log(response);
     return response.data;
   });
 
@@ -25,7 +28,7 @@ function MoumContentProfile() {
       <Box>
         <Image>
           <div>
-            {user.imgPath && <img src={user.imgPath} alt="유저 이미지" />}
+            {user?.imgPath && <img src={user.imgPath} alt="유저 이미지" />}
           </div>
         </Image>
         <Content>
@@ -34,10 +37,10 @@ function MoumContentProfile() {
         </Content>
         <Follow>
           <div className="counter">
-            <div className="follower"><em>팔로워</em><strong>{user.followerCnt}명</strong></div>
-            <div className="following"><em>팔로잉</em><strong>{user.followingCnt}명</strong></div>
-            <div className="moum"><em>전체 모음</em><strong>{user.folderCnt}명</strong></div>
-            <div className="piece"><em>전체 조각</em><strong>{user.boardCnt}명</strong></div>
+            <div className="follower"><em>팔로워</em><strong>{user?.followerCnt}명</strong></div>
+            <div className="following"><em>팔로잉</em><strong>{user?.followingCnt}명</strong></div>
+            <div className="moum"><em>전체 모음</em><strong>{user?.folderCnt}명</strong></div>
+            <div className="piece"><em>전체 조각</em><strong>{user?.boardCnt}명</strong></div>
           </div>
         </Follow>
       </Box>

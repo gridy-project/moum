@@ -7,7 +7,6 @@ import { instance } from "../../api/axios";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";
-import { mappingPieceToServerSimple } from "../../mapping/piece";
 
 // image
 import arrowSave from "../../public/img/arrow-moum-save.png"
@@ -45,8 +44,22 @@ function MoumTitleCreateForm () {
       return;
     }
 
-    const mapping = mappingPieceToServerSimple(input);
-    addPiece(mapping);
+    let obj = {}
+    if (input.type === "LINK") {
+      obj = {
+        link: input.content,
+        status: "PRIVATE",
+        boardType: input.type,
+      }
+    } else if (input.type === "MEMO") {
+      obj = {
+        content: input.content,
+        status: "PRIVATE",
+        boardType: input.type,
+      }
+    }
+
+    addPiece(obj);
 
     // dispatch(addPieceSimpleThunk(folderId, mappingPieceToServerSimple(input)));
   }

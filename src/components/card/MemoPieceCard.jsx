@@ -28,7 +28,7 @@ function MemoPieceCard ({piece}) {
           <div className="content">{piece.content}</div>
         </PieceScrollVertical>
       </CardContent>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} />
+      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
     </Card>
   );
 }
