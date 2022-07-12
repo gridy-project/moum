@@ -126,6 +126,7 @@ function MyPage() {
       },
 			onError: (err) => {
 				console.log(err)
+				window.alert(err.response.data.message);
 			}
     }
   )
@@ -152,7 +153,6 @@ function MyPage() {
       },
 			onError: (err) => {
 				console.log(err)
-				// window.alert(err.response.data.message);
 			}
     }
   )
