@@ -1,42 +1,39 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+// React, React-redux
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// React Query
+import {  useMutation, useQuery } from "react-query";
+import queryClient from "../shared/query";
+// css
 import styled, { css } from "styled-components";
-import axios from "axios";
-import Modal from "react-modal";
-
-import Header from "../components/common/Header";
-import { getProfileDB, modifyProfileDB, deleteProfileDB, modifyPasswordeDB, modifyNicknameDB, modifyDescDB, uploadPhotoDB } from "../redux/modules/profileSlice";
 import pen from "../public/img/pen.png";
-import { act } from "react-dom/test-utils";
+// modal
+import Modal from "react-modal";
+// axios
+import { instance } from "../api/axios"
+// component
+import Header from "../components/common/Header";
 import Container from "../components/common/Container";
-import { instance } from "../api/axios";
-
 
 Modal.setAppElement("#root");
 
 function MyPage() {
-	const dispatch = useDispatch();
-
 	const imageRef = useRef(null);
 	const passwordRef = useRef(null);
 	const newPasswordRef = useRef(null);
-	const deletePwdRef = useRef(null);
 	const nicknameRef = useRef(null);
 	const descInfoRef = useRef(null);
 
-	const [imageUrls, setImageUrls] = useState([]);
-	const [imageSrc, setImageSrc] = useState("");
-	const [descText, setDescText] = useState("");
+	// textarea
+	const [active, setActive] = useState(false);
+	const actived = active ? false : true;
+
+	// 글자 수 세기
 	const [len, setLen] = useState(0);
 
+	// modal
 	const [nicknameModalIsOpen, setNicknameModalIsOpen] = useState(false);
 	const [passwordModalIsOpen, setPasswordModalIsOpen] = useState(false);
-
-	const [active, setActive] = useState(false);
-
-	const profileList = useSelector((state) => state.profile.info);
-
-	const actived = active ? false : true;
 
 	// 프로필 이미지 1장 업로드
 	const uploadImage = (e) => {
@@ -49,58 +46,145 @@ function MyPage() {
 				"content-type": "multipart/form-data",
 			},
 		};
-
-		dispatch(uploadPhotoDB(formData, config));
+		modifyImage({formData, config});
 	};
 
-	// ========================================== 계정 관리
+	const { mutate: modifyImage } = useMutation(
+    async ({formData, config}) => {
+      await instance.post("/user/profilePhoto", formData, config);
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("profile");
+        console.log(data);
+      },
+			onError: (err) => {
+				 window.alert(err.response.data.message);
+			}
+    }
+  )
 
-	useEffect(() => {
-		dispatch(getProfileDB());
-	}, []);
+	// ======= 계정 관리 ========
 
+	const { data } = useQuery(
+    "profile",
+    async () => {
+      const response = await instance.get("/user/profile");
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+				queryClient.invalidateQueries("profile");
+			 },
+      onError: (err) => {
+        console.log(err);
+      }
+    }
+  );
+	
 	// 닉네임 변경
-	const updateNickname = () => {
-		const data = {
-			nickname: nicknameRef.current.value,
-		};
-		dispatch(modifyNicknameDB(data));
+	const clickModifyNickname = () => {
+			const data = {
+			nickname: nicknameRef.current.value
+		}		
+		modifyNickname(data);
 	};
+
+	const { mutate: modifyNickname } = useMutation(
+    async (data) => {
+      const response = await instance.put("/user/updateName/", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("profile");
+        console.log(data);
+      },
+			onError: (err) => {
+				 window.alert(err.response.data.message);
+			}
+    }
+  )
 
 	// 비밀번호 변경
-	const updatePassword = () => {
-		const data = {
+	const clickModifyPassword = () => {
+			const data = {
 			password: passwordRef.current.value,
 			newPassword: newPasswordRef.current.value,
-		};
-		dispatch(modifyPasswordeDB(data));
+		}		
+		modifyPassword(data);
 	};
+
+		const { mutate: modifyPassword } = useMutation(
+    async (data) => {
+      const response = await instance.put("/user/pw/update/", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+			onError: (err) => {
+				console.log(err)
+			}
+    }
+  )
 
 	// 계정 설명 수정
 	const updateDesc = (e) => {
 		e.preventDefault();
-		const data = {
-			information: descInfoRef.current.value,
-		};
-		dispatch(modifyDescDB(data));
+			const data = {
+				information: descInfoRef.current.value
+		}		
+		modifyDesc(data);
 		actived ? descInfoRef.current.blur() : descInfoRef.current.focus();
 	};
 
+	const { mutate: modifyDesc } = useMutation(
+    async (data) => {
+      const response = await instance.put("/user/updateInfo/", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("profile");
+        console.log(data);
+      },
+			onError: (err) => {
+				console.log(err)
+				// window.alert(err.response.data.message);
+			}
+    }
+  )
 	// 회원 탈퇴
-	const RemoveAccount = () => {
-		dispatch(deleteProfileDB());
+	const clickDelete = () => {
+		RemoveAccount()
 	};
 
-	// ==============================================
-
-		// 글자 수 세기 / 제한
-		const descTextChange = (e) => {
-			setLen(e.target.value.length);
-			if (descInfoRef.current.value.length > 40){
-				descInfoRef.current.value = descInfoRef.current.value.slice(0,39);
+	const { mutate: RemoveAccount } = useMutation(
+    async () => {
+      const response = await instance.delete("/user/getout/");
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+				window.location.replace("/login")
+      },
+			onError: (err) => {
+				console.log(err)
+				// window.alert(err.response.data.message);
 			}
+    }
+  )
+	// 글자 수 세기 / 제한
+	const descTextChange = (e) => {
+		setLen(e.target.value.length);
+		
+		if (descInfoRef.current.value.length > 40){
+			descInfoRef.current.value = descInfoRef.current.value.slice(0,39);
 		}
-
+	}
 
 	return (
 		<Container>
@@ -117,9 +201,9 @@ function MyPage() {
 								<label htmlFor="file" onChange={uploadImage}>
 									<Image>
 										<div>
-											{profileList.imgPath && (
+											{data?.imgPath && (
 												<img
-													src={profileList.imgPath}
+													src={data?.imgPath}
 													alt="previewImg"
 													style={{
 														width: "187px",
@@ -143,7 +227,7 @@ function MyPage() {
 						</ImageArea>
 						<TextArea>
 							<NicknameArticle>
-								<Nickname>{profileList.nickname}</Nickname>
+								<Nickname>{data?.nickname}</Nickname>
 								<NicknameBtn onClick={() => setNicknameModalIsOpen(true)}>닉네임 변경하기</NicknameBtn>
 								<Modal
 									isOpen={nicknameModalIsOpen}
@@ -170,7 +254,7 @@ function MyPage() {
 									<br />
 									<p>변경할 닉네임</p>
 									<input type="text" ref={nicknameRef} />
-									<button onClick={updateNickname}>변경</button>
+									<button onClick={clickModifyNickname}>변경</button>
 									<div>
 										<button onClick={() => setNicknameModalIsOpen(false)}>X</button>
 									</div>
@@ -188,19 +272,25 @@ function MyPage() {
 										id="tesxtArea"
 										maxLength="40"
 										spellcheck="false"
-										placeholder={profileList.information === null ? "나의 계정/모음/채널에 대해 설명해주세요." : profileList.information}
+										placeholder={
+											data?.information === null ? 
+											"나의 계정/모음/채널에 대해 설명해주세요." : data?.information
+										}
 										isActive={active}
 										ref={descInfoRef}
 										onChange={descTextChange}
 									/>
-									<DescBtn isActive={active} onClick={() => setActive(!active)}>
+									<DescBtn
+										isActive={active} 
+										onClick={() => setActive(!active)}
+									>
 										{actived ? "수정하기" : "적용하기"}
 									</DescBtn>
 								</form>
 							</DescArticle>
 							<EmailArticle>
 								<EmailTitle>계정 이메일</EmailTitle>
-								<Email>{profileList.username}</Email>
+								<Email>{data?.username}</Email>
 							</EmailArticle>
 							<PwdArticle>
 								<PwdTitle>비밀번호</PwdTitle>
@@ -238,14 +328,14 @@ function MyPage() {
 										<p>변경 비밀번호</p>
 										<input type="password" ref={newPasswordRef} />
 									</div>
-									<button onClick={updatePassword}>변경</button>
+									<button onClick={clickModifyPassword}>변경</button>
 									<div>
 										<button onClick={() => setPasswordModalIsOpen(false)}>X</button>
 									</div>
 								</Modal>
 							</PwdArticle>
 							<DeleteAccountArticle>
-								<DeleteAccount onClick={RemoveAccount}>계정 탈퇴하기</DeleteAccount>
+								<DeleteAccount onClick={clickDelete}>계정 탈퇴하기</DeleteAccount>
 							</DeleteAccountArticle>
 						</TextArea>
 					</Content>
