@@ -1,16 +1,7 @@
 // module
 import styled from "styled-components";
 
-// redux
-import useGetReactQuery from "../../hooks/useGetReactQuery";
-import { instance } from "../../api/axios";
-
-function MoumContentProfile() {
-  const {data: user, isLoading} = useGetReactQuery("user", async () => {
-    const response = await instance.get(`/user/myProfile`);
-    return response.data;
-  });
-
+function MoumContentProfile({isLoading, user}) {
   return (
     isLoading ? (
     <div>isLoading</div>) :
