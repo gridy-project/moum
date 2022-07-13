@@ -7,6 +7,7 @@ import queryClient from "../shared/query";
 // css
 import styled, { css } from "styled-components";
 import pen from "../public/img/pen.png";
+import human from "../public/img/human.png"
 // modal
 import Modal from "react-modal";
 // axios
@@ -21,10 +22,22 @@ function MyPage() {
 	const imageRef = useRef(null);
 	const passwordRef = useRef(null);
 	const newPasswordRef = useRef(null);
+	const reNewPasswordRef = useRef(null)
 	const nicknameRef = useRef(null);
 	const descInfoRef = useRef(null);
 
-	// textarea
+	// 닉네임 변경 input
+	const [nickFill, setNickFill] = useState(false);
+
+	const nicknameFilled = (e) => {
+		if(e.target.value.length > 0) {
+			setNickFill(true)
+		} else {
+			setNickFill(false)
+		}
+	}
+
+	// 계정 설명 textarea
 	const [active, setActive] = useState(false);
 	const actived = active ? false : true;
 
@@ -84,6 +97,7 @@ function MyPage() {
 	
 	// 닉네임 변경
 	const clickModifyNickname = () => {
+			setNickFill(false)
 			const data = {
 			nickname: nicknameRef.current.value
 		}		
@@ -98,7 +112,6 @@ function MyPage() {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("profile");
-        console.log(data);
       },
 			onError: (err) => {
 				 window.alert(err.response.data.message);
@@ -233,31 +246,50 @@ function MyPage() {
 									isOpen={nicknameModalIsOpen}
 									onRequestClose={() => setNicknameModalIsOpen(false)}
 									style={{
-										overlay: {
+											overlay: {
 											position: "fixed",
 											top: 0,
 											left: 0,
 											right: 0,
 											bottom: 0,
-											backgroundColor: "rgba(255, 255, 255, 0.75)",
+											backgroundColor: "rgba(0,0,0,0.5)"
 										},
 										content: {
+											background:"#fff",
+											borderRadius:"30px",
 											color: "#111",
-											width: "500px",
-											height: "500px",
-											top: "15%",
-											left: "35%",
+											width: "438px",
+											height: "248px",
+											top: "25%",
+											left: "39%",
+											padding:"24px"
 										},
 									}}
-								>
-									<h1>닉네임 변경하기</h1>
-									<br />
-									<p>변경할 닉네임</p>
-									<input type="text" ref={nicknameRef} />
-									<button onClick={clickModifyNickname}>변경</button>
-									<div>
-										<button onClick={() => setNicknameModalIsOpen(false)}>X</button>
-									</div>
+								>								
+										<ModalNicknameHeader>
+											<Modalimagebox>
+												<img src={human} alt="human"></img>
+											</Modalimagebox>							
+											<h1>닉네임 변경하기</h1>
+										</ModalNicknameHeader>
+											<ModalNicknameInput 
+												className="NickInput"
+												type="text" 
+												ref={nicknameRef}
+												onChange={nicknameFilled}
+												maxLength="10"
+												placeholder = "공백 포함 10자 이내로 작성이 가능해요."
+											/>
+										<ModalBtnWrap>
+											<CancelNicknameBtn onClick={() => setNicknameModalIsOpen(false)}>취소</CancelNicknameBtn>
+											<ChangeNicknameBtn 
+											onClick={clickModifyNickname}
+											isFilled={nickFill}
+											disabled={nickFill === false}
+											>닉네임 변경</ChangeNicknameBtn>
+											<div>										
+											</div>
+										</ModalBtnWrap>
 								</Modal>
 							</NicknameArticle>
 							<DescArticle>
@@ -307,31 +339,46 @@ function MyPage() {
 											left: 0,
 											right: 0,
 											bottom: 0,
-											backgroundColor: "rgba(255, 255, 255, 0.75)",
+											backgroundColor: "rgba(0,0,0,0.5)"
 										},
 										content: {
+											background:"#fff",
+											borderRadius:"30px",
 											color: "#111",
-											width: "500px",
-											height: "500px",
-											top: "15%",
-											left: "35%",
+											width: "438px",
+											height: "492px",
+											top: "20%",
+											left: "39%",
+											padding:"24px"
 										},
 									}}
 								>
+									<ModalPasswordHeader>
+										<Modalimagebox>
+											<img src={human} alt="human"></img>
+										</Modalimagebox>	
 									<h1>비밀번호 변경하기</h1>
-									<br />
-									<div>
+									</ModalPasswordHeader>
+									<ModalPasswordContent>	
+									<ExistPwdWrap>
 										<p>기존 비밀번호</p>
 										<input type="password" ref={passwordRef} />
-									</div>
-									<div>
-										<p>변경 비밀번호</p>
+									</ExistPwdWrap>
+									<PwdWrap>
+										<p>새 비밀번호</p>
 										<input type="password" ref={newPasswordRef} />
-									</div>
-									<button onClick={clickModifyPassword}>변경</button>
-									<div>
-										<button onClick={() => setPasswordModalIsOpen(false)}>X</button>
-									</div>
+									</PwdWrap>
+									<RePwdWrap>
+										<p>새 비밀번호 확인</p>
+										<input type="password" ref={reNewPasswordRef} />
+									</RePwdWrap>
+									</ModalPasswordContent>
+									<ModalPasswrodBtnWrap>
+										<CancelPwdBtn onClick={() => setPasswordModalIsOpen(false)}>취소</CancelPwdBtn>
+										<ChangePwdBtn onClick={clickModifyPassword}>비밀번호 변경</ChangePwdBtn>
+									</ModalPasswrodBtnWrap>
+									
+							
 								</Modal>
 							</PwdArticle>
 							<DeleteAccountArticle>
@@ -465,6 +512,97 @@ const NicknameBtn = styled.button`
 	}
 `;
 
+// ModalNickname
+const ModalNicknameHeader = styled.div`
+	display:flex;
+	align-items:center;
+	margin-bottom:28px;
+	h1 {
+		color:#303030;
+		font-size:20px;
+		font-weight:600;
+	}
+`;
+
+const Modalimagebox = styled.div`
+	width: 44px;
+	height: 44px;
+	background-color:#E8E1FC;
+	border-radius:50%;
+	margin-right:12px;
+	img {
+		position:relative;
+		left: 33%;
+		top: 25%;
+	}
+`;
+
+const ModalNicknameInput = styled.input`
+	width: 390px;
+	height: 50px;
+	border: 1px solid #D2BAFF;
+	border-radius: 100px;
+	padding: 18px 20px;
+	margin-bottom:28px;
+	&:focus {
+		outline: 1px solid #9152FF;
+	}
+`;
+
+const ModalBtnWrap = styled.div`
+	display:flex;
+	float:right;
+`;
+
+const CancelNicknameBtn = styled.button`
+	width: 62px;
+	height: 48px;
+	background: #F7F3FD;
+	border-radius: 26px;
+	font-size:14px;
+	line-height:14px;
+	color:#9E67FF;
+	padding:18px;
+	margin-right:12px;
+	border:none;
+	cursor: pointer;
+`;
+
+const ChangeNicknameBtn = styled.button`
+	width: 100px;
+	height: 48px;
+	border-radius: 50px;
+	padding: 18px;
+	font-size:14px;
+	line-height:14px;
+	border:none;
+	background-color: #ECECEC;
+	color:#949494;
+	${(props) =>
+		props.isFilled
+			? css`
+					background-color: #ECECEC;
+					color:#949494;
+			  `
+			: css`		
+					background-color: #9152FF;
+					color:#fff;
+					cursor: pointer;
+			`}
+	${(props) =>
+		props.disabled
+			? css`
+					background-color: #ECECEC;
+					color:#949494;
+			  `
+			: css`		
+					background-color: #9152FF;
+					color:#fff;
+					cursor: pointer;
+			`}
+
+`;
+
 // Desc
 const DescArticle = styled.div`
 	position: relative;
@@ -555,22 +693,9 @@ const PwdTitle = styled.div`
 	color: #111111;
 	margin-bottom: 16px;
 `;
-
 const PwdArea = styled.div`
-	/* line-height: 40px; */
-	/* display: flex;
-	align-items: center; */
 `;
 
-// const Pwd = styled.div`
-// 	font-size: 20px;
-// 	color: #818181;
-// 	vertical-align: middle;
-// 	display: flex;
-// 	align-items: center;
-// 	position: relative;
-// 	top: 5px;
-// `;
 
 const PwdBtn = styled.button`
 	border: none;
@@ -584,6 +709,82 @@ const PwdBtn = styled.button`
 		cursor: pointer;
 	}
 `;
+
+// ModalPassword
+const ModalPasswordHeader = styled.div`
+	display:flex;
+	align-items:center;
+	margin-bottom:32px;
+	h1 {
+		color:#303030;
+		font-size:20px;
+		font-weight:600;
+	}
+	`
+const ModalPasswordContent = styled.div`
+	margin-bottom:28px;
+	p {
+		font-size:16px;
+		margin-bottom:12px;
+	}
+	input {
+		width: 390px;
+		height: 50px;
+		border: 1px solid #D2BAFF;
+		border-radius: 100px;
+		padding: 18px 20px;
+		&:focus {
+			outline: 1px solid #9152FF;
+	}
+	}
+`;
+
+const ExistPwdWrap = styled.div`
+	input {
+		margin-bottom:28px;
+	}
+`
+const PwdWrap = styled.div`
+	input {
+		margin-bottom:28px;
+	}
+`
+const RePwdWrap = styled.div`
+	
+`
+const ModalPasswrodBtnWrap = styled.div`
+	display:flex;
+	float:right;
+`;
+
+const CancelPwdBtn = styled.button`
+	width: 62px;
+	height: 48px;
+	background: #F7F3FD;
+	border-radius: 26px;
+	font-size:14px;
+	line-height:14px;
+	color:#9E67FF;
+	padding:18px;
+	margin-right:12px;
+	border:none;
+	cursor: pointer;
+`
+
+const ChangePwdBtn = styled.button`
+	width: 113px;
+	height: 48px;
+	border-radius: 50px;
+	padding: 18px;
+	font-size:14px;
+	line-height:14px;
+	border:none;
+	background-color: #ECECEC;
+	color:#949494;
+	box-shadow: 0px 2px 12px 1px #D2BAFF;
+`
+
+
 
 // DeleteAccount
 const DeleteAccountArticle = styled.div`
