@@ -1,10 +1,20 @@
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
 import { floatState, globalFloat } from "../../atoms/popup";
 
 function Float () {
-  const [viewState] = useRecoilState(floatState);
+  const [viewState, setViewState] = useRecoilState(floatState);
   const [float] = useRecoilState(globalFloat);
+
+  useEffect(() => {
+    if (viewState) {
+      setTimeout(() => {
+        setViewState(false)
+      }, 5000);
+    }
+  }, [viewState, setViewState]);
+
   return (
     <Box isActive={viewState}>
       {float}

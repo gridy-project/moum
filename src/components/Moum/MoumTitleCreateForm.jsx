@@ -14,6 +14,7 @@ import useHandleChange from "../../hooks/useHandleChange";
 
 // image
 import arrowSave from "../../public/img/arrow-moum-save.png"
+import queryClient from "../../shared/query";
 import LinkPieceModifyPopup from "../card/LinkPieceModifyPopup";
 import MemoPieceModifyPopup from "../card/MemoPieceModifyPopup";
 import fastCreateBottom from "./images/fast-create-select-bottom.png";
@@ -22,12 +23,6 @@ function MoumCreateModifyPopup ({piece}) {
   const setFloatState = useSetRecoilState(floatState);
   const setPopupState = useSetRecoilState(popupState);
   const setPopup = useSetRecoilState(globalPopup);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setFloatState(false);
-    }, 5000);
-  }, [setFloatState]);
 
   const runModifyPopup = (e) => {
     if (piece.boardType === "LINK") {
@@ -65,7 +60,9 @@ function MoumTitleCreateForm () {
     }
   }, {
     onSuccess: data => {
+      queryClient.invalidateQueries("piece");
       setFloatState(true);
+      console.log(data);
       setFloat(<MoumCreateModifyPopup piece={data} />)
     },
     onError: err => {

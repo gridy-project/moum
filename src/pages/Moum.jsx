@@ -5,8 +5,6 @@ import Container from "../components/common/Container";
 
 // components
 import Header from "../components/common/Header";
-import MoumContentProfile from "../components/Moum/MoumContentProfile";
-import MoumCategoryGroup from "../components/Moum/MoumCategoryGroup";
 
 // redux
 import MoumSelect from "../components/Moum/MoumSelect";
@@ -18,6 +16,7 @@ import { useRecoilValue } from "recoil";
 import { pageMoumSelectedFolderId } from "../atoms/moum";
 import MoumList from "../components/Moum/MoumList";
 import { useState } from "react";
+import MoumHeaderCommon from "../components/Moum/MoumHeaderCommon";
 
 function Moum() {
   const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
@@ -33,13 +32,12 @@ function Moum() {
         <MoumTitleCreateForm />
       </Title>
       <Content>
-        <MoumContentProfile />
+        <MoumHeader>
+          <MoumHeaderCommon />
+          {selectedFolderId !== 0 && <MoumSelect />}
+          <MoumOptionGroup isFolderView={selectedFolderId === 0} onSelectAll={onSelectAll} />
+        </MoumHeader>
         <PieceBoard>
-          <MoumHeader>
-            <MoumCategoryGroup />
-            {selectedFolderId !== 0 && <MoumSelect />}
-            <MoumOptionGroup isFolderView={selectedFolderId === 0} onSelectAll={onSelectAll} />
-          </MoumHeader>
           {selectedFolderId === 0 ? <MoumList /> : <PieceList selectAll={selectAll} />}
         </PieceBoard>
       </Content>
@@ -63,7 +61,7 @@ const Content = styled.div`
 `;
 
 const PieceBoard = styled.div`
-  margin-top: 80px;
+  margin-top: 0px;
 `;
 
 const MoumHeader = styled.div`
