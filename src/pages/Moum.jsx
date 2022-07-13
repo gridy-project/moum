@@ -17,13 +17,18 @@ import MoumTitleCreateForm from "../components/Moum/MoumTitleCreateForm";
 import { useRecoilValue } from "recoil";
 import { pageMoumSelectedFolderId } from "../atoms/moum";
 import MoumList from "../components/Moum/MoumList";
+import { useState } from "react";
 
 function Moum() {
   const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
+  const [selectAll, setSelectAll] = useState(false);
+  const onSelectAll = (status) => {
+    setSelectAll(status);
+  }
   return (
     <Container>
       <Title>
-        <Header />
+        <Header selected={1} />
         <MoumTitleContent />
         <MoumTitleCreateForm />
       </Title>
@@ -33,9 +38,9 @@ function Moum() {
           <MoumHeader>
             <MoumCategoryGroup />
             {selectedFolderId !== 0 && <MoumSelect />}
-            <MoumOptionGroup />
+            <MoumOptionGroup isFolderView={selectedFolderId === 0} onSelectAll={onSelectAll} />
           </MoumHeader>
-          {selectedFolderId === 0 ? <MoumList /> : <PieceList />}
+          {selectedFolderId === 0 ? <MoumList /> : <PieceList selectAll={selectAll} />}
         </PieceBoard>
       </Content>
     </Container>

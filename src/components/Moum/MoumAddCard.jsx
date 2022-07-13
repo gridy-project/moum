@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import moumAddButton from "../Moum/images/moum-add-button.png";
 import moum from "../../public/img/moum-background.png";

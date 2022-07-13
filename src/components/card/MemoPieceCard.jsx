@@ -1,15 +1,57 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import more from "../../public/img/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 import PieceScrollVertical from "../Moum/PieceScrollVertical";
 import privateLock from "../Moum/images/private-lock.png";
 import PieceCardOption from "./PieceCardOption";
 import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { pieceSelectMode, selectedItems } from "../../atoms/mode";
+import { useCallback } from "react";
+import { useEffect } from "react";
 
-function MemoPieceCard ({piece}) {
+function MemoPieceCard ({piece, selectAll}) {
+  const selectMode = useRecoilValue(pieceSelectMode);
+  const [items, setItems] = useRecoilState(selectedItems);
+
+  const clickCard = useCallback((e) => {
+    if (selectMode) {
+      e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
+      setItems(current => {
+        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
+          return [...current, piece.id];
+        } else {
+          return current.filter(v => v !== piece.id); // 값이 있는 경우 리스트 삭제
+        }
+      })
+    } else {
+      setItems([current => current.filter(v => v !== piece.id)]);
+    }
+  }, [selectMode, piece.id, setItems]);
+
+  useEffect(() => {
+    if (!selectMode) {
+      setItems([current => current.filter(v => v !== piece.id)]);
+    }
+  }, [selectMode, setItems, piece.id])
+
+  useEffect(() => {
+    if (selectAll) {
+      setItems(current => {
+        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
+          return [...current, piece.id];
+        } else {
+          return current;
+        }
+      });
+    } else {
+      setItems([current => current.filter(v => v !== piece.id)]);
+    }
+  }, [selectAll, setItems, piece.id]);
+
   const [buttonState, setButtonState] = useState(false);
   return (
-    <Card>
+    <Card onClick={clickCard} isSelected={items.indexOf(piece.id) !== -1}>
       <CardHeader>
         <Category>
           {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
@@ -44,6 +86,12 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  
+  ${props => props.isSelected && css`
+    background-color: #E0D6FF;
+    border: 2px solid #AC7DFF;
+  `}
 `;
 
 const CardHeader = styled.div`

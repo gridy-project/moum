@@ -1,11 +1,11 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useMutation } from 'react-query';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
 import { instance } from '../../api/axios';
-import { setLoginStatus } from '../../redux/modules/userSlice';
+import { isLogin } from '../../atoms/user';
 import { setToken } from '../../shared/localStorage';
 
 function SocialLogin ({loginSuccess}) {
@@ -20,7 +20,7 @@ function SocialLogin ({loginSuccess}) {
 export default SocialLogin;
 
 function SocialLoginButton () {
-  const dispatch = useDispatch();
+  const setLogin = useSetRecoilState(isLogin);
   const navigate = useNavigate();
 
   const {mutate: login} = useMutation(async (data) => {
@@ -30,12 +30,12 @@ function SocialLoginButton () {
     onSuccess: data => {
       alert("로그인 성공");
       setToken(data.accessToken, data.refreshToken);
-      dispatch(setLoginStatus(true));
-      navigate("/moum");
+      setLogin(true);
+      navigate("/");
     },
     onError: err => {
       alert("로그인 실패");
-      dispatch(setLoginStatus(false));
+      setLogin(false);
     }
   });
 

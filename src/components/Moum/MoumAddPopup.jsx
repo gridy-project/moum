@@ -40,6 +40,8 @@ function MoumAddPopup () {
     }
 
     addMoum(moum);
+    setPopupState(false);
+    resetPopup();
   };
 
   return (

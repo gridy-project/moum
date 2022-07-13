@@ -6,7 +6,7 @@ import { instance } from "../../api/axios";
 import LinkPieceCard from "../card/LinkPieceCard";
 import MemoPieceCard from "../card/MemoPieceCard";
 
-function PieceList () {
+function PieceList ({selectAll}) {
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {data: piece, isLoading} = useGetReactQuery(["piece", folderId], async () => {
     const response = await instance.post(`/boards/0/${folderId}/all`, [{category: "전체"}]);
@@ -18,8 +18,8 @@ function PieceList () {
       { !isLoading &&
       piece?.boardList?.length > 0 ? piece.boardList.map(
         (piece) => piece.boardType === "LINK" ? 
-          <LinkPieceCard key={piece.id} piece={piece} /> : 
-          <MemoPieceCard key={piece.id} piece={piece}/>
+          <LinkPieceCard key={piece.id} piece={piece} selectAll={selectAll} /> : 
+          <MemoPieceCard key={piece.id} piece={piece} selectAll={selectAll} />
       )
       : <div className="no-piece">조각을 생성해 주세요</div>
       }

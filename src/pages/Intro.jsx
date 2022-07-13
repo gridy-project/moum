@@ -4,7 +4,7 @@ import Header from "../components/common/Header";
 function Intro() {
   return (
     <Container>
-      <Header />
+      <Header selected={0} />
       <div></div>
     </Container>
   );

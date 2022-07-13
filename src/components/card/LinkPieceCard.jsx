@@ -8,14 +8,52 @@ import more from "../../public/img/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 import privateLock from "../Moum/images/private-lock.png";
 import PieceCardOption from "./PieceCardOption";
-import LinkPieceModifyPopup from "../card/LinkPieceModifyPopup";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { pieceSelectMode, selectedItems } from "../../atoms/mode";
+import { useCallback } from "react";
+import { useEffect } from "react";
 
-function LinkPieceCard({piece}) {
+function LinkPieceCard({piece, selectAll}) {
   const [buttonState, setButtonState] = useState(false);
+  const selectMode = useRecoilValue(pieceSelectMode);
+  const [items, setItems] = useRecoilState(selectedItems);
+
+  const clickCard = useCallback((e) => {
+    if (selectMode) {
+      e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
+      setItems(current => {
+        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
+          return [...current, piece.id];
+        } else {
+          return current.filter(v => v !== piece.id); // 값이 있는 경우 리스트 삭제
+        }
+      })
+    }
+  }, [selectMode, piece.id, setItems]);
+
+  useEffect(() => {
+    if (!selectMode) {
+      setItems([current => current.filter(v => v !== piece.id)]);
+    }
+  }, [selectMode, setItems, piece.id])
+
+  useEffect(() => {
+    if (selectAll) {
+      setItems(current => {
+        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
+          return [...current, piece.id];
+        } else {
+          return current;
+        }
+      });
+    } else {
+      setItems([current => current.filter(v => v !== piece.id)]);
+    }
+  }, [selectAll, setItems, piece.id]);
 
   return (
-    <Box>
-      <a href={piece.link} target="blank">
+    <Box isSelected={items.indexOf(piece.id) !== -1}>
+      <a onClick={clickCard} href={piece.link} target="blank">
         <div className="card-image">
           <img src={piece.imgPath || noImage} alt="noImage" />
           <div className="menu" onClick={
@@ -44,6 +82,7 @@ function LinkPieceCard({piece}) {
 
 const Box = styled.div`
   position: relative;
+
   a {
     width: 100%;
     height: 314px;
@@ -53,13 +92,22 @@ const Box = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow: hidden;
   }
+
+  
+  ${props => props.isSelected && css`
+    a {
+      background-color: #E0D6FF;
+      border: 2px solid #AC7DFF;
+    }
+  `}
 
   .card-image {
     width: 100%;
     height: 100%;
     background-color: #D9D9D9;
-    border-radius: 15px;
+    border-radius: 0px 0px 15px 15px;
     overflow: hidden;
     display: flex;
     justify-content: center;

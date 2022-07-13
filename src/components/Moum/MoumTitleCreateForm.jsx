@@ -1,29 +1,72 @@
 // module
+import { useEffect } from "react";
 import { useState } from "react";
 import { useMutation } from "react-query";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { instance } from "../../api/axios";
+import { pageMoumSelectedFolderId } from "../../atoms/moum";
+import { floatState, globalFloat, globalPopup, popupState } from "../../atoms/popup";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";
 
 // image
 import arrowSave from "../../public/img/arrow-moum-save.png"
+import LinkPieceModifyPopup from "../card/LinkPieceModifyPopup";
+import MemoPieceModifyPopup from "../card/MemoPieceModifyPopup";
 import fastCreateBottom from "./images/fast-create-select-bottom.png";
 
+function MoumCreateModifyPopup ({piece}) {
+  const setFloatState = useSetRecoilState(floatState);
+  const setPopupState = useSetRecoilState(popupState);
+  const setPopup = useSetRecoilState(globalPopup);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFloatState(false);
+    }, 5000);
+  }, [setFloatState]);
+
+  const runModifyPopup = (e) => {
+    if (piece.boardType === "LINK") {
+      setPopup(<LinkPieceModifyPopup piece={piece} />);
+    } else if (piece.boardType === "MEMO") {
+      setPopup(<MemoPieceModifyPopup piece={piece} />);
+    }
+    setPopupState(true);
+    setFloatState(false);
+  }
+
+  return (
+    <div>
+      <button onClick={runModifyPopup}>수정하기</button>
+    </div>
+  )
+}
+
 function MoumTitleCreateForm () {
+  const setFloatState = useSetRecoilState(floatState);
+  const setFloat = useSetRecoilState(globalFloat);
+  const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {input, setInput, handleChange} = useHandleChange({
     type: "LINK",
     content: ""
   });
 
   const {mutate: addPiece} = useMutation(async (data) => {
-    const response = await instance.post("/board", data);
-    return response.data;
+    if (folderId === 0) {
+      const response = await instance.post("/board", data);
+      return response.data;
+    } else {
+      const response = await instance.put("/folder", {folderId, ...data});
+      return response.data;
+    }
   }, {
     onSuccess: data => {
-      alert("파일 추가 성공");
+      setFloatState(true);
+      setFloat(<MoumCreateModifyPopup piece={data} />)
     },
     onError: err => {
       alert("파일 추가 실패");
@@ -60,8 +103,7 @@ function MoumTitleCreateForm () {
     }
 
     addPiece(obj);
-
-    // dispatch(addPieceSimpleThunk(folderId, mappingPieceToServerSimple(input)));
+    setInput((current) => ({...current, content: ""}));
   }
 
   const [toggle, setToggle] = useState(false);
@@ -89,7 +131,11 @@ function MoumTitleCreateForm () {
             }}>메모</Option>
         </SelectBoxOption>
       </SelectWrap>
-      <input type="text" placeholder="링크를 입력하세요." onChange={handleChange("content")} value={input.content}/>
+      <input 
+        type="text" 
+        placeholder={type.value === "LINK" ? "링크를 입력하세요." : "메모를 입력하세요"} 
+        onChange={handleChange("content")} 
+        value={input.content}/>
       <button>저장하기<img src={arrowSave} alt="save" /></button>
     </Form>
   );
@@ -105,6 +151,7 @@ const SelectBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
   img {
     margin-left: 8px;
   }
@@ -119,6 +166,7 @@ const SelectBoxOption = styled.div`
   background-color: #FFFFFF;
   padding: 6px;
   border-radius: 12px;
+  cursor: pointer;
   display: ${props => props.toggle ? "block" : "none"};
 `;
 

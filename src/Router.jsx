@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { runRefresh } from "./redux/modules/userSlice";
+import { useCallback, useEffect } from "react";
 
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
@@ -11,13 +10,34 @@ import Moum from "./pages/Moum";
 import NotFound from "./pages/NotFound";
 import Intro from "./pages/Intro";
 import Test from "./pages/Test";
+import { getRefreshToken, removeToken, setToken } from "./shared/localStorage";
+import { refresh } from "./api/auth";
+import { useSetRecoilState } from "recoil";
+import { isLogin } from "./atoms/user";
 
 function Router() {
-  const dispatch = useDispatch();
+  const setLogin = useSetRecoilState(isLogin);
+
+  const refreshLogin = useCallback(async () => {
+    const token = getRefreshToken();
+    if (token) {
+      const { result, data } = await refresh(token);
+
+      if (result) {
+        console.log("토큰 갱신 성공");
+        setToken(data.accessToken, data.refreshToken);
+        setLogin(true);
+      } else {
+        console.log("토큰 갱신 실패");
+        removeToken();
+        setLogin(false);
+      }
+    }
+  }, [setLogin])
 
   useEffect(() => {
-    dispatch(runRefresh());
-  }, [dispatch]);
+    refreshLogin();
+  }, [refreshLogin]);
 
   return (
     <Routes>

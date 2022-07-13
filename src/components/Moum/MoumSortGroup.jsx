@@ -1,30 +1,146 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import moumSortBottom from "./images/moum-sort-select-bottom.png";
 import pieceSelect from "./images/piece-select.png";
 import pieceSearch from "./images/piece-search.png";
+import { useState } from "react";
+import { useRef } from "react";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import { pieceSelectMode, selectedItems } from "../../atoms/mode";
 
-function MoumOptionGroup () {
+function MoumOptionSort ({active, setActive}) {
+  const [option, setOption] = useState("최신 조각순");
+  const toggleOptionSelect = (e) => {
+    setActive((current) => !current);
+  }
+
+  return (
+    <Sort>
+      <NowOption isActive={active} onClick={toggleOptionSelect}>{option}<img src={moumSortBottom} alt="bottom" /></NowOption>
+      <SortOptionList isActive={active}>
+        <li onClick={(e) => {setOption("최신 조각순"); setActive(false)}}>최신 조각순</li>
+        <li onClick={(e) => {setOption("사용자 지정순"); setActive(false)}}>사용자 지정순</li>
+      </SortOptionList>
+    </Sort>
+  )
+}
+
+
+const Sort = styled.div`
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+`;
+
+const NowOption = styled.div`
+  padding: 16px;
+  border: 1px solid #DFDFDF;
+  background-color: #FFFFFF;
+  border-radius: 50px;
+  color: #303030;
+  display: flex;
+  align-items: center;
+  width: 145px;
+  font-size: 15px;
+  box-shadow: none;
+  transition: border .3s, box-shadow .3s;
+  justify-content: space-between;
+
+  img {
+    margin-left: 18px;
+  }
+
+  ${props => props.isActive && css`
+    border: 1px solid #E0D6FF;
+    box-shadow: 0px 0px 6px 2px #E8E1FC;
+  `}
+`;
+
+const SortOptionList = styled.ul`
+  display: ${props => props.isActive ? "flex" : "none"};
+  position: absolute;
+  top: 65px;
+  width: 100%;
+  background-color: #FFFFFF;
+  z-index: 1;
+  border-radius: 12px;
+  flex-direction: column;
+
+  ${props => props.isActive && css`
+    border: 1px solid #E0D6FF;
+    box-shadow: 0px 0px 6px 2px #E8E1FC;
+  `}
+
+  li {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 14px;
+    padding: 18px;
+    transition: color .3s;
+  }
+
+  li:hover {
+    color: #9152FF;
+  }
+
+  li + li {
+    padding-top: 9px;
+  }
+`;
+
+function MoumOptionGroup ({isFolderView, onSelectAll}) {
+  const [selectState, setSelectState] = useState(false);
+  const [searchActive, setSearchActive] = useState(false);
+  const [modeState, setModeState] = useRecoilState(pieceSelectMode);
+  const setSelectedItems = useSetRecoilState(selectedItems);
+
+  const changeSearchText = (e) => {
+    if (e.target.value.length > 0) {
+      setSearchActive(true);
+    } else {
+      setSearchActive(false);
+    }
+  }
+
+  const toggleSelectMode = (e) => {
+    setModeState(current => {
+      if (current) {
+        onSelectAll(false);
+      }
+      return !current;
+    });
+  }
+
+  const selectAll = (e) => {
+    onSelectAll(true);
+  }
+
   return (
     <OptionGroup>
-      <Sort>
-        <div className="selected-sort">최신 조각순<img src={moumSortBottom} alt="bottom" /></div>
-        <ul>
-          <li>최신 조각순</li>
-          <li>사용자 지정순</li>
-        </ul>
-      </Sort>
-      <Search>
+      <MoumOptionSort active={selectState} setActive={setSelectState} />
+      <Search isActive={searchActive}>
         <form>
-          <input type="text" placeholder="나의 조각 검색하기" />
+          <input type="text" placeholder="나의 조각 검색하기" onChange={changeSearchText} />
           <button><img src={pieceSearch} alt="검색" /></button>
         </form>
       </Search>
       <Option>
-        <button className="piece-select-button">
-          <img src={pieceSelect} alt="select" />
-          <span>조각 선택 및 정리</span>
-        </button>
+        {!isFolderView && ( // Folder를 보고 있지 않은 경우
+          modeState ? 
+          <div className="piece-select-mode">
+            <span>조각을 선택하세요</span>
+            <button className="btn-cancel" onClick={toggleSelectMode}>취소</button>
+            <button className="btn-select" onClick={selectAll}>모두 선택</button>
+          </div> :
+          <button className="piece-select-button" onClick={toggleSelectMode}>
+            <img src={pieceSelect} alt="select" />
+            <span>조각 선택 및 정리</span>
+          </button>
+        )}
       </Option>
     </OptionGroup>
   );
@@ -39,29 +155,6 @@ const OptionGroup = styled.div`
   align-items: center;
 `;
 
-const Sort = styled.div`
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  .selected-sort {
-    padding: 16px;
-    border: 1px solid #DFDFDF;
-    background-color: #FFFFFF;
-    border-radius: 50px;
-    color: #303030;
-    display: flex;
-    align-items: center;
-
-    img {
-      margin-left: 18px;
-    }
-  }
-
-  ul {
-    display: none;
-  }
-`;
-
 const Search = styled.div`
   width: 100%;
   height: 100%;
@@ -74,7 +167,8 @@ const Search = styled.div`
     width: 400px;
     height: 44px;
     border-radius: 22px;
-    background-color: #E8E1FC;
+    transition: background .3s;
+    background-color: ${props => props.isActive ? "#FFFFFF": "#E8E1FC"};
     justify-content: space-between;
     input {
       width: 100%;
@@ -82,7 +176,7 @@ const Search = styled.div`
       background-color: transparent;
       border: none;
       outline: none;
-      color: #9E67FF;
+      color: #303030;
       padding: 0 0 0 20px;
 
       &::placeholder {
@@ -103,10 +197,39 @@ const Search = styled.div`
 const Option = styled.div`
   display: flex;
   flex-shrink: 0;
-  button {
+  height: 44px;
+  .piece-select-mode {
+    display: flex;
+    align-items: center;
+    span {
+      color: #949494;
+    }
+
+    button {
+      height: 100%;
+      padding: 0 18px;
+      border-radius: 22px;
+      margin-left: 16px;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background-color: #E8E1FC;
+      border: none;
+      color: #9152FF;
+    }
+
+    .btn-select {
+      border: 1px solid #BE9AFF;
+      background-color: #FFFFFF;
+      color: #9152FF;
+    }
+  }
+
+  .piece-select-button {
     border: 1px solid #BE9AFF;
     background-color: #FFFFFF;
-    padding: 18px;
+    padding: 0 18px;
     font-size: 16px;
     color: #9152FF;
     display: flex;
