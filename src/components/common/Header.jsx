@@ -1,43 +1,42 @@
 import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "../../shared/localStorage";
-import { setLoginStatus } from "../../redux/modules/userSlice";
+import { useRecoilState } from "recoil";
+import { isLogin } from "../../atoms/user";
 
-function Header() {
+function Header({selected}) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { isLogin, isLoading } = useSelector((state) => state.user);
+  const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
 
   return (
     <Container>
-      {!isLoading && (
-        <>
-          <Logo><Link to="/"><span></span>moum</Link></Logo>
-          <Menu>
-            <nav>
-              <ul>
-                <Item><Link to="/">moum 소개</Link></Item>
-                <Item isActive={true}><Link to="/moum">나의 모음</Link></Item>
-                <Item><Link to="/search">전체 모음</Link></Item>
-                <Item><Link to="/mypage">마이페이지</Link></Item>
-              </ul>
-            </nav>
-            {isLogin ? 
-              (
-                <button onClick={() => {
-                  removeToken();
-                  dispatch(setLoginStatus(false));
-                  navigate("/");
-                }}>로그아웃</button>
-              ) : (
-                <button onClick={() => { navigate("/login") }}>로그인</button>
-              )
+      <Logo><Link to="/"><span></span>moum</Link></Logo>
+      <Menu>
+        <nav>
+          <ul>
+            <Item isActive={selected === 0}><Link to="/">moum 소개</Link></Item>
+            {loginStatus && (
+              <>
+                <Item isActive={selected === 1}><Link to="/moum">나의 모음</Link></Item>
+                <Item isActive={selected === 2}><Link to="/search">전체 모음</Link></Item>
+                <Item isActive={selected === 3}><Link to="/mypage">마이페이지</Link></Item>
+              </>
+            )
             }
-          </Menu>
-        </>
-      )}
+          </ul>
+        </nav>
+        {loginStatus ? 
+          (
+            <button onClick={() => {
+              removeToken();
+              setLoginStatus(false);
+              navigate("/");
+            }}>로그아웃</button>
+          ) : (
+            <button onClick={() => { navigate("/login") }}>로그인</button>
+          )
+        }
+      </Menu>
     </Container>
   );
 }

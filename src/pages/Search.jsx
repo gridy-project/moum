@@ -30,7 +30,7 @@ function Search() {
 
   return (
     <Container>
-      <Header />
+      <Header selected={2}/>
       <SearchForm>
         <input type="text" />
         <button>
@@ -38,14 +38,14 @@ function Search() {
         </button>
       </SearchForm>
       <Content>
-        { followUserList.length > 0 && 
+        {/* { followUserList?.length > 0 &&  */}
         <Follower>
           <em>내가 팔로우한 계정</em>
           <FollowerList>
             {
               followUserListLoading ? <div>isLoading</div> : 
-              bestMoum.content.map((moum) => {
-                return <MoumCard key={moum.id} moum={moum}/>
+              followUserList?.content?.map((moum) => {
+                return <FollowerCard />
               })
             }
             <FollowerCard />
@@ -54,29 +54,27 @@ function Search() {
             <FollowerCard />
           </FollowerList>
         </Follower>
-        }
         <Latest>
           <em>스크랩 많은 인기 모음</em>
           <LatestList>
             {
               bestMoumLoading ? <div>isLoading</div> :
-              bestMoum.content.map((moum) => {
+              bestMoum?.content?.map((moum) => {
                 return <MoumCard key={moum.id} moum={moum}/>
               })
             }
           </LatestList>
         </Latest>
-        { latestPiece.content.length > 0 && 
         <Favorite>
           <em>최근 올라온 조각</em>
           <FavoriteList>
             { latestPieceLoading ? <div>isLoading</div> :
-              latestPiece.content.map(piece => {
+              latestPiece?.content?.map(piece => {
                 return <LinkPieceCard key={piece.id} piece={piece} />
               })
             }
           </FavoriteList>
-        </Favorite>}
+        </Favorite>
       </Content>
     </Container>
   )

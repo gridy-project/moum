@@ -11,6 +11,7 @@ export const requestAxios = async (func) => {
     const response = await func();
     return { result: SUCCESS, data: response.data };
   } catch (err) {
+    console.log("에러");
     console.log(err);
     return { result: FAILED, data: err.response.data };
   }
@@ -44,27 +45,30 @@ instance.interceptors.response.use(
       config,
       response: { status },
     } = error;
-    if (status === 402) { // 토큰 없음 : 402
+    console.log(status);
+    if (status === 402) { // 토큰이 헤더에 없음 : 402
       window.location.replace("/");
     }
-    if (status === 403 || status === 401) { // 만료된 토큰 : 403 , 변질된 토큰 : 401, 토큰 없음 : 402
+    if (status === 406) { // 변질된 토큰 : 406
+      removeToken();
+      window.location.replace("/");
+    }
+    if (status === 410) { // 만료된 토큰 : 410
       const originalRequest = config;
       const token = getRefreshToken();
       if (token) {
         const { result, data } = await refresh(token);
         if (result) {
-          console.log("SUCCESS");
           setToken(data.accessToken, data.refreshToken);
           return instance(originalRequest);
         } else {
           removeToken();
           window.location.replace("/");
         }
-      } else {
-        window.location.replace("/");
       }
+      window.location.replace("/");
     } else if (status === 500) {
-      console.log("ERROR 500");
+      console.log(error);
     }
     return Promise.reject(error);
   },

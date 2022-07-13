@@ -104,7 +104,7 @@ function MyPage() {
 
 	return (
 		<Container>
-			<Header />
+			<Header selected={3}/>
 			<Wrap>
 				<TitleWrap>
 					<Title>마이페이지</Title>

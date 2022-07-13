@@ -2,15 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SocialLogin from "../components/Login/SocialLogin";
-import { useDispatch } from "react-redux";
 import { instance } from "../api/axios";
 import { useMutation } from "react-query";
 import { setToken } from "../shared/localStorage";
-import { setLoginStatus } from "../redux/modules/userSlice";
+import { useRecoilState } from "recoil";
+import { isLogin } from "../atoms/user";
 
 function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
 
   const idRef = React.useRef(null);
   const pwRef = React.useRef(null);
@@ -23,12 +23,12 @@ function Login() {
     onSuccess: data => {
       alert("로그인 성공");
       setToken(data.accessToken, data.refreshToken);
-      dispatch(setLoginStatus(true));
+      setLoginStatus(true);
       navigate("/moum");
     },
     onError: err => {
       alert("로그인 실패");
-      dispatch(setLoginStatus(false));
+      setLoginStatus(false);
     }
   });
 

@@ -63,7 +63,7 @@ export const typeCategory = [
   "디자인",
   "쇼핑",
   "건강",
-  "식당",
+  "음식",
   "카페",
   "영화",
   "비즈니스",
@@ -108,10 +108,10 @@ export const getSelectMoumCategory = (name) => {
         image: healthSelect,
         imageActive: healthSelectActive
       }
-    case "식당":
+    case "음식":
       return {
         id: 4,
-        category: "식당",
+        category: "음식",
         image: foodSelect,
         imageActive: foodSelectActive
       }

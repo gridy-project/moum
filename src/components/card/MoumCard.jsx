@@ -79,16 +79,19 @@ function MoumCard({moum}) {
   const setGlobalPopup = useSetRecoilState(globalPopup);
   const setSelectedFolderId = useSetRecoilState(pageMoumSelectedFolderId);
   const [buttonState, setButtonState] = useState(false);
+  
   const runFolder = (e) => {
     setSelectedFolderId(moum.id);
   }
 
-  const {mutate: remove} = useMutation(async (id) => {
-    const response = await instance.delete(`/folder/${id}`);
+  const {mutate: remove} = useMutation(async (data) => {
+    console.log(data);
+    const response = await instance.delete(`/folders`, {data});
     return response.data;
   }, {
     onSuccess: data => {
       queryClient.invalidateQueries("moum");
+      alert("폴더 생성 성공");
     },
     onError: err => {
       console.log(err);
@@ -99,7 +102,7 @@ function MoumCard({moum}) {
     e.preventDefault();
     e.stopPropagation(); 
     setButtonState(false);
-    remove(moum.id);
+    remove([{ id: moum.id }]);
   }
 
   const modifyFolder = (e) => {
