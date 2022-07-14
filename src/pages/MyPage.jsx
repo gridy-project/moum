@@ -4,10 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 // React Query
 import {  useMutation, useQuery } from "react-query";
 import queryClient from "../shared/query";
+// React-hook-form
+import { useForm } from "react-hook-form";
 // css
 import styled, { css } from "styled-components";
 import pen from "../public/img/pen.png";
-import human from "../public/img/human.png"
+import human from "../public/img/human.png";
+import xbutton from "../public/img/xbutton.png";
 // modal
 import Modal from "react-modal";
 // axios
@@ -15,38 +18,30 @@ import { instance } from "../api/axios"
 // component
 import Header from "../components/common/Header";
 import Container from "../components/common/Container";
-
 Modal.setAppElement("#root");
+
 
 function MyPage() {
 	const imageRef = useRef(null);
-	const passwordRef = useRef(null);
-	const newPasswordRef = useRef(null);
-	const reNewPasswordRef = useRef(null)
 	const nicknameRef = useRef(null);
 	const descInfoRef = useRef(null);
 
+	// modal
+	const [nicknameModalIsOpen, setNicknameModalIsOpen] = useState(false);
+	const [passwordModalIsOpen, setPasswordModalIsOpen] = useState(false);
+
 	// 닉네임 변경 input
 	const [nickFill, setNickFill] = useState(false);
-
-	const nicknameFilled = (e) => {
-		if(e.target.value.length > 0) {
-			setNickFill(true)
-		} else {
-			setNickFill(false)
-		}
-	}
 
 	// 계정 설명 textarea
 	const [active, setActive] = useState(false);
 	const actived = active ? false : true;
 
 	// 글자 수 세기
-	const [len, setLen] = useState(0);
-
-	// modal
-	const [nicknameModalIsOpen, setNicknameModalIsOpen] = useState(false);
-	const [passwordModalIsOpen, setPasswordModalIsOpen] = useState(false);
+	const [len, setLen] = useState(0); // 계정 설명
+	const [existPwdLen, setExistPwdLen] = useState(false); // 기존 비밀번호
+	const [newPwdLen, setNewPwdLen] = useState(false); // 새 비밀번호
+	const [reNewPwdLen, setReNewPwdLen] = useState(false); // 새 비밀번호 재입력
 
 	// 프로필 이미지 1장 업로드
 	const uploadImage = (e) => {
@@ -77,7 +72,7 @@ function MyPage() {
     }
   )
 
-	// ======= 계정 관리 ========
+	// 계정 조회 ==========================================
 
 	const { data } = useQuery(
     "profile",
@@ -87,15 +82,14 @@ function MyPage() {
     },
     {
       onSuccess: (data) => {
-				queryClient.invalidateQueries("profile");
-			 },
+			},
       onError: (err) => {
         console.log(err);
       }
     }
   );
 	
-	// 닉네임 변경
+	// 닉네임 변경 ===========================================
 	const clickModifyNickname = () => {
 			setNickFill(false)
 			const data = {
@@ -119,32 +113,108 @@ function MyPage() {
     }
   )
 
-	// 비밀번호 변경
-	const clickModifyPassword = () => {
-			const data = {
-			password: passwordRef.current.value,
-			newPassword: newPasswordRef.current.value,
-		}		
-		modifyPassword(data);
-	};
-
+	// 닉네임 변경 input
+	const nicknameFilled = (e) => {
+		if(e.target.value.length > 0) {
+			setNickFill(true)
+		} else {
+			setNickFill(false)
+		}
+	}
+	// 비밀번호 변경 ==========================================
 		const { mutate: modifyPassword } = useMutation(
-    async (data) => {
-      const response = await instance.put("/user/pw/update/", data);
-      return response.data;
+    async (newData) => {
+      const response = await instance.put("/user/pw/update/", newData);
+      return response.newData;
     },
     {
       onSuccess: (data) => {
         console.log(data);
+				localStorage.removeItem("accessToken")
+				localStorage.removeItem("refreshToken")
+				window.location.replace('/login');
       },
 			onError: (err) => {
 				console.log(err)
-				window.alert(err.response.data.message);
+				// window.alert(err.response.data.message);
 			}
     }
   )
+	// react-hook-form 에서 쓸 애들 꺼내 쓰기
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    watch,
+  } = useForm();
 
-	// 계정 설명 수정
+	// react-hook-form 넘길때 추가에러 설정 및 데이터 서버에 넘기기
+	const onValid = (data) => {
+		if(data.newpassword !== data.renewpassword){
+			setError(
+				"renewpassword",
+				{message:"새로 설정한 비밀번호가 동일하지 않습니다."},
+				// error 발생시 그 input 값으로 focus
+				{shouldFocus:true}
+			);
+		} else if (data.newpassword === data.password){
+				setError(
+				"newpassword",
+				{message:"기존 비밀번호와 동일합니다."},
+				// error 발생시 그 input 값으로 focus
+				{shouldFocus:true}
+			);
+		} else {
+			// 제대로 다 작성했을 때 실행
+			let newData = {
+				password: data.password,
+				newPassword: data.newpassword,
+			};
+			modifyPassword(newData);
+		}
+	}
+
+	// react-hook-form 비밀번호 활성화 비활성화
+	const [isPwdActive, setIsPwdActive] = useState(false);
+	const watchAll = Object.values(watch());
+	useEffect(() => {
+		if (watchAll.every((el) => el)){ // 인풋값이 다 채워졌을때
+			setIsPwdActive(true);
+		} else {
+			setIsPwdActive(false);
+		}
+	},[watchAll])
+
+
+	// input 값 있을시 x button 활성화
+	const onChangePwd = watch("password")?.length ?? 0;
+
+	const watchExistpwd = () => {
+		if (onChangePwd > 0){
+			setExistPwdLen(true)
+		} else {
+			setExistPwdLen(false)
+		}
+	}
+
+
+	const checkExistPwd = (e) => {	
+		e.target.value.length > 0 ? setExistPwdLen(true) : setExistPwdLen(false)
+		console.log(e.target.value.length)
+		if (watch.password.length > 0){
+			setExistPwdLen(true)
+		} else {
+			setExistPwdLen(false)
+		}
+	} 
+
+	// x button 클릭시 input 초기화
+	const removeExitPwd = () => {
+		
+	}
+
+	// 계정 설명 수정  ============================================
 	const updateDesc = (e) => {
 		e.preventDefault();
 			const data = {
@@ -169,7 +239,16 @@ function MyPage() {
 			}
     }
   )
-	// 회원 탈퇴
+		// 글자 수 세기 / 제한
+	const descTextChange = (e) => {
+		setLen(e.target.value.length);
+		
+		if (descInfoRef.current.value.length > 40){
+			descInfoRef.current.value = descInfoRef.current.value.slice(0,39);
+		}
+	}
+
+	// 회원 탈퇴 =====================================================
 	const clickDelete = () => {
 		RemoveAccount()
 	};
@@ -190,14 +269,6 @@ function MyPage() {
 			}
     }
   )
-	// 글자 수 세기 / 제한
-	const descTextChange = (e) => {
-		setLen(e.target.value.length);
-		
-		if (descInfoRef.current.value.length > 40){
-			descInfoRef.current.value = descInfoRef.current.value.slice(0,39);
-		}
-	}
 
 	return (
 		<Container>
@@ -273,7 +344,6 @@ function MyPage() {
 											<h1>닉네임 변경하기</h1>
 										</ModalNicknameHeader>
 											<ModalNicknameInput 
-												className="NickInput"
 												type="text" 
 												ref={nicknameRef}
 												onChange={nicknameFilled}
@@ -284,7 +354,6 @@ function MyPage() {
 											<CancelNicknameBtn onClick={() => setNicknameModalIsOpen(false)}>취소</CancelNicknameBtn>
 											<ChangeNicknameBtn 
 											onClick={clickModifyNickname}
-											isFilled={nickFill}
 											disabled={nickFill === false}
 											>닉네임 변경</ChangeNicknameBtn>
 											<div>										
@@ -345,8 +414,9 @@ function MyPage() {
 											background:"#fff",
 											borderRadius:"30px",
 											color: "#111",
-											width: "438px",
-											height: "492px",
+											width: "438px",				
+											height: "540px",
+											overflow: "clip",
 											top: "20%",
 											left: "39%",
 											padding:"24px"
@@ -359,26 +429,63 @@ function MyPage() {
 										</Modalimagebox>	
 									<h1>비밀번호 변경하기</h1>
 									</ModalPasswordHeader>
-									<ModalPasswordContent>	
-									<ExistPwdWrap>
-										<p>기존 비밀번호</p>
-										<input type="password" ref={passwordRef} />
-									</ExistPwdWrap>
-									<PwdWrap>
-										<p>새 비밀번호</p>
-										<input type="password" ref={newPasswordRef} />
-									</PwdWrap>
-									<RePwdWrap>
-										<p>새 비밀번호 확인</p>
-										<input type="password" ref={reNewPasswordRef} />
-									</RePwdWrap>
+									<form onSubmit={handleSubmit(onValid)}>
+										<ModalPasswordContent>										
+											<ExistPwdWrap
+											isExitFilled={existPwdLen} >
+												<p>기존 비밀번호</p>
+												<input
+												id="password"
+												type="password" 
+												placeholder="비밀번호를 입력하세요."								
+												onChange={e => checkExistPwd(e)}
+												{...register("password", {
+													pattern:{
+														  value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
+															message: "현재 비밀번호와 다릅니다.",
+													},
+												})}
+												/>
+												<span>{errors?.password?.message}</span>
+												{onChangePwd > 0 && <img 
+												src={xbutton} 
+												alt=""
+												onClick={removeExitPwd} />}
+								
+											</ExistPwdWrap>
+											<PwdWrap>
+												<p>새 비밀번호</p>
+												<input
+												id="newPassword"
+												type="password"
+												placeholder="새 비밀번호를 입력하세요."
+												{...register("newpassword", {
+												required:"새 비밀번호를 입력하세요.",
+												pattern:{
+														value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
+														message: "숫자 + 영문자 조합으로 최소 4자 이상 입력해주세요.",
+												},	
+												})}	
+												/>
+												<span>{errors?.newpassword?.message}</span>
+												<img src={xbutton} alt=""/>
+											</PwdWrap>
+											<RePwdWrap>
+												<p>새 비밀번호 확인</p>
+												<input
+												id="reNewPassword"
+												type="password"
+												placeholder="새 비밀번호를 재입력하세요."										
+												/>
+												<span>{errors?.renewpassword?.message}</span>
+												<img src={xbutton} alt=""/>
+											</RePwdWrap>												
 									</ModalPasswordContent>
 									<ModalPasswrodBtnWrap>
 										<CancelPwdBtn onClick={() => setPasswordModalIsOpen(false)}>취소</CancelPwdBtn>
-										<ChangePwdBtn onClick={clickModifyPassword}>비밀번호 변경</ChangePwdBtn>
+										<ChangePwdBtn disabled={!isPwdActive}>비밀번호 변경</ChangePwdBtn>
 									</ModalPasswrodBtnWrap>
-									
-							
+									</form>							
 								</Modal>
 							</PwdArticle>
 							<DeleteAccountArticle>
@@ -532,7 +639,7 @@ const Modalimagebox = styled.div`
 	margin-right:12px;
 	img {
 		position:relative;
-		left: 33%;
+		left: 35.6%;
 		top: 25%;
 	}
 `;
@@ -551,7 +658,9 @@ const ModalNicknameInput = styled.input`
 
 const ModalBtnWrap = styled.div`
 	display:flex;
-	float:right;
+	position:absolute;
+	bottom: 24px;
+	right:24px;
 `;
 
 const CancelNicknameBtn = styled.button`
@@ -579,17 +688,6 @@ const ChangeNicknameBtn = styled.button`
 	background-color: #ECECEC;
 	color:#949494;
 	${(props) =>
-		props.isFilled
-			? css`
-					background-color: #ECECEC;
-					color:#949494;
-			  `
-			: css`		
-					background-color: #9152FF;
-					color:#fff;
-					cursor: pointer;
-			`}
-	${(props) =>
 		props.disabled
 			? css`
 					background-color: #ECECEC;
@@ -600,7 +698,6 @@ const ChangeNicknameBtn = styled.button`
 					color:#fff;
 					cursor: pointer;
 			`}
-
 `;
 
 // Desc
@@ -708,6 +805,7 @@ const PwdBtn = styled.button`
 	&:hover {
 		cursor: pointer;
 	}
+
 `;
 
 // ModalPassword
@@ -723,6 +821,7 @@ const ModalPasswordHeader = styled.div`
 	`
 const ModalPasswordContent = styled.div`
 	margin-bottom:28px;
+	position:relative;
 	p {
 		font-size:16px;
 		margin-bottom:12px;
@@ -740,21 +839,58 @@ const ModalPasswordContent = styled.div`
 `;
 
 const ExistPwdWrap = styled.div`
-	input {
-		margin-bottom:28px;
+	position:relative;
+	span {
+		color:#FF5C5C;
+		position:relative;
+		top:10px;
+		height: 15px;
+		display:inline-block;
+	}
+	img {
+		position:absolute;
+		top:42px;
+		right:15px;
+		display:block;
 	}
 `
 const PwdWrap = styled.div`
-	input {
-		margin-bottom:28px;
+	margin-top:28px;
+	position:relative;
+	span {
+		color:#FF5C5C;
+		position:relative;
+		top:10px;
+		height: 15px;
+		display:inline-block;
+	}
+	img {
+		position:absolute;
+		top:42px;
+		right:15px;
 	}
 `
 const RePwdWrap = styled.div`
-	
+	margin-top:28px;
+	position:relative;
+	span {
+		color:#FF5C5C;
+		position:relative;
+		height: 15px;
+		display:inline-block;
+		top:10px;
+	}
+	img {
+		position:absolute;
+		top:42px;
+		right:15px;
+	}
 `
 const ModalPasswrodBtnWrap = styled.div`
 	display:flex;
-	float:right;
+	position:absolute;
+	right:24px;
+	bottom:24px;
 `;
 
 const CancelPwdBtn = styled.button`
@@ -781,10 +917,18 @@ const ChangePwdBtn = styled.button`
 	border:none;
 	background-color: #ECECEC;
 	color:#949494;
-	box-shadow: 0px 2px 12px 1px #D2BAFF;
+		${(props) =>
+		props.disabled
+			? css`
+					background-color: #ECECEC;
+					color:#949494;
+			  `
+			: css`		
+					background-color: #9152FF;
+					color:#fff;
+					cursor: pointer;
+			`}
 `
-
-
 
 // DeleteAccount
 const DeleteAccountArticle = styled.div`
