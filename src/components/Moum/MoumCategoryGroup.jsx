@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { selectedCategories } from "../../atoms/moum";
 import MoumCategory from "./MoumCategory";
 
-function MoumCategoryGroup ({user}) {
+function MoumCategoryGroup ({categories}) {
   const [count, setCount] = useState(0);
   const [category, setCategory] = useState(
     [
@@ -12,19 +14,17 @@ function MoumCategoryGroup ({user}) {
         name: "카테고리 전체",
         isActive: true
       },
-      ...user.categoryList.map((v) => ({name: v.category, isActive: false})).filter((v) => v.name !== null)
+      ...categories.map((v) => ({name: v.category, isActive: false}))
     ]
   );
+  const setSelected = useSetRecoilState(selectedCategories);
 
   useEffect(() => {
-    setCategory(
-      (current) => {
-        const arr = [...current];
-        arr[0].isActive = count === 0 ? true : false;
-        return arr;
-      }
-    )
-  }, [count]);
+    setSelected(
+      category.filter((v) => v.isActive)
+      .map((v) => ({category : v.name === "카테고리 전체" ? "전체" : v.name}))
+    );
+  }, [category, setSelected]);
 
   const categoryClick = useCallback((idx) => {
     if (idx === 0) { // 전체 선택일경우 -> 전체선택은 비활성화 불가능
@@ -41,8 +41,21 @@ function MoumCategoryGroup ({user}) {
         
         const active = arr[idx].isActive; // active 현재 상태 저장
         
-        active ? setCount(current => current + 1) : setCount(current => current - 1);
-        // active 상태에 따라 count 추가 및 감소
+        if (active) {
+          setCount(num => {
+            if (num + 1 > 0) {
+              arr[0].isActive = false;
+            }
+            return num + 1;
+          });
+        } else {
+          setCount(num => {
+            if (num - 1 === 0) {
+              arr[0].isActive = true;
+            }
+            return num - 1;
+          });
+        }
         return arr;
       })
     }

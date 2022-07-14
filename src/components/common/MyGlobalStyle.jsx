@@ -1,10 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "../../public/css/reset.css";
-import { useSelector } from "react-redux";
 
 function MyGlobalStyle () {
-  const bgColor = useSelector((state) => state.option.backgroundColor);
-  return <GlobalStyle bgColor={bgColor} />;
+  return <GlobalStyle />;
 }
 
 const GlobalStyle = createGlobalStyle`

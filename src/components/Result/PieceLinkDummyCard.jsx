@@ -1,57 +1,17 @@
-// module
-import React, { useState } from "react";
 import styled, { css } from "styled-components";
-
-// image
 import noImage from "../../public/img/Image.png";
 import more from "../../public/img/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
-import privateLock from "../Moum/images/private-lock.png";
-import PieceCardOption from "./PieceCardOption";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../atoms/mode";
-import { useCallback } from "react";
-import { useEffect } from "react";
 
-function LinkPieceCard({piece, selectAll}) {
-  const [buttonState, setButtonState] = useState(false);
-  const selectMode = useRecoilValue(pieceSelectMode);
-  const [items, setItems] = useRecoilState(selectedItems);
-
-  const clickCard = useCallback((e) => {
-    if (selectMode) {
-      e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
-      setItems(current => {
-        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
-          return [...current, piece.id];
-        } else {
-          return current.filter(v => v !== piece.id); // 값이 있는 경우 리스트 삭제
-        }
-      })
-    }
-  }, [selectMode, piece.id, setItems]);
-
-  useEffect(() => {
-    if (selectAll) {
-      setItems(current => {
-        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
-          return [...current, piece.id];
-        } else {
-          return current;
-        }
-      });
-    }
-  }, [selectAll, setItems, piece.id]);
-
+function PieceLinkDummyCard () {
   return (
-    <Box isSelected={items.indexOf(piece.id) !== -1}>
-      <a onClick={clickCard} href={piece.link} target="blank">
+    <Box>
+      <a href="http://localhost:3000" target="blank">
         <div className="card-image">
-          <img src={piece.imgPath || noImage} className={noImage && "no-image"} alt="noImage" />
+          <img src={noImage} alt="noImage" />
           <div className="menu" onClick={
             (e) => {
               e.preventDefault();
-              setButtonState(current => !current);
             }
           }>
             <img src={more} alt="" />
@@ -59,16 +19,15 @@ function LinkPieceCard({piece, selectAll}) {
         </div>
         <div className="card-content">
           <div className="card-header">
-            <PieceCategory category={piece.category} />
+            <PieceCategory category="디자인" />
           </div>
-          
-          <div className="card-title">{piece.title}</div>
-          <div className="card-description"><span>{piece.explanation}</span></div>
+          <div className="card-title">제목</div>
+          <div className="card-description"><span>내용</span></div>
         </div>
       </a>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
+      {/* <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} /> */}
     </Box>
-  );
+  )
 }
 
 const Box = styled.div`
@@ -96,8 +55,7 @@ const Box = styled.div`
 
   .card-image {
     width: 100%;
-    /* height: 100%; */
-    height: 155px;
+    height: 100%;
     background-color: #D9D9D9;
     border-radius: 0px 0px 15px 15px;
     overflow: hidden;
@@ -183,4 +141,4 @@ const PrivateIcon = styled.div`
   margin-right: 8px;
 `;
 
-export default LinkPieceCard;
+export default PieceLinkDummyCard;

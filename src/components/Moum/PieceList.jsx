@@ -3,8 +3,12 @@ import {useRecoilValue} from "recoil";
 import { pageMoumSelectedFolderId } from "../../atoms/moum";
 import useGetReactQuery from "../../hooks/useGetReactQuery";
 import { instance } from "../../api/axios";
-import LinkPieceCard from "../card/LinkPieceCard";
-import MemoPieceCard from "../card/MemoPieceCard";
+import MoumSortablePieceTypeLinkCard from "./Card/MoumSortablePieceTypeLinkCard";
+import MoumSortablePieceTypeMemoCard from "./Card/MoumSortablePieceTypeMemoCard";
+import SortableList from 'react-easy-sort';
+import arrayMove from 'array-move';
+import { useState } from "react";
+import { useEffect } from "react";
 
 function PieceList ({selectAll}) {
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
@@ -13,13 +17,31 @@ function PieceList ({selectAll}) {
     return response.data;
   });
 
+  const [sortablePieceList, setSortablePieceList] = useState([]);
+
+  const onSortEnd = (oldIndex, newIndex) => {
+    setSortablePieceList((array) => arrayMove(array, oldIndex, newIndex))
+  }
+
+  useEffect(() => {
+    if (piece) {
+      setSortablePieceList([...piece.folder.boardList])
+    }
+  }, [piece]);
+
   return (
     <List>
-      { !isLoading &&
-      piece?.boardList?.length > 0 ? piece.boardList.map(
-        (piece) => piece.boardType === "LINK" ? 
-          <LinkPieceCard key={piece.id} piece={piece} selectAll={selectAll} /> : 
-          <MemoPieceCard key={piece.id} piece={piece} selectAll={selectAll} />
+      {
+      sortablePieceList.length > 0 ? (
+        <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
+          {
+            sortablePieceList.map(
+              (piece) => piece.boardType === "LINK" ? 
+                <MoumSortablePieceTypeLinkCard key={piece.id} piece={piece} selectAll={selectAll} /> : 
+                <MoumSortablePieceTypeMemoCard key={piece.id} piece={piece} selectAll={selectAll} />
+            )
+          }
+        </SortableList>
       )
       : <div className="no-piece">조각을 생성해 주세요</div>
       }
@@ -30,23 +52,27 @@ function PieceList ({selectAll}) {
 
 const List = styled.div`
   padding-top: 40px;
-  display: flex;
-  flex-wrap: wrap;
   justify-content: flex-start;
 
-  > div {
+  .list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .list > div {
     width: calc(92% / 4);
   }
 
-  > div + div {
+  .list > div + div {
     margin-left: calc(8% / 3);
   }
 
-  > div:nth-of-type(4n + 1) {
+  .list > div:nth-of-type(4n + 1) {
     margin-left: 0;
   }
 
-  > div:nth-of-type(n + 5) {
+  .list > div:nth-of-type(n + 5) {
     margin-top: calc(8% / 3);
   }
 

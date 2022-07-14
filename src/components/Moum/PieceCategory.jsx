@@ -2,15 +2,13 @@ import styled from "styled-components";
 import { getPieceCategory } from "../../shared/type";
 
 function PieceCategory ({category}) {
-  return (category ? 
-  (
-  <Category>
+  return (category === "미정" ? 
+  (<NoCategory>카테고리 없음</NoCategory>)
+  :
+  (<Category>
     <img src={getPieceCategory(category).image} alt={category} />
     <span>{category}</span>
-  </Category>
-  )
-  :
-  (<NoCategory>카테고리 없음</NoCategory>)
+  </Category>)
   )
 }
 

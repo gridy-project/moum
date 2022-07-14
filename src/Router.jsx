@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { useCallback, useEffect } from "react";
 
 import { Routes, Route } from "react-router-dom";
@@ -11,9 +10,10 @@ import NotFound from "./pages/NotFound";
 import Intro from "./pages/Intro";
 import Test from "./pages/Test";
 import { getRefreshToken, removeToken, setToken } from "./shared/localStorage";
-import { refresh } from "./api/auth";
 import { useSetRecoilState } from "recoil";
 import { isLogin } from "./atoms/user";
+import { tokenRefresh } from "./api/auth";
+import Result from "./pages/Result";
 
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
@@ -21,13 +21,12 @@ function Router() {
   const refreshLogin = useCallback(async () => {
     const token = getRefreshToken();
     if (token) {
-      const { result, data } = await refresh(token);
-
-      if (result) {
+      try {
+        const response = await tokenRefresh(token);
         console.log("토큰 갱신 성공");
-        setToken(data.accessToken, data.refreshToken);
+        setToken(response.data.accessToken, response.data.refreshToken);
         setLogin(true);
-      } else {
+      } catch (err) {
         console.log("토큰 갱신 실패");
         removeToken();
         setLogin(false);
@@ -44,6 +43,7 @@ function Router() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/search" element={<Search />} />
+      <Route path="/search/:keyword" element={<Result />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/moum" element={<Moum />} />
       <Route path="/test" element={<Test />} />

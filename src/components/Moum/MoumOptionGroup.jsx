@@ -3,9 +3,8 @@ import styled, { css } from "styled-components";
 import moumSortBottom from "./images/moum-sort-select-bottom.png";
 import pieceSelect from "./images/piece-select.png";
 import pieceSearch from "./images/piece-search.png";
-import { useState } from "react";
-import { useRef } from "react";
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../atoms/mode";
 
 function MoumOptionSort ({active, setActive}) {
@@ -92,11 +91,20 @@ const SortOptionList = styled.ul`
   }
 `;
 
-function MoumOptionGroup ({isFolderView, onSelectAll}) {
+function MoumOptionGroup ({
+  isFolderView, 
+  onSelectAll, 
+  setFloatStatus, 
+  setFloatItemStatus, 
+  floatItemStatus,
+  setSearch
+}) {
   const [selectState, setSelectState] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [modeState, setModeState] = useRecoilState(pieceSelectMode);
-  const setSelectedItems = useSetRecoilState(selectedItems);
+  const resetSelectedItems = useResetRecoilState(selectedItems);
+  const items = useRecoilValue(selectedItems);
 
   const changeSearchText = (e) => {
     if (e.target.value.length > 0) {
@@ -104,26 +112,45 @@ function MoumOptionGroup ({isFolderView, onSelectAll}) {
     } else {
       setSearchActive(false);
     }
+    setSearchText(e.target.value);
   }
 
   const toggleSelectMode = (e) => {
-    setModeState(current => {
-      if (current) {
-        onSelectAll(false);
-      }
-      return !current;
-    });
+    setModeState(current => !current);
   }
 
   const selectAll = (e) => {
     onSelectAll(true);
   }
 
+  useEffect(() => {
+    if (modeState) {
+      onSelectAll(false);
+      setFloatStatus(true);
+    } else {
+      resetSelectedItems();
+      setFloatStatus(false);
+    }
+  }, [modeState]);
+
+  useEffect(() => {
+    if (items.length > 0 && floatItemStatus === false) {
+      setFloatItemStatus(true);
+    } else if (items.length <= 0 && floatItemStatus === true) {
+      setFloatItemStatus(false);
+    }
+  }, [items]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setSearch(searchText);
+  }
+
   return (
     <OptionGroup>
       <MoumOptionSort active={selectState} setActive={setSelectState} />
       <Search isActive={searchActive}>
-        <form>
+        <form onSubmit={onSubmit}>
           <input type="text" placeholder="나의 조각 검색하기" onChange={changeSearchText} />
           <button><img src={pieceSearch} alt="검색" /></button>
         </form>

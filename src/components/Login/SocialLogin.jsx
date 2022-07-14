@@ -4,9 +4,11 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
-import { instance } from '../../api/axios';
+import { signInWithGoogle } from '../../api/auth';
 import { isLogin } from '../../atoms/user';
 import { setToken } from '../../shared/localStorage';
+
+import google from '../Login/images/google.png';
 
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;
@@ -24,7 +26,7 @@ function SocialLoginButton () {
   const navigate = useNavigate();
 
   const {mutate: login} = useMutation(async (data) => {
-    const response = await instance.post(`/user/social`, {}, { headers: { Code: data.code } });
+    const response = await signInWithGoogle(data.code);
     return response.data;
   }, {
     onSuccess: data => {
@@ -50,9 +52,32 @@ function SocialLoginButton () {
   });
 
   return (
-    <GoogleLogin onClick={() => googleLogin()}>구글 계정으로 로그인</GoogleLogin>
+    <GoogleLogin onClick={() => googleLogin()}><img src={google} alt="google"></img>구글 계정으로 로그인</GoogleLogin>
   );
 }
 
 const GoogleLogin = styled.div`
+  margin-top: 60px;
+  width: 100%;
+  height: 60px;
+  background-color: #909090;
+  color: #FFFFFF;
+  font-size: 22px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: #666666;
+  }
+
+  img {
+    position: absolute;
+    left: 25px;
+  }
 `;

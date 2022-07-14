@@ -1,16 +1,17 @@
 import styled, { css } from "styled-components";
-import more from "../../public/img/menu-black.png";
-import PieceCategory from "../Moum/PieceCategory";
-import PieceScrollVertical from "../Moum/PieceScrollVertical";
-import privateLock from "../Moum/images/private-lock.png";
-import PieceCardOption from "./PieceCardOption";
+import more from "../../../public/img/menu-black.png";
+import PieceCategory from "../../Moum/PieceCategory";
+import PieceScrollVertical from "../../Moum/PieceScrollVertical";
+import privateLock from "../../Moum/images/private-lock.png";
+import PieceCardOption from "../../card/PieceCardOption";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../atoms/mode";
+import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import { SortableItem } from "react-easy-sort";
 
-function MemoPieceCard ({piece, selectAll}) {
+function MoumSortablePieceTypeMemoCard ({piece, selectAll}) {
   const selectMode = useRecoilValue(pieceSelectMode);
   const [items, setItems] = useRecoilState(selectedItems);
 
@@ -41,27 +42,29 @@ function MemoPieceCard ({piece, selectAll}) {
 
   const [buttonState, setButtonState] = useState(false);
   return (
-    <Card onClick={clickCard} isSelected={items.indexOf(piece.id) !== -1}>
-      <CardHeader>
-        <Category>
-          {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
-          <PieceCategory category={piece.category}/>
-        </Category>
-        <More className="menu" onClick={
-            (e) => {
-              e.preventDefault();
-              setButtonState(current => !current);
-            }
-          }><img src={more} alt="more" /></More>
-      </CardHeader>
-      <CardContent>
-        <PieceScrollVertical>
-          <div className="title">{piece.title}</div>
-          <div className="content">{piece.content}</div>
-        </PieceScrollVertical>
-      </CardContent>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
-    </Card>
+    <SortableItem>
+      <Card onClick={clickCard} isSelected={items.indexOf(piece.id) !== -1}>
+        <CardHeader>
+          <Category>
+            {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
+            <PieceCategory category={piece.category}/>
+          </Category>
+          <More className="menu" onClick={
+              (e) => {
+                e.preventDefault();
+                setButtonState(current => !current);
+              }
+            }><img src={more} alt="more" /></More>
+        </CardHeader>
+        <CardContent>
+          <PieceScrollVertical>
+            <div className="title">{piece.title}</div>
+            <div className="content">{piece.content}</div>
+          </PieceScrollVertical>
+        </CardContent>
+        <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
+      </Card>
+    </SortableItem>
   );
 }
 
@@ -134,4 +137,4 @@ const CardContent = styled.div`
   height: 100%;
 `;
 
-export default MemoPieceCard;
+export default MoumSortablePieceTypeMemoCard;

@@ -88,13 +88,11 @@ function MoumTitleCreateForm () {
     if (input.type === "LINK") {
       obj = {
         link: input.content,
-        status: "PRIVATE",
         boardType: input.type,
       }
     } else if (input.type === "MEMO") {
       obj = {
         content: input.content,
-        status: "PRIVATE",
         boardType: input.type,
       }
     }

@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import store from "./redux/configStore";
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from "react-query/devtools";
 import {RecoilRoot} from "recoil";
@@ -13,12 +11,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
     <RecoilRoot>
       <ReactQueryDevtools initialIsOpen={true} /> 
       <App />
     </RecoilRoot>
-    </Provider>
   </QueryClientProvider>
   // </React.StrictMode>
 );
