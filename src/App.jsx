@@ -5,6 +5,7 @@ import MyGlobalStyle from "./components/common/MyGlobalStyle";
 import { BrowserRouter } from "react-router-dom";
 import Popup from "./components/popup/Popup";
 import Float from "./components/popup/Float";
+import { removeToken } from "./shared/localStorage";
 
 function App() {
   return (

@@ -5,12 +5,14 @@ import SocialLogin from "../components/Login/SocialLogin";
 import { instance } from "../api/axios";
 import { useMutation } from "react-query";
 import { setToken } from "../shared/localStorage";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { isLogin } from "../atoms/user";
+
+import noBG from "../components/Login/images/no-background.png";
 
 function Login() {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
+  const setLoginStatus = useSetRecoilState(isLogin);
 
   const idRef = React.useRef(null);
   const pwRef = React.useRef(null);
@@ -24,7 +26,7 @@ function Login() {
       alert("로그인 성공");
       setToken(data.accessToken, data.refreshToken);
       setLoginStatus(true);
-      navigate("/moum");
+      navigate("/");
     },
     onError: err => {
       alert("로그인 실패");
@@ -49,124 +51,161 @@ function Login() {
   return (
     <Container>
       <Wrap>
-        <Leftbox>
+        <BoxLeft>
           <Title>
             <h1>moum</h1>
             <p>모음에 가입하고 더 많은 정보를 쉽게 모아봐요.</p>
           </Title>
           <Imgbox>
-            <p>img</p>
+            <img src={noBG} alt="noBG" />
           </Imgbox>
-        </Leftbox>
-        <Rightbox>
+        </BoxLeft>
+        <BoxRight>
           <Information>
             <form onSubmit={loginSubmit}>
-              <input type="text" ref={idRef} className="id-pw" placeholder="이메일" autoComplete="email" />
-              <input type="password" ref={pwRef} className="id-pw" placeholder="비밀번호" autoComplete="password" />
-              <input type="checkbox" className="checkbox" /> 로그인 상태 유지
-              <button className="login-button">로그인</button>
+              <input type="text" ref={idRef} className="username" placeholder="이메일" autoComplete="email" />
+              <input type="password" ref={pwRef} className="password" placeholder="비밀번호" autoComplete="password" />
+              {/* <input type="checkbox" className="checkbox" /> 로그인 상태 유지 */}
+              <button className="btn-login">로그인</button>
             </form>
-            <span>아이디 찾기</span>|<span>비밀번호 찾기</span>|<span onClick={() => navigate("/register")}>회원가입</span>
-            <button className="login-button"><img src="kakao.png" alt="kakao"></img>카카오 계정으로 로그인</button>
-            <button className="login-button"><img src="google.png" alt="google"></img>구글 계정으로 로그인</button>
+            <div className="option">
+              <span>아이디 찾기</span>
+              <span>비밀번호 찾기</span>
+              <span onClick={() => navigate("/register")}>회원가입</span>
+            </div>
             <SocialLogin />
           </Information>
-        </Rightbox>
+        </BoxRight>
       </Wrap>
     </Container>
   );
 }
 
 const Container = styled.div`
-width: 100%;
-height: 100vh;
-display: flex;
-align-items: center;
-justify-content: center;
-`;
-const Wrap = styled.div`
-width: 1700px;
-height: 800px;
-border : 1px solid black;
-display: flex;
-align-items: center;
-justify-content: center;
-`;
-const Leftbox = styled.div`
-width: 1000px;
-height: 800px;
-border : 1px solid black;
-display: flex;
-flex-direction: column;
-justify-content: space-between
-`;
-const Title = styled.div`
-width: 1000px;
-border : 1px solid black;
-h1 {
-  margin-left : 15px;
-  font-size: 60px;
-  font-weight: bold;
-}
-p {
-  margin : 15px;
-  font-size: 30px;
-  font-weight: bold;
-}
-`;
-const Imgbox = styled.div`
-width: 1000px;
-height: 600px;
-border : 1px solid black;
-display: flex;
-align-items: center;
-justify-content: center;
-p {
-  width: 800px;
-  height: 500px;
-  border : 1px solid black;
+  width: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-}
 `;
-const Rightbox = styled.div`
-width: 700px;
-height: 800px;
-border : 1px solid black;
-display: flex;
-align-items: center;
-justify-content: center;
+
+const Wrap = styled.div`
+  width: 1700px;
+  height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BoxLeft = styled.div`
+  width: 1000px;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Title = styled.div`
+  width: 1000px;
+  h1 {
+    margin-left : 15px;
+    font-size: 60px;
+  }
+  p {
+    margin : 15px;
+    font-size: 30px;
+  }
+`;
+
+const Imgbox = styled.div`
+  width: 1000px;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    width: 800px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const BoxRight = styled.div`
+  width: 700px;
+  height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Information = styled.div`
-width: 360px;
-.id-pw {
   width: 360px;
-  height: 50px;
-  border-radius: 20px;
-  margin: 15px auto;
-  font-size: 18px;
-}
-.checkbox {
-  margin : 15px auto;
-}
-.login-button {
-  width: 360px;
-  height: 50px;
-  border-radius: 20px;
-  margin: 15px auto;
-  font-size: 18px;
-  padding: 10px;
-  cursor: pointer;
-}
-span {
-  margin: 18px;
-  cursor: pointer;
-}
-img {
-  float: left;
-}
+
+  .username, .password {
+    width: 100%;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 18px;
+    border: none;
+    padding: 0 24px;
+  }
+
+  .password {
+    margin-top: 24px;
+  }
+
+  .checkbox {
+    margin : 15px auto;
+  }
+
+  .btn-login {
+    width: 100%;
+    height: 60px;
+    border-radius: 20px;
+    margin-top: 30px;
+    font-size: 18px;
+    padding: 10px;
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #909090;
+    border: none;
+    font-size: 23px;
+    transition: background-color .3s;
+
+    &:hover {
+      background-color: #666666;
+    }
+  }
+
+  .option {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+    span {
+      cursor: pointer;
+      position: relative;
+      font-size: 19px;
+      font-weight: 400;
+      color: #606060;
+    }
+    span + span {
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 16px;
+        left: -18px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #606060;
+      }
+    }
+  }
 `;
 
 export default Login;

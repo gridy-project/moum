@@ -1,6 +1,5 @@
 // React, React-redux
-import React, { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useRef } from "react";
 // React Query
 import {  useMutation, useQuery } from "react-query";
 import queryClient from "../shared/query";

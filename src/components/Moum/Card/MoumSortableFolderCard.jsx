@@ -4,19 +4,19 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 
 // image
-import more from "../../public/img/menu-white.png";
-import moum from "../../public/img/moum-background.png";
-import iconPrivate from "../../public/img/icon-private.png";
-import iconPieceCount from "../../public/img/icon-piece-count.png";
-import iconScrapCount from "../../public/img/icon-scrap-count.png";
-import { instance } from "../../api/axios";
-import queryClient from "../../shared/query";
+import more from "../../../public/img/menu-white.png";
+import moum from "../../../public/img/moum-background.png";
+import iconPrivate from "../../../public/img/icon-private.png";
+import iconPieceCount from "../../../public/img/icon-piece-count.png";
+import iconScrapCount from "../../../public/img/icon-scrap-count.png";
+import { instance } from "../../../api/axios";
+import queryClient from "../../../shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "../../atoms/moum";
-import { globalPopup, popupState } from "../../atoms/popup";
+import { pageMoumSelectedFolderId } from "../../../atoms/moum";
+import { globalPopup, popupState } from "../../../atoms/popup";
 import { useRef } from "react";
 import { useEffect } from "react";
-import SortableList, { SortableItem } from 'react-easy-sort'
+import { SortableItem } from 'react-easy-sort'
 
 function MoumModifyPopup ({moum}) {
   const setPopupState = useSetRecoilState(popupState);
@@ -37,7 +37,7 @@ function MoumModifyPopup ({moum}) {
     return response.data;
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("moum");
+      queryClient.invalidateQueries("moums");
     },
     onError: err => {
       console.log(err);
@@ -75,7 +75,7 @@ function MoumModifyPopup ({moum}) {
   )
 }
 
-function MoumCard({moum}) {
+function MoumSortableFolderCard({moum}) {
   const setPopupState = useSetRecoilState(popupState);
   const setGlobalPopup = useSetRecoilState(globalPopup);
   const setSelectedFolderId = useSetRecoilState(pageMoumSelectedFolderId);
@@ -119,35 +119,37 @@ function MoumCard({moum}) {
 	}
 
   return (
-    <Container onClick={runFolder}>
-      <div className="card-content">
-        <div className="card-header">
-          {moum.status === "PRIVATE" && <img src={iconPrivate} alt="private" />}
-          <div className="menu" onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setButtonState((current) => !current);
-          }}><img src={more} alt="" /></div>
+    <SortableItem>
+      <Container onClick={runFolder}>
+        <div className="card-content">
+          <div className="card-header">
+            {moum.status === "PRIVATE" && <img src={iconPrivate} alt="private" />}
+            <div className="menu" onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setButtonState((current) => !current);
+            }}><img src={more} alt="" /></div>
+          </div>
+          <div className={`card-title ${moum.status === "PUBLIC" && `no-image`}`}>{moum.name}</div>
         </div>
-        <div className={`card-title ${moum.status === "PUBLIC" && `no-image`}`}>{moum.name}</div>
-      </div>
-      <div className="card-info">
-        <div className="piece-count">
-          <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
-          <Text>전체 조각</Text>
-          <Count>10개</Count>
+        <div className="card-info">
+          <div className="piece-count">
+            <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
+            <Text>전체 조각</Text>
+            <Count>10개</Count>
+          </div>
+          <div className="scrap-count">
+            <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>
+            <Text>스크랩</Text>
+            <Count>{comma(moum.sharedCount)}회</Count>
+          </div>
         </div>
-        <div className="scrap-count">
-          <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>
-          <Text>스크랩</Text>
-          <Count>{comma(moum.sharedCount)}회</Count>
-        </div>
-      </div>
-      <CardOption isActive={buttonState}>
-        <div onClick={modifyFolder}>수정하기</div>
-        <div onClick={removeFolder}>삭제하기</div>
-      </CardOption>
-    </Container>
+        <CardOption isActive={buttonState}>
+          <div onClick={modifyFolder}>수정하기</div>
+          <div onClick={removeFolder}>삭제하기</div>
+        </CardOption>
+      </Container>
+    </SortableItem>
   );
 }
 
@@ -289,4 +291,4 @@ const CardOption = styled.div`
   }
 `;
 
-export default MoumCard;
+export default MoumSortableFolderCard;

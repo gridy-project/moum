@@ -1,17 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { instance } from "../../api/axios";
-import useGetReactQuery from "../../hooks/useGetReactQuery";
 import MoumSelectItem from "./MoumSelectItem";
 import {useRecoilState} from "recoil";
 import { pageMoumSelectedFolderId } from "../../atoms/moum";
 
-function MoumSelect () {
+function MoumSelect ({moums}) {
   const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
-  const {data: moum, isLoading} = useGetReactQuery("moum", async () => {
-    const response = await instance.post("/folders/0/all");
-    return response.data;
-  });
   const onClick = (id) => {
     setSelectedFolderId(id);
   }
@@ -20,14 +14,16 @@ function MoumSelect () {
       <em>전체 모음 목록</em>
       <MoumList>
         <ul>
-          {!isLoading && moum?.map((v, i) => {
+          {
+          moums?.map((v, i) => {
             return (
               <MoumSelectItem 
               key={v.id} 
               isActive={v.id === selectedFolderId} 
               _onClick={() => onClick(v.id)}>{v.name}</MoumSelectItem>
             )
-          })}
+          })
+          }
         </ul>
       </MoumList>
     </Line>

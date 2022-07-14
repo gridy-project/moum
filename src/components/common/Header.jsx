@@ -3,47 +3,84 @@ import { Link, useNavigate } from "react-router-dom";
 import { removeToken } from "../../shared/localStorage";
 import { useRecoilState } from "recoil";
 import { isLogin } from "../../atoms/user";
+import { useEffect, useState } from "react";
 
 function Header({selected}) {
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
+  const [headerFixed, setHeaderFixed] = useState(false);
+
+  useEffect(() => {
+    if (window.scrollY > 80) setHeaderFixed(true);
+    function scrollEvt (e) {
+      if (window.scrollY > 80) {
+        if (!headerFixed) {
+          setHeaderFixed(true);
+        }
+      } else {
+        setHeaderFixed(false);
+      }
+    }
+    window.addEventListener("scroll", scrollEvt);
+    return () => {
+      window.removeEventListener("scroll", scrollEvt);
+    }
+  }, [])
 
   return (
-    <Container>
-      <Logo><Link to="/"><span></span>moum</Link></Logo>
-      <Menu>
-        <nav>
-          <ul>
-            <Item isActive={selected === 0}><Link to="/">moum 소개</Link></Item>
-            {loginStatus && (
-              <>
-                <Item isActive={selected === 1}><Link to="/moum">나의 모음</Link></Item>
-                <Item isActive={selected === 2}><Link to="/search">전체 모음</Link></Item>
-                <Item isActive={selected === 3}><Link to="/mypage">마이페이지</Link></Item>
-              </>
+    <Container isFixed={headerFixed}>
+      <Box>
+        <Logo><Link to="/"><span></span>moum</Link></Logo>
+        <Menu>
+          <nav>
+            <ul>
+              <Item isActive={selected === 0}><Link to="/">moum 소개</Link></Item>
+              {loginStatus && (
+                <>
+                  <Item isActive={selected === 1}><Link to="/moum">나의 모음</Link></Item>
+                  <Item isActive={selected === 2}><Link to="/search">전체 모음</Link></Item>
+                  <Item isActive={selected === 3}><Link to="/mypage">마이페이지</Link></Item>
+                </>
+              )
+              }
+            </ul>
+          </nav>
+          {loginStatus ? 
+            (
+              <button onClick={() => {
+                removeToken();
+                setLoginStatus(false);
+                navigate("/");
+              }}>로그아웃</button>
+            ) : (
+              <button onClick={() => { navigate("/login") }}>로그인</button>
             )
-            }
-          </ul>
-        </nav>
-        {loginStatus ? 
-          (
-            <button onClick={() => {
-              removeToken();
-              setLoginStatus(false);
-              navigate("/");
-            }}>로그아웃</button>
-          ) : (
-            <button onClick={() => { navigate("/login") }}>로그인</button>
-          )
-        }
-      </Menu>
+          }
+        </Menu>
+      </Box>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 1200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 200px;
+  display: flex;
+  justify-content: center;
+
+  ${props => props.isFixed && css`
+    background-color: #FFFFFF;
+    height: 100px;
+    position: fixed;
+    z-index: 9999;
+  `}
+`;
+
+const Box = styled.div`
+  width: 1200px;
   display: flex;
   justify-content: space-between;
 `;

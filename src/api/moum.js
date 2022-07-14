@@ -1,5 +1,7 @@
 import { instance } from "./axios";
 
-export const getMoumAll = () => instance.get("/board");
-export const getPieceInFolder = (id) => instance.get(`/folder/${id}`);
-export const addMoumAxios = (data) => instance.post("/folder", data);
+export const axiosGetMoumMineAll = async () => await instance.post("/folders/0/all", [{ category: "전체" }]);
+export const axiosGetMoumMineByOptions = async ({ keyword, categories }) => {
+  return await instance.post(`/folders/0/${keyword}`, [{ category: "전체" }]);
+}
+export const axiosAddMoum = (data) => instance.post("/folder", data);

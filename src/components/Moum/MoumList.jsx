@@ -1,25 +1,31 @@
 import styled from "styled-components";
-import { instance } from "../../api/axios";
-import useGetReactQuery from "../../hooks/useGetReactQuery";
-import MoumCard from "../card/MoumCard";
 import MoumAddCard from "./MoumAddCard";
+import SortableList from 'react-easy-sort'
+import arrayMove from 'array-move';
+import { useEffect, useState } from "react";
+import MoumSortableFolderCard from "./Card/MoumSortableFolderCard";
 
-function MoumList () {
-  const {data: moumList, isLoading} = useGetReactQuery("moum", async () => {
-    const response = await instance.post("/folders/0/all");
-    return response.data;
-  });
+function MoumList ({moums}) {
+  const [sortableMoumList, setSortableMoumList] = useState([]);
+
+  const onSortEnd = (oldIndex, newIndex) => {
+    setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex))
+  }
+
+  useEffect(() => {
+    if (moums) {
+      setSortableMoumList([...moums?.folderList]);
+    }
+  }, [moums]);
 
   return (
     <List>
-      {isLoading ? "isLoading...." :
-        <>
-          <MoumAddCard />
-          {moumList.map((moum) => {
-            return <MoumCard key={moum.id} moum={moum} />
-          })}
-        </>
-      }
+      <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
+        <MoumAddCard />
+        {sortableMoumList?.map((item, i) => (
+          <MoumSortableFolderCard key={item.id} moum={item} />
+        ))}
+      </SortableList>
     </List>
   )
 }
@@ -30,19 +36,24 @@ const List = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
 
-  > div {
-    width: calc(92% / 4);
+  .list {
+    width: 100%;
   }
 
-  > div + div {
+  .list > div {
+    width: calc(92% / 4);
+    float: left;
+  }
+
+  .list > div + div {
     margin-left: calc(8% / 3);
   }
 
-  > div:nth-of-type(4n + 1) {
+  .list > div:nth-of-type(4n + 1) {
     margin-left: 0;
   }
 
-  > div:nth-of-type(n + 5) {
+  .list > div:nth-of-type(n + 5) {
     margin-top: calc(8% / 3);
   }
 

@@ -3,17 +3,18 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
 // image
-import noImage from "../../public/img/Image.png";
-import more from "../../public/img/menu-black.png";
-import PieceCategory from "../Moum/PieceCategory";
-import privateLock from "../Moum/images/private-lock.png";
-import PieceCardOption from "./PieceCardOption";
+import noImage from "../../../public/img/Image.png";
+import more from "../../../public/img/menu-black.png";
+import PieceCategory from "../PieceCategory";
+import privateLock from "../images/private-lock.png";
+import PieceCardOption from "../../card/PieceCardOption";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../atoms/mode";
+import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import { SortableItem } from "react-easy-sort";
 
-function LinkPieceCard({piece, selectAll}) {
+function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
   const [buttonState, setButtonState] = useState(false);
   const selectMode = useRecoilValue(pieceSelectMode);
   const [items, setItems] = useRecoilState(selectedItems);
@@ -44,32 +45,60 @@ function LinkPieceCard({piece, selectAll}) {
   }, [selectAll, setItems, piece.id]);
 
   return (
-    <Box isSelected={items.indexOf(piece.id) !== -1}>
-      <a onClick={clickCard} href={piece.link} target="blank">
-        <div className="card-image">
-          <img src={piece.imgPath || noImage} className={noImage && "no-image"} alt="noImage" />
-          <div className="menu" onClick={
-            (e) => {
-              e.preventDefault();
-              setButtonState(current => !current);
-            }
-          }>
-            <img src={more} alt="" />
+    <SortableItem>
+      <Box isSelected={items.indexOf(piece.id) !== -1}>
+        <ItemDragBox>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ItemDragBox>
+        <a onClick={clickCard} href={piece.link} target="blank">
+          <div className="card-image">
+            <img src={piece.imgPath || noImage} alt="noImage" />
+            <div className="menu" onClick={
+              (e) => {
+                e.preventDefault();
+                setButtonState(current => !current);
+              }
+            }>
+              <img src={more} alt="" />
+            </div>
           </div>
-        </div>
-        <div className="card-content">
-          <div className="card-header">
-            <PieceCategory category={piece.category} />
+          <div className="card-content">
+            <div className="card-header">
+              {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
+              <PieceCategory category={piece.category} />
+            </div>
+            
+            <div className="card-title">{piece.title}</div>
+            <div className="card-description"><span>{piece.explanation}</span></div>
           </div>
-          
-          <div className="card-title">{piece.title}</div>
-          <div className="card-description"><span>{piece.explanation}</span></div>
-        </div>
-      </a>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
-    </Box>
+        </a>
+        <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
+      </Box>
+    </SortableItem>
   );
 }
+
+const ItemDragBox = styled.ul`
+  position: absolute;
+  width: 25px;
+  height: 20px;
+  z-index: 1;
+  left: 50%;
+  top: 0px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  li {
+    width: 5px;
+    height: 5px;
+    background-color: #FFF;
+    box-shadow: 0 0 2px 0 #333;
+    border-radius: 50%;
+  }
+`;
 
 const Box = styled.div`
   position: relative;
@@ -96,8 +125,7 @@ const Box = styled.div`
 
   .card-image {
     width: 100%;
-    /* height: 100%; */
-    height: 155px;
+    height: 100%;
     background-color: #D9D9D9;
     border-radius: 0px 0px 15px 15px;
     overflow: hidden;
@@ -183,4 +211,4 @@ const PrivateIcon = styled.div`
   margin-right: 8px;
 `;
 
-export default LinkPieceCard;
+export default MoumSortablePieceTypeLinkCard;

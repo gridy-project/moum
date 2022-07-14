@@ -25,7 +25,7 @@ function Float () {
 const Box = styled.div`
   width: 300px;
   height: 100px;
-  background-color: #333333;
+  background-color: #000000;
   color: white;
   position: fixed;
   transition: bottom .3s ease-in;

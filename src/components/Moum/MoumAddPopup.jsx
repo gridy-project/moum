@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { useMutation } from "react-query";
-import { addMoumAxios } from "../../api/moum";
+import { axiosAddMoum } from "../../api/moum";
 import useHandleChange from "../../hooks/useHandleChange";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { globalPopup, popupState } from "../../atoms/popup";
+import queryClient from "../../shared/query";
 
 function MoumAddPopup () {
   const setPopupState = useSetRecoilState(popupState);
@@ -19,11 +20,13 @@ function MoumAddPopup () {
     share: "NONE"
   });
 
-  const {mutate: addMoum} = useMutation("user/login", async (data) => {
-    const response = await addMoumAxios(data);
+  const {mutate: addMoum} = useMutation(async (data) => {
+    const response = await axiosAddMoum(data);
     return response.data;
   }, {
     onSuccess: data => {
+      console.log(data);
+      queryClient.invalidateQueries("moums");
       alert("폴더 추가 성공");
     },
     onError: err => {
