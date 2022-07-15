@@ -1,5 +1,5 @@
 // React, React-redux
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 // React Query
 import {  useMutation, useQuery } from "react-query";
 import queryClient from "../shared/query";
@@ -146,6 +146,7 @@ function MyPage() {
     formState: { errors },
     setError,
     watch,
+		reset
   } = useForm();
 
 	// react-hook-form 넘길때 추가에러 설정 및 데이터 서버에 넘기기
@@ -188,30 +189,45 @@ function MyPage() {
 
 	// input 값 있을시 x button 활성화
 	const onChangePwd = watch("password")?.length ?? 0;
-
-	const watchExistpwd = () => {
-		if (onChangePwd > 0){
-			setExistPwdLen(true)
-		} else {
-			setExistPwdLen(false)
-		}
-	}
-
+	const onChangeNewPwd = watch("newpassword")?.length ?? 0;
+	const onChangeReNewPwd = watch("renewpassword")?.length ?? 0;
 
 	const checkExistPwd = (e) => {	
 		e.target.value.length > 0 ? setExistPwdLen(true) : setExistPwdLen(false)
-		console.log(e.target.value.length)
-		if (watch.password.length > 0){
-			setExistPwdLen(true)
+	}
+
+	const checkNewPwd = (e) => {
+		if (watch.newpassword.length > 0){
+			setNewPwdLen(true)
 		} else {
-			setExistPwdLen(false)
+			setNewPwdLen(false)
 		}
-	} 
+	}
+
+	const checkReNewPwd = (e) => {
+			e.target.value.length > 0 ? setReNewPwdLen(true) : setReNewPwdLen(false)
+	}
 
 	// x button 클릭시 input 초기화
-	const removeExitPwd = () => {
-		
+	const removeExistPwd = (data) => {
+		reset()
 	}
+	const removeNewPwd = (e) => {
+		watch("newpassword")
+		reset()
+	}
+	const removeReNewPwd= (e) => {
+		watch("renewpassword")
+		reset()
+	}
+
+	// 비밀번호 변경 모달창 닫았을 때 input 값 초기화
+ const resetPwd = () => {
+		if (	passwordModalIsOpen === true ) {
+			watch("password") && watch("newpassword") && watch("renewpassword")
+			reset()
+	} 
+}
 
 	// 계정 설명 수정  ============================================
 	const updateDesc = (e) => {
@@ -399,7 +415,7 @@ function MyPage() {
 								</PwdArea>
 								<Modal
 									isOpen={passwordModalIsOpen}
-									onRequestClose={() => setPasswordModalIsOpen(false)}
+									onRequestClose={() => {setPasswordModalIsOpen(false); resetPwd();}}
 									style={{
 										overlay: {
 											position: "fixed",
@@ -449,15 +465,17 @@ function MyPage() {
 												{onChangePwd > 0 && <img 
 												src={xbutton} 
 												alt=""
-												onClick={removeExitPwd} />}
-								
+												onClick={() => {removeExistPwd(watch("password"))}
+													}
+												/>}							
 											</ExistPwdWrap>
-											<PwdWrap>
+											<PwdWrap isNewPwdFilled={newPwdLen}>
 												<p>새 비밀번호</p>
 												<input
-												id="newPassword"
+												id="newpassword"
 												type="password"
 												placeholder="새 비밀번호를 입력하세요."
+												onChange={e => checkNewPwd(e)}
 												{...register("newpassword", {
 												required:"새 비밀번호를 입력하세요.",
 												pattern:{
@@ -467,24 +485,39 @@ function MyPage() {
 												})}	
 												/>
 												<span>{errors?.newpassword?.message}</span>
-												<img src={xbutton} alt=""/>
+												{onChangeNewPwd > 0 && <img 
+												src={xbutton} 
+												alt=""
+												onClick={removeNewPwd} />}									
 											</PwdWrap>
-											<RePwdWrap>
+											<RePwdWrap isReNewPwdFilled={reNewPwdLen}>
 												<p>새 비밀번호 확인</p>
 												<input
-												id="reNewPassword"
+												id="renewpassword"
 												type="password"
-												placeholder="새 비밀번호를 재입력하세요."										
+												placeholder="새 비밀번호를 재입력하세요."						
+												onChange={e => checkReNewPwd(e)}		
+														{...register("renewpassword", {
+												required:"새 비밀번호를 재입력하세요.",
+												pattern:{
+														value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
+														message: ""
+												},	
+												})}			
 												/>
 												<span>{errors?.renewpassword?.message}</span>
-												<img src={xbutton} alt=""/>
+												{onChangeReNewPwd > 0 && <img 
+												src={xbutton} 
+												alt=""
+												onClick={removeReNewPwd} />}	
 											</RePwdWrap>												
 									</ModalPasswordContent>
 									<ModalPasswrodBtnWrap>
-										<CancelPwdBtn onClick={() => setPasswordModalIsOpen(false)}>취소</CancelPwdBtn>
+										<CancelPwdBtn onClick={() => 
+											{setPasswordModalIsOpen(false); resetPwd();}}>취소</CancelPwdBtn>
 										<ChangePwdBtn disabled={!isPwdActive}>비밀번호 변경</ChangePwdBtn>
 									</ModalPasswrodBtnWrap>
-									</form>							
+									</form>								
 								</Modal>
 							</PwdArticle>
 							<DeleteAccountArticle>
