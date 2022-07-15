@@ -368,7 +368,7 @@ function MyPage() {
 										<ModalBtnWrap>
 											<CancelNicknameBtn onClick={() => setNicknameModalIsOpen(false)}>취소</CancelNicknameBtn>
 											<ChangeNicknameBtn 
-											onClick={clickModifyNickname}
+											onClick={() => {clickModifyNickname(); setNicknameModalIsOpen(false);}}
 											disabled={nickFill === false}
 											>닉네임 변경</ChangeNicknameBtn>
 											<div>										
@@ -430,8 +430,7 @@ function MyPage() {
 											borderRadius:"30px",
 											color: "#111",
 											width: "438px",				
-											height: "540px",
-											overflow: "clip",
+											height: "600px",
 											top: "20%",
 											left: "39%",
 											padding:"24px"
@@ -852,7 +851,7 @@ const ModalPasswordHeader = styled.div`
 	}
 	`
 const ModalPasswordContent = styled.div`
-	margin-bottom:28px;
+	/* margin-bottom:28px; */
 	position:relative;
 	p {
 		font-size:16px;
@@ -874,9 +873,8 @@ const ExistPwdWrap = styled.div`
 	position:relative;
 	span {
 		color:#FF5C5C;
-		position:relative;
-		top:10px;
-		height: 15px;
+		margin-top:10px;
+		/* height:15px; */
 		display:inline-block;
 	}
 	img {
@@ -887,13 +885,11 @@ const ExistPwdWrap = styled.div`
 	}
 `
 const PwdWrap = styled.div`
-	margin-top:28px;
+	margin-top:15px;
 	position:relative;
 	span {
 		color:#FF5C5C;
-		position:relative;
-		top:10px;
-		height: 15px;
+		margin-top:10px;
 		display:inline-block;
 	}
 	img {
@@ -903,14 +899,12 @@ const PwdWrap = styled.div`
 	}
 `
 const RePwdWrap = styled.div`
-	margin-top:28px;
+	margin-top:15px;
 	position:relative;
 	span {
 		color:#FF5C5C;
-		position:relative;
-		height: 15px;
 		display:inline-block;
-		top:10px;
+		margin-top:10px;
 	}
 	img {
 		position:absolute;
