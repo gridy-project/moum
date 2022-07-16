@@ -1,71 +1,107 @@
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { selectedCategories } from "../../atoms/moum";
+import { moumCategories, selectedCategories } from "../../atoms/moum";
 import MoumCategory from "./MoumCategory";
 
 function MoumCategoryGroup ({categories}) {
-  const [count, setCount] = useState(0);
-  const [category, setCategory] = useState(
-    [
-      {
-        name: "카테고리 전체",
-        isActive: true
-      },
-      ...categories.map((v) => ({name: v.category, isActive: false}))
-    ]
-  );
-  const setSelected = useSetRecoilState(selectedCategories);
+  const [category, setCategory] = useRecoilState(moumCategories);
 
   useEffect(() => {
-    setSelected(
-      category.filter((v) => v.isActive)
-      .map((v) => ({category : v.name === "카테고리 전체" ? "전체" : v.name}))
-    );
-  }, [category, setSelected]);
-
-  const categoryClick = useCallback((idx) => {
-    if (idx === 0) { // 전체 선택일경우 -> 전체선택은 비활성화 불가능
-      setCategory(current => {
-        setCount(0);
-        // 선택된 카운트 값을 0으로 설정
-        return current.map((v, i) => i === 0 ? {...v, isActive: true} : {...v, isActive: false});
-        // 전체 선택을 제외한 나머지 false로 처리
-      });
-    } else {
-      setCategory(current => {
-        const arr = [...current]; // 새 배열 생성
-        arr[idx].isActive = !arr[idx].isActive; // active 값 반전
-        
-        const active = arr[idx].isActive; // active 현재 상태 저장
-        
-        if (active) {
-          setCount(num => {
-            if (num + 1 > 0) {
-              arr[0].isActive = false;
-            }
-            return num + 1;
-          });
-        } else {
-          setCount(num => {
-            if (num - 1 === 0) {
-              arr[0].isActive = true;
-            }
-            return num - 1;
-          });
+    if (Object.keys(category).length === 0) {
+      setCategory(
+        current => {
+          const obj = {};
+          obj["전체"] = true;
+          for (let i = 0; i < categories.length; i++) {
+            obj[categories[i].category] = false;
+          }
+          return obj;
         }
-        return arr;
-      })
+      );
+    } else {
+      setCategory(
+        current => {
+          const obj = {};
+          obj["전체"] = current["전체"];
+          for (let i = 0; i < categories.length; i++) {
+            obj[categories[i].category] = current[categories[i].category] ?? false;
+          }
+          return obj;
+        }
+      )
     }
-  }, []);
+  }, [categories]);
+
+  const [selected, setSelected] = useRecoilState(selectedCategories);
+
+  useEffect(() => {
+    if (selected.length === 0) {
+      setCategory(current => ({...current, "전체": true}));
+    }
+  }, [selected, setCategory]);
+
+  useEffect(() => {
+    const categoryKeys = Object.keys(category);
+    if (categoryKeys.length > 0) {
+      setSelected(
+        Object
+        .keys(category)
+        .filter((v) => category[v]) // true인 것들만 남기기
+        .map((v) => ({category : v}))
+      );
+    }
+  }, [category]);
+
+  const clickCategory = (category) => {
+    setCategory(current => {
+      const obj = {...current};
+      if (category === "전체") {
+        const objKeys = Object.keys(obj);
+        const length = objKeys.length;
+        for (let i = 0; i < length; i++) {
+          obj[objKeys[i]] = false;
+        }
+        obj["전체"] = true;
+        return obj;
+      } else {
+        obj["전체"] = false;
+        obj[category] = !obj[category];
+        const objKeys = Object.keys(obj);
+        const length = objKeys.length;
+        let nowCount = 0;
+        for (let i = 0; i < length; i++) {
+          if (obj[objKeys[i]]) {
+            nowCount += 1;
+          }
+        }
+        if (nowCount === 0) {
+          return {...current, "전체": false, [category]: true};
+        } else {
+          return obj;
+        }
+      }
+    })
+  }
 
   return (
     <CategoryGroup>
       <div className="category-title">카테고리</div>
       <ul className="category-list">
-        {category.map((v, i) => <MoumCategory key={i} category={v} _onClick={() => categoryClick(i)} />)}
+        {
+          Object.keys(category)?.map(
+          (v, i) => <MoumCategory 
+                      key={i} 
+                      category={v === "전체" ? "카테고리 전체" : v} 
+                      active={category[v]} 
+                      _onClick={
+                        () => clickCategory(v)
+                      } 
+                    />
+          )
+        }
       </ul>
     </CategoryGroup>
   );

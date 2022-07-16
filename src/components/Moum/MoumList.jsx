@@ -4,28 +4,61 @@ import SortableList from 'react-easy-sort'
 import arrayMove from 'array-move';
 import { useEffect, useState } from "react";
 import MoumSortableFolderCard from "./Card/MoumSortableFolderCard";
+import MoumFolderCard from "./Card/MoumFolderCard";
+import { useRecoilValue } from "recoil";
+import { moumSort } from "atoms/moum";
+import { useMutation, useQueryClient } from "react-query";
+import { instance } from "api/axios";
 
 function MoumList ({moums}) {
+  const queryClient = useQueryClient();
   const [sortableMoumList, setSortableMoumList] = useState([]);
+  const sortState = useRecoilValue(moumSort);
+
+  const {mutate: order} = useMutation(async ({folderId, afterOrder}) => {
+    const response = await instance.post(`/folders`, {folderId, afterOrder});
+    return response.data;
+  }, {
+    onSuccess: data => {
+      // queryClient.invalidateQueries("mine/moums");
+    },
+    onError: err => {
+      console.log(err);
+    }
+  });
 
   const onSortEnd = (oldIndex, newIndex) => {
+    const oldId = sortableMoumList[oldIndex].id;
+    // const newOrder = sortableMoumList[newIndex].folderOrder;
+
+    order({folderId: oldId, afterOrder: newIndex});
     setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex))
   }
 
   useEffect(() => {
     if (moums) {
-      setSortableMoumList([...moums?.folderList]);
+      setSortableMoumList([...moums]);
     }
   }, [moums]);
 
   return (
     <List>
-      <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
-        <MoumAddCard />
-        {sortableMoumList?.map((item, i) => (
-          <MoumSortableFolderCard key={item.id} moum={item} />
-        ))}
-      </SortableList>
+      {sortState === "최신 조각순" && (
+        <div className="list">
+          <MoumAddCard />
+          {sortableMoumList?.map((item, i) => (
+            <MoumFolderCard key={item.id} moum={item} />
+          ))}
+        </div>
+      )}
+      {sortState === "사용자 지정순" && (
+        <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
+          <MoumAddCard />
+          {sortableMoumList?.map((item, i) => (
+            <MoumSortableFolderCard key={item.id} moum={item} />
+          ))}
+        </SortableList>
+      )}
     </List>
   )
 }

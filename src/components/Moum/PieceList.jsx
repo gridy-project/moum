@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useRecoilValue} from "recoil";
-import { pageMoumSelectedFolderId } from "../../atoms/moum";
+import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "../../atoms/moum";
 import useGetReactQuery from "../../hooks/useGetReactQuery";
 import { instance } from "../../api/axios";
 import MoumSortablePieceTypeLinkCard from "./Card/MoumSortablePieceTypeLinkCard";
@@ -9,12 +9,25 @@ import SortableList from 'react-easy-sort';
 import arrayMove from 'array-move';
 import { useState } from "react";
 import { useEffect } from "react";
+import { axiosGetPieceMineAll, axiosGetPieceMineByOptions } from "api/moum";
+import MoumPieceTypeLinkCard from "./Card/MoumPieceTypeLinkCard";
+import MoumPieceTypeMemoCard from "./Card/MoumPieceTypeMemoCard";
 
-function PieceList ({selectAll}) {
+function PieceList ({selectAll, search}) {
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
-  const {data: piece, isLoading} = useGetReactQuery(["piece", folderId], async () => {
-    const response = await instance.post(`/boards/0/${folderId}/all`, [{category: "전체"}]);
-    return response.data;
+  const categories = useRecoilValue(selectedCategories);
+  const sortState = useRecoilValue(moumSort);
+  const piecesQuery = useGetReactQuery(["mine/pieces", folderId, categories, search], async () => {
+    if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
+      const response = await axiosGetPieceMineAll(folderId);
+      return response.data;
+    } else if (search === "") {
+      const response = await axiosGetPieceMineByOptions(folderId, { keyword: "all", categories });
+      return response.data;
+    } else {
+      const response = await axiosGetPieceMineByOptions(folderId, { keyword: search, categories });
+      return response.data;
+    }
   });
 
   const [sortablePieceList, setSortablePieceList] = useState([]);
@@ -24,15 +37,26 @@ function PieceList ({selectAll}) {
   }
 
   useEffect(() => {
-    if (piece) {
-      setSortablePieceList([...piece.folder.boardList])
+    if (piecesQuery.isSuccess) {
+      setSortablePieceList([...piecesQuery.data.boardList])
     }
-  }, [piece]);
+  }, [piecesQuery.isSuccess, piecesQuery.data]);
 
   return (
     <List>
-      {
-      sortablePieceList.length > 0 ? (
+      { sortState === "최신 조각순" && sortablePieceList.length > 0 && (
+        <div className="list">
+          {
+            sortablePieceList.map(
+              (piece) => piece.boardType === "LINK" ? 
+                <MoumPieceTypeLinkCard key={piece.id} piece={piece} selectAll={selectAll} /> : 
+                <MoumPieceTypeMemoCard key={piece.id} piece={piece} selectAll={selectAll} />
+            )
+          }
+        </div>
+      )
+      }
+      { sortState === "사용자 지정순" && sortablePieceList.length > 0 && (
         <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
           {
             sortablePieceList.map(
@@ -43,7 +67,9 @@ function PieceList ({selectAll}) {
           }
         </SortableList>
       )
-      : <div className="no-piece">조각을 생성해 주세요</div>
+      }
+      {
+        piecesQuery.isSuccess && sortablePieceList.length === 0 && <div className="no-piece">조각을 생성해 주세요</div>
       }
     </List>
   );

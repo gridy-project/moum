@@ -4,19 +4,19 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 
 // image
-import more from "../../public/img/menu-white.png";
-import moum from "../../public/img/moum-background.png";
-import iconPrivate from "../../public/img/icon-private.png";
-import iconPieceCount from "../../public/img/icon-piece-count.png";
-import iconScrapCount from "../../public/img/icon-scrap-count.png";
-import { instance } from "../../api/axios";
-import queryClient from "../../shared/query";
+import more from "../../../public/img/menu-white.png";
+import moum from "../../../public/img/moum-background.png";
+import iconPrivate from "../../../public/img/icon-private.png";
+import iconPieceCount from "../../../public/img/icon-piece-count.png";
+import iconScrapCount from "../../../public/img/icon-scrap-count.png";
+import { instance } from "../../../api/axios";
+import queryClient from "../../../shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "../../atoms/moum";
-import { globalPopup, popupState } from "../../atoms/popup";
+import { pageMoumSelectedFolderId } from "../../../atoms/moum";
+import { globalPopup, popupState } from "../../../atoms/popup";
 import { useRef } from "react";
 import { useEffect } from "react";
-import SortableList, { SortableItem } from 'react-easy-sort'
+import { SortableItem } from 'react-easy-sort';
 
 function MoumModifyPopup ({moum}) {
   const setPopupState = useSetRecoilState(popupState);
@@ -37,7 +37,7 @@ function MoumModifyPopup ({moum}) {
     return response.data;
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("moum");
+      queryClient.invalidateQueries("moums");
     },
     onError: err => {
       console.log(err);
@@ -75,7 +75,7 @@ function MoumModifyPopup ({moum}) {
   )
 }
 
-function MoumCard({moum}) {
+function MoumSortableFolderCard({moum}) {
   const setPopupState = useSetRecoilState(popupState);
   const setGlobalPopup = useSetRecoilState(globalPopup);
   const setSelectedFolderId = useSetRecoilState(pageMoumSelectedFolderId);
@@ -91,8 +91,8 @@ function MoumCard({moum}) {
     return response.data;
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("moum");
-      alert("폴더 생성 성공");
+      queryClient.invalidateQueries("mine/moums");
+      alert("폴더 삭제 성공");
     },
     onError: err => {
       console.log(err);
@@ -135,7 +135,7 @@ function MoumCard({moum}) {
         <div className="piece-count">
           <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
           <Text>전체 조각</Text>
-          <Count>10개</Count>
+          <Count>{comma(moum.boardCnt)}개</Count>
         </div>
         <div className="scrap-count">
           <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>
@@ -193,8 +193,6 @@ const Container = styled.div`
       border-radius: 12.ㄴ5px;
     }
   }
-
-
 
   .card-title {
     padding: 20px 20px 0;
@@ -289,4 +287,4 @@ const CardOption = styled.div`
   }
 `;
 
-export default MoumCard;
+export default MoumSortableFolderCard;

@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { instance } from "../../api/axios";
 import useGetReactQuery from "../../hooks/useGetReactQuery";
-import LinkPieceCard from "../card/LinkPieceCard";
-import MemoPieceCard from "../card/MemoPieceCard";
+import LinkPieceCard from "./LinkPieceCard";
+import MemoPieceCard from "./MemoPieceCard";
 
 function AllMoumLatest () {
   const query = useGetReactQuery("search/latestPiece", async () => {
     const response = await instance.get("/newboards/0/4");
-    console.log(response);
     return response.data;
   });
 

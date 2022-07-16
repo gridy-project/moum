@@ -12,9 +12,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
-import { SortableItem } from "react-easy-sort";
 
-function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
+function MoumPieceTypeLinkCard({piece, selectAll}) {
   const [buttonState, setButtonState] = useState(false);
   const selectMode = useRecoilValue(pieceSelectMode);
   const [items, setItems] = useRecoilState(selectedItems);
@@ -45,38 +44,36 @@ function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
   }, [selectAll, setItems, piece.id]);
 
   return (
-    <SortableItem>
-      <Box isSelected={items.indexOf(piece.id) !== -1}>
-        <ItemDragBox>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ItemDragBox>
-        <a onClick={clickCard} href={piece.link} target="blank">
-          <div className="card-image">
-            <img src={piece.imgPath || noImage} alt="noImage" />
-            <div className="menu" onClick={
-              (e) => {
-                e.preventDefault();
-                setButtonState(current => !current);
-              }
-            }>
-              <img src={more} alt="" />
-            </div>
+    <Box isSelected={items.indexOf(piece.id) !== -1}>
+      <ItemDragBox>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ItemDragBox>
+      <a onClick={clickCard} href={piece.link} target="blank">
+        <div className="card-image">
+          <img src={piece.imgPath || noImage} alt="noImage" />
+          <div className="menu" onClick={
+            (e) => {
+              e.preventDefault();
+              setButtonState(current => !current);
+            }
+          }>
+            <img src={more} alt="" />
           </div>
-          <div className="card-content">
-            <div className="card-header">
-              {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
-              <PieceCategory category={piece.category} />
-            </div>
-            
-            <div className="card-title">{piece.title}</div>
-            <div className="card-description"><span>{piece.explanation}</span></div>
+        </div>
+        <div className="card-content">
+          <div className="card-header">
+            {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
+            <PieceCategory category={piece.category} />
           </div>
-        </a>
-        <PieceOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
-      </Box>
-    </SortableItem>
+          
+          <div className="card-title">{piece.title}</div>
+          <div className="card-description"><span>{piece.explanation}</span></div>
+        </div>
+      </a>
+      <PieceOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
+    </Box>
   );
 }
 
@@ -211,4 +208,4 @@ const PrivateIcon = styled.div`
   margin-right: 8px;
 `;
 
-export default MoumSortablePieceTypeLinkCard;
+export default MoumPieceTypeLinkCard;

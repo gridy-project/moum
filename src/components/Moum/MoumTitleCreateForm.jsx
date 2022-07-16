@@ -1,8 +1,7 @@
 // module
-import { useEffect } from "react";
 import { useState } from "react";
 import { useMutation } from "react-query";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { instance } from "../../api/axios";
@@ -15,33 +14,81 @@ import useHandleChange from "../../hooks/useHandleChange";
 // image
 import arrowSave from "../../public/img/arrow-moum-save.png"
 import queryClient from "../../shared/query";
-import LinkPieceModifyPopup from "../card/LinkPieceModifyPopup";
-import MemoPieceModifyPopup from "../card/MemoPieceModifyPopup";
+import LinkUpdatePopup from "./Popup/LinkUpdatePopup";
+import MemoUpdatePopup from "./Popup/MemoUpdatePopup";
 import fastCreateBottom from "./images/fast-create-select-bottom.png";
+import fastCreateOptionModify from "./images/fast-create-option-modify.png";
+import fastCreateOptionArrow from "./images/fast-create-option-arrow.png";
 
-function MoumCreateModifyPopup ({piece}) {
+function MoumModifyFloat ({piece, moums}) {
   const setFloatState = useSetRecoilState(floatState);
   const setPopupState = useSetRecoilState(popupState);
   const setPopup = useSetRecoilState(globalPopup);
+  const folderId = useRecoilValue(pageMoumSelectedFolderId);
+  console.log(moums);
 
   const runModifyPopup = (e) => {
     if (piece.boardType === "LINK") {
-      setPopup(<LinkPieceModifyPopup piece={piece} />);
+      setPopup(<LinkUpdatePopup piece={piece} />);
     } else if (piece.boardType === "MEMO") {
-      setPopup(<MemoPieceModifyPopup piece={piece} />);
+      setPopup(<MemoUpdatePopup piece={piece} />);
     }
     setPopupState(true);
     setFloatState(false);
   }
 
   return (
-    <div>
-      <button onClick={runModifyPopup}>수정하기</button>
-    </div>
+    <Wrap>
+      <img src={fastCreateOptionModify} alt="modify" />
+      <div className="desc">
+        <em>{(folderId === 0 || moums === undefined) ? "무제" : moums.filter((v) => v.id === folderId)[0]?.name}</em>
+        <p>에 조각 저장 완료</p>
+      </div>
+      <button onClick={runModifyPopup}>
+        자세히 작성하기
+        <img src={fastCreateOptionArrow} alt="modify" />
+      </button>
+    </Wrap>
   )
 }
 
-function MoumTitleCreateForm () {
+
+const Wrap = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px 0 28px;
+
+  .desc {
+    em {
+      font-weight: 600;
+    }
+    p {
+      font-size: 13px;
+      font-weight: 400;
+      margin-top: 5px;
+    }
+  }
+
+  button {
+    width: 150px;
+    height: 50px;
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    color: #721EFC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      margin-left: 5px;
+    }
+  }
+`;
+
+function MoumTitleCreateForm ({moums}) {
   const setFloatState = useSetRecoilState(floatState);
   const setFloat = useSetRecoilState(globalFloat);
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
@@ -60,10 +107,13 @@ function MoumTitleCreateForm () {
     }
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("piece");
+      if (folderId === 0) {
+        queryClient.invalidateQueries("mine/moums");
+      } else {
+        queryClient.invalidateQueries("mine/pieces");
+      }
       setFloatState(true);
-      console.log(data);
-      setFloat(<MoumCreateModifyPopup piece={data} />)
+      setFloat(<MoumModifyFloat piece={data} moums={moums} />)
     },
     onError: err => {
       alert("파일 추가 실패");
@@ -72,7 +122,6 @@ function MoumTitleCreateForm () {
 
   const addPieceSimple = (e) => {
     e.preventDefault();
-    console.log("작동");
 
     if (input.type === "NONE") {
       alert("타입을 선택해주세요");

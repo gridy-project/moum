@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { instance } from "../api/axios";
-import Container from "../components/common/Container";
-import Header from "../components/common/Header";
-import MoumResultSet from "../components/Result/MoumResultSet";
-import PieceResultSet from "../components/Result/PieceResultSet";
-import Search from "../components/Search/SearchForm";
+import { instance } from "api/axios";
+import Container from "components/common/Container";
+import Header from "components/common/Header";
+import MoumResultSet from "components/Search/Result/MoumResultSet";
+import PieceResultSet from "components/Search/Result/PieceResultSet";
+import Search from "components/Search/SearchForm";
 
 function Result () {
   const params = useParams();
