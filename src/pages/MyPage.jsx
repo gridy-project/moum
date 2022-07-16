@@ -17,6 +17,7 @@ import { instance } from "../api/axios"
 // component
 import Header from "../components/common/Header";
 import Container from "../components/common/Container";
+import { useEffect } from "react";
 Modal.setAppElement("#root");
 
 

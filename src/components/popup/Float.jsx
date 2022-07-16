@@ -16,16 +16,17 @@ function Float () {
   }, [viewState, setViewState]);
 
   return (
-    <Box isActive={viewState}>
+    <Box isActive={viewState} backgroundColor={"#721EFC"} width={"360px"} height={"80px"}>
       {float}
     </Box>
   )
 }
 
+
 const Box = styled.div`
-  width: 300px;
-  height: 100px;
-  background-color: #000000;
+  width: ${props => props.width};
+  height: ${props => props.height};
+  background-color: ${props => props.backgroundColor};
   color: white;
   position: fixed;
   transition: bottom .3s ease-in;
@@ -42,7 +43,7 @@ const Box = styled.div`
   `}
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9999;
+  z-index: 999;
 `;
 
 export default Float;

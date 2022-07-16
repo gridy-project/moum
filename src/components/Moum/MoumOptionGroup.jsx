@@ -6,9 +6,10 @@ import pieceSearch from "./images/piece-search.png";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../atoms/mode";
+import { moumSort } from "atoms/moum";
 
 function MoumOptionSort ({active, setActive}) {
-  const [option, setOption] = useState("최신 조각순");
+  const [option, setOption] = useRecoilState(moumSort);
   const toggleOptionSelect = (e) => {
     setActive((current) => !current);
   }

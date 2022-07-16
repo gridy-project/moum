@@ -1,16 +1,16 @@
 import styled, { css } from "styled-components";
-import more from "../../public/img/menu-black.png";
-import PieceCategory from "../Moum/PieceCategory";
-import PieceScrollVertical from "../Moum/PieceScrollVertical";
-import privateLock from "../Moum/images/private-lock.png";
-import PieceCardOption from "./PieceCardOption";
+import more from "../../../public/img/menu-black.png";
+import PieceCategory from "../../Moum/PieceCategory";
+import PieceScrollVertical from "../../Moum/PieceScrollVertical";
+import privateLock from "../../Moum/images/private-lock.png";
+import PieceOption from "./PieceOption";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../atoms/mode";
+import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
 
-function MemoPieceCard ({piece, selectAll}) {
+function MoumPieceTypeMemoCard ({piece, selectAll}) {
   const selectMode = useRecoilValue(pieceSelectMode);
   const [items, setItems] = useRecoilState(selectedItems);
 
@@ -60,7 +60,7 @@ function MemoPieceCard ({piece, selectAll}) {
           <div className="content">{piece.content}</div>
         </PieceScrollVertical>
       </CardContent>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
+      <PieceOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
     </Card>
   );
 }
@@ -134,4 +134,4 @@ const CardContent = styled.div`
   height: 100%;
 `;
 
-export default MemoPieceCard;
+export default MoumPieceTypeMemoCard;

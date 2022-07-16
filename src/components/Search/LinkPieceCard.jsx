@@ -1,51 +1,39 @@
 // module
+import { instance } from "api/axios";
 import React, { useState } from "react";
+import { useMutation } from "react-query";
+import queryClient from "shared/query";
 import styled, { css } from "styled-components";
 
 // image
 import noImage from "../../public/img/Image.png";
 import more from "../../public/img/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
-import privateLock from "../Moum/images/private-lock.png";
-import PieceCardOption from "./PieceCardOption";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../atoms/mode";
-import { useCallback } from "react";
-import { useEffect } from "react";
 
-function LinkPieceCard({piece, selectAll}) {
+
+function LinkPieceCard({piece}) {
   const [buttonState, setButtonState] = useState(false);
-  const selectMode = useRecoilValue(pieceSelectMode);
-  const [items, setItems] = useRecoilState(selectedItems);
 
-  const clickCard = useCallback((e) => {
-    if (selectMode) {
-      e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
-      setItems(current => {
-        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
-          return [...current, piece.id];
-        } else {
-          return current.filter(v => v !== piece.id); // 값이 있는 경우 리스트 삭제
-        }
-      })
+  const {mutate: copy} = useMutation(async (boardId) => {
+    const response = await instance.post(`/myshare/board/${boardId}`, {});
+    return response.data;
+  }, {
+    onSuccess: data => {
+      queryClient.invalidateQueries("mine/pieces");
+      alert("복사 성공");
+    },
+    onError: err => {
+      console.log(err);
     }
-  }, [selectMode, piece.id, setItems]);
+  });
 
-  useEffect(() => {
-    if (selectAll) {
-      setItems(current => {
-        if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
-          return [...current, piece.id];
-        } else {
-          return current;
-        }
-      });
-    }
-  }, [selectAll, setItems, piece.id]);
+  const copyPiece = (e) => {
+    copy(piece.id);
+  }
 
   return (
-    <Box isSelected={items.indexOf(piece.id) !== -1}>
-      <a onClick={clickCard} href={piece.link} target="blank">
+    <Box>
+      <a href={piece.link} target="blank">
         <div className="card-image">
           <img src={piece.imgPath || noImage} className={noImage && "no-image"} alt="noImage" />
           <div className="menu" onClick={
@@ -66,10 +54,45 @@ function LinkPieceCard({piece, selectAll}) {
           <div className="card-description"><span>{piece.explanation}</span></div>
         </div>
       </a>
-      <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
+      <CardOption isActive={buttonState}>
+        <div onClick={copyPiece}>복사하기</div>
+      </CardOption>
     </Box>
   );
 }
+
+const CardOption = styled.div`
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  background-color: #FFFFFF;
+  right: -60px;
+  top: 50px;
+  border: 1px solid #ddd;
+  z-index: 1;
+  display: none;
+
+  ${props => props.isActive && css`
+    display: block;
+  `};
+
+  div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  div:hover {
+    background-color: #ddd;
+  }
+
+  div + div {
+    border-top: 1px solid #ddd;
+  }
+`;
 
 const Box = styled.div`
   position: relative;
@@ -169,18 +192,6 @@ const Box = styled.div`
       white-space: nowrap;
     }
   }
-`;
-
-const PrivateIcon = styled.div`
-  width: 28px;
-  height: 28px;
-  padding-bottom: 2px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #9152FF;
-  margin-right: 8px;
 `;
 
 export default LinkPieceCard;

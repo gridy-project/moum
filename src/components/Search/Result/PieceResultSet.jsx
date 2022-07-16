@@ -1,21 +1,30 @@
 import styled from "styled-components";
-import MoumCard from "../card/MoumCard";
+import LinkPieceCard from "../LinkPieceCard";
+import MemoPieceCard from "../MemoPieceCard";
 
-function MoumResultSet ({moumQuery}) {
+function PieceResultSet ({pieceQuery}) {
   return (
     <Wrap>
-      <h2>관련있는 모음<p>모음 검색 결과 {moumQuery.foldersCnt}건</p></h2>
-      <MoumRelationList>
-        {moumQuery.folders.map((moum) => {
-          return <MoumCard key={moum.id} moum={moum} />
+      <h2>관련있는 조각<p>조각 검색 결과 {pieceQuery.boardsCnt}건</p></h2>
+      <PieceRelationList>
+        {pieceQuery.boards.map((piece) => {
+          return piece.boardType === "LINK" ? <LinkPieceCard piece={piece} /> : <MemoPieceCard piece={piece} />
         })}
-      </MoumRelationList>
+      </PieceRelationList>
+      {pieceQuery.boardsCnt === 0 && <div className="no-item">조각 검색 결과가 없습니다.</div>}
     </Wrap>
   )
 }
 
 const Wrap = styled.div`
   width: 1200px;
+
+  .no-item {
+    width: 100%;
+    font-size: 24px;
+    font-weight: 400;
+  }
+
   > h2 {
     margin-top: 100px;
     margin-bottom: 36px;
@@ -34,7 +43,7 @@ const Wrap = styled.div`
   }
 `;
 
-const MoumRelationList = styled.div`
+const PieceRelationList = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -56,4 +65,4 @@ const MoumRelationList = styled.div`
   }
 `;
 
-export default MoumResultSet;
+export default PieceResultSet;

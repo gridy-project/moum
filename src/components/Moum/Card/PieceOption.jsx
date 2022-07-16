@@ -1,16 +1,18 @@
 import { useMutation } from "react-query";
 import styled, { css } from "styled-components";
-import { removePiece } from "../../api/piece";
-import {useSetRecoilState} from "recoil";
-import { globalPopup, popupState } from "../../atoms/popup";
-import LinkPieceModifyPopup from "./LinkPieceModifyPopup";
-import MemoPieceModifyPopup from "./MemoPieceModifyPopup";
+import { removePiece } from "../../../api/piece";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import { globalPopup, popupState } from "../../../atoms/popup";
+import LinkUpdatePopup from "../Popup/LinkUpdatePopup";
+import MemoUpdatePopup from "../Popup/MemoUpdatePopup";
+import { pageMoumSelectedFolderId } from "../../../atoms/moum";
 
 function PieceCardOption ({isActive, setActive, piece, type}) {
   const setPopupState = useSetRecoilState(popupState);
   const setPopup = useSetRecoilState(globalPopup);
+  const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {mutate: remove} = useMutation(async (id) => {
-    const response = await removePiece(id);
+    const response = await removePiece(folderId, id);
     return response.data;
   }, {
     onSuccess: data => {
@@ -24,10 +26,9 @@ function PieceCardOption ({isActive, setActive, piece, type}) {
   const onClickModify = (e) => {
     console.log(type);
     if (type === "LINK") {
-      setPopup(<LinkPieceModifyPopup piece={piece} />);
+      setPopup(<LinkUpdatePopup piece={piece} />);
     } else if (type === "MEMO") {
-      console.log(type);
-      setPopup(<MemoPieceModifyPopup piece={piece} />);
+      setPopup(<MemoUpdatePopup piece={piece} />);
     }
     setPopupState(true);
     setActive(false);

@@ -37,7 +37,7 @@ function MoumModifyPopup ({moum}) {
     return response.data;
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("moums");
+      queryClient.invalidateQueries("mine/moums");
     },
     onError: err => {
       console.log(err);
@@ -60,20 +60,59 @@ function MoumModifyPopup ({moum}) {
   }
 
   return (
-    <div>
-      <button onClick={onClose}>팝업 닫기</button>
-      <form onSubmit={onModify}>
-        <input type="text" placeholder="폴더 이름" ref={ref.name} />
-        <select ref={ref.share}>
+    <Box>
+      <ModifyForm onSubmit={onModify}>
+        <label htmlFor="name">폴더명</label>
+        <input type="text" id="name" placeholder="폴더 이름" ref={ref.name} />
+        <label htmlFor="share" className="label-share">공유 설정</label>
+        <select ref={ref.share} id="share">
           <option value="NONE">공유 설정</option>
           <option value="PUBLIC">공개</option>
           <option value="PRIVATE">비공개</option>
         </select>
         <button>수정하기</button>
-      </form>
-    </div>
+      </ModifyForm>
+      <button onClick={onClose}>팝업 닫기</button>
+    </Box>
   )
 }
+
+
+const Box = styled.div`
+  width: 500px;
+  height: 500px;
+  background-color: #FFFFFF;
+  font-size: 24px;
+  padding: 40px;
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .label-share {
+    margin-top: 20px;
+  }
+
+  input {
+    font-size: 20px;
+  }
+
+  select, option {
+    font-size: 20px;
+  }
+`;
+
+const ModifyForm = styled.form`
+  button {
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin: 20px 0;
+    border: none;
+    background-color: #29af61;
+    color: #FFFFFF;
+  }
+`;
 
 function MoumSortableFolderCard({moum}) {
   const setPopupState = useSetRecoilState(popupState);
@@ -136,7 +175,7 @@ function MoumSortableFolderCard({moum}) {
           <div className="piece-count">
             <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
             <Text>전체 조각</Text>
-            <Count>10개</Count>
+            <Count>{comma(moum.boardCnt)}개</Count>
           </div>
           <div className="scrap-count">
             <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>

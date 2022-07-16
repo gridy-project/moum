@@ -1,11 +1,11 @@
 import { useMutation } from "react-query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { instance } from "../../api/axios";
-import { globalPopup, popupState } from "../../atoms/popup";
-import useHandleChange from "../../hooks/useHandleChange";
-import queryClient from "../../shared/query";
-import { typeCategory } from "../../shared/type";
+import { instance } from "api/axios";
+import { globalPopup, popupState } from "atoms/popup";
+import useHandleChange from "hooks/useHandleChange";
+import queryClient from "shared/query";
+import { typeCategory } from "shared/type";
 
 function MemoPieceModifyPopup({piece}) {
   const setPopupState = useSetRecoilState(popupState);
@@ -23,7 +23,8 @@ function MemoPieceModifyPopup({piece}) {
     return response.data;
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("piece");
+      queryClient.invalidateQueries("mine/pieces");
+      queryClient.invalidateQueries("mine/categories");
     },
     onError: err => {
       console.log(err);

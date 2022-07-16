@@ -70,12 +70,12 @@ const Container = styled.div`
   height: 200px;
   display: flex;
   justify-content: center;
+  z-index: 998;
 
   ${props => props.isFixed && css`
     background-color: #FFFFFF;
     height: 100px;
     position: fixed;
-    z-index: 9999;
   `}
 `;
 

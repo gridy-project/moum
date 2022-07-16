@@ -3,7 +3,7 @@ import more from "../../../public/img/menu-black.png";
 import PieceCategory from "../../Moum/PieceCategory";
 import PieceScrollVertical from "../../Moum/PieceScrollVertical";
 import privateLock from "../../Moum/images/private-lock.png";
-import PieceCardOption from "../../card/PieceCardOption";
+import PieceOption from "./PieceOption";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
@@ -62,7 +62,7 @@ function MoumSortablePieceTypeMemoCard ({piece, selectAll}) {
             <div className="content">{piece.content}</div>
           </PieceScrollVertical>
         </CardContent>
-        <PieceCardOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
+        <PieceOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"MEMO"} />
       </Card>
     </SortableItem>
   );

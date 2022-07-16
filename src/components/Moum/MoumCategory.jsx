@@ -1,18 +1,18 @@
 import styled, { css } from "styled-components";
 import { getSelectMoumCategory } from "../../shared/type";
 
-function MoumCategory ({category, _onClick}) {
+function MoumCategory ({category, active, _onClick}) {
   return (
-    <Category isActive={category.isActive} onClick={_onClick}>
+    <Category isActive={active} onClick={_onClick}>
       <span>
         <img src={
-          category.isActive ? 
-          getSelectMoumCategory(category.name).imageActive : 
-          getSelectMoumCategory(category.name).image} alt={category.name}
+          active ? 
+          getSelectMoumCategory(category).imageActive : 
+          getSelectMoumCategory(category).image} alt={category}
         />
       </span>
       <span>
-        {category.name}
+        {category}
       </span>
     </Category>
   )
