@@ -1,18 +1,18 @@
 import { useMutation } from "react-query";
 import styled, { css } from "styled-components";
-import { removePiece } from "../../../api/piece";
+import { removePieceAxios } from "utils/api/piece";
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import { globalPopup, popupState } from "../../../state/popup";
+import { globalPopup, popupState } from "state/popup";
 import LinkUpdatePopup from "../Popup/LinkUpdatePopup";
 import MemoUpdatePopup from "../Popup/MemoUpdatePopup";
-import { pageMoumSelectedFolderId } from "../../../state/moum";
+import { pageMoumSelectedFolderId } from "state/moum";
 
 function PieceCardOption ({isActive, setActive, piece, type}) {
   const setPopupState = useSetRecoilState(popupState);
   const setPopup = useSetRecoilState(globalPopup);
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {mutate: remove} = useMutation(async (id) => {
-    const response = await removePiece(folderId, id);
+    const response = await removePieceAxios(folderId, id);
     return response.data;
   }, {
     onSuccess: data => {

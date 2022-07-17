@@ -1,31 +1,30 @@
 import styled from "styled-components";
 import {useRecoilValue} from "recoil";
-import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "../../state/moum";
-import useGetReactQuery from "../../hooks/useGetReactQuery";
-import { instance } from "../../api/axios";
-import MoumSortablePieceTypeLinkCard from "./Card/MoumSortablePieceTypeLinkCard";
-import MoumSortablePieceTypeMemoCard from "./Card/MoumSortablePieceTypeMemoCard";
+import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
+import useCustomQuery from "hooks/useCustomQuery";
+import MoumSortablePieceTypeLinkCard from "../Card/MoumSortablePieceTypeLinkCard";
+import MoumSortablePieceTypeMemoCard from "../Card/MoumSortablePieceTypeMemoCard";
 import SortableList from 'react-easy-sort';
 import arrayMove from 'array-move';
 import { useState } from "react";
 import { useEffect } from "react";
-import { axiosGetPieceMineAll, axiosGetPieceMineByOptions } from "api/moum";
-import MoumPieceTypeLinkCard from "./Card/MoumPieceTypeLinkCard";
-import MoumPieceTypeMemoCard from "./Card/MoumPieceTypeMemoCard";
+import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum";
+import MoumPieceTypeLinkCard from "../Card/MoumPieceTypeLinkCard";
+import MoumPieceTypeMemoCard from "../Card/MoumPieceTypeMemoCard";
 
 function PieceList ({selectAll, search}) {
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const categories = useRecoilValue(selectedCategories);
   const sortState = useRecoilValue(moumSort);
-  const piecesQuery = useGetReactQuery(["mine/pieces", folderId, categories, search], async () => {
+  const piecesQuery = useCustomQuery(["mine/pieces", folderId, categories, search], async () => {
     if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
-      const response = await axiosGetPieceMineAll(folderId);
+      const response = await getPieceMineAllAxios(folderId);
       return response.data;
     } else if (search === "") {
-      const response = await axiosGetPieceMineByOptions(folderId, { keyword: "all", categories });
+      const response = await getPieceMineByOptionsAxios(folderId, { keyword: "all", categories });
       return response.data;
     } else {
-      const response = await axiosGetPieceMineByOptions(folderId, { keyword: search, categories });
+      const response = await getPieceMineByOptionsAxios(folderId, { keyword: search, categories });
       return response.data;
     }
   });

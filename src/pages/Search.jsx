@@ -2,11 +2,11 @@
 import styled from "styled-components";
 
 // component
-import Header from "../components/common/Header";
-import SearchForm from "../components/Search/SearchForm";
-import AllMoumFavorite from "../components/Search/AllMoumFavorite";
-import AllMoumLatest from "../components/Search/AllMoumLatest";
-import Container from "../components/common/Container";
+import Header from "components/Common/Header";
+import SearchForm from "components/Search/SearchForm";
+import AllMoumFavorite from "components/Search/AllMoumFavorite";
+import AllMoumLatest from "components/Search/AllMoumLatest";
+import Container from "components/Common/Container";
 
 function Search() {
 

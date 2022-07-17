@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import Container from "../components/common/Container";
-import { instance } from "../api/axios";
+import Container from "components/Common/Container";
+import { instance } from "shared/axios";
 import { useMutation } from "react-query";
+import useCustomMutate from "hooks/useCustomMutate";
+import { executeCheckEmailAxios, executeCheckNickAxios, executeSignUpAxios } from "utils/api/auth";
 
 function Register() {
   const navigate = useNavigate();
@@ -14,71 +16,38 @@ function Register() {
     passwordConfirm: useRef()
   }
 
-  // 이메일 체크
-  const {mutate: emailChkMutate} = useMutation("statusEmailCheck", async (username) => {
-    const response = await instance.get(`/user/emailDupCheck/${username}`);
-    return response.data;
-  }, {
-    onSuccess: data => {
-      console.log(data);
+  // mutate
+  const {mutateAsync: checkMail} = useCustomMutate(async (username) => await executeCheckEmailAxios(username));
+  const {mutateAsync: checkName} = useCustomMutate(async (nickname) => await executeCheckNickAxios(nickname));
+  const {mutateAsync: register} = useCustomMutate(async (data) => await executeSignUpAxios(data));
+
+  const clickMailCheck = async (e) => {
+    e.preventDefault();
+    const {result, data} = await checkMail(ref.username.current.value);
+
+    if (result) {
       if (data) {
         alert("이메일 중복 없음");
       } else {
         alert("이메일 중복 있음");
       }
-    },
-    onError: err => {
-      console.log(err);
     }
-  });
-
-  const emailChk = (e) => {
-    e.preventDefault();
-    emailChkMutate(ref.username.current.value);
   }
 
-  // 닉네임 체크
-  const {mutate: nicknameChkMutate} = useMutation("statusEmailCheck", async (nickname) => {
-    const response = await instance.get(`/user/nameDupCheck/${nickname}`);
-    return response.data;
-  }, {
-    onSuccess: data => {
-      console.log(data);
+  const clickNameCheck = async (e) => {
+    e.preventDefault();
+    const {result, data} = await checkName(ref.nickname.current.value);
+    if (result) {
       if (data) {
         alert("닉네임 중복 없음");
       } else {
         alert("닉네임 중복 있음");
       }
-    },
-    onError: err => {
-      console.log(err);
     }
-  });
-
-  const nicknameChk = (e) => {
-    e.preventDefault();
-    nicknameChkMutate(ref.nickname.current.value);
   }
 
-  // 회원가입
-  const {mutate: register} = useMutation("user/register", async (data) => {
-    const response = await instance.post(`/user/signup`, data);
-    return response.data;
-  }, {
-    onSuccess: data => {
-      if (data.result) {
-        alert(data.errorMsg);
-        navigate("/login");
-      } else {
-        alert(data.errorMsg);
-      }
-    },
-    onError: err => {
-      console.log(err);
-    }
-  });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const username = ref.username.current.value;
     const nickname = ref.nickname.current.value;
@@ -106,7 +75,15 @@ function Register() {
       return;
     }
 
-    register({username, nickname, password, imgPath: null});
+    const {result, data} = await register({username, nickname, password, imgPath: null});
+    if (result) {
+      if (data.result) {
+        alert(data.errorMsg);
+        navigate("/login");
+      } else {
+        alert(data.errorMsg);
+      }
+    }
   };
 
   return (
@@ -118,12 +95,12 @@ function Register() {
             <div>
               <p>아이디</p>
               <input type="text" placeholder="이메일을 입력해주세요" ref={ref.username} autoComplete="email"  />
-              <button onClick={emailChk}>중복체크</button>
+              <button onClick={clickMailCheck}>중복체크</button>
             </div>
             <div>
               <p>닉네임</p>
               <input type="text" placeholder="닉네임 입력해주세요" ref={ref.nickname} autoComplete="nickname"  />
-              <button onClick={nicknameChk}>중복체크</button>
+              <button onClick={clickNameCheck}>중복체크</button>
             </div>
             <div>
               <p>비밀번호</p>

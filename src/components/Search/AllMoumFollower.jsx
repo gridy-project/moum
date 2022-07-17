@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { instance } from "../../api/axios";
+import { instance } from "shared/axios";
 import useGetReactQuery from "../../hooks/useGetReactQuery";
 import FollowerCard from "../card/FollowerCard";
 

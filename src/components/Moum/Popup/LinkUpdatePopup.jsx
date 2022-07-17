@@ -5,7 +5,7 @@ import { typeCategory } from "shared/type";
 import { useSetRecoilState, useResetRecoilState } from "recoil";
 import { globalPopup, popupState } from "state/popup";
 import { useMutation } from "react-query";
-import { instance } from "api/axios";
+import { instance } from "shared/axios";
 import queryClient from "shared/query";
 import { useState } from "react";
 import { useRef } from "react";

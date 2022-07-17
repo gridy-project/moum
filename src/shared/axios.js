@@ -1,21 +1,6 @@
 import axios from "axios";
-import { refresh, tokenRefresh } from "./auth";
-import { getAccessToken, getRefreshToken, removeToken, setToken } from "../shared/localStorage";
-
-// library : sweetAlert
-
-const SUCCESS = true;
-const FAILED = false;
-export const requestAxios = async (func) => {
-  try {
-    const response = await func();
-    return { result: SUCCESS, data: response.data };
-  } catch (err) {
-    console.log("에러");
-    console.log(err);
-    return { result: FAILED, data: err.response.data };
-  }
-}
+import { executeTokenRefreshAxios } from "utils/api/auth";
+import { getAccessToken, getRefreshToken, removeToken, setToken } from "shared/localStorage";
 
 export const instance = axios.create({
   // baseURL: "http://15.164.165.106"
@@ -31,17 +16,15 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log(error);
     return Promise.reject(error);
   }
 );
 
 instance.interceptors.response.use(
   (config) => {
-    return config;
+    return { result: true, data: config.data, response: config };
   },
   async (error) => {
-
     const {
       config,
       response: { status },
@@ -60,7 +43,7 @@ instance.interceptors.response.use(
         const token = getRefreshToken();
         if (token) {
           try {
-            const response = await tokenRefresh(token);
+            const response = await executeTokenRefreshAxios(token);
             console.log("토큰 자동 리프레시 성공");
             setToken(response.data.accessToken, response.data.refreshToken);
             return instance(originalRequest);
@@ -72,6 +55,6 @@ instance.interceptors.response.use(
         }
       }
     }
-    return Promise.reject(error);
+    return Promise.reject({ result: false, data: error.response.data, error });
   },
 );

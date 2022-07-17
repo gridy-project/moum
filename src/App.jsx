@@ -3,8 +3,8 @@ import { ThemeProvider } from "styled-components";
 import { defaultTheme } from "styles/theme";
 import GlobalStyle from "styles/GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
-import Popup from "./components/popup/Popup";
-import Float from "./components/popup/Float";
+import Popup from "components/Popup/Popup";
+import Float from "components/Popup/Float";
 
 function App() {
   return (

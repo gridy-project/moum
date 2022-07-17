@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getPieceCategory } from "../../shared/type";
+import { getPieceCategory } from "shared/type";
 
 function PieceCategory ({category}) {
   return (category === "미정" ? 

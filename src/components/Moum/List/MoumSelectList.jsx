@@ -1,22 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import MoumSelectItem from "./MoumSelectItem";
+import MoumSelectItem from "../Item/MoumSelectItem";
 import {useRecoilState} from "recoil";
-import { pageMoumSelectedFolderId } from "../../state/moum";
-import { axiosGetMoumMineAll } from "api/moum";
-import useGetReactQuery from "hooks/useGetReactQuery";
+import { pageMoumSelectedFolderId } from "state/moum";
+import { getMoumMineAllAxios } from "utils/api/moum";
+import useCustomQuery from "hooks/useCustomQuery";
 
 function MoumSelect ({moums}) {
   const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
   
-  const moumsQuery = useGetReactQuery("mine/moums/all", async () => {
-    const response = await axiosGetMoumMineAll();
-    return response.data;
-  });
+  const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
 
-  const onClick = (id) => {
-    setSelectedFolderId(id);
-  }
+  const onClick = (id) => { setSelectedFolderId(id) }
 
   return (
     <Line>
@@ -24,7 +19,8 @@ function MoumSelect ({moums}) {
       <MoumList>
         <ul>
           {
-            moumsQuery.data?.map((v, i) => {
+            isSuccess &&
+            query?.data?.map((v, i) => {
               return (
                 <MoumSelectItem 
                 key={v.id} 

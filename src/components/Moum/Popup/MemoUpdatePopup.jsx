@@ -1,7 +1,7 @@
 import { useMutation } from "react-query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { instance } from "api/axios";
+import { instance } from "shared/axios";
 import { globalPopup, popupState } from "state/popup";
 import useHandleChange from "hooks/useHandleChange";
 import queryClient from "shared/query";

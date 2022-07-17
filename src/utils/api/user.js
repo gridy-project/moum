@@ -1,4 +1,4 @@
-import { instance, requestAxios } from "./axios";
+import { instance, requestAxios } from "shared/axios";
 
 // React Query
 export const getUserInfo = () => requestAxios(() => instance.get(`/user/profile`));

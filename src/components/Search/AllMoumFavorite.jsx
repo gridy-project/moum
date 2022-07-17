@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { instance } from "../../api/axios";
-import useGetReactQuery from "../../hooks/useGetReactQuery";
+import { instance } from "shared/axios";
+import useCustomQuery from "hooks/useCustomQuery";
 import MoumCard from "./MoumCard";
 
 function AllMoumFavorite () {
-  const {data: bestMoum, isLoading: bestMoumLoading} = useGetReactQuery("search/bestMoum", async () => {
+  const {data: bestMoum, isLoading: bestMoumLoading} = useCustomQuery("search/bestMoum", async () => {
     const response = await instance.get("/BestFolders/0/10");
     return response.data;
   });

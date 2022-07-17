@@ -1,10 +1,10 @@
-import { instance } from "../../api/axios";
-import useGetReactQuery from "../../hooks/useGetReactQuery";
+import useCustomQuery from "hooks/useCustomQuery";
+import { instance } from "shared/axios";
 import MoumCategoryGroup from "./MoumCategoryGroup";
 import MoumContentProfile from "./MoumContentProfile";
 
 function MoumHeaderCommon ({categories}) {
-  const {data: user, isLoading} = useGetReactQuery("user", async () => {
+  const {data: user, isLoading} = useCustomQuery("user", async () => {
     const response = await instance.get(`/user/myProfile`);
     return response.data;
   });
