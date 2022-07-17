@@ -9,7 +9,7 @@ import PieceCategory from "../PieceCategory";
 import privateLock from "assets/images/pages/moum/private-lock.png";
 import PieceOption from "./PieceOption";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
+import { pieceSelectMode, selectedItems } from "../../../state/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { SortableItem } from "react-easy-sort";

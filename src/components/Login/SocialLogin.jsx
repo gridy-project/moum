@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
 import { signInWithGoogle } from '../../api/auth';
-import { isLogin } from '../../atoms/user';
+import { isLogin } from '../../state/user';
 import { setToken } from '../../shared/localStorage';
 
 import google from 'assets/images/pages/login/google.png';

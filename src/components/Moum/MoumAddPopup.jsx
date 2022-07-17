@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { axiosAddMoum } from "../../api/moum";
 import useHandleChange from "../../hooks/useHandleChange";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { globalPopup, popupState } from "../../atoms/popup";
+import { globalPopup, popupState } from "../../state/popup";
 import queryClient from "../../shared/query";
 
 function MoumAddPopup () {

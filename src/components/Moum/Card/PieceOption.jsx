@@ -2,10 +2,10 @@ import { useMutation } from "react-query";
 import styled, { css } from "styled-components";
 import { removePiece } from "../../../api/piece";
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import { globalPopup, popupState } from "../../../atoms/popup";
+import { globalPopup, popupState } from "../../../state/popup";
 import LinkUpdatePopup from "../Popup/LinkUpdatePopup";
 import MemoUpdatePopup from "../Popup/MemoUpdatePopup";
-import { pageMoumSelectedFolderId } from "../../../atoms/moum";
+import { pageMoumSelectedFolderId } from "../../../state/moum";
 
 function PieceCardOption ({isActive, setActive, piece, type}) {
   const setPopupState = useSetRecoilState(popupState);

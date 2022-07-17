@@ -6,7 +6,7 @@ import { instance } from "../api/axios";
 import { useMutation } from "react-query";
 import { setToken } from "../shared/localStorage";
 import { useSetRecoilState } from "recoil";
-import { isLogin } from "../atoms/user";
+import { isLogin } from "../state/user";
 
 import noBG from "assets/images/pages/login/no-background.png";
 

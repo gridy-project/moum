@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { moumCategories, selectedCategories } from "../../atoms/moum";
+import { moumCategories, selectedCategories } from "../../state/moum";
 import MoumCategory from "./MoumCategory";
 
 function MoumCategoryGroup ({categories}) {

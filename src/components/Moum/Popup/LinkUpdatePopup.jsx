@@ -3,7 +3,7 @@ import useHandleChange from "hooks/useHandleChange";
 import noImage from "assets/images/pages/moum/images-none.png";
 import { typeCategory } from "shared/type";
 import { useSetRecoilState, useResetRecoilState } from "recoil";
-import { globalPopup, popupState } from "atoms/popup";
+import { globalPopup, popupState } from "state/popup";
 import { useMutation } from "react-query";
 import { instance } from "api/axios";
 import queryClient from "shared/query";

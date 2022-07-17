@@ -6,7 +6,7 @@ import styled, { css } from "styled-components";
 import PieceCategory from "../PieceCategory";
 import PieceOption from "./PieceOption";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
+import { pieceSelectMode, selectedItems } from "../../../state/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import noImage from "assets/images/pages/moum/images-none.png";

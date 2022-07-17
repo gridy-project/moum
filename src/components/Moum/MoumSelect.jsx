@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import MoumSelectItem from "./MoumSelectItem";
 import {useRecoilState} from "recoil";
-import { pageMoumSelectedFolderId } from "../../atoms/moum";
+import { pageMoumSelectedFolderId } from "../../state/moum";
 import { axiosGetMoumMineAll } from "api/moum";
 import useGetReactQuery from "hooks/useGetReactQuery";
 
