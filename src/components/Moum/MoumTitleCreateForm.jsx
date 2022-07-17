@@ -5,8 +5,8 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { instance } from "../../api/axios";
-import { pageMoumSelectedFolderId } from "../../atoms/moum";
-import { floatState, globalFloat, globalPopup, popupState } from "../../atoms/popup";
+import { pageMoumSelectedFolderId } from "../../state/moum";
+import { floatState, globalFloat, globalPopup, popupState } from "../../state/popup";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";

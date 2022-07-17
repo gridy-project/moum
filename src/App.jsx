@@ -1,6 +1,6 @@
 import Router from "./Router";
 import { ThemeProvider } from "styled-components";
-import { defaultTheme } from "./shared/theme";
+import { defaultTheme } from "styles/theme";
 import GlobalStyle from "styles/GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
 import Popup from "./components/popup/Popup";

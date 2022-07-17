@@ -12,8 +12,8 @@ import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
 import { instance } from "../../../api/axios";
 import queryClient from "../../../shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "../../../atoms/moum";
-import { globalPopup, popupState } from "../../../atoms/popup";
+import { pageMoumSelectedFolderId } from "../../../state/moum";
+import { globalPopup, popupState } from "../../../state/popup";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { SortableItem } from 'react-easy-sort'

@@ -11,7 +11,7 @@ import Intro from "./pages/Intro";
 import Test from "./pages/Test";
 import { getRefreshToken, removeToken, setToken } from "./shared/localStorage";
 import { useSetRecoilState } from "recoil";
-import { isLogin } from "./atoms/user";
+import { isLogin } from "./state/user";
 import { tokenRefresh } from "./api/auth";
 import Result from "./pages/Result";
 
