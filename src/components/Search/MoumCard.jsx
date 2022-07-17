@@ -4,16 +4,13 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 
 // image
-import more from "../../public/img/menu-white.png";
-import moum from "../../public/img/moum-background.png";
-import iconPrivate from "../../public/img/icon-private.png";
-import iconPieceCount from "../../public/img/icon-piece-count.png";
-import iconScrapCount from "../../public/img/icon-scrap-count.png";
+import more from "assets/images/pages/moum/menu-white.png";
+import moum from "assets/images/pages/moum/moum-background.png";
+import iconPrivate from "assets/images/pages/moum/icon-private.png";
+import iconPieceCount from "assets/images/pages/moum/icon-piece-count.png";
+import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
 import { instance } from "../../api/axios";
 import queryClient from "../../shared/query";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "../../atoms/moum";
-import { globalPopup, popupState } from "../../atoms/popup";
 
 
 function MoumCard({moum}) {
@@ -57,7 +54,7 @@ function MoumCard({moum}) {
         <div className="piece-count">
           <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
           <Text>전체 조각</Text>
-          <Count>10개</Count>
+          <Count>{comma(moum.boardCnt)}개</Count>
         </div>
         <div className="scrap-count">
           <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>

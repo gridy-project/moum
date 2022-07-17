@@ -7,9 +7,9 @@ import queryClient from "../shared/query";
 import { useForm } from "react-hook-form";
 // css
 import styled, { css } from "styled-components";
-import pen from "../public/img/pen.png";
-import human from "../public/img/human.png";
-import xbutton from "../public/img/xbutton.png";
+import pen from "assets/images/pages/mypage/pen.png";
+import human from "assets/images/pages/mypage/human.png";
+import xbutton from "assets/images/pages/mypage/xbutton.png";
 // modal
 import Modal from "react-modal";
 // axios
@@ -17,7 +17,7 @@ import { instance } from "../api/axios"
 // component
 import Header from "../components/common/Header";
 import Container from "../components/common/Container";
-import { useEffect } from "react";
+
 Modal.setAppElement("#root");
 
 

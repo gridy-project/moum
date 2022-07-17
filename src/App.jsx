@@ -1,18 +1,17 @@
 import Router from "./Router";
 import { ThemeProvider } from "styled-components";
 import { defaultTheme } from "./shared/theme";
-import MyGlobalStyle from "./components/common/MyGlobalStyle";
+import GlobalStyle from "styles/GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
 import Popup from "./components/popup/Popup";
 import Float from "./components/popup/Float";
-import { removeToken } from "./shared/localStorage";
 
 function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Popup />
       <Float />
-      <MyGlobalStyle />
+      <GlobalStyle />
       <BrowserRouter>
         <Router />
       </BrowserRouter>

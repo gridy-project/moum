@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
 // image
-import noImage from "../../../public/img/Image.png";
-import more from "../../../public/img/menu-black.png";
+import noImage from "assets/images/pages/moum/images-none.png";
+import more from "assets/images/pages/moum/menu-black.png";
 import PieceCategory from "../PieceCategory";
-import privateLock from "../images/private-lock.png";
+import privateLock from "assets/images/pages/moum/private-lock.png";
 import PieceOption from "./PieceOption";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
@@ -21,7 +21,7 @@ function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
 
   const clickCard = useCallback((e) => {
     if (selectMode) {
-      e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
+      // e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
       setItems(current => {
         if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
           return [...current, piece.id];
@@ -29,8 +29,10 @@ function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
           return current.filter(v => v !== piece.id); // 값이 있는 경우 리스트 삭제
         }
       })
+    } else {
+      window.open(piece.link, "_blank");
     }
-  }, [selectMode, piece.id, setItems]);
+  }, [selectMode, piece, setItems]);
 
   useEffect(() => {
     if (selectAll) {
@@ -52,12 +54,13 @@ function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
           <li></li>
           <li></li>
         </ItemDragBox>
-        <a onClick={clickCard} href={piece.link} target="blank">
+        <div className="link-box" onClick={clickCard}>
           <div className="card-image">
-            <img src={piece.imgPath || noImage} alt="noImage" />
+            <img src={piece.imgPath || noImage} alt="noImage" className="item-image" />
             <div className="menu" onClick={
               (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 setButtonState(current => !current);
               }
             }>
@@ -66,14 +69,15 @@ function MoumSortablePieceTypeLinkCard({piece, selectAll}) {
           </div>
           <div className="card-content">
             <div className="card-header">
-              {piece.status === "PRIVATE" && <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
+              {piece.status === "PRIVATE" && 
+              <PrivateIcon><img src={privateLock} alt="" /></PrivateIcon>}
               <PieceCategory category={piece.category} />
             </div>
             
             <div className="card-title">{piece.title}</div>
             <div className="card-description"><span>{piece.explanation}</span></div>
           </div>
-        </a>
+        </div>
         <PieceOption isActive={buttonState} setActive={setButtonState} piece={piece} type={"LINK"} />
       </Box>
     </SortableItem>
@@ -103,7 +107,7 @@ const ItemDragBox = styled.ul`
 const Box = styled.div`
   position: relative;
 
-  a {
+  .link-box {
     width: 100%;
     height: 314px;
     background-color: #FFFFFF;
@@ -113,11 +117,14 @@ const Box = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     overflow: hidden;
+
+    img {
+      pointer-events: none;
+    }
   }
 
-  
   ${props => props.isSelected && css`
-    a {
+    .link-box {
       background-color: #E0D6FF;
       border: 2px solid #AC7DFF;
     }

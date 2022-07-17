@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
-import iconMoumSelectActive from "./images/moum/moum-select-active.png";
-import iconMoumSelect from "./images/moum/moum-select.png";
+import iconMoumSelectActive from "assets/images/pages/moum/moum-select-active.png";
+import iconMoumSelect from "assets/images/pages/moum/moum-select.png";
 
 function MoumSelectItem ({isActive, children, _onClick}) {
   return (

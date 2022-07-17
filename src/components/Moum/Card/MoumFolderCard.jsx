@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 
 // image
-import more from "../../../public/img/menu-white.png";
-import moum from "../../../public/img/moum-background.png";
-import iconPrivate from "../../../public/img/icon-private.png";
-import iconPieceCount from "../../../public/img/icon-piece-count.png";
-import iconScrapCount from "../../../public/img/icon-scrap-count.png";
+import more from "assets/images/pages/moum/menu-white.png";
+import moum from "assets/images/pages/moum/moum-background.png";
+import iconPrivate from "assets/images/pages/moum/icon-private.png";
+import iconPieceCount from "assets/images/pages/moum/icon-piece-count.png";
+import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
 import { instance } from "../../../api/axios";
 import queryClient from "../../../shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
@@ -16,7 +16,6 @@ import { pageMoumSelectedFolderId } from "../../../atoms/moum";
 import { globalPopup, popupState } from "../../../atoms/popup";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { SortableItem } from 'react-easy-sort';
 
 function MoumModifyPopup ({moum}) {
   const setPopupState = useSetRecoilState(popupState);
@@ -37,7 +36,7 @@ function MoumModifyPopup ({moum}) {
     return response.data;
   }, {
     onSuccess: data => {
-      queryClient.invalidateQueries("moums");
+      queryClient.invalidateQueries("mine/moums");
     },
     onError: err => {
       console.log(err);
@@ -45,7 +44,6 @@ function MoumModifyPopup ({moum}) {
   });
 
   useEffect(() => {
-    console.log(moum);
     ref.name.current.value = moum.name;
     ref.share.current.value = moum.status;
   }, []);

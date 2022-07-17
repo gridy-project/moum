@@ -12,13 +12,13 @@ import { floatState, globalFloat, globalPopup, popupState } from "../../atoms/po
 import useHandleChange from "../../hooks/useHandleChange";
 
 // image
-import arrowSave from "../../public/img/arrow-moum-save.png"
+import arrowSave from "assets/images/pages/moum/arrow-moum-save.png"
 import queryClient from "../../shared/query";
 import LinkUpdatePopup from "./Popup/LinkUpdatePopup";
 import MemoUpdatePopup from "./Popup/MemoUpdatePopup";
-import fastCreateBottom from "./images/fast-create-select-bottom.png";
-import fastCreateOptionModify from "./images/fast-create-option-modify.png";
-import fastCreateOptionArrow from "./images/fast-create-option-arrow.png";
+import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom.png";
+import fastCreateOptionModify from "assets/images/pages/moum/fast-create-option-modify.png";
+import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-arrow.png";
 
 function MoumModifyFloat ({piece, moums}) {
   const setFloatState = useSetRecoilState(floatState);

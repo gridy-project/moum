@@ -14,13 +14,12 @@ function Header({selected}) {
     if (window.scrollY > 80) setHeaderFixed(true);
     function scrollEvt (e) {
       if (window.scrollY > 80) {
-        if (!headerFixed) {
-          setHeaderFixed(true);
-        }
+        if (!headerFixed) setHeaderFixed(true);
       } else {
         setHeaderFixed(false);
       }
     }
+
     window.addEventListener("scroll", scrollEvt);
     return () => {
       window.removeEventListener("scroll", scrollEvt);

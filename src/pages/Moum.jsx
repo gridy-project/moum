@@ -16,13 +16,14 @@ import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "../atoms
 import MoumList from "../components/Moum/MoumList";
 import { useState } from "react";
 import MoumHeaderCommon from "../components/Moum/MoumHeaderCommon";
-import iconMove from "../components/Moum/images/move_icon.png";
-import iconDelete from "../components/Moum/images/delete_icon.png";
 import useGetReactQuery from "../hooks/useGetReactQuery";
-import { axiosGetCategories, axiosGetCategoriesInFolder, axiosGetMoumMineAll, axiosGetMoumMineByOptions } from "../api/moum";
 import { selectedItems } from "atoms/mode";
 import { useMutation, useQueryClient } from "react-query";
 import { instance } from "api/axios";
+
+import { axiosGetCategories, axiosGetCategoriesInFolder, axiosGetMoumMineAll, axiosGetMoumMineByOptions } from "../api/moum";
+import iconMove from "assets/images/pages/moum/move_icon.png";
+import iconDelete from "assets/images/pages/moum/delete_icon.png";
 
 function Moum() {
   const queryClient = useQueryClient();
