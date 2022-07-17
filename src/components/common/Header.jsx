@@ -1,9 +1,10 @@
 import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { removeToken } from "../../shared/localStorage";
+import { removeToken } from "shared/localStorage";
 import { useRecoilState } from "recoil";
 import { isLogin } from "../../state/user";
 import { useEffect, useState } from "react";
+
 
 function Header({selected}) {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Header({selected}) {
     return () => {
       window.removeEventListener("scroll", scrollEvt);
     }
-  }, [])
+  }, [headerFixed])
 
   return (
     <Container isFixed={headerFixed}>

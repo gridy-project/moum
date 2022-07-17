@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import { getSelectMoumCategory } from "../../shared/type";
+import { getSelectMoumCategory } from "shared/type";
 
-function MoumCategory ({category, active, _onClick}) {
+function MoumCategoryCard ({category, active, _onClick}) {
   return (
     <Category isActive={active} onClick={_onClick}>
       <span>
@@ -49,4 +49,4 @@ const Category = styled.li`
   }
 `;
 
-export default MoumCategory;
+export default MoumCategoryCard;

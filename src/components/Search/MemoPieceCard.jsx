@@ -5,7 +5,7 @@ import PieceScrollVertical from "../Moum/PieceScrollVertical";
 import privateLock from "assets/images/pages/moum/private-lock.png";
 import { useState } from "react";
 import { useMutation } from "react-query";
-import { instance } from "api/axios";
+import { instance } from "shared/axios";
 import queryClient from "shared/query";
 
 function MemoPieceCard ({piece}) {

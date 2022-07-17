@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 // React Query
 import {  useMutation, useQuery } from "react-query";
-import queryClient from "../shared/query";
+import queryClient from "shared/query";
 // React-hook-form
 import { useForm } from "react-hook-form";
 // css
@@ -13,10 +13,10 @@ import xbutton from "assets/images/pages/mypage/xbutton.png";
 // modal
 import Modal from "react-modal";
 // axios
-import { instance } from "../api/axios"
+import { instance } from "shared/axios"
 // component
-import Header from "../components/common/Header";
-import Container from "../components/common/Container";
+import Header from "components/Common/Header";
+import Container from "components/Common/Container";
 
 Modal.setAppElement("#root");
 

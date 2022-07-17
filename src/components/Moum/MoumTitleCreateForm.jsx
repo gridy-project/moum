@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
-import { instance } from "../../api/axios";
+import { instance } from "shared/axios";
 import { pageMoumSelectedFolderId } from "../../state/moum";
 import { floatState, globalFloat, globalPopup, popupState } from "../../state/popup";
 
@@ -13,12 +13,13 @@ import useHandleChange from "../../hooks/useHandleChange";
 
 // image
 import arrowSave from "assets/images/pages/moum/arrow-moum-save.png"
-import queryClient from "../../shared/query";
+import queryClient from "shared/query";
 import LinkUpdatePopup from "./Popup/LinkUpdatePopup";
 import MemoUpdatePopup from "./Popup/MemoUpdatePopup";
 import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom.png";
 import fastCreateOptionModify from "assets/images/pages/moum/fast-create-option-modify.png";
 import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-arrow.png";
+import useCustomMutate from "hooks/useCustomMutate";
 
 function MoumModifyFloat ({piece, moums}) {
   const setFloatState = useSetRecoilState(floatState);
@@ -97,30 +98,15 @@ function MoumTitleCreateForm ({moums}) {
     content: ""
   });
 
-  const {mutate: addPiece} = useMutation(async (data) => {
+  const {mutateAsync: addPiece} = useCustomMutate(async (data) => {
     if (folderId === 0) {
-      const response = await instance.post("/board", data);
-      return response.data;
+      return await instance.post("/board", data);
     } else {
-      const response = await instance.put("/folder", {folderId, ...data});
-      return response.data;
+      return await instance.put("/folder", {folderId, ...data});
     }
-  }, {
-    onSuccess: data => {
-      if (folderId === 0) {
-        queryClient.invalidateQueries("mine/moums");
-      } else {
-        queryClient.invalidateQueries("mine/pieces");
-      }
-      setFloatState(true);
-      setFloat(<MoumModifyFloat piece={data} moums={moums} />)
-    },
-    onError: err => {
-      alert("파일 추가 실패");
-    }
-  });
+  })
 
-  const addPieceSimple = (e) => {
+  const addPieceSimple = async (e) => {
     e.preventDefault();
 
     if (input.type === "NONE") {
@@ -146,7 +132,18 @@ function MoumTitleCreateForm ({moums}) {
       }
     }
 
-    addPiece(obj);
+    const {result, data} = await addPiece(obj);
+    if (result) {
+      if (folderId === 0) {
+        queryClient.invalidateQueries("mine/moums");
+      } else {
+        queryClient.invalidateQueries("mine/pieces");
+      }
+      setFloatState(true);
+      setFloat(<MoumModifyFloat piece={data} moums={moums} />)
+    } else {
+      alert("파일 추가 실패");
+    }
     setInput((current) => ({...current, content: ""}));
   }
 

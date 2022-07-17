@@ -1,38 +1,26 @@
 import styled from "styled-components";
-import MoumAddCard from "./MoumAddCard";
+import MoumAddCard from "../Card/MoumAddCard";
 import SortableList from 'react-easy-sort'
 import arrayMove from 'array-move';
 import { useEffect, useState } from "react";
-import MoumSortableFolderCard from "./Card/MoumSortableFolderCard";
-import MoumFolderCard from "./Card/MoumFolderCard";
+import MoumSortableFolderCard from "../Card/MoumSortableFolderCard";
+import MoumFolderCard from "../Card/MoumFolderCard";
 import { useRecoilValue } from "recoil";
 import { moumSort } from "state/moum";
-import { useMutation, useQueryClient } from "react-query";
-import { instance } from "api/axios";
+import { changeMoumOrder } from "utils/api/moum";
+import useCustomMutate from "hooks/useCustomMutate";
 
 function MoumList ({moums}) {
-  const queryClient = useQueryClient();
   const [sortableMoumList, setSortableMoumList] = useState([]);
   const sortState = useRecoilValue(moumSort);
 
-  const {mutate: order} = useMutation(async ({folderId, afterOrder}) => {
-    const response = await instance.post(`/folders`, {folderId, afterOrder});
-    return response.data;
-  }, {
-    onSuccess: data => {
-      // queryClient.invalidateQueries("mine/moums");
-    },
-    onError: err => {
-      console.log(err);
-    }
-  });
+  const {mutate: order} = useCustomMutate(async ({folderId, afterOrder}) => await changeMoumOrder(folderId, afterOrder));
 
   const onSortEnd = (oldIndex, newIndex) => {
     const oldId = sortableMoumList[oldIndex].id;
-    // const newOrder = sortableMoumList[newIndex].folderOrder;
 
     order({folderId: oldId, afterOrder: newIndex});
-    setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex))
+    setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex));
   }
 
   useEffect(() => {

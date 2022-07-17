@@ -1,10 +1,8 @@
 import { useEffect } from "react";
-import { useCallback } from "react";
-import { useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { moumCategories, selectedCategories } from "../../state/moum";
-import MoumCategory from "./MoumCategory";
+import MoumCategoryItem from "./Item/MoumCategoryItem";
 
 function MoumCategoryGroup ({categories}) {
   const [category, setCategory] = useRecoilState(moumCategories);
@@ -92,7 +90,7 @@ function MoumCategoryGroup ({categories}) {
       <ul className="category-list">
         {
           Object.keys(category)?.map(
-          (v, i) => <MoumCategory 
+          (v, i) => <MoumCategoryItem 
                       key={i} 
                       category={v === "전체" ? "카테고리 전체" : v} 
                       active={category[v]} 

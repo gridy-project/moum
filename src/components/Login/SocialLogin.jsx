@@ -4,9 +4,9 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
-import { signInWithGoogle } from '../../api/auth';
+import { executeSignInWithGoogleAxios } from 'utils/api/auth';
 import { isLogin } from '../../state/user';
-import { setToken } from '../../shared/localStorage';
+import { setToken } from 'shared/localStorage';
 
 import google from 'assets/images/pages/login/google.png';
 
@@ -26,7 +26,7 @@ function SocialLoginButton () {
   const navigate = useNavigate();
 
   const {mutate: login} = useMutation(async (data) => {
-    const response = await signInWithGoogle(data.code);
+    const response = await executeSignInWithGoogleAxios(data.code);
     return response.data;
   }, {
     onSuccess: data => {

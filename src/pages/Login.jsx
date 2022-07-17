@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import SocialLogin from "../components/Login/SocialLogin";
-import { instance } from "../api/axios";
-import { useMutation } from "react-query";
-import { setToken } from "../shared/localStorage";
+import SocialLogin from "components/Login/SocialLogin";
+import { instance } from "shared/axios";
+import { setToken } from "shared/localStorage";
 import { useSetRecoilState } from "recoil";
 import { isLogin } from "../state/user";
 
 import noBG from "assets/images/pages/login/no-background.png";
+import useCustomMutate from "hooks/useCustomMutate";
+import { executeSignInAxios } from "utils/api/auth";
 
 function Login() {
   const navigate = useNavigate();
@@ -18,22 +19,7 @@ function Login() {
   const pwRef = React.useRef(null);
 
   // 로그인
-  const {mutate: login} = useMutation("user/login", async (data) => {
-    const response = await instance.post(`/user/login`, data);
-    return response.data;
-  }, {
-    onSuccess: data => {
-      alert("로그인 성공");
-      setToken(data.accessToken, data.refreshToken);
-      setLoginStatus(true);
-      navigate("/");
-    },
-    onError: err => {
-      alert("로그인 실패");
-      setLoginStatus(false);
-    }
-  });
-
+  const {mutateAsync: login} = useCustomMutate(async (data) => await executeSignInAxios(data));
 
   const loginSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +31,17 @@ function Login() {
       return;
     }
 
-    login({username, password});
+    const {result, data} = await login({username, password});
+    
+    if (result) {
+      alert("로그인 성공");
+      setToken(data.accessToken, data.refreshToken);
+      setLoginStatus(true);
+      navigate("/");
+    } else {
+      alert("로그인 실패");
+      setLoginStatus(false);
+    }
   };
 
   return (

@@ -1,34 +1,31 @@
 // module
-import { React } from "react";
+import { React, useState } from "react";
 import styled, { css } from "styled-components";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useQueryClient } from "react-query";
 
 // components
-import Header from "../components/common/Header";
+import Header from "components/Common/Header";
+import MoumSelectList from "components/Moum/List/MoumSelectList";
+import MoumOptionGroup from "components/Moum/MoumOptionGroup";
+import MoumTitleContent from "components/Moum/MoumTitleContent";
+import MoumTitleCreateForm from "components/Moum/MoumTitleCreateForm";
+import MoumHeaderCommon from "components/Moum/MoumHeaderCommon";
 
-// redux
-import MoumSelect from "../components/Moum/MoumSelect";
-import MoumOptionGroup from "../components/Moum/MoumOptionGroup";
-import PieceList from "../components/Moum/PieceList";
-import MoumTitleContent from "../components/Moum/MoumTitleContent";
-import MoumTitleCreateForm from "../components/Moum/MoumTitleCreateForm";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "../state/moum";
-import MoumList from "../components/Moum/MoumList";
-import { useState } from "react";
-import MoumHeaderCommon from "../components/Moum/MoumHeaderCommon";
-import useGetReactQuery from "../hooks/useGetReactQuery";
-import { selectedItems } from "state/mode";
-import { useMutation, useQueryClient } from "react-query";
-import { instance } from "api/axios";
+// state
+import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
 
-import { axiosGetCategories, axiosGetCategoriesInFolder, axiosGetMoumMineAll, axiosGetMoumMineByOptions } from "../api/moum";
-import iconMove from "assets/images/pages/moum/move_icon.png";
-import iconDelete from "assets/images/pages/moum/delete_icon.png";
+// hook
+import useCustomQuery from "hooks/useCustomQuery";
+
+// asset
+import { getCategoryAxios } from "utils/api/category";
+import { getMoumFetch } from "utils/fetch/moum";
+import MoumBoard from "components/Moum/MoumBoard";
+import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
 
 function Moum() {
-  const queryClient = useQueryClient();
   const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
-  const selectedItemList = useRecoilValue(selectedItems);
   const categories = useRecoilValue(selectedCategories);
   const sortState = useRecoilValue(moumSort);
 
@@ -41,53 +38,8 @@ function Moum() {
     setSelectAll(status);
   }
 
-  const categoriesQuery = useGetReactQuery(["mine/categories", selectedFolderId], async () => {
-    if (selectedFolderId === 0) {
-      const response = await axiosGetCategories();
-      return response.data;
-    } else {
-      const response = await axiosGetCategoriesInFolder(selectedFolderId);
-      return response.data;
-    }
-  });
-
-  const moumsQuery = useGetReactQuery(["mine/moums", categories, search, sortState], async () => {
-    if (search === "" && (categories[0]?.category === "전체" || categories.length === 0) && sortState === "최신 조각순") {
-      const response = await axiosGetMoumMineAll();
-      return response.data;
-    } else if (search === "") {
-      const response = await axiosGetMoumMineByOptions(
-        { keyword: "all", categories, sort: sortState === "사용자 지정순" ? true : false }
-      );
-      return response.data;
-    } else {
-      const response = await axiosGetMoumMineByOptions(
-        { keyword: search, categories, sort: sortState === "사용자 지정순" ? true : false }
-      );
-      return response.data;
-    }
-  });
-
-  const {mutate: remove} = useMutation(async ({folderId, data}) => {
-    const response = await instance.delete(`/boards/${folderId}`, {data});
-    return response.data;
-  }, {
-    onSuccess: data => {
-      queryClient.invalidateQueries("mine/pieces");
-      alert("삭제 성공");
-    },
-    onError: err => {
-      console.log(err);
-    }
-  });
-
-  const removeFolders = (e) => {
-    if (selectedItemList.length === 0) {
-      alert("조각을 선택해주세요");
-    } else {
-      remove({folderId: selectedFolderId, data: selectedItemList.map((v) => ({id: v}))});
-    }
-  }
+  const categoriesQuery = useCustomQuery(["mine/categories", selectedFolderId], async () => await getCategoryAxios(selectedFolderId));
+  const moumsQuery = useCustomQuery(["mine/moums", categories, search, sortState], async () => await getMoumFetch(categories, search, sortState));
 
   return (
     <CustomContainer>
@@ -99,7 +51,7 @@ function Moum() {
       <Content>
         <MoumHeader>
           {categoriesQuery.isSuccess && <MoumHeaderCommon categories={categoriesQuery.data} />}
-          {moumsQuery.isSuccess && (selectedFolderId !== 0 && <MoumSelect moums={moumsQuery.data} />)}
+          {moumsQuery.isSuccess && (selectedFolderId !== 0 && <MoumSelectList moums={moumsQuery.data} />)}
           {selectedFolderId !== 0 && <button onClick={() => {setSelectedFolderId(0)}}>폴더 선택으로 이동</button>}
           <MoumOptionGroup
             search={search}
@@ -111,32 +63,9 @@ function Moum() {
             floatItemStatus={floatItemStatus}
           />
         </MoumHeader>
-        <PieceBoard>
-          {moumsQuery.isSuccess && 
-            (
-              selectedFolderId === 0 ? 
-              <MoumList
-                moums={moumsQuery.data}
-              />
-              :
-              <PieceList
-                selectAll={selectAll}
-                search={search}
-              />
-            )
-          }
-        </PieceBoard>
+        {moumsQuery.isSuccess && <MoumBoard folderId={selectedFolderId} search={search} moums={moumsQuery.data} selectAll={selectAll}/>}
       </Content>
-      <FloatingBox
-        isActive={floatStatus}
-      >
-        <FloatItem isActive={floatItemStatus} onClick={() => {alert("폴더 이동 미구현")}}>
-          <img src={iconMove} alt="move" />
-        </FloatItem>
-        <FloatItem isActive={floatItemStatus}>
-          <img src={iconDelete} alt="remove" onClick={removeFolders}/>
-        </FloatItem>
-      </FloatingBox>
+      <MoumSelectFloatingBox floatStatus={floatStatus} floatItemStatus={floatItemStatus} />
     </CustomContainer>
   )
 }
@@ -165,42 +94,10 @@ const Content = styled.div`
   padding-bottom: 70px;
 `;
 
-const PieceBoard = styled.div`
-  margin-top: 0px;
-`;
-
 const MoumHeader = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-const FloatingBox = styled.div`
-  position: fixed;
-  bottom: -100px;
-  display: flex;
-  gap: 16px;
-  transition: bottom .3s;
-  ${props => props.isActive && css`
-    bottom: 50px;
-  `}
-`;
-
-const FloatItem = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #E0D6FF;
-  box-shadow: 0px 0px 20px 1px #E8E1FC;
-  transition: background-color .3s, box-shadow .3s;
-  ${props => props.isActive && css`
-    background-color: #9E67FF;
-    box-shadow: 0px 0px 20px 1px #D2BAFF;
-    cursor: pointer;
-  `}
 `;
 
 export default Moum;

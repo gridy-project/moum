@@ -9,8 +9,8 @@ import moum from "assets/images/pages/moum/moum-background.png";
 import iconPrivate from "assets/images/pages/moum/icon-private.png";
 import iconPieceCount from "assets/images/pages/moum/icon-piece-count.png";
 import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
-import { instance } from "../../api/axios";
-import queryClient from "../../shared/query";
+import { instance } from "shared/axios";
+import queryClient from "shared/query";
 
 
 function MoumCard({moum}) {

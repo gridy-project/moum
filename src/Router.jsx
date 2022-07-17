@@ -12,8 +12,8 @@ import Test from "./pages/Test";
 import { getRefreshToken, removeToken, setToken } from "./shared/localStorage";
 import { useSetRecoilState } from "recoil";
 import { isLogin } from "./state/user";
-import { tokenRefresh } from "./api/auth";
 import Result from "./pages/Result";
+import { executeTokenRefreshAxios } from "utils/api/auth";
 
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
@@ -22,7 +22,7 @@ function Router() {
     const token = getRefreshToken();
     if (token) {
       try {
-        const response = await tokenRefresh(token);
+        const response = await executeTokenRefreshAxios(token);
         console.log("토큰 갱신 성공");
         setToken(response.data.accessToken, response.data.refreshToken);
         setLogin(true);

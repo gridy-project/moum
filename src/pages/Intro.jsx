@@ -1,5 +1,5 @@
-import Container from "../components/common/Container";
-import Header from "../components/common/Header";
+import Container from "components/Common/Container";
+import Header from "components/Common/Header";
 
 function Intro() {
   return (

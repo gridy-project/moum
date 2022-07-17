@@ -1,5 +1,5 @@
 // module
-import { instance } from "api/axios";
+import { instance } from "shared/axios";
 import React, { useState } from "react";
 import { useMutation } from "react-query";
 import queryClient from "shared/query";
