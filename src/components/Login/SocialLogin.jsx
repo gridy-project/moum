@@ -8,7 +8,7 @@ import { signInWithGoogle } from '../../api/auth';
 import { isLogin } from '../../atoms/user';
 import { setToken } from '../../shared/localStorage';
 
-import google from '../Login/images/google.png';
+import google from 'assets/images/pages/login/google.png';
 
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;

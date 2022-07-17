@@ -8,7 +8,7 @@ import { setToken } from "../shared/localStorage";
 import { useSetRecoilState } from "recoil";
 import { isLogin } from "../atoms/user";
 
-import noBG from "../components/Login/images/no-background.png";
+import noBG from "assets/images/pages/login/no-background.png";
 
 function Login() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import searchIcon from "../../public/img/icon-search-white.png";
+import searchIcon from "assets/images/pages/search/icon-search-white.png";
 
 function SearchForm () {
   const navigate = useNavigate();

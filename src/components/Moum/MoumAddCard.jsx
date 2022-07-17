@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import moumAddButton from "../Moum/images/moum-add-button.png";
-import moum from "../../public/img/moum-background.png";
+import moumAddButton from "assets/images/pages/moum/moum-add-button.png";
+import moum from "assets/images/pages/moum/moum-background.png";
 import { useSetRecoilState } from "recoil";
 import { popupState, globalPopup } from "../../atoms/popup";
 import MoumAddPopup from "./MoumAddPopup";

@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 
 // image
-import more from "../../../public/img/menu-white.png";
-import moum from "../../../public/img/moum-background.png";
-import iconPrivate from "../../../public/img/icon-private.png";
-import iconPieceCount from "../../../public/img/icon-piece-count.png";
-import iconScrapCount from "../../../public/img/icon-scrap-count.png";
+import more from "assets/images/pages/moum/menu-white.png";
+import moum from "assets/images/pages/moum/moum-background.png";
+import iconPrivate from "assets/images/pages/moum/icon-private.png";
+import iconPieceCount from "assets/images/pages/moum/icon-piece-count.png";
+import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
 import { instance } from "../../../api/axios";
 import queryClient from "../../../shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";

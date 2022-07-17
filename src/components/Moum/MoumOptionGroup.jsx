@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
-import moumSortBottom from "./images/moum-sort-select-bottom.png";
-import pieceSelect from "./images/piece-select.png";
-import pieceSearch from "./images/piece-search.png";
+import moumSortBottom from "assets/images/pages/moum/moum-sort-select-bottom.png";
+import pieceSelect from "assets/images/pages/moum/piece-select.png";
+import pieceSearch from "assets/images/pages/moum/piece-search.png";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../atoms/mode";

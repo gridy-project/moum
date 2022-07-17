@@ -13,6 +13,5 @@ export const axiosGetMoumMineByOptions = async ({ keyword, categories, sort }) =
 export const axiosGetPieceMineAll = async (folderId) => await instance.post(`/boards/0/${folderId}/all`, [{ category: "전체" }]);
 export const axiosGetPieceMineByOptions = async (folderId, { keyword, categories }) => {
   return await instance.post(`/boards/0/${folderId}/${keyword}`, categories);
-
 }
 export const axiosAddMoum = (data) => instance.post("/folder", data);

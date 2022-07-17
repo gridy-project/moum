@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
 // image
-import noImage from "../../../public/img/Image.png";
-import more from "../../../public/img/menu-black.png";
 import PieceCategory from "../PieceCategory";
-import privateLock from "../images/private-lock.png";
 import PieceOption from "./PieceOption";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { pieceSelectMode, selectedItems } from "../../../atoms/mode";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import noImage from "assets/images/pages/moum/images-none.png";
+import more from "assets/images/pages/moum/menu-black.png";
+import privateLock from "assets/images/pages/moum/private-lock.png";
 
 function MoumPieceTypeLinkCard({piece, selectAll}) {
   const [buttonState, setButtonState] = useState(false);

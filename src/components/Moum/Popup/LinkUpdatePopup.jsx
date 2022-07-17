@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import useHandleChange from "hooks/useHandleChange";
-import noImage from "public/img/Image.png";
+import noImage from "assets/images/pages/moum/images-none.png";
 import { typeCategory } from "shared/type";
 import { useSetRecoilState, useResetRecoilState } from "recoil";
 import { globalPopup, popupState } from "atoms/popup";

@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
-import more from "../../public/img/menu-black.png";
+import more from "assets/images/pages/moum/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 import PieceScrollVertical from "../Moum/PieceScrollVertical";
-import privateLock from "../Moum/images/private-lock.png";
+import privateLock from "assets/images/pages/moum/private-lock.png";
 import { useState } from "react";
 import { useMutation } from "react-query";
 import { instance } from "api/axios";
