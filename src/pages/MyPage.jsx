@@ -2,17 +2,20 @@
 import React from "react";
 // css
 import styled from "styled-components";
+// modal
+import Modal from "react-modal";
 // component
 import Header from "components/Common/Header";
 import Container from "components/Common/Container";
-import ProfileImage from "../components/Mypage/ProfileImage";
-import ChangeNickname from "../components/Mypage/ChangeNickname";
-import ChangeDesc from "../components/Mypage/ChangeDesc";
-import ChangeEmail from "../components/Mypage/ChangeEmail";
-import ChangePwd from "../components/Mypage/ChangePwd";
-import DeleteAccount from "../components/Mypage/DeleteAccount";
+import ProfileImage from "../components/MyPage/ProfileImage";
+import ChangeNickname from "../components/MyPage/ChangeNickname";
+import ChangeDesc from "../components/MyPage/ChangeDesc";
+import ChangeEmail from "../components/MyPage/ChangeEmail";
+import ChangePwd from "../components/MyPage/ChangePwd";
+import DeleteAccount from "../components/MyPage/DeleteAccount";
 
 function MyPage() {
+
 	return (
 		<Container>
 			<Header selected={3}/>
@@ -81,5 +84,7 @@ const Content = styled.div`
 const TextArea = styled.div`
 	margin-left: 100px;
 `;
+
+
 
 export default MyPage;
