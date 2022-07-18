@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
-import { floatState, globalFloat } from "../../state/popup";
+import { floatState, globalFloat } from "state/common/popup";
 
 function Float () {
   const [viewState, setViewState] = useRecoilState(floatState);

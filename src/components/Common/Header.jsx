@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { removeToken } from "shared/localStorage";
 import { useRecoilState } from "recoil";
-import { isLogin } from "../../state/user";
+import { isLogin } from "state/common/user";
 import { useEffect, useState } from "react";
 
 

@@ -1,18 +1,18 @@
 import { useCallback, useEffect } from "react";
 
 import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import MyPage from "./pages/MyPage";
-import Search from "./pages/Search";
-import Moum from "./pages/Moum";
-import NotFound from "./pages/NotFound";
-import Intro from "./pages/Intro";
-import Test from "./pages/Test";
-import { getRefreshToken, removeToken, setToken } from "./shared/localStorage";
+import Login from "pages/Login";
+import Register from "pages/Register";
+import MyPage from "pages/MyPage";
+import Search from "pages/Search";
+import Moum from "pages/Moum";
+import NotFound from "pages/NotFound";
+import Intro from "pages/Intro";
+import Test from "pages/Test";
+import { getRefreshToken, removeToken, setToken } from "shared/localStorage";
 import { useSetRecoilState } from "recoil";
-import { isLogin } from "./state/user";
-import Result from "./pages/Result";
+import { isLogin } from "state/common/user";
+import Result from "pages/Result";
 import { executeTokenRefreshAxios } from "utils/api/auth";
 
 function Router() {

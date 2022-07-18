@@ -19,3 +19,18 @@ export const moumSort = atom({
   key: "page/Moum/sort",
   default: "사용자 지정순"
 });
+
+export const moumSearch = atom({
+  key: "page/Moum/search",
+  default: ""
+});
+
+export const pieceSelectMode = atom({
+  key: "pieceSelectMode",
+  default: false
+});
+
+export const selectedItems = atom({
+  key: "selectedItems",
+  default: []
+})

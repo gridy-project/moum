@@ -1,6 +1,6 @@
 import iconMove from "assets/images/pages/moum/move_icon.png";
 import iconDelete from "assets/images/pages/moum/delete_icon.png";
-import { selectedItems } from "state/mode";
+import { selectedItems } from "state/moum";
 import { useRecoilValue } from "recoil";
 import { useQueryClient } from "react-query";
 import { pageMoumSelectedFolderId } from "state/moum";
