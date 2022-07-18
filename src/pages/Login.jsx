@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SocialLogin from "components/Login/SocialLogin";
-import { instance } from "shared/axios";
 import { setToken } from "shared/localStorage";
 import { useSetRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
