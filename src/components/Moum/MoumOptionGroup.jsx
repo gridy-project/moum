@@ -94,7 +94,7 @@ const SortOptionList = styled.ul`
 
 function MoumOptionGroup ({
   isFolderView, 
-  onSelectAll, 
+  setSelectAll, 
   setFloatStatus, 
   setFloatItemStatus, 
   floatItemStatus,
@@ -121,12 +121,12 @@ function MoumOptionGroup ({
   }
 
   const selectAll = (e) => {
-    onSelectAll(true);
+    setSelectAll(true);
   }
 
   useEffect(() => {
     if (modeState) {
-      onSelectAll(false);
+      setSelectAll(false);
       setFloatStatus(true);
     } else {
       resetSelectedItems();
