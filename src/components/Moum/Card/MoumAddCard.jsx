@@ -2,7 +2,7 @@ import styled from "styled-components";
 import moumAddButton from "assets/images/pages/moum/moum-add-button.png";
 import moum from "assets/images/pages/moum/moum-background.png";
 import { useSetRecoilState } from "recoil";
-import { popupState, globalPopup } from "state/popup";
+import { popupState, globalPopup } from "state/common/popup";
 import MoumAddPopup from "../Popup/MoumAddPopup";
 
 function MoumAddCard () {

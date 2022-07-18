@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "state/moum";
+import { moumSearch, pageMoumSelectedFolderId } from "state/moum";
 import styled from "styled-components";
 import MoumSelectList from "./List/MoumSelectList";
 import MoumBoard from "./MoumBoard";
 import MoumHeaderCommon from "./MoumHeaderCommon";
 import MoumOptionGroup from "./MoumOptionGroup";
 
-function MoumContent ({categoriesQuery, moumsQuery, search, floatItemStatus, setSearch, setFloatStatus, setFloatItemStatus}) {
+function MoumContent ({categoriesQuery, moumsQuery, floatItemStatus, setFloatStatus, setFloatItemStatus}) {
   const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
   const [selectAll, setSelectAll] = useState(false);
+  const [search, setSearch] = useRecoilState(moumSearch);
 
   return (
     <Content>

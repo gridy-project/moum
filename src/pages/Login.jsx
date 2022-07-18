@@ -5,7 +5,7 @@ import SocialLogin from "components/Login/SocialLogin";
 import { instance } from "shared/axios";
 import { setToken } from "shared/localStorage";
 import { useSetRecoilState } from "recoil";
-import { isLogin } from "../state/user";
+import { isLogin } from "state/common/user";
 
 import noBG from "assets/images/pages/login/no-background.png";
 import useCustomMutate from "hooks/useCustomMutate";
