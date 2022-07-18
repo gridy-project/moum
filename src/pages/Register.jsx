@@ -2,8 +2,6 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Container from "components/Common/Container";
-import { instance } from "shared/axios";
-import { useMutation } from "react-query";
 import useCustomMutate from "hooks/useCustomMutate";
 import { executeCheckEmailAxios, executeCheckNickAxios, executeSignUpAxios } from "utils/api/auth";
 
@@ -18,9 +16,9 @@ function Register() {
   }
 
   // mutate
-  const {mutateAsync: checkMail} = useCustomMutate(async (username) => await executeCheckEmailAxios(username));
-  const {mutateAsync: checkName} = useCustomMutate(async (nickname) => await executeCheckNickAxios(nickname));
-  const {mutateAsync: register} = useCustomMutate(async (data) => await executeSignUpAxios(data));
+  const {mutateAsync: checkMail} = useCustomMutate(executeCheckEmailAxios);
+  const {mutateAsync: checkName} = useCustomMutate(executeCheckNickAxios);
+  const {mutateAsync: register} = useCustomMutate(executeSignUpAxios);
 
   const clickMailCheck = async (e) => {
     e.preventDefault();
