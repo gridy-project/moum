@@ -13,7 +13,8 @@ function Register() {
     username: useRef(),
     nickname: useRef(),
     password: useRef(),
-    passwordConfirm: useRef()
+    passwordConfirm: useRef(),
+    email: useRef()
   }
 
   // mutate
@@ -53,6 +54,7 @@ function Register() {
     const nickname = ref.nickname.current.value;
     const password = ref.password.current.value;
     const passwordConfirm = ref.passwordConfirm.current.value;
+    const email = ref.email.current.value;
 
     if (username === "" || password === "" || nickname === "") {
       alert("아이디, 닉네임, 비밀번호를 모두 입력해주세요.");
@@ -65,17 +67,17 @@ function Register() {
     }
 
     // 이메일 정규식 교체 : ^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$
-    if (/^([0-9a-zA-Z_\\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/.test(username) === false) {
-      alert("이메일을 다시 확인해 주세요");
-      return;
-    }
+    // if (/^([0-9a-zA-Z_\\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/.test(username) === false) {
+    //   alert("이메일을 다시 확인해 주세요");
+    //   return;
+    // }
 
     if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test(password) === false) {
       alert("비밀번호는 1개 이상의 숫자, 1개 이상의 문자로 조합해야 하며 최소 4자 이상 입력해야 합니다.");
       return;
     }
 
-    const {result, data} = await register({username, nickname, password, imgPath: null});
+    const {result, data} = await register({username, nickname, password, email}); // imgPath: null
     if (result) {
       if (data.result) {
         alert(data.errorMsg);
@@ -109,6 +111,10 @@ function Register() {
             <div>
               <p>비밀번호 확인</p>
               <input type="password" placeholder="비밀번호를 확인해주세요" ref={ref.passwordConfirm} autoComplete="new-password"  />
+            </div>
+            <div>
+              <p>이메일</p>
+              <input type="text" placeholder="이메일을 입력해주세요" ref={ref.email} autoComplete="email"  />
             </div>
             <div>
               <button>회원가입</button>
