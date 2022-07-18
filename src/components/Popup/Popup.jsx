@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
-import { globalPopup, popupState } from "../../state/popup";
+import { globalPopup, popupState } from "state/common/popup";
 
 function Popup () {
   const [state, setState] = useRecoilState(popupState);

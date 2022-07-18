@@ -5,7 +5,7 @@ import pieceSelect from "assets/images/pages/moum/piece-select.png";
 import pieceSearch from "assets/images/pages/moum/piece-search.png";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { pieceSelectMode, selectedItems } from "state/mode";
+import { pieceSelectMode, selectedItems } from "state/moum";
 import { moumSort } from "state/moum";
 
 function MoumOptionSort ({active, setActive}) {

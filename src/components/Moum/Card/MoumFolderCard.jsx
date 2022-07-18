@@ -13,7 +13,7 @@ import { instance } from "shared/axios";
 import queryClient from "shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { pageMoumSelectedFolderId } from "../../../state/moum";
-import { globalPopup, popupState } from "../../../state/popup";
+import { globalPopup, popupState } from "state/common/popup";
 import { useRef } from "react";
 import { useEffect } from "react";
 

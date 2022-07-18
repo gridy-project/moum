@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
 import { executeSignInWithGoogleAxios } from 'utils/api/auth';
-import { isLogin } from '../../state/user';
+import { isLogin } from 'state/common/user';
 import { setToken } from 'shared/localStorage';
 
 import google from 'assets/images/pages/login/google.png';

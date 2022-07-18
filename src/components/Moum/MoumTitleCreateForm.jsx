@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import { instance } from "shared/axios";
 import { pageMoumSelectedFolderId } from "../../state/moum";
-import { floatState, globalFloat, globalPopup, popupState } from "../../state/popup";
+import { floatState, globalFloat, globalPopup, popupState } from "state/common/popup";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";

@@ -13,7 +13,7 @@ import MoumTitleCreateForm from "components/Moum/MoumTitleCreateForm";
 import MoumHeaderCommon from "components/Moum/MoumHeaderCommon";
 
 // state
-import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
+import { moumSearch, moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
 
 // hook
 import useCustomQuery from "hooks/useCustomQuery";
@@ -31,7 +31,7 @@ function Moum () {
   const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
   const categories = useRecoilValue(selectedCategories);
   const sortState = useRecoilValue(moumSort);
-  const [search, setSearch] = useState("");
+  const search = useRecoilValue(moumSearch);
   const [floatStatus, setFloatStatus] = useState(false);
   const [floatItemStatus, setFloatItemStatus] = useState(false);
 
@@ -44,9 +44,7 @@ function Moum () {
       <MoumContent 
         categoriesQuery={categoriesQuery} 
         moumsQuery={moumsQuery} 
-        search={search}
         floatItemStatus={floatItemStatus}
-        setSearch={setSearch} 
         setFloatStatus={setFloatStatus} 
         setFloatItemStatus={setFloatItemStatus} 
       />
