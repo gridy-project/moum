@@ -1,14 +1,15 @@
 import Header from "components/Common/Header";
+import { useState } from "react";
 import styled from "styled-components";
 import MoumTitleContent from "./MoumTitleContent";
 import MoumTitleCreateForm from "./MoumTitleCreateForm";
 
-function MoumTitle ({isSuccess, moums}) {
+function MoumTitle ({moums}) {
   return (
     <Title>
       <Header selected={1} />
       <MoumTitleContent />
-      {isSuccess && <MoumTitleCreateForm moums={moums} />}
+      <MoumTitleCreateForm moums={moums} />
     </Title>
   );
 }

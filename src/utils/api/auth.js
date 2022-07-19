@@ -1,5 +1,4 @@
-import { capsule, instance } from "shared/axios";
-
+import { instance } from "shared/axios";
 
 export const executeSignInAxios = (data) => instance.post(`/user/login`, data);
 export const executeSignUpAxios = (data) => instance.post(`/user/signup`, data);
