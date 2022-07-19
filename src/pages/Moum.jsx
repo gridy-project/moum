@@ -1,16 +1,7 @@
 // module
 import { React, useState } from "react";
-import styled, { css } from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useQueryClient } from "react-query";
-
-// components
-import Header from "components/Common/Header";
-import MoumSelectList from "components/Moum/List/MoumSelectList";
-import MoumOptionGroup from "components/Moum/MoumOptionGroup";
-import MoumTitleContent from "components/Moum/MoumTitleContent";
-import MoumTitleCreateForm from "components/Moum/MoumTitleCreateForm";
-import MoumHeaderCommon from "components/Moum/MoumHeaderCommon";
+import styled from "styled-components";
+import { useRecoilValue } from "recoil";
 
 // state
 import { moumSearch, moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
@@ -21,11 +12,9 @@ import useCustomQuery from "hooks/useCustomQuery";
 // asset
 import { getCategoryAxios } from "utils/api/category";
 import { getMoumFetch } from "utils/fetch/moum";
-import MoumBoard from "components/Moum/MoumBoard";
 import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
 import MoumTitle from "components/Moum/MoumTitle";
 import MoumContent from "components/Moum/MoumContent";
-
 
 function Moum () {
   const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
@@ -40,13 +29,13 @@ function Moum () {
 
   return (
     <CustomContainer>
-      {moumsQuery.isSuccess && <MoumTitle moums={moumsQuery.data} isSuccess={moumsQuery.isSuccess} />}
+      {moumsQuery.isSuccess && <MoumTitle moums={moumsQuery.data} />}
       <MoumContent 
-        categoriesQuery={categoriesQuery} 
-        moumsQuery={moumsQuery} 
+        categoriesQuery={categoriesQuery}
+        moumsQuery={moumsQuery}
         floatItemStatus={floatItemStatus}
-        setFloatStatus={setFloatStatus} 
-        setFloatItemStatus={setFloatItemStatus} 
+        setFloatStatus={setFloatStatus}
+        setFloatItemStatus={setFloatItemStatus}
       />
       <MoumSelectFloatingBox floatStatus={floatStatus} floatItemStatus={floatItemStatus} />
     </CustomContainer>

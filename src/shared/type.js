@@ -59,7 +59,7 @@ import studyPieceCategory from "assets/images/category/piece/study.png";
 import tripPieceCategory from "assets/images/category/piece/trip.png";
 
 export const typeCategory = [
-  "카테고리",
+  "카테고리 없음",
   "디자인",
   "쇼핑",
   "건강",
@@ -75,7 +75,8 @@ export const typeCategory = [
   "여행",
   "공연",
   "전시",
-  "공부"
+  "공부",
+  "기타"
 ]
 
 export const getSelectMoumCategory = (name) => {
@@ -199,12 +200,17 @@ export const getSelectMoumCategory = (name) => {
         image: studySelect,
         imageActive: studySelectActive
       }
-    default:
+    case "기타":
       return {
         id: 17,
         category: "기타",
         image: otherSelect,
         imageActive: otherSelectActive
+      }
+    default:
+      return {
+        id: 18,
+        category: "카테고리 없음"
       }
   }
 }
@@ -229,10 +235,10 @@ export const getPieceCategory = (name) => {
         category: "건강",
         image: healthPieceCategory,
       }
-    case "식당":
+    case "음식":
       return {
         id: 4,
-        category: "식당",
+        category: "음식",
         image: foodPieceCategory,
       }
     case "카페":
@@ -307,11 +313,16 @@ export const getPieceCategory = (name) => {
         category: "공부",
         image: studyPieceCategory,
       }
-    default:
+    case "기타":
       return {
         id: 17,
         category: "기타",
         image: otherPieceCategory,
+      }
+    default:
+      return {
+        id: 18,
+        category: "카테고리 없음"
       }
   }
 }

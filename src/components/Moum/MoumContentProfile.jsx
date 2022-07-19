@@ -1,10 +1,9 @@
 // module
 import styled from "styled-components";
 
-function MoumContentProfile({isLoading, user}) {
+function MoumContentProfile({isSuccess, user}) {
   return (
-    isLoading ? (
-    <div>isLoading</div>) :
+    isSuccess &&
     <Wrap>
       <Box>
         <Image>

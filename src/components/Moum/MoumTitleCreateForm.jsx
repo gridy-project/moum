@@ -1,12 +1,11 @@
 // module
 import { useState } from "react";
-import { useMutation } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { instance } from "shared/axios";
 import { pageMoumSelectedFolderId } from "../../state/moum";
-import { floatState, globalFloat, globalPopup, popupState } from "state/common/popup";
+import { floatState, globalFloat } from "state/common/popup";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";
@@ -14,80 +13,9 @@ import useHandleChange from "../../hooks/useHandleChange";
 // image
 import arrowSave from "assets/images/pages/moum/arrow-moum-save.png"
 import queryClient from "shared/query";
-import LinkUpdatePopup from "./Popup/LinkUpdatePopup";
-import MemoUpdatePopup from "./Popup/MemoUpdatePopup";
 import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom.png";
-import fastCreateOptionModify from "assets/images/pages/moum/fast-create-option-modify.png";
-import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-arrow.png";
 import useCustomMutate from "hooks/useCustomMutate";
-
-function MoumModifyFloat ({piece, moums}) {
-  const setFloatState = useSetRecoilState(floatState);
-  const setPopupState = useSetRecoilState(popupState);
-  const setPopup = useSetRecoilState(globalPopup);
-  const folderId = useRecoilValue(pageMoumSelectedFolderId);
-  console.log(moums);
-
-  const runModifyPopup = (e) => {
-    if (piece.boardType === "LINK") {
-      setPopup(<LinkUpdatePopup piece={piece} />);
-    } else if (piece.boardType === "MEMO") {
-      setPopup(<MemoUpdatePopup piece={piece} />);
-    }
-    setPopupState(true);
-    setFloatState(false);
-  }
-
-  return (
-    <Wrap>
-      <img src={fastCreateOptionModify} alt="modify" />
-      <div className="desc">
-        <em>{(folderId === 0 || moums === undefined) ? "무제" : moums.filter((v) => v.id === folderId)[0]?.name}</em>
-        <p>에 조각 저장 완료</p>
-      </div>
-      <button onClick={runModifyPopup}>
-        자세히 작성하기
-        <img src={fastCreateOptionArrow} alt="modify" />
-      </button>
-    </Wrap>
-  )
-}
-
-
-const Wrap = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px 0 28px;
-
-  .desc {
-    em {
-      font-weight: 600;
-    }
-    p {
-      font-size: 13px;
-      font-weight: 400;
-      margin-top: 5px;
-    }
-  }
-
-  button {
-    width: 150px;
-    height: 50px;
-    background-color: #FFFFFF;
-    border: none;
-    border-radius: 25px;
-    color: #721EFC;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      margin-left: 5px;
-    }
-  }
-`;
+import MoumCreateFloat from "./Float/MoumCreateFloat";
 
 function MoumTitleCreateForm ({moums}) {
   const setFloatState = useSetRecoilState(floatState);
@@ -140,7 +68,7 @@ function MoumTitleCreateForm ({moums}) {
         queryClient.invalidateQueries("mine/pieces");
       }
       setFloatState(true);
-      setFloat(<MoumModifyFloat piece={data} moums={moums} />)
+      setFloat(<MoumCreateFloat piece={data} moums={moums} />)
     } else {
       alert("파일 추가 실패");
     }

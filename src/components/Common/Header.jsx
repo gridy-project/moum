@@ -70,7 +70,7 @@ const Container = styled.div`
   height: 200px;
   display: flex;
   justify-content: center;
-  z-index: 998;
+  z-index: 5;
 
   ${props => props.isFixed && css`
     background-color: #FFFFFF;

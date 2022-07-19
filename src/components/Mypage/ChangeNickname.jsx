@@ -3,11 +3,14 @@ import React, { useState, useRef } from "react";
 // css
 import styled, {css} from 'styled-components';
 import human from "assets/images/pages/mypage/human.png";
+
 // modal
 import Modal from "react-modal";
+
 // React Query
 import {  useMutation, useQuery } from "react-query";
 import queryClient from "shared/query";
+
 // axios
 import { instance } from "shared/axios"
 

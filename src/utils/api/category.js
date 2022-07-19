@@ -1,11 +1,12 @@
 import { instance } from "shared/axios";
 
-export const getCategoryAxios = async (folderId) => {
+export const getCategoryAxios = (folderId) => {
   if (folderId === 0) {
-    const response = await instance.get(`/folders/${folderId}`);
-    return response.data;
+    return getCategoryFolderAxios(folderId);
   } else {
-    const response = await instance.get(`/boards/0/${folderId}`);
-    return response.data;
+    return getCategoryBoardAxios(folderId);
   }
 }
+
+export const getCategoryFolderAxios = (folderId) => instance.get(`/folders/${folderId}`);
+export const getCategoryBoardAxios = (folderId) => instance.get(`/boards/0/${folderId}`);
