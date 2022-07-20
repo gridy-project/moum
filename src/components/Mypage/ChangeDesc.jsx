@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 // css
 import styled, {css} from 'styled-components';
 // React Query
-import {  useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import queryClient from "shared/query";
 // axios
 import { instance } from "shared/axios"
@@ -33,7 +33,7 @@ const ChangeDesc = () => {
       }
     }
   );
-  // 계정 설명 수정  ============================================
+  // 계정 설명 수정 
 	const updateDesc = (e) => {
 		e.preventDefault();
 			const data = {
@@ -69,33 +69,33 @@ const ChangeDesc = () => {
 
   return (
     <DescArticle>
-								<form onSubmit={updateDesc}>
-									<Desc>계정 설명</Desc>
-									{actived === false && (
-										<DescNumber>
-											<p id="textCount">{len}자 / 40자</p>
-										</DescNumber>
-									)}
-									<DescTextarea
-										id="tesxtArea"
-										maxLength="40"
-										spellcheck="false"
-										placeholder={
-											data?.information === null ? 
-											"나의 계정/모음/채널에 대해 설명해주세요." : data?.information
-										}
-										isActive={active}
-										ref={descInfoRef}
-										onChange={descTextChange}
-									/>
-									<DescBtn
-										isActive={active} 
-										onClick={() => setActive(!active)}
-									>
-										{actived ? "수정하기" : "적용하기"}
-									</DescBtn>
-								</form>
-							</DescArticle>
+			<form onSubmit={updateDesc}>
+				<Desc>계정 설명</Desc>
+				{actived === false && (
+					<DescNumber>
+						<p id="textCount">{len}자 / 40자</p>
+					</DescNumber>
+				)}
+				<DescTextarea
+					id="tesxtArea"
+					maxLength="40"
+					spellcheck="false"
+					placeholder={
+						data?.information === null ? 
+						"나의 계정/모음/채널에 대해 설명해주세요." : data?.information
+					}
+					isActive={active}
+					ref={descInfoRef}
+					onChange={descTextChange}
+				/>
+				<DescBtn
+					isActive={active} 
+					onClick={() => setActive(!active)}
+				>
+					{actived ? "수정하기" : "적용하기"}
+				</DescBtn>
+			</form>
+		</DescArticle>
   );
 };
 
