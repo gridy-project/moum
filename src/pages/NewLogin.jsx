@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+// React Query
+import { useMutation, useQuery } from "react-query";
+import queryClient from "shared/query";
+// axios
+import { instance } from "shared/axios"
 // css
 import styled from "styled-components";
 import background from "../assets/images/pages/login/background.png"
@@ -9,6 +14,7 @@ import check from "../assets/images/pages/login/check.png";
 import circle from "../assets/images/pages/login/circle.png";
 // component
 import Header from "components/Common/Header";
+import SearchId from 'components/Login/SearchId';
 
  const LoginPage = (props) => {
   return (
@@ -76,18 +82,7 @@ import Header from "components/Common/Header";
     </PwdContainer>
   )
  }
- const FingIdPage = () => {
-  return (
-    <IdContainer>
-    <IdTitle>아이디 찾기</IdTitle>
-    <IdContent>
-      <p>이메일로 본인 확인</p>
-      <input type="text" />
-    </IdContent>
-    <IdBtn>아이디 찾기</IdBtn>
-    </IdContainer>
-  )
- }
+
  const JoinPage = () => {
   return (
     <JoinContainer>
@@ -144,7 +139,7 @@ const NewLogin = () => {
               runjoin={runJoinPage}
             />}
             {state === 1 && <FingPwdPage />}
-            {state === 2 && <FingIdPage />}
+            {state === 2 && <SearchId/>}
             {state === 3 && <JoinPage />}
           </Content>
         </ChangeContainer>
@@ -358,39 +353,7 @@ const PwdCodeBox = styled.div`
 `
 
 // FindId
-const IdContainer = styled.div`
-  position:relative;
-  top:-37px;
-`;
 
-const IdTitle = styled.h1`
-  font-size:28px;
-  margin-bottom:52px;
-`;
-const IdContent = styled.div`
-  p {
-    font-size:17px;
-    margin-bottom: 18px;
-  }
-  input {
-    width: 360px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
-  }
-`;
-
-const IdBtn = styled.button`
-  width: 360px;
-  height: 44px;
-  background: #9E67FF;
-  border-radius: 50px;
-  color:#fff;
-  border:none;
-  margin-top:32px;
-  cursor: pointer;
-`;
 
 // Join
 const JoinContainer = styled.div`
