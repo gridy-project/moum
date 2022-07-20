@@ -1,5 +1,3 @@
-import { NodeExpandOutlined } from "@ant-design/icons"
-
 export const modalOverlay = {
   position: "fixed",
   top: 0,

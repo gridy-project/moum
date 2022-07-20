@@ -10,6 +10,4 @@ function Test () {
 const Container = styled.div`
 `;
 
-
-
 export default Test;

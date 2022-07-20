@@ -1,18 +1,31 @@
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import PopupButtonGroup from "./PopupButtonGroup";
+import PopupButtonGroup from "../LinkDetailPopup/PopupButtonGroup";
 
-function PopupContentField ({next, close}) {
+function MemoContentField ({finish, close, setter, getter}) {
+  console.log(getter);
+  const ref = {
+    subject: useRef(null),
+    content: useRef(null)
+  }
+
+  const finishContent = () => {
+    finish(ref.subject.current.value, ref.content.current.value);
+  }
+
   return (
     <Box>
       <form>
         <label className="subject-label" htmlFor="subject">제목</label>
-        <input id="subject" type="text" placeholder="해당 링크에 대한 제목을 적어주세요." />
+        <input id="subject" type="text" placeholder="해당 링크에 대한 제목을 적어주세요." ref={ref.subject} defaultValue={getter.subject}/>
         <label className="content-label" htmlFor="content">내용</label>
         <textarea 
           id="content"
           placeholder="해당 링크에 대한 설명을 적어주세요."
+          ref={ref.content}
+          defaultValue={getter.content}
         ></textarea>
-        <PopupButtonGroup next={next} close={close} />
+        <PopupButtonGroup finish={finishContent} close={close} />
       </form>
     </Box>
   )
@@ -57,4 +70,4 @@ const Box = styled.div`
   }
 `;
 
-export default PopupContentField;
+export default MemoContentField;

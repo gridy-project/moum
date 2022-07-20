@@ -1,23 +1,73 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import PopupButtonGroup from "./PopupButtonGroup";
 import checkIcon from "assets/images/pages/moum/popup/check.png";
 import noImage from "assets/images/pages/moum/popup/no-image.png";
 import pcIcon from "assets/images/pages/moum/popup/pc_icon.png"
 import addImage from "assets/images/pages/moum/popup/add-image.png"
+import { useMutation } from "react-query";
+import { instance } from "shared/axios";
+import { apiCommon } from "utils/api/common";
+import useCustomMutate from "hooks/useCustomMutate";
 
-function PopupImageChange ({finish, close}) {
-  const [shareState, setShareState] = useState(false);
+function PopupImageChange ({finish, close, getter, setter}) {
   const [imageType, setImageType] = useState(0);
+  const [customImageState, setCustomImageState] = useState(false);
+  const ref = {
+    file: useRef(null)
+  }
+
+  const {mutateAsync: upload} = useCustomMutate(async (data) => await apiCommon.uploadImage(data));
+
+  const popupFinish = async () => {
+    if (imageType === 0) {
+      finish();
+    } else if (imageType === 1) {
+      alert("미구현 상태");
+      return;
+    } else if (imageType === 2) {
+      const formData = new FormData();
+      formData.append("boardImage", ref.file.current.files[0]);
+      const {result, data} = await upload(formData);
+      if (result) {
+        alert("파일 업로드 성공");
+        finish(data.url);
+      } else {
+        alert("파일 업로드 실패");
+      }
+    }
+  }
+
+
+  const changeFile = (fileEvent) => {
+    if (fileEvent.target.files && fileEvent.target.files[0]) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+          const previewImage = document.getElementById('uploadImage');
+          previewImage.src = e.target.result;
+      }
+      reader.readAsDataURL(fileEvent.target.files[0]);
+      setCustomImageState(true);
+    }
+  }
+
   return (
     <Box>
       <form>
         <SelectBox>
           <Item onClick={() => {setImageType(0)}} isActive={imageType === 0}>
             <Name>불러온 이미지</Name> 
-            {/* <Image>
-            </Image> */}
-            <NoImage></NoImage>
+            {
+              getter.image ?
+              <Image>
+                <img src={getter.image} alt="og" />
+              </Image>
+              :
+              <NoImage>
+
+              </NoImage>
+            }
           </Item>
           <Item onClick={() => {setImageType(1)}} isActive={imageType === 1}>
             <Name>추천 이미지</Name>
@@ -26,23 +76,33 @@ function PopupImageChange ({finish, close}) {
           </Item>
           <Item onClick={() => {setImageType(2)}} isActive={imageType === 2}>
             <Name>내 PC에서 불러오기</Name>
-            {/* <Image></Image> */}
-            <NoImage isUpload>
-              <label htmlFor="image">
-                <img src={addImage} alt="파일 선택" />
-                파일 선택
-              </label>
-              <input id="image" type="file" hidden />
-            </NoImage>
+            {
+              customImageState ? 
+              <Image>
+                <img id="uploadImage" alt="uploaded" />
+                <Label htmlFor="image">
+                  <img src={addImage} alt="파일 선택" />
+                  파일 선택
+                </Label>
+              </Image>
+              :
+              <NoImage isUpload>
+                <Label htmlFor="image">
+                  <img src={addImage} alt="파일 선택" />
+                  파일 선택
+                </Label>
+              </NoImage>
+            }
+            <input id="image" type="file" onChange={changeFile} ref={ref.file} hidden/>
           </Item>
         </SelectBox>
-        <Share isShared={shareState}>
+        <Share isShared={getter.share}>
           조각 공개 설정
-          <div className="switch" onClick={() => setShareState(current => !current)}>
+          <div className="switch" onClick={() => setter(current => ({...current, share: !current.share}))}>
             <div className="switch-ball"></div>
           </div>
         </Share>
-        <PopupButtonGroup close={close} finish={finish} />
+        <PopupButtonGroup close={close} finish={popupFinish} />
       </form>
     </Box>
   )
@@ -124,6 +184,18 @@ const Image = styled.div`
   height: 96px;
   background-color: #E6E6E6;
   border-radius: 11px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+  }
 `;
 
 const NoImage = styled.div`
@@ -137,26 +209,32 @@ const NoImage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
 
-  label {
-    padding: 0 12px;
-    height: 34px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #FFFFFF;
-    color: #555555;
-    border-radius: 17px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity .3s;
-    img {
-      margin-right: 6px;
-    }
+const Label = styled.label`
+  position: relative;
+  z-index: 1;
+  padding: 0 12px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+  color: #555555;
+  border-radius: 17px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .3s;
+  
+  img {
+    width: auto;
+    height: auto;
+    margin-right: 6px;
+    position: static;
+  }
 
-    &:hover {
-      opacity: 1;
-    }
+  &:hover {
+    opacity: 1;
   }
 `;
 
