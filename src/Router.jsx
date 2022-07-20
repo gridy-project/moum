@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "pages/Login";
+import NewLogin from "pages/NewLogin"
 import Register from "pages/Register";
 import MyPage from "pages/MyPage";
 import Search from "pages/Search";
@@ -40,6 +41,7 @@ function Router() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/newlogin" element={<NewLogin />}/>
       <Route path="/register" element={<Register />} />
       <Route path="/search" element={<Search />} />
       <Route path="/search/:keyword" element={<Result />} />
