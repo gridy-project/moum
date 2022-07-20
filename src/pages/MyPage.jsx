@@ -2,8 +2,6 @@
 import React from "react";
 // css
 import styled from "styled-components";
-// modal
-import Modal from "react-modal";
 // component
 import Header from "components/Common/Header";
 import Container from "components/Common/Container";
