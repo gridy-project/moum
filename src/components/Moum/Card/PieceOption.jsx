@@ -3,9 +3,9 @@ import styled, { css } from "styled-components";
 import { removePieceAxios } from "utils/api/piece";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import { globalPopup, popupState } from "state/common/popup";
-import LinkUpdatePopup from "../Popup/LinkUpdatePopup";
-import MemoUpdatePopup from "../Popup/MemoUpdatePopup";
+import LinkDetailPopup from "../Popup/LinkDetailPopup";
 import { pageMoumSelectedFolderId } from "state/moum";
+import MemoDetailPopup from "../Popup/MemoDetailPopup";
 
 function PieceCardOption ({isActive, setActive, piece, type}) {
   const setPopupState = useSetRecoilState(popupState);
@@ -26,9 +26,9 @@ function PieceCardOption ({isActive, setActive, piece, type}) {
   const onClickModify = (e) => {
     console.log(type);
     if (type === "LINK") {
-      setPopup(<LinkUpdatePopup piece={piece} />);
+      setPopup(<LinkDetailPopup piece={piece} />);
     } else if (type === "MEMO") {
-      setPopup(<MemoUpdatePopup piece={piece} />);
+      setPopup(<MemoDetailPopup piece={piece} />);
     }
     setPopupState(true);
     setActive(false);

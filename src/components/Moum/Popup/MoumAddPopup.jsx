@@ -1,23 +1,18 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useMutation } from "react-query";
 import { addMoumAxios } from "utils/api/moum";
 import useHandleChange from "hooks/useHandleChange";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { globalPopup, popupState } from "state/common/popup";
 import queryClient from "shared/query";
+import PopupTopView from "components/Common/PopupTopView";
+import moumAdd from "assets/svg/moum_add.svg";
+import CancelButton from "components/Common/CancelButton";
+import ConfirmButton from "components/Common/ConfirmButton";
+import ToggleSwitch from "components/Common/ToggleSwitch";
 
-function MoumAddPopup () {
-  const setPopupState = useSetRecoilState(popupState);
-  const resetPopup = useResetRecoilState(globalPopup);
-
-  const closePop = (e) => {
-    setPopupState(false);
-    resetPopup();
-  }
-
-  const {input, handleChange} = useHandleChange({
+function MoumAddPopup ({close}) {
+  const {input, setInput, handleChange} = useHandleChange({
     name: "",
-    share: "NONE"
+    share: false
   });
 
   const {mutate: addMoum} = useMutation(async (data) => {
@@ -43,65 +38,103 @@ function MoumAddPopup () {
     
     const moum = {
       name: input.name,
-      status: input.share
+      status: input.share ? "PUBLIC" : "PRIVATE"
     }
 
     addMoum(moum);
-    setPopupState(false);
-    resetPopup();
+    close();
   };
+
+  const toggleShare = () => {
+    setInput(current => ({...current, share: !current.share}));
+  }
 
   return (
     <Box>
-      <MakeFolder onSubmit={submitAddFolder}>
-        <label htmlFor="name" className="label-name">폴더명</label>
-        <input type="text" id="name" onChange={handleChange("name")} value={input.name} />
-        <label htmlFor="share" className="label-share">공유설정</label>
-        <select id="share" onChange={handleChange("share")} value={input.share}>
-          <option value="NONE">공유 설정</option>
-          <option value="PUBLIC">공개</option>
-          <option value="PRIVATE">비공개</option>
-        </select>
-        <button>폴더 생성</button>
-      </MakeFolder>
-      <button onClick={closePop}>팝업 닫기</button>
+      <PopupTopView image={moumAdd} title={"모음 만들기"} />
+      <Form onSubmit={submitAddFolder}>
+        <div className="moum-name">
+          <label htmlFor="name">모음 이름</label>
+          <input type="text" id="name" onChange={handleChange("name")} value={input.name} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
+        </div>
+        <div className="moum-share">
+          <label>공유설정</label>
+          <ToggleSwitch 
+            status={input.share} 
+            onClick={toggleShare}
+          />
+        </div>
+        <div className="btn-group">
+          <CancelButton optionStyle={
+            css`
+              margin-right: 10px;
+            `
+          } />
+          <ConfirmButton text={"만들기"} isActive />
+        </div>
+      </Form>
     </Box>
   )
 }
 
 const Box = styled.div`
-  width: 500px;
-  height: 500px;
-  background-color: #FFFFFF;
-  font-size: 24px;
-  padding: 40px;
-  label {
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  .label-share {
-    margin-top: 20px;
-  }
-
-  input {
-    font-size: 20px;
-  }
-
-  select, option {
-    font-size: 20px;
-  }
+  padding: 24px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
-const MakeFolder = styled.form`
-  button {
-    display: block;
-    width: 100px;
-    height: 50px;
-    margin: 20px 0;
-    border: none;
-    background-color: #29af61;
-    color: #FFFFFF;
+const Form = styled.form`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  .moum-name {
+    margin-top: 32px;
+
+    label {
+      display: block;
+      color: #303030;
+    }
+
+    input {
+      margin-top: 12px;
+      width: 100%;
+      height: 50px;
+      border-radius: 25px;
+      border: 1px solid #D2BAFF; 
+      padding: 0 20px;
+      transition: border .3s;
+      &:focus {
+        outline: none;
+        border: 1px solid #9152FF;
+      }
+
+      &::placeholder {
+        color: #B7B7B7; 
+      }
+    }
+  }
+
+  .moum-share {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    
+    label {
+      color: #303030;
+      margin-right: 12px;
+    }
+  }
+
+  .btn-group {
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 `;
 

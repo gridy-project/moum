@@ -4,12 +4,12 @@ import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-a
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { floatState } from "state/common/popup";
 import { pageMoumSelectedFolderId } from "state/moum";
-import LinkUpdatePopup from "../Popup/LinkUpdatePopup";
-import MemoUpdatePopup from "../Popup/MemoUpdatePopup";
+import LinkDetailPopup from "../Popup/LinkDetailPopup";
 import {modalOverlay, modalContent} from "shared/modal";
 
 import Modal from "react-modal";
 import { useState } from "react";
+import MemoDetailPopup from "../Popup/MemoDetailPopup";
 
 const createModalContent = {
   ...modalContent,
@@ -52,9 +52,9 @@ function MoumCreateFloat ({piece, moums}) {
       >
         {
         piece.boardType === "LINK" ?
-          <LinkUpdatePopup piece={piece} close={closeModal} />
+          <LinkDetailPopup piece={piece} close={closeModal} />
           :
-          <MemoUpdatePopup piece={piece} close={closeModal} />
+          <MemoDetailPopup piece={piece} close={closeModal} />
         }
       </Modal>
       <img src={fastCreateOptionModify} alt="modify" />
