@@ -12,9 +12,9 @@ function Header({selected}) {
   const [headerFixed, setHeaderFixed] = useState(false);
 
   useEffect(() => {
-    if (window.scrollY > 80) setHeaderFixed(true);
+    if (window.scrollY > 0) setHeaderFixed(true);
     function scrollEvt (e) {
-      if (window.scrollY > 80) {
+      if (window.scrollY > 0) {
         if (!headerFixed) setHeaderFixed(true);
       } else {
         setHeaderFixed(false);
@@ -67,14 +67,14 @@ const Container = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 200px;
+  height: 90px;
   display: flex;
   justify-content: center;
   z-index: 5;
 
   ${props => props.isFixed && css`
     background-color: #FFFFFF;
-    height: 100px;
+    height: 90px;
     position: fixed;
   `}
 `;

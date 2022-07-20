@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import detailAdd from "assets/images/pages/moum/popup/detail-add-logo.png";
 
-function UpdatePopupHeader ({pageNum, menu}) {
+function DetailPopupHeader ({pageNum, menu}) {
   return (
     <PopHeaderView>
       <PopHeaderTitle>
@@ -77,4 +77,4 @@ const NavigationItem = styled.li`
 `;
 
 
-export default UpdatePopupHeader;
+export default DetailPopupHeader;

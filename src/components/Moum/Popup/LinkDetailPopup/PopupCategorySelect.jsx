@@ -1,44 +1,30 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useCustomQuery from "hooks/useCustomQuery";
 import { getMoumMineAllAxios } from "utils/api/moum";
-import folderIcon from "assets/images/pages/moum/popup/folder-icon.png";
-import folderIconGrey from "assets/images/pages/moum/popup/folder-icon-grey.png";
 import { getSelectMoumCategory, typeCategory } from "shared/type";
-import PopupSelectBox from "./PopupSelectBox";
 import PopupButtonGroup from "./PopupButtonGroup";
+import PopupSelectBoxFolder from "../CommonDetailPopup/PopupSelectBoxFolder";
+import PopupSelectBoxCategory from "../CommonDetailPopup/PopupSelectBoxCategory";
 
 
-function PopupCategorySelect ({next, close}) {
+function PopupCategorySelect ({getter, setter, next, close}) {
   const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    next();
-  }
 
   return (
     <Box>
-      <form onSubmit={onSubmit}>
+      <form>
         <div className="name">저장할 모음 선택하기</div>
         {isSuccess && 
-        <PopupSelectBox 
-          width={360} 
-          height={48} 
-          items={query.data} 
-          useIcon
-          useSingleIcon
-          useSingleIconImage = {folderIcon}
-          useSingleIconImageNotSelected = {folderIconGrey}
-          zIndex={1}
+        <PopupSelectBoxFolder
+          items={query.data}
+          setter={setter}
+          getter={getter}
         />}
         <div className="name">카테고리 선택</div>
-        <PopupSelectBox 
-          width={200} 
-          height={48} 
-          items={typeCategory.map((v) => ({...getSelectMoumCategory(v), name: v}))} 
-          useIcon
-          useItemsIcon
-          zIndex={0}
+        <PopupSelectBoxCategory
+          items={typeCategory.map((v) => ({...getSelectMoumCategory(v), name: v}))}
+          setter={setter}
+          getter={getter}
         />
         <PopupButtonGroup close={close} next={next} />
       </form>

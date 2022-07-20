@@ -1,30 +1,25 @@
-import { useState } from "react";
-
-import arrowDown from "assets/images/pages/moum/popup/arrow_down.png";
+import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import folderIcon from "assets/images/pages/moum/popup/folder-icon.png";
+import folderIconGrey from "assets/images/pages/moum/popup/folder-icon-grey.png";
+import arrowDown from "assets/images/pages/moum/popup/arrow_down.png";
 
-function PopupSelectBox ({
-  width,
-  height, 
-  items, 
-  useIcon, 
-  useSingleIcon, 
-  useSingleIconImage,
-  useSingleIconImageNotSelected,
-  useItemsIcon,
-  zIndex
-}) {
+function PopupSelectBoxFolder ({ items, setter, getter }) {
   const [selectedItem, setSelectedItem] = useState(0);
   const [isActive, setActive] = useState(false);
+
+  useEffect(() => {
+    setter(current => ({...current, folderId: items[0].id}));
+  }, [setter]);
+
   return (
-    <Wrap width={width} height={height} zIndex={zIndex}>
+    <Wrap>
       <Selected onClick={() => {setActive(current => !current)}}>
-        {useIcon && useSingleIcon && <img src={useSingleIconImage} alt={"single"}/>}
-        {useIcon && useItemsIcon && items[selectedItem].imageActive && <img src={items[selectedItem].imageActive} alt={"single"}/>}
+        <img src={folderIcon} alt={"single"}/>
         <span>{items[selectedItem].name}</span>
         <img src={arrowDown} alt="down" />
       </Selected>
-      <Select isActive={isActive} height={height} useSmall={useItemsIcon}>
+      <Select isActive={isActive}>
         {items.map((v, idx) => {
           return (
             <Item 
@@ -32,28 +27,18 @@ function PopupSelectBox ({
               isActive={selectedItem === idx}
               onClick={() => {
                 setSelectedItem(idx);
+                setter(current => ({...current, folderId: items[idx].id}));
                 setActive(false);
               }}
             >
               {/* UseSingleIcon */}
               {
-                useIcon && 
-                useSingleIcon && 
                 selectedItem === idx &&
-                <img src={useSingleIconImage} alt={"single"}/>
+                <img src={folderIcon} alt={"single"}/>
               }
               {
-                useIcon &&
-                useSingleIcon &&
                 selectedItem !== idx &&
-                <img src={useSingleIconImageNotSelected} alt={"single"}/>
-              }
-              {/* UseItemsIcon */}
-              {
-                useIcon &&
-                useItemsIcon &&
-                v.image &&
-                <img src={v.image} alt={v.name} />
+                <img src={folderIconGrey} alt={"single"}/>
               }
               {v.name}
             </Item>
@@ -65,12 +50,12 @@ function PopupSelectBox ({
 }
 
 const Wrap = styled.div`
-  width: ${props => props.width ? `${props.width}px` : "100px"};
-  height: ${props => props.height ? `${props.height}px` : "50px"};
-  border-radius: ${props => props.height ? `${props.height/2}px` : "25px"};
+  width: 360px;
+  height: 48px;
+  border-radius: 24px;
   background-color: #F7F3FD;
   position: relative;
-  z-index: ${props => props.zIndex};
+  z-index: 2;
 `;
 
 const Selected = styled.div`
@@ -103,39 +88,6 @@ const Select = styled.div`
   background-color: #FFFFFF;
   padding: 10px;
   overflow-y: auto;
-
-  ${props => props.useSmall && css`
-    display: ${props => props.isActive ? "flex" : "none"};
-    width: 190%;
-    height: 140px;
-    flex-wrap: wrap;
-    gap: 3.3%;
-
-    ${Item} {
-      width: 30%;
-      height: 36px;
-      background-color: #F6F6F6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 15px;
-      img {
-        width: 16px;
-      }
-
-      &:hover {
-        background-color: #F0F0F0;
-      }
-    }
-
-    ${Item} + ${Item} {
-      margin-top: 0;
-    }
-
-    ${Item}:nth-of-type(n+4) {
-      margin-top: 10px;
-    }
-  `}
 `;
 
 const Item = styled.div`
@@ -166,4 +118,5 @@ const Item = styled.div`
   }
 `;
 
-export default PopupSelectBox;
+
+export default PopupSelectBoxFolder;
