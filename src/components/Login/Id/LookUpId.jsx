@@ -1,8 +1,8 @@
 // React
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 // React Query
 import { useMutation } from "react-query";
-// // Recoil
+// Recoil
 import { useRecoilState } from "recoil";
 import { viewAccountState } from 'state/login';
 // axios
@@ -10,8 +10,7 @@ import { instance } from "shared/axios"
 // css
 import styled from "styled-components";
 
-// 아이디 찾기
- const FingIdPage = (props) => {
+ const LookUpId = (props) => {
   const idEmailRef = useRef(null);
 
   const [viewId, setViewID] = useRecoilState(viewAccountState)
@@ -55,52 +54,7 @@ import styled from "styled-components";
   )
  }
 
- // 아이디 찾기 완료
- const SuccessFindId = () => {
-  const [viewId, setViewID] = useRecoilState(viewAccountState)
-
-  const goToLogin = () => {
-    window.location.reload();
-  }
-
-  return (
-    <IdContainer>
-      <IdTitle>아이디 찾기 완료</IdTitle>
-        <IdContent>
-          <p>계정 아이디</p>
-          <FoundIdBox>
-            <p>{viewId}</p>
-          </FoundIdBox>
-        </IdContent>
-      <IdBtn onClick={goToLogin}>로그인 하러가기</IdBtn> 
-      <IdPwdBtn>비밀번호 찾기</IdPwdBtn> 
-    </IdContainer>
-  )
- }  
-
- 
-const SearchId = () => {
-  const [searchIdState, setSearchIdState] = useState(0);
-
-  const runSearchId = () => {
-    setSearchIdState(0);
-  }
-  const runSuccessId = () => {
-    setSearchIdState(1);
-  }
-  return (
-    <div>
-      {searchIdState === 0 && <FingIdPage
-        runFindId={runSearchId}
-        runSuccessFindId={runSuccessId}
-      />}
-      {searchIdState === 1 && <SuccessFindId />}
-    </div>
-  );
-};
-
-// FingIdPage 
-const IdContainer = styled.div`
+ const IdContainer = styled.div`
   position:relative;
   top:-37px;
 `;
@@ -141,35 +95,4 @@ const IdBtn = styled.button`
   cursor: pointer;
 `;
 
-// SuccessFindId
-const FoundIdBox = styled.div`
-  width: 360px;
-  height: 44px;
-  background: #F7F3FD;
-  border-radius: 10px;
-  display: table;
-  table-layout: fixed;
-  p {
-    text-align:center;
-    display: table-cell; 
-    vertical-align:middle;
-    color: #721EFC;
-    font-size: 16px;
-    font-weight: 600;
-  }
-`
-
-const IdPwdBtn = styled.button`
-  width: 360px;
-  height: 44px;
-  border: 1px solid #D2BAFF;
-  background: #FFFFFF;
-  border-radius: 50px;
-  color: #AC7DFF;
-  font-weight: 600;
-  font-size: 17px;
-  margin-top:12px;
-  cursor: pointer;
-`;
-
-export default SearchId;
+export default LookUpId;
