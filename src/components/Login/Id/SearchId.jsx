@@ -1,7 +1,6 @@
 // React
 import React, { useState } from 'react';
 // component
-import ReissuePwd from '../ReissuePwd';
 import LookUpId from '../Id/LookUpId';
 import SuccessFindId from '../Id/SuccessFindId'
 
@@ -14,6 +13,7 @@ const SearchId = () => {
   const runSuccessId = () => {
     setSearchIdState(1);
   }
+
   return (
     <div>
       {searchIdState === 0 && <LookUpId

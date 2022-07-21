@@ -1,25 +1,89 @@
 // React
-import React from 'react';
+import React, { useRef } from 'react';
+// React Query
+import { useMutation } from "react-query";
+// axios
+import { instance } from "shared/axios"
 // css
 import styled from "styled-components";
 
 const ReissuePwd = () => {
+  const idCheckRef = useRef();
+  const emailCheckRef = useRef();
+  const CodeCheckRef = useRef();
+
+  // 비밀번호 재설정 인증 메일 발송
+  const ClickResetPwdCode = () => {
+     const data = {
+      username : idCheckRef.current.value,
+      email : emailCheckRef.current.value
+    }
+    sendResetPwdCode(data);
+  }
+
+  const { mutate: sendResetPwdCode } = useMutation(
+    async (data) => {
+      const response = await instance.post("/email/sendResetPwCode", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        window.alert(data.massage);
+      },
+			onError: (err) => {
+				console.log(err)
+        if (err.statusCode === 501) {
+          window.alert(err.massage);
+        } else if (err.statusCode === 500) {
+          window.alert(err.massage);
+        }
+			}
+    }
+  )
+
+  // 임시 비밀번호 발급
+    const ClicksendNewPwd = () => {
+     const data = {
+      email : emailCheckRef.current.value,
+      certification : CodeCheckRef.current.value
+    }
+    sendNewPwd(data);
+  }
+
+  const { mutate: sendNewPwd } = useMutation(
+    async (data) => {
+      const response = await instance.post("/email/sendNewPw", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);       
+        window.alert(data.massage);
+      },
+			onError: (err) => {
+				console.log(err)
+        window.alert(err.massage);
+			}
+    }
+  )
+
   return (
     <PwdContainer>
       <PwdTitle>비밀번호 재발급하기</PwdTitle>
       <PwdCheckId>
         <p>아이디</p>
-        <input type="text" placeholder='아이디 입력' />
+        <input type="text" ref={idCheckRef} placeholder='아이디 입력' />
       </PwdCheckId>
       <PwdCheckEmail>
         <p>이메일로 본인 확인</p>
         <PwdEmailBox>
-          <input type="text" placeholder='이메일'/>
-          <button>인증요청</button>
+          <input type="text" ref={emailCheckRef} placeholder='이메일'/>
+          <button onClick={ClickResetPwdCode}>인증요청</button>
         </PwdEmailBox>
         <PwdCodeBox>
-          <input type="text" placeholder='인증코드를 입력해주세요.'/>
-        <button>확인</button>  
+          <input type="text" ref={CodeCheckRef} placeholder='인증코드를 입력해주세요.'/>
+        <button onClick={ClicksendNewPwd}>확인</button>  
         </PwdCodeBox>
       </PwdCheckEmail>
       <PwdBtn>새 비밀번호 받기</PwdBtn>
