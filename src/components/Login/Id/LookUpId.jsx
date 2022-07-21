@@ -10,6 +10,7 @@ import { instance } from "shared/axios"
 // css
 import styled from "styled-components";
 
+// sparta3@dev.com
  const LookUpId = (props) => {
   const idEmailRef = useRef(null);
 
@@ -20,7 +21,6 @@ import styled from "styled-components";
     const data = {
       email : idEmailRef.current.value
     }
-    props.runSuccessFindId();
     searchId(data);
   }
 
@@ -32,7 +32,8 @@ import styled from "styled-components";
     {
       onSuccess: (data) => {
         console.log(data);
-        setViewID(data)
+        setViewID(data);
+        props.runSuccessFindId();
       },
 			onError: (err) => {
 				console.log(err)

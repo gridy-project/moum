@@ -1,19 +1,22 @@
 // React
-import React from 'react';
+import React, { useState } from 'react';
 // Recoil
 import { useRecoilState } from "recoil";
-import { viewAccountState } from 'state/login';
+import { numberLoginState, viewAccountState } from 'state/login';
 // css
 import styled from "styled-components";
-import { useNavigate } from 'react-router-dom';
 
 const SuccessFindId = () => {
-  const navigate = useNavigate();
-
   const [viewId, setViewID] = useRecoilState(viewAccountState)
+  console.log(viewId)
+  const [numberState, setNumberState] = useRecoilState(numberLoginState)
 
   const goToLogin = () => {
     window.location.reload();
+  }
+
+  const ChangeIdPageNumber = () => {
+    setNumberState(1)
   }
 
   return (
@@ -25,10 +28,8 @@ const SuccessFindId = () => {
             <p>{viewId}</p>
           </FoundIdBox>
         </IdContent>
-      <IdBtn onClick={goToLogin}>로그인 하러가기</IdBtn> 
-      <IdPwdBtn onClick={() => {
-        // window.location.replace({ReissuePwd})
-      }}>비밀번호 재발급하기</IdPwdBtn> 
+      <IdBtn onClick={goToLogin}>로그인 하러가기</IdBtn>
+      <IdPwdBtn onClick={ChangeIdPageNumber}>비밀번호 재발급하기</IdPwdBtn> 
     </IdContainer>
   )
  }  

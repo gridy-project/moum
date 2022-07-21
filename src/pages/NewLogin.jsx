@@ -1,5 +1,8 @@
 // React
-import React, { useState } from 'react';
+import React from 'react';
+// Recoil
+import { useRecoilState } from "recoil";
+import { numberLoginState } from 'state/login';
 // css
 import styled from "styled-components";
 import background from "../assets/images/pages/login/background.png"
@@ -11,19 +14,19 @@ import ReissuePwd from 'components/Login/ReissuePwd';
 import Join from 'components/Login/Join';
 
 const NewLogin = () => {
-  const [state, setState] = useState(0);
+  const [numberState, setNumberState] = useRecoilState(numberLoginState)
 
   const runLoginPage = () => {
-    setState(0)
+    setNumberState(0)
   }
   const runPwdPage = () => {
-    setState(1)
+    setNumberState(1)
   }
   const runIdPage = () => {
-    setState(2)
+    setNumberState(2)
   }
   const runJoinPage = () => {
-    setState(3)
+    setNumberState(3)
   }
 
   return (
@@ -33,15 +36,15 @@ const NewLogin = () => {
       <Box>
         <ChangeContainer>
           <Content>
-            {state === 0 && <StartLogin
+            {numberState === 0 && <StartLogin
               runlogin={runLoginPage}
               runpwd={runPwdPage}
               runid={runIdPage}
               runjoin={runJoinPage}
             />}
-            {state === 1 && <ReissuePwd />}
-            {state === 2 && <SearchId/>}
-            {state === 3 && <Join />}
+            {numberState === 1 && <ReissuePwd />}
+            {numberState === 2 && <SearchId/>}
+            {numberState === 3 && <Join />}
           </Content>
         </ChangeContainer>
       </Box>
