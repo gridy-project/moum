@@ -17,12 +17,10 @@ import styled from "styled-components";
   const [viewId, setViewID] = useRecoilState(viewAccountState)
 
   const searchIdForm = (e) => {
-
     e.preventDefault();
     const data = {
       email : idEmailRef.current.value
     }
-    console.log(data)
     props.runSuccessFindId();
     searchId(data);
   }
@@ -30,7 +28,6 @@ import styled from "styled-components";
   const { mutate: searchId } = useMutation(
     async (data) => {
       const response = await instance.post("/find/username", data);
-      console.log(response)
       return response.data;
     },
     {
@@ -61,7 +58,7 @@ import styled from "styled-components";
  // 아이디 찾기 완료
  const SuccessFindId = () => {
   const [viewId, setViewID] = useRecoilState(viewAccountState)
-  
+
   const goToLogin = () => {
     window.location.reload();
   }
@@ -81,6 +78,7 @@ import styled from "styled-components";
   )
  }  
 
+ 
 const SearchId = () => {
   const [searchIdState, setSearchIdState] = useState(0);
 
