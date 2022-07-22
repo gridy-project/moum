@@ -8,7 +8,6 @@ import { executeSignInWithGoogleAxios } from 'utils/api/auth';
 import { isLogin } from 'state/common/user';
 import { setToken } from 'shared/localStorage';
 
-import google from 'assets/images/pages/login/google.png';
 import googlelogo from "assets/images/pages/login/google_logo.png";
 
 function SocialLogin ({loginSuccess}) {
