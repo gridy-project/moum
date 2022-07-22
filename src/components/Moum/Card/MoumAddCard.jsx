@@ -1,51 +1,33 @@
 import styled from "styled-components";
 import moumAddButton from "assets/images/pages/moum/moum-add-button.png";
 import moum from "assets/images/pages/moum/moum-background.png";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import { popupState, globalPopup } from "state/common/popup";
 import MoumAddPopup from "../Popup/MoumAddPopup";
 
-import Modal from "react-modal";
-import { modalContent, modalOverlay } from "shared/modal";
-import { useState } from "react";
-Modal.setAppElement("#root");
-
-const createFolderModal = {
-  ...modalContent,
-  width: "440px",
-  height: "330px",
-  overflow: "hidden",
-  borderRadius: "30px"
-};
-
 function MoumAddCard () {
-  const [modalState, setModalState] = useState(false);
-  // const setGlobalPopup = useSetRecoilState(globalPopup);
-  // const runAddMoumPopup = (e) => {
-  //   setGlobalPopup(<MoumAddPopup />);
-  //   setPopupState(true);
-  // }
+  const [popup, setPopup] = useRecoilState(globalPopup);
+  const resetPopup = useResetRecoilState(globalPopup);
+
+  const closePopup = () => {
+    resetPopup();
+  }
+
+  const openPopup = () => {
+    setPopup({
+      state: true,
+      component: <MoumAddPopup close={() => closePopup()} />
+    });
+  }
   
   return (
-    <>
-      <Modal
-        isOpen={modalState}
-        onRequestClose={(e) => {e.preventDefault(); setModalState(false);}}
-        style={{
-          overlay: modalOverlay,
-          content: createFolderModal
-        }}
-      >
-        <MoumAddPopup close={() => setModalState(false)} />
-      </Modal>
-      <Card onClick={() => setModalState(true)}>
-        <MoumAddCardBackground />
-        <MoumAddCardContent>
-          <img src={moumAddButton} alt="모음 추가 버튼" />
-          <div className="moum-new">새 모음 만들기</div>
-        </MoumAddCardContent>
-      </Card>
-    </>
+    <Card onClick={openPopup}>
+      <MoumAddCardBackground />
+      <MoumAddCardContent>
+        <img src={moumAddButton} alt="모음 추가 버튼" />
+        <div className="moum-new">새 모음 만들기</div>
+      </MoumAddCardContent>
+    </Card>
   )
 }
 

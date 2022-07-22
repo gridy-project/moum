@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MoumCard from "../MoumCard";
+import SearchMoumCard from "../Card/SearchMoumCard";
 
 function MoumResultSet ({moumQuery}) {
   return (
@@ -7,7 +7,7 @@ function MoumResultSet ({moumQuery}) {
       <h2>관련있는 모음<p>모음 검색 결과 {moumQuery.foldersCnt}건</p></h2>
       <MoumRelationList>
         {moumQuery.folders.map((moum) => {
-          return <MoumCard key={moum.id} moum={moum} />
+          return <SearchMoumCard key={moum.id} moum={moum} />
         })}
       </MoumRelationList>
       {moumQuery.foldersCnt === 0 && <div className="no-item">모음 검색 결과가 없습니다.</div>}

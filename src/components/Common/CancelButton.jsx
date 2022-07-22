@@ -1,14 +1,13 @@
 import { css } from "styled-components";
 import Button from "components/Common/Tag/Button";
-import { useCallback } from "react";
 
 function CancelButton ({text, isActive, onClick, optionStyle}) {
   return (
     <Button
       text={text ?? "취소"}
-      btnStyle={cancelBtnStyle + optionStyle}
-      btnHoverStyle={cancelBtnHoverStyle}
-      btnActiveStyle={cancelBtnActiveStyle}
+      defaultStyle={cancelBtnStyle + optionStyle}
+      hoverStyle={cancelBtnHoverStyle}
+      activeStyle={cancelBtnActiveStyle}
       isActive={isActive}
       onClick={onClick}
     />

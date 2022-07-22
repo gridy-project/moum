@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
-import { globalPopup, popupState } from "state/common/popup";
+import { globalPopup } from "state/common/popup";
 
 function Popup () {
-  const [state, setState] = useRecoilState(popupState);
   const [popup, setPopup] = useRecoilState(globalPopup);
   return (
-    <Fixed isActive={state}>
+    <Fixed isActive={popup.state}>
       <Background />
-      <Pop>{popup}</Pop>
+      <Pop>{popup.component}</Pop>
     </Fixed>
   )
 }

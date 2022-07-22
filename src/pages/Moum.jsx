@@ -1,5 +1,5 @@
 // module
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 
@@ -24,13 +24,17 @@ function Moum () {
   const [floatStatus, setFloatStatus] = useState(false);
   const [floatItemStatus, setFloatItemStatus] = useState(false);
 
-  const categoriesQuery = useCustomQuery(["mine/categories", selectedFolderId], async () => await getCategoryAxios(selectedFolderId));
-  const moumsQuery = useCustomQuery(["mine/moums", categories, search, sortState], async () => await getMoumFetch(categories, search, sortState));
+  const categoriesQuery = useCustomQuery(["mine/categories", selectedFolderId], () => getCategoryAxios(selectedFolderId));
+  const moumsQuery = useCustomQuery(["mine/moums", categories, search, sortState], () => getMoumFetch(categories, search, sortState));
+
+  useEffect(() => {
+    console.log(moumsQuery);
+  }, []);
 
   return (
     <CustomContainer>
-      {moumsQuery.isSuccess && <MoumTitle moums={moumsQuery.data} />}
-      <MoumContent 
+      {moumsQuery.isSuccess && <MoumTitle moums={moumsQuery?.data?.data} />}
+      <MoumContent
         categoriesQuery={categoriesQuery}
         moumsQuery={moumsQuery}
         floatItemStatus={floatItemStatus}

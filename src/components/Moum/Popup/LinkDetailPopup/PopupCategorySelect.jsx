@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import useCustomQuery from "hooks/useCustomQuery";
 import { getMoumMineAllAxios } from "utils/api/moum";
 import { getSelectMoumCategory, typeCategory } from "shared/type";
@@ -7,7 +7,7 @@ import PopupSelectBoxFolder from "../CommonDetailPopup/PopupSelectBoxFolder";
 import PopupSelectBoxCategory from "../CommonDetailPopup/PopupSelectBoxCategory";
 
 
-function PopupCategorySelect ({getter, setter, next, close}) {
+function PopupCategorySelect ({getter, setter, next, close, folderId}) {
   const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
 
   return (
@@ -19,6 +19,7 @@ function PopupCategorySelect ({getter, setter, next, close}) {
           items={query.data}
           setter={setter}
           getter={getter}
+          initFolderId={folderId}
         />}
         <div className="name">카테고리 선택</div>
         <PopupSelectBoxCategory

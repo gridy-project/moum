@@ -1,23 +1,25 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
-import { floatState, globalFloat } from "state/common/popup";
+import { globalFloat } from "state/common/popup";
 
 function Float () {
-  const [viewState, setViewState] = useRecoilState(floatState);
-  const [float] = useRecoilState(globalFloat);
+  const [float, setFloat] = useRecoilState(globalFloat);
 
   useEffect(() => {
-    if (viewState) {
+    if (float.state) {
       setTimeout(() => {
-        setViewState(false)
+        setFloat(current => ({
+          ...current,
+          state: false
+        }))
       }, 5000);
     }
-  }, [viewState, setViewState]);
+  }, [float.state, setFloat]);
 
   return (
-    <Box isActive={viewState} backgroundColor={"#721EFC"} width={"360px"} height={"80px"}>
-      {float}
+    <Box isActive={float.state} backgroundColor={"#721EFC"} width={"360px"} height={"80px"}>
+      {float.component}
     </Box>
   )
 }

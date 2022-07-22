@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { moumSearch, pageMoumSelectedFolderId } from "state/moum";
 import styled from "styled-components";
 import MoumSelectList from "./List/MoumSelectList";
@@ -8,7 +8,7 @@ import MoumHeaderCommon from "./MoumHeaderCommon";
 import MoumOptionGroup from "./MoumOptionGroup";
 
 function MoumContent ({categoriesQuery, moumsQuery, floatItemStatus, setFloatStatus, setFloatItemStatus}) {
-  const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
+  const [selectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
   const [selectAll, setSelectAll] = useState(false);
   const [search, setSearch] = useRecoilState(moumSearch);
 
@@ -16,8 +16,7 @@ function MoumContent ({categoriesQuery, moumsQuery, floatItemStatus, setFloatSta
     <Content>
       <MoumHeader>
         {categoriesQuery.isSuccess && <MoumHeaderCommon categories={categoriesQuery.data} />}
-        {moumsQuery.isSuccess && (selectedFolderId !== 0 && <MoumSelectList moums={moumsQuery.data} />)}
-        {selectedFolderId !== 0 && <button onClick={() => {setSelectedFolderId(0)}}>폴더 선택으로 이동</button>}
+        {moumsQuery?.isSuccess && (selectedFolderId !== 0 && <MoumSelectList moums={moumsQuery?.data?.data} />)}
         <MoumOptionGroup
           search={search}
           setSearch={setSearch}
@@ -28,7 +27,7 @@ function MoumContent ({categoriesQuery, moumsQuery, floatItemStatus, setFloatSta
           floatItemStatus={floatItemStatus}
         />
       </MoumHeader>
-      {moumsQuery.isSuccess && <MoumBoard folderId={selectedFolderId} search={search} moums={moumsQuery.data} selectAll={selectAll}/>}
+      {moumsQuery.isSuccess && <MoumBoard folderId={selectedFolderId} search={search} moums={moumsQuery?.data.data} selectAll={selectAll}/>}
     </Content>
   );
 }

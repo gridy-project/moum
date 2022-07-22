@@ -1,21 +1,24 @@
 import useCustomMutate from "hooks/useCustomMutate";
 import useHandleChange from "hooks/useHandleChange";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { instance } from "shared/axios";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import PopupCategorySelect from "./LinkDetailPopup/PopupCategorySelect";
 import PopupContentField from "./LinkDetailPopup/PopupContentField";
 import PopupImageChange from "./LinkDetailPopup/PopupImageChange";
 import DetailPopupHeader from "./DetailPopupHeader";
+import { useRecoilValue } from "recoil";
+import { pageMoumSelectedFolderId } from "state/moum";
 
 function LinkDetailPopup ({close, piece}) {
   const queryClient = useQueryClient();
   const [menu] = useState(["카테고리 선택", "작성한 내용", "이미지 변경"]);
+  const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const [pageNum, setPageNum] = useState(0);
   const {input, setInput} = useHandleChange({
     id: piece.id,
-    folderId: 0,
+    folderId: piece.folderId ?? folderId,
     category: piece.category,
     link: piece.link,
     subject: piece.title,
@@ -31,12 +34,17 @@ function LinkDetailPopup ({close, piece}) {
   const {mutateAsync: modify} = useCustomMutate(async ({id, data}) => await instance.put(`/board/${id}`, data));
 
   const pageEnd = async (imageUrl) => {
+    // REQUIRED BACKEND CHECK ERROR
+    // 자세히 작성하기에서 이미지 업로드 후 선택 안되는 증상
     const id = input.id;
     const data = {
       title: input.subject,
       explanation: input.content,
       link: input.link,
-      imgPath: imageUrl ?? input.image,
+      image: {
+        imagePath: imageUrl ?? input.image,
+        imageType: imageUrl ? "self" : "og"
+      },
       category: input.category,
       boardType: "LINK",
       status: input.share ? "PUBLIC" : "PRIVATE",
@@ -54,14 +62,16 @@ function LinkDetailPopup ({close, piece}) {
     }
   }
 
-  useEffect(() => {
-    console.log(input);
-  }, [input]);
-
   return (
     <Box>
-      <DetailPopupHeader pageNum={pageNum} menu={menu} />
-      {pageNum === 0 && <PopupCategorySelect next={pageNext} close={close} setter={setInput} getter={input} />}
+      <DetailPopupHeader setPageNum={setPageNum} pageNum={pageNum} menu={menu} />
+      {pageNum === 0 && <PopupCategorySelect 
+                          next={pageNext} 
+                          close={close} 
+                          setter={setInput} 
+                          getter={input} 
+                          folderId={piece.folderId ?? folderId} 
+                        />}
       {pageNum === 1 && <PopupContentField next={pageNext} close={close} setter={setInput} getter={input} />}
       {pageNum === 2 && <PopupImageChange finish={pageEnd} close={close} setter={setInput} getter={input} />}
     </Box>
@@ -69,10 +79,12 @@ function LinkDetailPopup ({close, piece}) {
 }
 
 const Box = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 630px;
+  height: 530px;
+  background-color: #FFFFFF;
   display: flex;
   flex-direction: column;
+  border-radius: 30px;
 `;
 
 export default LinkDetailPopup;

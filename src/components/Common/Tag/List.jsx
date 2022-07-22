@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function Button ({text, isActive, defaultStyle, hoverStyle, activeStyle, onClick, ...props}) {
+function List ({children, isActive, defaultStyle, hoverStyle, activeStyle, onClick, ...props}) {
   return (
     <Item
       onClick={
@@ -18,12 +18,12 @@ function Button ({text, isActive, defaultStyle, hoverStyle, activeStyle, onClick
       isActive={isActive}
       {...props}
     >
-    {text}
+    {children}
     </Item>
   )
 }
 
-const Item = styled.button`
+const Item = styled.li`
   ${props => props.defaultStyle};
 
   &:hover {
@@ -33,4 +33,4 @@ const Item = styled.button`
   ${props => props.isActive && props.activeStyle};
 `;
 
-export default Button;
+export default List;

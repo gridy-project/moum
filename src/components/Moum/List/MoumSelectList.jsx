@@ -5,6 +5,7 @@ import {useRecoilState} from "recoil";
 import { pageMoumSelectedFolderId } from "state/moum";
 import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
+import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
 
 function MoumSelect ({moums}) {
   const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
@@ -15,8 +16,16 @@ function MoumSelect ({moums}) {
 
   return (
     <Line>
-      <em>전체 모음 목록</em>
-      <MoumList>
+      <Location>
+        <span className="location-home" onClick={
+          () => {
+            setSelectedFolderId(0)
+          }
+        }>나의 모음</span>
+        <img src={arrowRight} alt="right" />
+        <span className="location-now">{query?.data?.filter((v) => v.id === selectedFolderId)[0].name}</span>
+      </Location>
+      <List>
         <ul>
           {
             isSuccess &&
@@ -30,7 +39,7 @@ function MoumSelect ({moums}) {
             })
           }
         </ul>
-      </MoumList>
+      </List>
     </Line>
   );
 }
@@ -42,7 +51,31 @@ const Line = styled.div`
   font-weight: 600px;
 `;
 
-const MoumList = styled.div`
+const Location = styled.div`
+  color: #949494;
+  display: flex;
+  gap: 4px;
+
+  span {
+    padding: 6px;
+  }
+
+  .location-home {
+    cursor: pointer;
+    transition: background-color .3s, color .3s;
+    &:hover {
+      background-color: #E8E1FC;
+      border-radius: 10px;
+      color: #9152FF;
+    }
+  }
+
+  .location-now {
+    color: #555555;
+  }
+`;
+
+const List = styled.div`
   padding: 25px 0;
   width: 100%;
   ul {

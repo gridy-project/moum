@@ -2,8 +2,6 @@
 import React from "react";
 // css
 import styled from "styled-components";
-// modal
-import Modal from "react-modal";
 // component
 import Header from "components/Common/Header";
 import Container from "components/Common/Container";
@@ -13,6 +11,7 @@ import ChangeDesc from "../components/MyPage/ChangeDesc";
 import ChangeEmail from "../components/MyPage/ChangeEmail";
 import ChangePwd from "../components/MyPage/ChangePwd";
 import DeleteAccount from "../components/MyPage/DeleteAccount";
+
 
 function MyPage() {
 

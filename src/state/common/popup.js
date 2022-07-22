@@ -1,21 +1,17 @@
-import {atom} from "recoil";
-
-export const popupState = atom({
-  key: "popupState",
-  default: false
-});
+import { atom } from "recoil";
 
 export const globalPopup = atom({
   key: "globalPopup",
-  default: <div>No Popup</div>
-});
-
-export const floatState = atom({
-  key: "floatState",
-  default: false
+  default: {
+    state: false,
+    component: <div>No Popup</div>
+  }
 });
 
 export const globalFloat = atom({
-  key: "globalFloat",
-  default: <div>No Float</div>
+  key: "floatState",
+  default: {
+    state: false,
+    component: <div>No Float</div>
+  }
 });
