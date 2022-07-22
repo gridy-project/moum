@@ -10,7 +10,7 @@ import styled, {css} from "styled-components";
 const ReissuePwd = () => {
   const idCheckRef = useRef();
   const emailCheckRef = useRef();
-  const CodeCheckRef = useRef();
+  const codeCheckRef = useRef();
 
   const [active, setActive] = useState(false);
 
@@ -44,12 +44,43 @@ const ReissuePwd = () => {
     }
   )
 
-  // 임시 비밀번호 발급
-    const clickSendNewPwd = () => {
+  // 인증번호 확인
+
+  const ClickCheckCode = () => {
      const data = {
       email : emailCheckRef.current.value,
-      certification : CodeCheckRef.current.value
+      certification : codeCheckRef.current.value
     }
+    checkCode(data);
+  }
+
+  const { mutate: checkCode } = useMutation(
+    async (data) => {
+      const response = await instance.post("/email/check", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);    
+        if (data.statusCode === 200) {
+          window.alert(data.message);
+        }   
+        
+      },
+			onError: (err) => {
+				console.log(err)
+        window.alert(err.message);
+			}
+    }
+  )
+
+ // 임시 비밀번호 발급
+    const ClickSendNewPwd = () => {
+     
+     const data = {
+      email : emailCheckRef.current.value,
+      certification : codeCheckRef.current.value
+    } 
     sendNewPwd(data);
   }
 
@@ -61,18 +92,22 @@ const ReissuePwd = () => {
     {
       onSuccess: (data) => {
         console.log(data);       
-        window.alert(data.message);
+        if (data.statusCode === 200) {
+          window.alert(data.message);
+        }   
       },
 			onError: (err) => {
 				console.log(err)
-        window.alert(err.message);
+        if (err.statusCode === 404) {
+          window.alert(err.message);
+        }
 			}
     }
   )
 
   // input 에 값이 있을 경우 확인 버튼 활성화
   const checkInputCount = () => {
-    if (CodeCheckRef.current.value.length > 0){
+    if (codeCheckRef.current.value.length > 0){
 			setActive(true);
 		} else {
       setActive(false);
@@ -95,15 +130,15 @@ const ReissuePwd = () => {
         <PwdCodeBox isActive={active}>
           <input 
           type="text" 
-          ref={CodeCheckRef}
+          ref={codeCheckRef}
           onChange={checkInputCount}
           placeholder='인증코드를 입력해주세요.'/>
           <button         
-          onClick={clickSendNewPwd}
+          onClick={ClickCheckCode}
           >확인</button>  
         </PwdCodeBox>
       </PwdCheckEmail>
-      <PwdBtn>새 비밀번호 받기</PwdBtn>
+      <PwdBtn onClick={ClickSendNewPwd}>새 비밀번호 받기</PwdBtn>
     </PwdContainer>
   )
  }
@@ -154,6 +189,7 @@ const PwdEmailBox = styled.div`
 		  outline: 1px solid #9152FF;
 	  }
   }
+
   button {
     width: 84px;
     height: 44px;
@@ -188,12 +224,12 @@ const PwdCodeBox = styled.div`
     ${(props) =>
       props.isActive ? 
       css`
-        background-color: #9152ff;
+        background-color: #9E67FF;
 				color: #ffffff;
       `:
       css`
         background-color: #f6f5fb;
-        color: #9152ff;
+        color: #9E67FF;
       `
     }
  
@@ -209,7 +245,7 @@ const PwdBtn = styled.button`
   font-size: 17px;
   color:#fff;
   border:none;
-
+  cursor: pointer;
 `;
 
 export default ReissuePwd;

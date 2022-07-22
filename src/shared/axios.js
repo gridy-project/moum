@@ -4,7 +4,8 @@ import { getAccessToken, getRefreshToken, removeToken, setToken } from "shared/l
 
 export const instance = axios.create({
   // baseURL: "http://15.164.165.106"
-  baseURL: "http://13.125.137.133/"
+  // baseURL: "http://13.125.137.133/"
+  baseURL: "http://43.200.169.59/"
 });
 
 instance.interceptors.request.use(
