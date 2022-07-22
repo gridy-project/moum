@@ -1,16 +1,18 @@
 // React
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 // React Query
 import { useMutation } from "react-query";
 // axios
 import { instance } from "shared/axios"
 // css
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 const ReissuePwd = () => {
   const idCheckRef = useRef();
   const emailCheckRef = useRef();
   const CodeCheckRef = useRef();
+
+  const [active, setActive] = useState(false);
 
   // 비밀번호 재설정 인증 메일 발송
   const ClickResetPwdCode = () => {
@@ -29,21 +31,21 @@ const ReissuePwd = () => {
     {
       onSuccess: (data) => {
         console.log(data);
-        window.alert(data.massage);
+        window.alert(data.message);
       },
 			onError: (err) => {
 				console.log(err)
         if (err.statusCode === 501) {
-          window.alert(err.massage);
+          window.alert(err.message);
         } else if (err.statusCode === 500) {
-          window.alert(err.massage);
+          window.alert(err.message);
         }
 			}
     }
   )
 
   // 임시 비밀번호 발급
-    const ClicksendNewPwd = () => {
+    const clickSendNewPwd = () => {
      const data = {
       email : emailCheckRef.current.value,
       certification : CodeCheckRef.current.value
@@ -59,14 +61,23 @@ const ReissuePwd = () => {
     {
       onSuccess: (data) => {
         console.log(data);       
-        window.alert(data.massage);
+        window.alert(data.message);
       },
 			onError: (err) => {
 				console.log(err)
-        window.alert(err.massage);
+        window.alert(err.message);
 			}
     }
   )
+
+  // input 에 값이 있을 경우 확인 버튼 활성화
+  const checkInputCount = () => {
+    if (CodeCheckRef.current.value.length > 0){
+			setActive(true);
+		} else {
+      setActive(false);
+    }
+  }
 
   return (
     <PwdContainer>
@@ -81,9 +92,15 @@ const ReissuePwd = () => {
           <input type="text" ref={emailCheckRef} placeholder='이메일'/>
           <button onClick={ClickResetPwdCode}>인증요청</button>
         </PwdEmailBox>
-        <PwdCodeBox>
-          <input type="text" ref={CodeCheckRef} placeholder='인증코드를 입력해주세요.'/>
-        <button onClick={ClicksendNewPwd}>확인</button>  
+        <PwdCodeBox isActive={active}>
+          <input 
+          type="text" 
+          ref={CodeCheckRef}
+          onChange={checkInputCount}
+          placeholder='인증코드를 입력해주세요.'/>
+          <button         
+          onClick={clickSendNewPwd}
+          >확인</button>  
         </PwdCodeBox>
       </PwdCheckEmail>
       <PwdBtn>새 비밀번호 받기</PwdBtn>
@@ -114,6 +131,9 @@ const PwdCheckId = styled.div`
     border: 1px solid #B7B7B7;
     border-radius: 10px;
     padding: 14px;
+    &:focus {
+		  outline: 1px solid #9152FF;
+	  }
   }
 `
 
@@ -130,6 +150,9 @@ const PwdEmailBox = styled.div`
     border: 1px solid #B7B7B7;
     border-radius: 10px;
     padding: 14px;
+    &:focus {
+		  outline: 1px solid #9152FF;
+	  }
   }
   button {
     width: 84px;
@@ -149,6 +172,9 @@ const PwdCodeBox = styled.div`
     border: 1px solid #B7B7B7;
     border-radius: 10px;
     padding: 14px;
+    &:focus {
+		  outline: 1px solid #9152FF;
+	  }
   }
   button {
     width: 84px;
@@ -159,6 +185,18 @@ const PwdCodeBox = styled.div`
     color: #8B8B8B;
     margin-left:8px;
     cursor: pointer;
+    ${(props) =>
+      props.isActive ? 
+      css`
+        background-color: #9152ff;
+				color: #ffffff;
+      `:
+      css`
+        background-color: #f6f5fb;
+        color: #9152ff;
+      `
+    }
+ 
   }
 `
 const PwdBtn = styled.button`
