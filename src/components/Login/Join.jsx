@@ -54,6 +54,9 @@ const JoinEmailBox = styled.div`
     border: 1px solid #B7B7B7;
     border-radius: 10px;
     padding: 14px;
+    &:focus {
+		  outline: 1px solid #9152FF;
+	  }
   }
   button {
     width: 84px;
@@ -73,6 +76,9 @@ const JoinCodeBox = styled.div`
     border: 1px solid #B7B7B7;
     border-radius: 10px;
     padding: 14px;
+    &:focus {
+		  outline: 1px solid #9152FF;
+	  }
   }
   button {
     width: 84px;
@@ -98,6 +104,9 @@ const CreateBox = styled.div`
     border-radius: 10px;
     padding: 14px;
     margin-bottom:12px;
+    &:focus {
+		  outline: 1px solid #9152FF;
+	  }
   }
 `;
 const JoinBtn = styled.button`

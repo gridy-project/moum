@@ -9,6 +9,7 @@ import { isLogin } from 'state/common/user';
 import { setToken } from 'shared/localStorage';
 
 import google from 'assets/images/pages/login/google.png';
+import googlelogo from "assets/images/pages/login/google_logo.png";
 
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;
@@ -52,32 +53,36 @@ function SocialLoginButton () {
   });
 
   return (
-    <GoogleLogin onClick={() => googleLogin()}><img src={google} alt="google"></img>구글 계정으로 로그인</GoogleLogin>
+    <GoogleLogin 
+    onClick={() => googleLogin()}>
+      <img src={googlelogo} alt="google">
+      </img>
+      <p>
+      구글 계정으로 시작하기
+      </p>
+    </GoogleLogin>
   );
 }
 
 const GoogleLogin = styled.div`
-  margin-top: 60px;
-  width: 100%;
-  height: 60px;
-  background-color: #909090;
-  color: #FFFFFF;
-  font-size: 22px;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
+  width: 360px;
+  height: 44px;
+  background: #F8F8F8;
+  border: 1px solid #E9E9E9;
+  border-radius: 50px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   position: relative;
   cursor: pointer;
-  transition: background-color .3s;
-
-  &:hover {
-    background-color: #666666;
-  }
-
   img {
-    position: absolute;
-    left: 25px;
+    width: 16px;
+    height: 16px;
+  }
+  p {
+    margin-left:10px;
+  }
+  &:hover {
+    background: #E9E9E9;
   }
 `;
