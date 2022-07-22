@@ -3,9 +3,9 @@ import React, { useState, useRef } from 'react';
 // React Query
 import { useMutation } from "react-query";
 // axios
-import { instance } from "shared/axios"
+import { instance }  from "shared/axios"
 // css
-import styled, {css} from "styled-components";
+import styled, { css } from "styled-components";
 
 const ReissuePwd = () => {
   const idCheckRef = useRef();
@@ -16,6 +16,7 @@ const ReissuePwd = () => {
 
   // 비밀번호 재설정 인증 메일 발송
   const ClickResetPwdCode = () => {
+   
      const data = {
       username : idCheckRef.current.value,
       email : emailCheckRef.current.value
@@ -31,7 +32,6 @@ const ReissuePwd = () => {
     {
       onSuccess: (data) => {
         console.log(data);
-        window.alert(data.message);
       },
 			onError: (err) => {
 				console.log(err)
@@ -43,6 +43,30 @@ const ReissuePwd = () => {
 			}
     }
   )
+
+ // 인증번호 확인
+  const clickEmailCheck = () => {
+     const data = {
+      email : emailCheckRef.current.value,
+      certification : CodeCheckRef.current.value
+    }
+    EmailCheck(data);
+  }
+
+  const { mutate: EmailCheck} = useMutation(
+    async (data) => {
+      const response = await instance.post("/email/check", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log(data);       
+      },
+			onError: (err) => {
+				console.log(err)
+			}
+    }
+  ) 
 
   // 임시 비밀번호 발급
     const clickSendNewPwd = () => {
@@ -61,11 +85,9 @@ const ReissuePwd = () => {
     {
       onSuccess: (data) => {
         console.log(data);       
-        window.alert(data.message);
       },
 			onError: (err) => {
 				console.log(err)
-        window.alert(err.message);
 			}
     }
   )
@@ -99,11 +121,11 @@ const ReissuePwd = () => {
           onChange={checkInputCount}
           placeholder='인증코드를 입력해주세요.'/>
           <button         
-          onClick={clickSendNewPwd}
+          onClick={clickEmailCheck}
           >확인</button>  
         </PwdCodeBox>
       </PwdCheckEmail>
-      <PwdBtn>새 비밀번호 받기</PwdBtn>
+      <PwdBtn onClick={clickSendNewPwd}>새 비밀번호 받기</PwdBtn>
     </PwdContainer>
   )
  }
@@ -196,7 +218,6 @@ const PwdCodeBox = styled.div`
         color: #9152ff;
       `
     }
- 
   }
 `
 const PwdBtn = styled.button`
