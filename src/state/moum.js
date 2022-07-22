@@ -17,7 +17,7 @@ export const moumCategories = atom({
 
 export const moumSort = atom({
   key: "page/Moum/sort",
-  default: "사용자 지정순"
+  default: "최신 조각순"
 });
 
 export const moumSearch = atom({

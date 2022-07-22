@@ -2,15 +2,15 @@ import styled from "styled-components";
 import {useRecoilValue} from "recoil";
 import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
 import useCustomQuery from "hooks/useCustomQuery";
-import MoumSortablePieceTypeLinkCard from "../Card/MoumSortablePieceTypeLinkCard";
-import MoumSortablePieceTypeMemoCard from "../Card/MoumSortablePieceTypeMemoCard";
 import SortableList from 'react-easy-sort';
 import arrayMove from 'array-move';
 import { useState } from "react";
 import { useEffect } from "react";
 import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum";
-import MoumPieceTypeLinkCard from "../Card/MoumPieceTypeLinkCard";
-import MoumPieceTypeMemoCard from "../Card/MoumPieceTypeMemoCard";
+import PieceLinkCard from "components/Card/PieceLinkCard";
+import PieceMemoCard from "components/Card/PieceMemoCard";
+import PieceCard from "components/Card/PieceCard";
+import MoumPieceCard from "../Card/MoumPieceCard";
 
 function PieceList ({selectAll, search}) {
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
@@ -47,9 +47,7 @@ function PieceList ({selectAll, search}) {
         <div className="list">
           {
             sortablePieceList.map(
-              (piece) => piece.boardType === "LINK" ? 
-                <MoumPieceTypeLinkCard key={piece.id} piece={piece} selectAll={selectAll} /> : 
-                <MoumPieceTypeMemoCard key={piece.id} piece={piece} selectAll={selectAll} />
+              (piece) => <MoumPieceCard key={piece.id} piece={piece} selectAll={selectAll} />
             )
           }
         </div>
@@ -59,9 +57,7 @@ function PieceList ({selectAll, search}) {
         <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
           {
             sortablePieceList.map(
-              (piece) => piece.boardType === "LINK" ? 
-                <MoumSortablePieceTypeLinkCard key={piece.id} piece={piece} selectAll={selectAll} /> : 
-                <MoumSortablePieceTypeMemoCard key={piece.id} piece={piece} selectAll={selectAll} />
+              (piece) => <MoumPieceCard key={piece.id} piece={piece} selectAll={selectAll} sortable />
             )
           }
         </SortableList>

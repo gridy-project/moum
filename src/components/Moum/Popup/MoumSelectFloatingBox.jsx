@@ -13,8 +13,11 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
   const selectedItemList = useRecoilValue(selectedItems);
   const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
 
-  const mutatePieceRemove = useCustomMutate(async ({folderId, list}) => await removePieceMultiAxios(folderId, list), () => {
-    queryClient.invalidateQueries("mine/pieces")
+  // Backend Required Test => File Delete Request Error
+  const mutatePieceRemove = useCustomMutate(({folderId, list}) => removePieceMultiAxios(folderId, list), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("mine/pieces")
+    }
   });
 
   const removeFolders = (e) => {

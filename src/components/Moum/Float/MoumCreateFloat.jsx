@@ -1,62 +1,45 @@
 import styled from "styled-components";
 import fastCreateOptionModify from "assets/images/pages/moum/fast-create-option-modify.png";
 import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-arrow.png";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { floatState } from "state/common/popup";
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { pageMoumSelectedFolderId } from "state/moum";
 import LinkDetailPopup from "../Popup/LinkDetailPopup";
-import {modalOverlay, modalContent} from "shared/modal";
-
-import Modal from "react-modal";
 import { useState } from "react";
 import MemoDetailPopup from "../Popup/MemoDetailPopup";
-
-const createModalContent = {
-  ...modalContent,
-  width: "630px",
-  height: "530px",
-  overflow: "hidden",
-  borderRadius: "30px"
-};
-
-Modal.setAppElement("#root");
+import { globalFloat, globalPopup } from "state/common/popup";
 
 function MoumCreateFloat ({piece, moums}) {
-  const [modalState, setModalState] = useState(false);
-  const setFloatState = useSetRecoilState(floatState);
-
-  const openModal = () => {
-    setModalState(true);
-  }
+  const setPopup = useSetRecoilState(globalPopup);
+  const resetPopup = useResetRecoilState(globalPopup);
+  const setFloat = useSetRecoilState(globalFloat);
 
   const closeModal = () => {
-    setModalState(false);
+    resetPopup();
+  }
+
+  const openModal = () => {
+    if (piece.boardType === "LINK") {
+      setPopup({
+        state: true,
+        component: <LinkDetailPopup piece={piece} close={closeModal} />
+      });
+    } else if (piece.boardType === "MEMO") {
+      setPopup({
+        state: true,
+        component: <MemoDetailPopup piece={piece} close={closeModal} />
+      });
+    }
   }
 
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
 
   const runModifyPopup = (e) => {
     openModal();
-    setFloatState(false);
+    setFloat(current => ({...current, state: false}));
   }
 
   return (
     <Wrap>
-      <Modal
-        isOpen={modalState}
-        onRequestClose={closeModal}
-        style={{
-          overlay: modalOverlay,
-          content: createModalContent
-        }}
-      >
-        {
-        piece.boardType === "LINK" ?
-          <LinkDetailPopup piece={piece} close={closeModal} />
-          :
-          <MemoDetailPopup piece={piece} close={closeModal} />
-        }
-      </Modal>
       <img src={fastCreateOptionModify} alt="modify" />
       <div className="desc">
         <em>{(folderId === 0 || moums === undefined) ? "무제" : moums.filter((v) => v.id === folderId)[0]?.name}</em>

@@ -5,8 +5,6 @@ import checkIcon from "assets/images/pages/moum/popup/check.png";
 import noImage from "assets/images/pages/moum/popup/no-image.png";
 import pcIcon from "assets/images/pages/moum/popup/pc_icon.png"
 import addImage from "assets/images/pages/moum/popup/add-image.png"
-import { useMutation } from "react-query";
-import { instance } from "shared/axios";
 import { apiCommon } from "utils/api/common";
 import useCustomMutate from "hooks/useCustomMutate";
 
@@ -17,7 +15,7 @@ function PopupImageChange ({finish, close, getter, setter}) {
     file: useRef(null)
   }
 
-  const {mutateAsync: upload} = useCustomMutate(async (data) => await apiCommon.uploadImage(data));
+  const {mutateAsync: upload} = useCustomMutate((data) => apiCommon.uploadImage(data));
 
   const popupFinish = async () => {
     if (imageType === 0) {
@@ -27,13 +25,14 @@ function PopupImageChange ({finish, close, getter, setter}) {
       return;
     } else if (imageType === 2) {
       const formData = new FormData();
-      formData.append("boardImage", ref.file.current.files[0]);
-      const {result, data} = await upload(formData);
+      formData.append("image", ref.file.current.files[0]);
+      const {result, data, error} = await upload(formData);
       if (result) {
         alert("파일 업로드 성공");
         finish(data.url);
       } else {
         alert("파일 업로드 실패");
+        console.log(error);
       }
     }
   }

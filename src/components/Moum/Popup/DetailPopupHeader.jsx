@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import detailAdd from "assets/images/pages/moum/popup/detail-add-logo.png";
 
-function DetailPopupHeader ({pageNum, menu}) {
+function DetailPopupHeader ({setPageNum, pageNum, menu}) {
   return (
     <PopHeaderView>
       <PopHeaderTitle>
@@ -11,7 +11,11 @@ function DetailPopupHeader ({pageNum, menu}) {
       <PopHeaderNavigation>
         <NavigationList>
           {menu.map((v, i) => {
-            return <NavigationItem key={i} isActive={i === pageNum}>{v}</NavigationItem>
+            return <NavigationItem onClick={
+              () => {
+                setPageNum(i)
+              }
+            } key={i} isActive={i === pageNum}>{v}</NavigationItem>
           })}
         </NavigationList>
       </PopHeaderNavigation>
@@ -69,6 +73,7 @@ const NavigationItem = styled.li`
   position: relative;
   color: #777777;
   top: 2px;
+  cursor: pointer;
 
   ${props => props.isActive && css`
     color: #721EFC;

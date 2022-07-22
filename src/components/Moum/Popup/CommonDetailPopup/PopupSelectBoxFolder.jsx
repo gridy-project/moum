@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import folderIcon from "assets/images/pages/moum/popup/folder-icon.png";
 import folderIconGrey from "assets/images/pages/moum/popup/folder-icon-grey.png";
 import arrowDown from "assets/images/pages/moum/popup/arrow_down.png";
 
-function PopupSelectBoxFolder ({ items, setter, getter }) {
-  const [selectedItem, setSelectedItem] = useState(0);
+function PopupSelectBoxFolder ({ items, setter, getter, initFolderId }) {
+  console.log(items);
+  console.log(initFolderId);
+  const folderIdx = items.findIndex((v) => v.id === initFolderId);
+
+  const [selectedItem, setSelectedItem] = useState(folderIdx);
   const [isActive, setActive] = useState(false);
 
   useEffect(() => {
-    setter(current => ({...current, folderId: items[0].id}));
+    setter(current => ({...current, folderId: items[folderIdx].id}));
   }, [setter]);
 
   return (

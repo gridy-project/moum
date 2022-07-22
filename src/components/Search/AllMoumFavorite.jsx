@@ -1,22 +1,19 @@
 import styled from "styled-components";
 import { instance } from "shared/axios";
 import useCustomQuery from "hooks/useCustomQuery";
-import MoumCard from "./MoumCard";
+import SearchMoumCard from "./Card/SearchMoumCard";
 
 function AllMoumFavorite () {
-  const {data: bestMoum, isLoading: bestMoumLoading} = useCustomQuery("search/bestMoum", async () => {
-    const response = await instance.get("/BestFolders/0/10");
-    return response.data;
-  });
+  const {data: bestMoum, isLoading: bestMoumLoading} = useCustomQuery("search/best", 
+  async () => await instance.get("/BestFolders/0/10"));
   return (
     <Favorite>
-      <div></div>
       <em>스크랩 많은 인기 모음</em>
       <FavoriteList>
         {
           bestMoumLoading ? <div>isLoading</div> :
-          bestMoum?.content?.map((moum) => {
-            return <MoumCard key={moum.id} moum={moum}/>
+          bestMoum.data?.content?.map((moum) => {
+            return <SearchMoumCard key={moum.id} moum={moum}/>
           })
         }
       </FavoriteList>

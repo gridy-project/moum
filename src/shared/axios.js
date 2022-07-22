@@ -22,7 +22,16 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (config) => {
-    return { result: true, data: config.data, response: config };
+    if (config.data?.statusCode) {
+      console.log(config.data);
+      if (config.data?.statusCode === 200) {
+        return { result: true, status: config.data.statusCode, message: config.data.massage, data: config.data.content }
+      } else {
+        return { result: false, status: config.data.statusCode, message: config.data.massage }
+      }
+    } else {
+      return { result: true, data: config.data, response: config };
+    }
   },
   async (error) => {
     const {

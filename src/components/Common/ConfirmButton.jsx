@@ -5,9 +5,9 @@ function ConfirmButton ({text, isActive, onClick, optionStyle}) {
   return (
     <Button
       text={text ?? "확인"}
-      btnStyle={createBtnStyle + optionStyle}
-      btnHoverStyle={createBtnHoverStyle}
-      btnActiveStyle={createBtnActiveStyle}
+      defaultStyle={createBtnStyle + optionStyle}
+      hoverStyle={createBtnHoverStyle}
+      activeStyle={createBtnActiveStyle}
       isActive={isActive}
       onClick={onClick}
     />

@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { instance } from "shared/axios";
 import { pageMoumSelectedFolderId } from "../../state/moum";
-import { floatState, globalFloat } from "state/common/popup";
+import { globalFloat } from "state/common/popup";
 
 // custom hook
 import useHandleChange from "../../hooks/useHandleChange";
@@ -18,7 +18,6 @@ import useCustomMutate from "hooks/useCustomMutate";
 import MoumCreateFloat from "./Float/MoumCreateFloat";
 
 function MoumTitleCreateForm ({moums}) {
-  const setFloatState = useSetRecoilState(floatState);
   const setFloat = useSetRecoilState(globalFloat);
   const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {input, setInput, handleChange} = useHandleChange({
@@ -67,8 +66,10 @@ function MoumTitleCreateForm ({moums}) {
       } else {
         queryClient.invalidateQueries("mine/pieces");
       }
-      setFloatState(true);
-      setFloat(<MoumCreateFloat piece={data} moums={moums} />)
+      setFloat({
+        state: true,
+        component: <MoumCreateFloat piece={data} moums={moums} />
+      })
     } else {
       alert("파일 추가 실패");
     }

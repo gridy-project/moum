@@ -3,7 +3,6 @@ import MoumAddCard from "../Card/MoumAddCard";
 import SortableList from 'react-easy-sort'
 import arrayMove from 'array-move';
 import { useEffect, useState } from "react";
-import MoumSortableFolderCard from "../Card/MoumSortableFolderCard";
 import MoumFolderCard from "../Card/MoumFolderCard";
 import { useRecoilValue } from "recoil";
 import { moumSort } from "state/moum";
@@ -43,7 +42,7 @@ function MoumList ({moums}) {
         <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
           <MoumAddCard />
           {sortableMoumList?.map((item, i) => (
-            <MoumSortableFolderCard key={item.id} moum={item} />
+            <MoumFolderCard key={item.id} moum={item} sortable />
           ))}
         </SortableList>
       )}

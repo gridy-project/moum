@@ -29,12 +29,8 @@ function MoumAddPopup ({close}) {
   });
 
   const submitAddFolder = async (e) => {
+    console.log("enter");
     e.preventDefault();
-
-    if (input.share === "NONE") {
-      alert("공유 설정이 필요합니다");
-      return;
-    }
     
     const moum = {
       name: input.name,
@@ -52,7 +48,7 @@ function MoumAddPopup ({close}) {
   return (
     <Box>
       <PopupTopView image={moumAdd} title={"모음 만들기"} />
-      <Form onSubmit={submitAddFolder}>
+      <Form>
         <div className="moum-name">
           <label htmlFor="name">모음 이름</label>
           <input type="text" id="name" onChange={handleChange("name")} value={input.name} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
@@ -65,12 +61,17 @@ function MoumAddPopup ({close}) {
           />
         </div>
         <div className="btn-group">
-          <CancelButton optionStyle={
-            css`
-              margin-right: 10px;
-            `
-          } />
-          <ConfirmButton text={"만들기"} isActive />
+          <CancelButton
+            optionStyle={
+              css`
+                margin-right: 10px;
+              `
+            }
+            onClick={close}
+          />
+          <ConfirmButton text={"만들기"} isActive
+            onClick={submitAddFolder}
+          />
         </div>
       </Form>
     </Box>
@@ -79,14 +80,17 @@ function MoumAddPopup ({close}) {
 
 const Box = styled.div`
   padding: 24px;
-  width: 100%;
-  height: 100%;
+  width: 440px;
+  height: 330px;
+  overflow: hidden;
+  border-radius: 30px;
   position: relative;
   display: flex;
   flex-direction: column;
+  background-color: #FFFFFF;
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
