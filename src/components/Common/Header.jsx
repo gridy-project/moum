@@ -5,7 +5,6 @@ import { useRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import { useEffect, useState } from "react";
 
-
 function Header({selected}) {
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
@@ -53,7 +52,7 @@ function Header({selected}) {
                 navigate("/");
               }}>로그아웃</button>
             ) : (
-              <button onClick={() => { navigate("/login") }}>로그인</button>
+              <button onClick={() => { navigate("/newlogin") }}>로그인</button>
             )
           }
         </Menu>

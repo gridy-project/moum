@@ -101,7 +101,6 @@ const CreateProfile = () => {
     }
   )
 
-// 이미지 호스팅 사이트 
   return (
     <Container>
       <ProfileTitle>
