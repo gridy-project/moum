@@ -10,11 +10,11 @@ import styled, { css } from "styled-components";
 const ReissuePwd = () => {
   const idCheckRef = useRef();
   const emailCheckRef = useRef();
-  const CodeCheckRef = useRef();
+  const codeCheckRef = useRef();
 
   const [active, setActive] = useState(false);
 
-  // 비밀번호 재설정 인증 메일 발송
+  // 비밀번호 발급을 위한 인증 메일 발송
   const ClickResetPwdCode = () => {
    
      const data = {
@@ -44,18 +44,18 @@ const ReissuePwd = () => {
     }
   )
 
- // 인증번호 확인
+ // 비밀번호 발급을 위한 인증번호 확인
   const clickEmailCheck = () => {
      const data = {
       email : emailCheckRef.current.value,
-      certification : CodeCheckRef.current.value
+      certification : codeCheckRef.current.value
     }
     EmailCheck(data);
   }
 
   const { mutate: EmailCheck} = useMutation(
     async (data) => {
-      const response = await instance.post("/email/check", data);
+      const response = await instance.post("/email/password/check", data);
       return response.data;
     },
     {
@@ -72,8 +72,8 @@ const ReissuePwd = () => {
     const clickSendNewPwd = () => {
      const data = {
       email : emailCheckRef.current.value,
-      certification : CodeCheckRef.current.value
     }
+    console.log(data)
     sendNewPwd(data);
   }
 
@@ -94,7 +94,7 @@ const ReissuePwd = () => {
 
   // input 에 값이 있을 경우 확인 버튼 활성화
   const checkInputCount = () => {
-    if (CodeCheckRef.current.value.length > 0){
+    if (codeCheckRef.current.value.length > 0){
 			setActive(true);
 		} else {
       setActive(false);
@@ -117,7 +117,7 @@ const ReissuePwd = () => {
         <PwdCodeBox isActive={active}>
           <input 
           type="text" 
-          ref={CodeCheckRef}
+          ref={codeCheckRef}
           onChange={checkInputCount}
           placeholder='인증코드를 입력해주세요.'/>
           <button         
@@ -146,6 +146,7 @@ const PwdCheckId = styled.div`
     font-size:17px;
     color:#303030;
     margin-bottom:18px;
+    font-weight:500;
   }
   input {
     width: 360px;
@@ -161,6 +162,9 @@ const PwdCheckId = styled.div`
 
 const PwdCheckEmail = styled.div`
   margin-top:40px;
+  p {
+    font-weight:500;
+  }
 `;
 
 const PwdEmailBox = styled.div`

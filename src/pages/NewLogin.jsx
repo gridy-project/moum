@@ -11,7 +11,8 @@ import Header from "components/Common/Header";
 import StartLogin from 'components/Login/StartLogin';
 import SearchId from 'components/Login/Id/SearchId';
 import ReissuePwd from 'components/Login/ReissuePwd';
-import Join from 'components/Login/Join';
+import Join from 'components/Login/SignUp/Join';
+import CreateProfile from 'components/Login/SignUp/CreateProfile';
 
 const NewLogin = () => {
   const [numberState, setNumberState] = useRecoilState(numberLoginState)
@@ -27,6 +28,9 @@ const NewLogin = () => {
   }
   const runJoinPage = () => {
     setNumberState(3)
+  }
+  const runCreateProfilePage = () => {
+    setNumberState(4)
   }
 
   return (
@@ -44,7 +48,10 @@ const NewLogin = () => {
             />}
             {numberState === 1 && <ReissuePwd />}
             {numberState === 2 && <SearchId/>}
-            {numberState === 3 && <Join />}
+            {numberState === 3 && <Join 
+              runProfile={runCreateProfilePage}
+            />}
+            {numberState === 4 && <CreateProfile />}
           </Content>
         </ChangeContainer>
       </Box>

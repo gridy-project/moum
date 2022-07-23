@@ -8,7 +8,6 @@ import styled from "styled-components";
 
 const SuccessFindId = () => {
   const [viewId, setViewID] = useRecoilState(viewAccountState)
-  console.log(viewId)
   const [numberState, setNumberState] = useRecoilState(numberLoginState)
 
   const goToLogin = () => {
