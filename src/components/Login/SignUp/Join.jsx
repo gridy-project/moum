@@ -102,10 +102,11 @@ const Join = (props) => {
     {
       onSuccess: (data) => {
         if (data === true){
-          window.alert("사용 가능한 아이디입니다.")
+          // window.alert("사용 가능한 아이디입니다.")
           // props.runProfile();
         } else if (data === false){ 
           window.alert("중복된 아이디입니다.")
+          return;
         }       
       },
 			onError: (err) => {
@@ -129,6 +130,53 @@ const Join = (props) => {
      
   }
 
+// input 값이 다 채워져야 버튼 활성화
+const [filled, setFilled] = useState(false)
+
+// 글자 수 세기
+const [emailLen, setEmailLen] = useState(false);
+const [codeLen, setCodeLen] = useState(false);
+const [idLen, setIdLen] = useState(false);
+const [PwdLen, setPwdLen] = useState(false); 
+const [rePwdLen, setRePwdLen] = useState(false);
+
+const filledEmail = (e)=> {
+  		if (ref.email.current.value.length > 0){
+			setEmailLen(true)
+		} else {
+      setEmailLen(false)
+		}
+}
+const filledCode = (e)=> {
+  		if (ref.certification.current.value.length > 0){
+			setCodeLen(true)
+		} else {
+			setCodeLen(false)
+		}
+}
+const filledId = (e)=> {
+  		if (ref.username.current.value.length > 0){
+			setIdLen(true)
+		} else {
+			setIdLen(false)
+		}
+}
+const filledPwd = (e) => {
+  		if (ref.password.current.value.length > 0){
+			setPwdLen(true)
+		} else {
+			setPwdLen(false)
+		}
+}
+const filledRePwd = (e)=> {
+  		if (ref.passwordConfirm.current.value.length > 0){
+			setRePwdLen(true)
+		} else {
+			setRePwdLen(false)
+		}
+}
+
+
   return (
     <JoinContainer>
       <JoinTitle>회원가입</JoinTitle>
@@ -140,14 +188,24 @@ const Join = (props) => {
             ref={ref.email} 
             placeholder='이메일' 
             autoComplete="email"
-            onChange={(e)=> {setJoinEmailState(e.target.value)}}
+            required
+            onChange={(e)=> {
+              setJoinEmailState(e.target.value);
+              filledEmail();
+            }     
+            }
             />
             <button onClick={CheckEmailRegister}>인증요청</button>
           </JoinEmailBox>
           <JoinCodeBox isActive={active}>
             <input 
-            type="text"         
-            onChange={checkInputCount}
+            type="text"  
+            required       
+            onChange={() => {
+              checkInputCount();
+              filledCode();
+              }
+            }
             placeholder='인증코드를 입력해주세요.'
             ref={ref.certification}  />
             <button 
@@ -161,21 +219,39 @@ const Join = (props) => {
           type="text" 
           ref={ref.username} 
           placeholder='아이디'
-          onChange={(e)=> {setJoinIdState(e.target.value)}}
+          required
+          onChange={(e)=> {
+            setJoinIdState(e.target.value)
+            filledId();
+          }
+            
+          }
           />
           <input 
           type="password" 
           ref={ref.password} 
           autoComplete="password" 
+          required
           placeholder='비밀번호 (숫자, 영문자 포함 4자 이상)'
-          onChange={(e)=> {setJoinPwdState(e.target.value)}}
+          onChange={(e)=> {
+            setJoinPwdState(e.target.value)
+            filledPwd();
+          }
+
+          }
           />
-          <input type="password" ref={ref.passwordConfirm} autoComplete="new-password" placeholder='비밀번호 확인' />
+          <input type="password" ref={ref.passwordConfirm} autoComplete="new-password" placeholder='비밀번호 확인'
+          onChange={filledRePwd}
+          required
+          />
         </CreateBox>
-        <JoinBtn type="button" onClick={() => {
-          // clickIdCheck();   
-          // clickPwdCheck();
-          // props.runProfile();
+        <JoinBtn 
+        type="button" 
+        disabled={!(emailLen && codeLen && idLen && PwdLen && rePwdLen)}
+        onClick={() => {
+          clickIdCheck();   
+          clickPwdCheck();
+          props.runProfile();
         }}>다음</JoinBtn>
     </JoinContainer>
   )
@@ -240,17 +316,17 @@ const JoinCodeBox = styled.div`
     border-radius: 10px;
     border:none;
     color: #8B8B8B;
-    margin-left:8px;
-    cursor: pointer;
+    margin-left:8px; 
     ${(props) =>
       props.isActive ? 
       css`
         background-color: #9152ff;
 				color: #ffffff;
+        cursor: pointer;
       `:
       css`
         background-color: #f6f5fb;
-        color: #9152ff;
+        color: #9152ff;     
       `
     }
   }
@@ -276,13 +352,21 @@ const CreateBox = styled.div`
 const JoinBtn = styled.button`
   width: 360px;
   height: 44px;
-  background: #9E67FF;
   border-radius: 50px;
-  color:#fff;
   border:none;
   margin-top:16px;
-  cursor: pointer;
+      ${(props) =>
+      props.disabled ? 
+      css`
+        background-color: #f6f5fb;
+        color: #9152ff;
+      `:
+      css`
+        background-color: #9152ff;
+				color: #ffffff;
+        cursor: pointer;
+      `
+    }
 `
-// profile
 
 export default Join;
