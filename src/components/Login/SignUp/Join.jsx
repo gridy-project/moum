@@ -96,18 +96,17 @@ const Join = (props) => {
 
   const { mutate: IdCheckJoin} = useMutation(
     async (username) => {
-      const response = await instance.get(`/user/emailDupCheck/test`);
+      const response = await instance.get(`/user/emailDupCheck/${username}`);
       return response.data;
     },
     {
       onSuccess: (data) => {
-        console.log(data);
-        // if (data === true){
-        //   window.alert("사용 가능한 아이디입니다.")
-        //   // props.runProfile();
-        // } else if (data === false){ 
-        //   window.alert("중복된 아이디입니다.")
-        // }       
+        if (data === true){
+          window.alert("사용 가능한 아이디입니다.")
+          // props.runProfile();
+        } else if (data === false){ 
+          window.alert("중복된 아이디입니다.")
+        }       
       },
 			onError: (err) => {
 				console.log(err)
@@ -174,7 +173,7 @@ const Join = (props) => {
           <input type="password" ref={ref.passwordConfirm} autoComplete="new-password" placeholder='비밀번호 확인' />
         </CreateBox>
         <JoinBtn type="button" onClick={() => {
-          clickIdCheck();   
+          // clickIdCheck();   
           // clickPwdCheck();
           // props.runProfile();
         }}>다음</JoinBtn>

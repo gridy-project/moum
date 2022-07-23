@@ -25,7 +25,7 @@ const ChangeEmail = () => {
   return (
     <EmailArticle>
       <EmailTitle>계정 이메일</EmailTitle>
-      <Email>{data?.email}</Email>
+      <Email>{data?.username}</Email>
 		</EmailArticle>
   );
 };
