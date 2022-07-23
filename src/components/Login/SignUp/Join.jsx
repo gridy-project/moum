@@ -1,18 +1,16 @@
 // React
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 // React Query
 import { useMutation } from "react-query";
-import useCustomMutate from "hooks/useCustomMutate";
+// Recoil
+import { useRecoilState } from "recoil";
+import { JoinIdState, JoinNicknameState, JoinPasswordState, JoinEmailState, JoinImgPathState } from 'state/login';
 // axios
 import { instance }  from "shared/axios"
-// import { executeCheckEmailAxios, executeCheckNickAxios, executeSignUpAxios } from "utils/api/auth";
 // css
 import styled, { css }  from "styled-components";
 
-const Join = () => {
-  // const navigate = useNavigate();
-
+const Join = (props) => {
   const [active, setActive] = useState(false);
   
   const ref = {
@@ -23,6 +21,12 @@ const Join = () => {
     email: useRef(),
     certification: useRef()
   }
+
+  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState)
+  const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState)
+  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState)
+  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState)
+  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState)
 
   // 회원가입 이메일인증 메일전송
   const CheckEmailRegister = () => {
@@ -87,17 +91,23 @@ const Join = () => {
 
   // 아이디 중복 확인
   const clickIdCheck = () => {
-    IdCheckJoin();
+    IdCheckJoin(ref.username.current.value);
   }
 
   const { mutate: IdCheckJoin} = useMutation(
-    async () => {
-      const response = await instance.get("/user/emailDupCheck/{username}");
+    async (username) => {
+      const response = await instance.get(`/user/emailDupCheck/test`);
       return response.data;
     },
     {
       onSuccess: (data) => {
-        console.log(data);       
+        console.log(data);
+        // if (data === true){
+        //   window.alert("사용 가능한 아이디입니다.")
+        //   // props.runProfile();
+        // } else if (data === false){ 
+        //   window.alert("중복된 아이디입니다.")
+        // }       
       },
 			onError: (err) => {
 				console.log(err)
@@ -110,37 +120,15 @@ const Join = () => {
     const password = ref.password.current.value;
     const passwordConfirm = ref.passwordConfirm.current.value;
 
-     if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
+     if ( password !== passwordConfirm ) {
+        window.alert("비밀번호가 일치하지 않습니다.");
+        return            
+     } else if (password === passwordConfirm) {
+        // props.runProfile();
+     }
+      return false;
+     
   }
-
-  // 회원가입
-   const clickSignUp = () => {
-    const data = {
-      username: ref.username.current.value,
-      nickname: ref.username.current.value,
-      password: ref.password.current.value,
-      email : ref.email.current.value
-    }
-    signUp(data);
-  }
-
-  const { mutate: signUp} = useMutation(
-    async (data) => {
-      const response = await instance.post("/user/signup", data);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        console.log(data);       
-      },
-			onError: (err) => {
-				console.log(err)
-			}
-    }
-  ) 
 
   return (
     <JoinContainer>
@@ -148,7 +136,13 @@ const Join = () => {
         <JoinCheckBox>
           <p>이메일로 본인 확인</p>
           <JoinEmailBox>
-            <input type="text" ref={ref.email} placeholder='이메일' autoComplete="email"/>
+            <input 
+            type="text" 
+            ref={ref.email} 
+            placeholder='이메일' 
+            autoComplete="email"
+            onChange={(e)=> {setJoinEmailState(e.target.value)}}
+            />
             <button onClick={CheckEmailRegister}>인증요청</button>
           </JoinEmailBox>
           <JoinCodeBox isActive={active}>
@@ -164,19 +158,31 @@ const Join = () => {
         </JoinCheckBox>
         <CreateBox>
           <p>계정 만들기</p>
-          <input type="text" ref={ref.username} placeholder='아이디' />
-          <input type="password" ref={ref.password} autoComplete="password" placeholder='비밀번호 (숫자, 영문자 포함 4자 이상)' />
+          <input 
+          type="text" 
+          ref={ref.username} 
+          placeholder='아이디'
+          onChange={(e)=> {setJoinIdState(e.target.value)}}
+          />
+          <input 
+          type="password" 
+          ref={ref.password} 
+          autoComplete="password" 
+          placeholder='비밀번호 (숫자, 영문자 포함 4자 이상)'
+          onChange={(e)=> {setJoinPwdState(e.target.value)}}
+          />
           <input type="password" ref={ref.passwordConfirm} autoComplete="new-password" placeholder='비밀번호 확인' />
         </CreateBox>
-        <JoinBtn onClick={() => {
+        <JoinBtn type="button" onClick={() => {
           clickIdCheck();   
-          clickPwdCheck();
-          clickSignUp();
-        }}>회원가입</JoinBtn>
+          // clickPwdCheck();
+          // props.runProfile();
+        }}>다음</JoinBtn>
     </JoinContainer>
   )
  }
 
+ // Join
  const JoinContainer = styled.div`
   position:relative;
   top:-37px;
@@ -278,5 +284,6 @@ const JoinBtn = styled.button`
   margin-top:16px;
   cursor: pointer;
 `
+// profile
 
 export default Join;

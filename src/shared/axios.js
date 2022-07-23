@@ -40,12 +40,13 @@ instance.interceptors.response.use(
       config,
       response: { status },
     } = error;
+
     if (status === 402) { // 토큰이 헤더에 없음 : 402
-      window.location.replace("/");
+      // window.location.replace("/");
     }
     if (status === 406) { // 변질된 토큰 : 406
-      removeToken();
-      window.location.replace("/");
+      // removeToken();
+      // window.location.replace("/");
     }
     const originalRequest = config;
     if (status === 410 && !originalRequest._retry) {
