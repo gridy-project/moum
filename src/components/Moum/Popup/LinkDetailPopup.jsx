@@ -1,51 +1,91 @@
 import useCustomMutate from "hooks/useCustomMutate";
 import useHandleChange from "hooks/useHandleChange";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { instance } from "shared/axios";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import PopupCategorySelect from "./LinkDetailPopup/PopupCategorySelect";
 import PopupContentField from "./LinkDetailPopup/PopupContentField";
 import PopupImageChange from "./LinkDetailPopup/PopupImageChange";
 import DetailPopupHeader from "./DetailPopupHeader";
-import { useRecoilValue } from "recoil";
-import { pageMoumSelectedFolderId } from "state/moum";
+import useCustomQuery from "hooks/useCustomQuery";
+import { useParams } from "react-router-dom";
 
-function LinkDetailPopup ({close, piece}) {
+function LinkDetailPopup ({close, piece, isUpdate}) {
+  const {folderId: viewFolderId = 0} = useParams();
+
   const queryClient = useQueryClient();
   const [menu] = useState(["카테고리 선택", "작성한 내용", "이미지 변경"]);
-  const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const [pageNum, setPageNum] = useState(0);
-  const {input, setInput} = useHandleChange({
-    id: piece.id,
-    folderId: piece.folderId ?? folderId,
-    category: piece.category,
-    link: piece.link,
-    subject: piece.title,
-    content: piece.explanation,
-    image: piece.imgPath,
-    share: false,
-  });
+  const {input, setInput} = useHandleChange({});
+
+  const {isSuccess, data} = useCustomQuery(["detail/piece", piece.id], () => instance.get(`/board/${piece.id}`));
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      const {data: item} = data;
+
+      const imageType = item.imageList.filter(v => v.id === item.imageId)[0].imageType;
+      let imageNum;
+      if (imageType === "og") {
+        imageNum = 0;
+      } else if (imageType === "basic") {
+        imageNum = 1;
+      } else if (imageType === "self") {
+        imageNum = 2;
+      }
+      setInput({
+        id: item.id,
+        subject: item.title,
+        link: item.link,
+        content: item.explanation,
+        image: item.imgPath,
+        share: item.status === "PUBLIC" ? true : false,
+        folderId: item.folderId,
+        category: item.category === "미정" ? "카테고리 없음" : item.category,
+        select: imageNum,
+        imageItems: {
+          og: item.imageList.filter((v) => v.imageType === "og")[0]?.imgPath ?? null,
+          recommend: item.imageList.filter((v) => v.imageType === "basic")[0]?.imgPath ?? null,
+          upload: item.imageList.filter((v) => v.imageType === "self")[0]?.imgPath ?? null
+        }
+      });
+    }
+  }, [isSuccess, data, setInput]);
 
   const pageNext = () => {
     setPageNum(current => current + 1);
   }
 
-  const {mutateAsync: modify} = useCustomMutate(async ({id, data}) => await instance.put(`/board/${id}`, data));
+  const {mutateAsync: modify} = useCustomMutate(({id, data}) => instance.put(`/board/${id}`, data));
 
-  const pageEnd = async (imageUrl) => {
-    // REQUIRED BACKEND CHECK ERROR
-    // 자세히 작성하기에서 이미지 업로드 후 선택 안되는 증상
+  const pageEnd = async (type, uploadUrl) => {
     const id = input.id;
+
+    const oldUrl = input.image;
+    let newUrl;
+    let typeText;
+    if (type === 0) { // OG 이미지
+      newUrl = input.imageItems.og;
+      typeText = "og";
+    } else if (type === 1) { // 추천 이미지
+      // newUrl = input.image
+    } else if (type === 2) { // 내 PC에서 불러오기
+      newUrl = uploadUrl;
+      typeText = "self";
+    }
+
     const data = {
       title: input.subject,
       explanation: input.content,
       link: input.link,
+      imgPath: oldUrl,
       image: {
-        imagePath: imageUrl ?? input.image,
-        imageType: imageUrl ? "self" : "og"
+        imgPath: newUrl,
+        imageType: typeText
       },
-      category: input.category,
+      folderId: input.folderId,
+      category: input.category === "카테고리 없음" ? null : input.category,
       boardType: "LINK",
       status: input.share ? "PUBLIC" : "PRIVATE",
     }
@@ -65,15 +105,36 @@ function LinkDetailPopup ({close, piece}) {
   return (
     <Box>
       <DetailPopupHeader setPageNum={setPageNum} pageNum={pageNum} menu={menu} />
-      {pageNum === 0 && <PopupCategorySelect 
-                          next={pageNext} 
-                          close={close} 
-                          setter={setInput} 
-                          getter={input} 
-                          folderId={piece.folderId ?? folderId} 
-                        />}
-      {pageNum === 1 && <PopupContentField next={pageNext} close={close} setter={setInput} getter={input} />}
-      {pageNum === 2 && <PopupImageChange finish={pageEnd} close={close} setter={setInput} getter={input} />}
+      {
+        isSuccess && input.id && <>
+          {
+            pageNum === 0 && 
+            <PopupCategorySelect 
+              next={pageNext} 
+              close={close} 
+              setter={setInput} 
+              getter={input}
+            />
+          }
+          {
+            pageNum === 1 && 
+            <PopupContentField 
+              next={pageNext} 
+              close={close} 
+              setter={setInput} 
+              getter={input}
+            />
+          }
+          {
+            pageNum === 2 && 
+            <PopupImageChange 
+              finish={pageEnd} 
+              close={close} 
+              setter={setInput} 
+              getter={input} 
+            />}
+        </>
+      }
     </Box>
   );
 }

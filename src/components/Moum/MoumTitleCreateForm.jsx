@@ -16,20 +16,22 @@ import queryClient from "shared/query";
 import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom.png";
 import useCustomMutate from "hooks/useCustomMutate";
 import MoumCreateFloat from "./Float/MoumCreateFloat";
+import { useParams } from "react-router-dom";
 
 function MoumTitleCreateForm ({moums}) {
+  const {folderId: viewFolderId = 0} = useParams();
+
   const setFloat = useSetRecoilState(globalFloat);
-  const folderId = useRecoilValue(pageMoumSelectedFolderId);
   const {input, setInput, handleChange} = useHandleChange({
     type: "LINK",
     content: ""
   });
 
   const {mutateAsync: addPiece} = useCustomMutate(async (data) => {
-    if (folderId === 0) {
+    if (viewFolderId === 0) {
       return await instance.post("/board", data);
     } else {
-      return await instance.put("/folder", {folderId, ...data});
+      return await instance.put("/folder", {folderId: viewFolderId, ...data});
     }
   })
 
@@ -61,7 +63,7 @@ function MoumTitleCreateForm ({moums}) {
 
     const {result, data} = await addPiece(obj);
     if (result) {
-      if (folderId === 0) {
+      if (viewFolderId === 0) {
         queryClient.invalidateQueries("mine/moums");
       } else {
         queryClient.invalidateQueries("mine/pieces");

@@ -22,6 +22,7 @@ const cancelBtnStyle = css`
   border-radius: 50px;
   background-color: #F7F3FD;
   color: #9E67FF;
+  cursor: pointer;
 `;
 
 const cancelBtnHoverStyle = css`

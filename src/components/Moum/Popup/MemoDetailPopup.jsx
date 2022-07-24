@@ -2,6 +2,7 @@ import useCustomMutate from "hooks/useCustomMutate";
 import useHandleChange from "hooks/useHandleChange";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
 import styled from "styled-components";
 import DetailPopupHeader from "./DetailPopupHeader";
@@ -12,19 +13,14 @@ function MemoDetailPopup ({piece, close}) {
   const queryClient = useQueryClient();
   const [menu] = useState(["카테고리 선택", "작성한 내용"]);
   const [pageNum, setPageNum] = useState(0);
-  console.log(piece);
+
   const {input, setInput} = useHandleChange({
     id: piece.id,
-    folderId: 0,
-    category: piece.category,
+    category: piece.category === "미정" ? "카테고리 없음" : piece.category,
     subject: piece.title,
     content: piece.content,
     share: false,
   });
-
-  useEffect(() => {
-    console.log(input);
-  }, [input]);
 
   const pageNext = () => {
     setPageNum(current => current + 1);
@@ -35,14 +31,13 @@ function MemoDetailPopup ({piece, close}) {
   const pageEnd = async (subject, content) => {
     const id = input.id;
     const data = {
+      folderId: input.folderId,
       title: subject,
       content: content,
-      category: input.category,
+      category: input.category === "카테고리 없음" ? null : input.category,
       boardType: "MEMO",
       status: input.share ? "PUBLIC" : "PRIVATE",
     }
-
-    console.log(data);
 
     const { result } = await modify({id, data});
 
@@ -58,7 +53,7 @@ function MemoDetailPopup ({piece, close}) {
 
   return (
     <Box>
-      <DetailPopupHeader pageNum={pageNum} menu={menu} />
+      <DetailPopupHeader pageNum={pageNum} setPageNum={setPageNum} menu={menu} />
       {pageNum === 0 && <MemoCategorySelect getter={input} setter={setInput} close={close} next={pageNext}/>}
       {pageNum === 1 && <MemoContentField getter={input} setter={setInput} close={close} finish={pageEnd} />}
     </Box>
@@ -66,8 +61,11 @@ function MemoDetailPopup ({piece, close}) {
 }
 
 const Box = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 630px;
+  height: 530px;
+  background-color: #FFFFFF;
+  border-radius: 30px;
+
 `;
 
 export default MemoDetailPopup;

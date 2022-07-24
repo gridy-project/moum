@@ -19,7 +19,6 @@ function PopupCategorySelect ({getter, setter, next, close, folderId}) {
           items={query.data}
           setter={setter}
           getter={getter}
-          initFolderId={folderId}
         />}
         <div className="name">카테고리 선택</div>
         <PopupSelectBoxCategory

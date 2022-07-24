@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { useMutation } from "react-query";
 import { addMoumAxios } from "utils/api/moum";
 import useHandleChange from "hooks/useHandleChange";
 import queryClient from "shared/query";
@@ -8,6 +7,7 @@ import moumAdd from "assets/svg/moum_add.svg";
 import CancelButton from "components/Common/CancelButton";
 import ConfirmButton from "components/Common/ConfirmButton";
 import ToggleSwitch from "components/Common/ToggleSwitch";
+import useCustomMutate from "hooks/useCustomMutate";
 
 function MoumAddPopup ({close}) {
   const {input, setInput, handleChange} = useHandleChange({
@@ -15,21 +15,13 @@ function MoumAddPopup ({close}) {
     share: false
   });
 
-  const {mutate: addMoum} = useMutation(async (data) => {
-    const response = await addMoumAxios(data);
-    return response.data;
-  }, { 
+  const {mutateAsync: addMoum} = useCustomMutate((data) => addMoumAxios(data), { 
     onSuccess: data => {
       queryClient.invalidateQueries("mine/moums");
-      alert("폴더 추가 성공");
-    },
-    onError: err => {
-      alert("폴더 추가 실패");
     }
   });
 
   const submitAddFolder = async (e) => {
-    console.log("enter");
     e.preventDefault();
     
     const moum = {
@@ -37,7 +29,10 @@ function MoumAddPopup ({close}) {
       status: input.share ? "PUBLIC" : "PRIVATE"
     }
 
-    addMoum(moum);
+    const {result} = await addMoum(moum);
+    if (!result) {
+      alert("폴더 추가 실패");
+    }
     close();
   };
 
@@ -48,7 +43,7 @@ function MoumAddPopup ({close}) {
   return (
     <Box>
       <PopupTopView image={moumAdd} title={"모음 만들기"} />
-      <Form>
+      <Form onSubmit={submitAddFolder}>
         <div className="moum-name">
           <label htmlFor="name">모음 이름</label>
           <input type="text" id="name" onChange={handleChange("name")} value={input.name} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
@@ -69,9 +64,7 @@ function MoumAddPopup ({close}) {
             }
             onClick={close}
           />
-          <ConfirmButton text={"만들기"} isActive
-            onClick={submitAddFolder}
-          />
+          <ConfirmButton text={"만들기"} useSubmit isActive />
         </div>
       </Form>
     </Box>
@@ -90,7 +83,7 @@ const Box = styled.div`
   background-color: #FFFFFF;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;

@@ -4,6 +4,7 @@ import { removeToken } from "shared/localStorage";
 import { useRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import { useEffect, useState } from "react";
+import logoSvg from "assets/common/Header/logo.svg";
 
 function Header({selected}) {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Header({selected}) {
   return (
     <Container isFixed={headerFixed}>
       <Box>
-        <Logo><Link to="/"><span></span>moum</Link></Logo>
+        <Logo><Link to="/"><img src={logoSvg} alt="moum" /></Link></Logo>
         <Menu>
           <nav>
             <ul>
@@ -86,7 +87,6 @@ const Box = styled.div`
 
 const Logo = styled.div`
   display: flex;
-  font-size: 36px;
   font-weight: bold;
   align-items: center;
   height: 100%;

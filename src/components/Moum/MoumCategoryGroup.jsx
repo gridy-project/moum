@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { moumCategories, selectedCategories } from "../../state/moum";
 import MoumCategoryItem from "./Item/MoumCategoryItem";
 
-function MoumCategoryGroup ({categories}) {
+function MoumCategoryGroup ({categories, noFolder}) {
   const [category, setCategory] = useRecoilState(moumCategories);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function MoumCategoryGroup ({categories}) {
   }
 
   return (
-    <CategoryGroup>
+    <CategoryGroup noFolder={noFolder}>
       <div className="category-title">카테고리</div>
       <ul className="category-list">
         {
@@ -109,7 +109,7 @@ const CategoryGroup = styled.div`
     font-size: 22px;
     color: #111111;
     font-weight: bold;
-    margin-top: 90px;
+    margin-top: ${props => props.noFolder ? "110px" : "60px"};
     margin-bottom: 20px;
   }
 

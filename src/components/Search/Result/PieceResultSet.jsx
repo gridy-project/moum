@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import LinkPieceCard from "../LinkPieceCard";
-import MemoPieceCard from "../MemoPieceCard";
+import SearchPieceCard from "../Card/SearchPieceCard";
 
 function PieceResultSet ({pieceQuery}) {
   return (
@@ -8,7 +7,7 @@ function PieceResultSet ({pieceQuery}) {
       <h2>관련있는 조각<p>조각 검색 결과 {pieceQuery.boardsCnt}건</p></h2>
       <PieceRelationList>
         {pieceQuery.boards.map((piece) => {
-          return piece.boardType === "LINK" ? <LinkPieceCard piece={piece} /> : <MemoPieceCard piece={piece} />
+          return <SearchPieceCard key={piece.id} piece={piece} />
         })}
       </PieceRelationList>
       {pieceQuery.boardsCnt === 0 && <div className="no-item">조각 검색 결과가 없습니다.</div>}

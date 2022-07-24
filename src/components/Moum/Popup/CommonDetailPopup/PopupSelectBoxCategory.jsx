@@ -4,18 +4,14 @@ import arrowDown from "assets/images/pages/moum/popup/arrow_down.png";
 import styled, { css } from "styled-components";
 
 function PopupSelectBox ({ items, getter, setter }) {
-  const [selectedItem, setSelectedItem] = useState(0);
+  const [selectedItem, setSelectedItem] = useState(items.findIndex(v => v.category === getter.category));
   const [isActive, setActive] = useState(false);
-
-  useEffect(() => {
-    setter(current => ({...current, category: items[0].category}));
-  }, [setter]);
 
   return (
     <Wrap>
       <Selected onClick={() => {setActive(current => !current)}}>
-        {items[selectedItem].imageActive && <img src={items[selectedItem].imageActive} alt={"single"}/>}
-        <span>{items[selectedItem].name}</span>
+        {items[selectedItem]?.imageActive && <img src={items[selectedItem]?.imageActive} alt={"single"}/>}
+        <span>{items[selectedItem]?.name}</span>
         <img src={arrowDown} alt="down" />
       </Selected>
       <Select isActive={isActive}>

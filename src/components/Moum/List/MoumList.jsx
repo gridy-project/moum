@@ -1,32 +1,37 @@
 import styled from "styled-components";
-import MoumAddCard from "../Card/MoumAddCard";
+import MoumAddCard from "components/Moum/Card/MoumAddCard";
 import SortableList from 'react-easy-sort'
 import arrayMove from 'array-move';
 import { useEffect, useState } from "react";
-import MoumFolderCard from "../Card/MoumFolderCard";
-import { useRecoilValue } from "recoil";
+import MoumFolderCard from "components/Moum/Card/MoumFolderCard";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { moumSort } from "state/moum";
 import { changeMoumOrder } from "utils/api/moum";
 import useCustomMutate from "hooks/useCustomMutate";
+import { atomScrollState } from "state/common/scroll";
 
 function MoumList ({moums}) {
   const [sortableMoumList, setSortableMoumList] = useState([]);
   const sortState = useRecoilValue(moumSort);
+  const setScrollState = useSetRecoilState(atomScrollState);
 
-  const {mutate: order} = useCustomMutate(async ({folderId, afterOrder}) => await changeMoumOrder(folderId, afterOrder));
+  const {mutateAsync: order} = useCustomMutate(
+    ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));
 
-  const onSortEnd = (oldIndex, newIndex) => {
+  const onSortEnd = async (oldIndex, newIndex) => {
     const oldId = sortableMoumList[oldIndex].id;
 
-    order({folderId: oldId, afterOrder: newIndex});
-    setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex));
+    const {result} = await order({folderId: oldId, afterOrder: moums[newIndex].folderOrder});
+    if (result) {
+      setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex));
+    }
   }
 
   useEffect(() => {
     if (moums) {
       setSortableMoumList([...moums]);
     }
-  }, [moums]);
+  }, [moums, setScrollState]);
 
   return (
     <List>

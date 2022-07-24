@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import PopupButtonGroup from "./PopupButtonGroup";
 import checkIcon from "assets/images/pages/moum/popup/check.png";
@@ -9,42 +9,58 @@ import { apiCommon } from "utils/api/common";
 import useCustomMutate from "hooks/useCustomMutate";
 
 function PopupImageChange ({finish, close, getter, setter}) {
-  const [imageType, setImageType] = useState(0);
+  const [imageType, setImageType] = useState(getter.select);
   const [customImageState, setCustomImageState] = useState(false);
   const ref = {
-    file: useRef(null)
+    file: useRef(null),
+    image: useRef(null)
   }
 
   const {mutateAsync: upload} = useCustomMutate((data) => apiCommon.uploadImage(data));
 
   const popupFinish = async () => {
     if (imageType === 0) {
-      finish();
+      finish(imageType);
     } else if (imageType === 1) {
       alert("미구현 상태");
       return;
     } else if (imageType === 2) {
-      const formData = new FormData();
-      formData.append("image", ref.file.current.files[0]);
-      const {result, data, error} = await upload(formData);
-      if (result) {
-        alert("파일 업로드 성공");
-        finish(data.url);
+      console.log(ref.file.current.files);
+      if (ref.file.current.files.length > 0) {
+        const formData = new FormData();
+        formData.append("image", ref.file.current.files[0]);
+        const {result, data, error} = await upload(formData);
+        if (result) {
+          alert("파일 업로드 성공");
+          finish(imageType, data);
+        } else {
+          alert("파일 업로드 실패");
+          console.log(error);
+        }
       } else {
-        alert("파일 업로드 실패");
-        console.log(error);
+        console.log(getter.imageItems)
+        if (getter.imageItems.upload) {
+          finish(imageType, getter.imageItems.upload);
+        } else {
+          alert("이미지를 등록해주세요");
+        }
       }
     }
   }
 
+  useEffect(() => {
+    if (getter?.imageItems?.upload && ref.image) {
+      // console.log(ref.image);
+      ref.image.current.src = getter.imageItems.upload;
+    }
+  }, [getter.imageItems.upload, ref.image]);
 
   const changeFile = (fileEvent) => {
     if (fileEvent.target.files && fileEvent.target.files[0]) {
       const reader = new FileReader();
       
       reader.onload = (e) => {
-          const previewImage = document.getElementById('uploadImage');
-          previewImage.src = e.target.result;
+          ref.image.current.src = e.target.result;
       }
       reader.readAsDataURL(fileEvent.target.files[0]);
       setCustomImageState(true);
@@ -58,9 +74,9 @@ function PopupImageChange ({finish, close, getter, setter}) {
           <Item onClick={() => {setImageType(0)}} isActive={imageType === 0}>
             <Name>불러온 이미지</Name> 
             {
-              getter.image ?
+              getter.imageItems ?
               <Image>
-                <img src={getter.image} alt="og" />
+                <img src={getter.imageItems.og} alt="og" />
               </Image>
               :
               <NoImage>
@@ -76,9 +92,9 @@ function PopupImageChange ({finish, close, getter, setter}) {
           <Item onClick={() => {setImageType(2)}} isActive={imageType === 2}>
             <Name>내 PC에서 불러오기</Name>
             {
-              customImageState ? 
+              customImageState || getter.imageItems.upload ? 
               <Image>
-                <img id="uploadImage" alt="uploaded" />
+                <img alt="uploaded" ref={ref.image} />
                 <Label htmlFor="image">
                   <img src={addImage} alt="파일 선택" />
                   파일 선택

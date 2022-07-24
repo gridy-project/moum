@@ -16,25 +16,24 @@ import MoumUpdatePopup from "components/Card/Popup/MoumUpdatePopup";
 import MoumCard from "components/Card/MoumCard";
 import { SortableItem } from "react-easy-sort";
 import { globalPopup } from "state/common/popup";
+import { useNavigate, useParams } from "react-router-dom";
 
 function MoumFolderCard ({moum, sortable}) {
+  const navigate = useNavigate();
+  const {folderId: viewFolderId = 0} = useParams();
+  
+  const runFolder = () => {
+    navigate(`/moum/${moum.id}`);
+  }
+
   const [buttonState, setButtonState] = useState(false);
   const setPopup = useSetRecoilState(globalPopup);
-  const resetPopup = useResetRecoilState(globalPopup);
 
-  const {mutate: remove} = useMutation(async (data) => {
-    const response = await instance.delete(`/folders`, {data});
-
-    return response.data;
-  }, {
-    onSuccess: data => {
-      queryClient.invalidateQueries("mine/moums");
-      alert("폴더 삭제 성공");
-    },
-    onError: err => {
-      console.log(err);
+  const {mutate: remove} = useMutation((data) => instance.delete(`/folders`, {data}), 
+    {
+      onSuccess: data => queryClient.invalidateQueries("mine/moums")
     }
-  });
+  );
 
   const removeFolder = (e) => {
     e.preventDefault();
@@ -54,12 +53,10 @@ function MoumFolderCard ({moum, sortable}) {
   }
 
   const {mutate: sharedChange} = useMutation(async ({id, status}) => {
-    console.log(status);
     const response = await instance.put(`/folder/${id}`, {
       name: moum.name,
       status: status
     });
-    console.log(response);
     return response.data;
   }, {
     onSuccess: data => {
@@ -105,6 +102,7 @@ function MoumFolderCard ({moum, sortable}) {
           optionState={buttonState}
           setOptionState={setButtonState}
           options={options}
+          onClick={runFolder}
         />
       </Container>
     </SortableItem>
@@ -115,6 +113,7 @@ function MoumFolderCard ({moum, sortable}) {
         optionState={buttonState}
         setOptionState={setButtonState}
         options={options}
+        onClick={runFolder}
       />
     </Container>
   );

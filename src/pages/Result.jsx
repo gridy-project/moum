@@ -12,7 +12,7 @@ function Result () {
   const params = useParams();
 
   const folderQuery = useCustomQuery(["folderQuery", params], async () => {
-    const response = await instance.post(`/allfolders/${params.keyword}/0`);
+    const response = await instance.post(`/allfolders/${params.keyword}?page=0`);
     return response.data;
   });
 
