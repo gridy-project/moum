@@ -60,26 +60,36 @@ const NewLogin = () => {
 };
 
 const Container = styled.div`
-  position:relative;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  
+  > img {
+    width: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Box = styled.div`
-  width: 1453px;
-  height: 702px;
+  width: 1300px;
+  height: 700px;
   position:absolute;
-  top:219px;
-  right:310px;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 `;
 
 const ChangeContainer = styled.div`
   width: 540px;
-  height: 702px;
+  height: 700px;
   background-color:#fff;
   border-radius: 24px;
   float:right;
 `;
+
 const Content = styled.div`
-  width: 369px;
+  width: 370px;
   height: 435px;
   margin-left:90px;
   margin-top:130px;

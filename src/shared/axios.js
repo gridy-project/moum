@@ -25,10 +25,10 @@ instance.interceptors.response.use(
     if (config.data?.statusCode) {
       console.log(config.data);
       if (config.data?.statusCode === 200) {
-        alert(config.data.message)
+        // alert(config.data.message)
         return { result: true, status: config.data.statusCode, message: config.data.massage, data: config.data.content }
       } else {
-        alert(config.data.message)
+        // alert(config.data.message)
         return { result: false, status: config.data.statusCode, message: config.data.massage }
       }
     } else {
