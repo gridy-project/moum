@@ -164,7 +164,7 @@ const LoginBtn = styled.button`
   border-radius: 50px;
   border:none;
   color:#fff;
-  cursor: pointer; 
+  cursor: pointer;
 `;
 
 const TabBox = styled.div`
