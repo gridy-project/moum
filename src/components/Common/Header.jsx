@@ -28,7 +28,7 @@ function Header({selected}) {
   }, [headerFixed])
 
   return (
-    <Container isFixed={headerFixed} selected={0}>
+    <Container isFixed={headerFixed}>
       <Box>
         <Logo><Link to="/"><img src={logoSvg} alt="moum" /></Link></Logo>
         <Menu>
@@ -77,10 +77,6 @@ const Container = styled.div`
     height: 90px;
     position: fixed;
   `}
-
-  ${props => props.selected === 0 && css`
-    color: #FFFFFF;
-  `} 
 `;
 
 const Box = styled.div`
@@ -144,11 +140,15 @@ const Menu = styled.div`
     cursor: pointer;
 
     &.btn-login {
+      font-weight: 600;
       background-color: #FFFFFF;
     }
 
     &.btn-logout {
+      font-weight: 600;
       background-color: transparent;
+      border: 1px solid #777777;
+      color: #949494;
     }
   }
 
