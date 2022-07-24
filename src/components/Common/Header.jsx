@@ -28,7 +28,7 @@ function Header({selected}) {
   }, [headerFixed])
 
   return (
-    <Container isFixed={headerFixed}>
+    <Container isFixed={headerFixed} selected={0}>
       <Box>
         <Logo><Link to="/"><img src={logoSvg} alt="moum" /></Link></Logo>
         <Menu>
@@ -47,13 +47,13 @@ function Header({selected}) {
           </nav>
           {loginStatus ? 
             (
-              <button onClick={() => {
+              <button className="btn-logout" onClick={() => {
                 removeToken();
                 setLoginStatus(false);
                 navigate("/");
               }}>로그아웃</button>
             ) : (
-              <button onClick={() => { navigate("/newlogin") }}>로그인</button>
+              <button className="btn-login" onClick={() => { navigate("/newlogin") }}>로그인</button>
             )
           }
         </Menu>
@@ -77,6 +77,10 @@ const Container = styled.div`
     height: 90px;
     position: fixed;
   `}
+
+  ${props => props.selected === 0 && css`
+    color: #FFFFFF;
+  `} 
 `;
 
 const Box = styled.div`
@@ -132,14 +136,20 @@ const Menu = styled.div`
 
   button {
     margin-left: ${marginLeft};
-    width: 120px;
-    height: 40px;
-    border: 1px solid #777777;
-    background-color: #E5D6FF;
-    color: #949494;
+    width: 90px;
+    height: 35px;
+    border: 1px solid #BF98FF;
+    color: #BF98FF;
     border-radius: 10px;
-    font-size: 18px;
     cursor: pointer;
+
+    &.btn-login {
+      background-color: #FFFFFF;
+    }
+
+    &.btn-logout {
+      background-color: transparent;
+    }
   }
 
   button:hover {
@@ -149,6 +159,7 @@ const Menu = styled.div`
 `;
 
 const Item = styled.li`
+  font-weight: 600;
   ${({isActive}) => isActive && css`
     color: #721EFC;
   `};

@@ -15,11 +15,11 @@ function MoumCardCommon ({moum, setButtonState}) {
       <Content>
         <div className="card-header">
           {moum.status === "PRIVATE" && <img src={iconPrivate} alt="private" />}
-          <div className="menu" onClick={(e) => {
+          {moum.name !== "무제" && <div className="menu" onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             setButtonState((current) => !current);
-          }}><img src={more} alt="" /></div>
+          }}><img src={more} alt="" /></div>}
         </div>
         <div className={`card-title ${moum.status === "PUBLIC" && `no-image`}`}>{moum.name}</div>
       </Content>

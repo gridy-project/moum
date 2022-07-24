@@ -14,10 +14,12 @@ function MoumTitle ({moums}) {
 }
 
 const Title = styled.div`
-  padding-top: 200px;
+  padding-top: 180px;
   width: 100%;
-  height: 500px;
-  background-color: #E5D6FF;
+  height: 480px;
+  background-image: url("https://i.ibb.co/G98Qn89/Rectangle-1808.png");
+  background-repeat: no-repeat;
+  background-size: cover;
   border-radius: 0 0 60px 60px;
   display: flex;
   flex-direction: column;

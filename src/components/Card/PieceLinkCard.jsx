@@ -5,17 +5,22 @@ import { SortableItem } from "react-easy-sort";
 import PieceLinkCardCommon from "./PieceLinkCardCommon";
 import OptionMenu from "components/Common/OptionMenu";
 import { useCallback } from "react";
-import { pieceSelectMode, selectedItems } from "state/moum";
-import { useRecoilState, useRecoilValue } from "recoil";
 
 
-function PieceLinkCard({piece, sortable, options, buttonState, setButtonState}) {
-  const selectMode = useRecoilValue(pieceSelectMode);
-  const [items, setItems] = useRecoilState(selectedItems);
+function PieceLinkCard({
+  piece, 
+  sortable, 
+  options, 
+  buttonState, 
+  setButtonState,
+  selectedItems,
+  setSelectedItems,
+  selectMode
+}) {
   const onClick = useCallback((e) => {
     if (selectMode) {
       e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
-      setItems(current => {
+      setSelectedItems(current => {
         if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
           return [...current, piece.id];
         } else {
@@ -25,21 +30,21 @@ function PieceLinkCard({piece, sortable, options, buttonState, setButtonState}) 
     } else {
       window.open(piece.link, "_blank");
     }
-  }, [selectMode, piece, setItems]);
+  }, [selectMode, piece, setSelectedItems]);
 
   return (
       sortable ? 
       <SortableItem>
         <Box>
-          <PieceLinkCardCommon isSelected={items.indexOf(piece.id) !== -1} piece={piece} onClick={onClick} setButtonState={setButtonState} />
+          <PieceLinkCardCommon isSelected={selectedItems.indexOf(piece.id) !== -1} piece={piece} onClick={onClick} setButtonState={setButtonState} />
           <Option>
             <OptionMenu isActive={buttonState} options={options} />
           </Option>
         </Box>
       </SortableItem>
       :
-      <Box isSelected={items.indexOf(piece.id) !== -1}>
-        <PieceLinkCardCommon isSelected={items.indexOf(piece.id) !== -1} piece={piece} onClick={onClick} setButtonState={setButtonState} />
+      <Box isSelected={selectedItems.indexOf(piece.id) !== -1}>
+        <PieceLinkCardCommon isSelected={selectedItems.indexOf(piece.id) !== -1} piece={piece} onClick={onClick} setButtonState={setButtonState} />
         <Option>
           <OptionMenu isActive={buttonState} options={options} />
         </Option>

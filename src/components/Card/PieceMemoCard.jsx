@@ -1,19 +1,23 @@
 import styled, { css } from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { pieceSelectMode, selectedItems } from "state/moum";
 import { useCallback } from "react";
 import PieceMemoCardCommon from "./PieceMemoCardCommon";
 import { SortableItem } from "react-easy-sort";
 import OptionMenu from "components/Common/OptionMenu";
 
-function PieceMemoCard ({piece, sortable, options, buttonState, setButtonState}) {
-  const selectMode = useRecoilValue(pieceSelectMode);
-  const [items, setItems] = useRecoilState(selectedItems);
-
+function PieceMemoCard ({
+  piece, 
+  sortable, 
+  options, 
+  buttonState, 
+  setButtonState,
+  selectMode,
+  selectedItems,
+  setSelectedItems
+}) {
   const clickCard = useCallback((e) => {
     if (selectMode) {
       e.preventDefault(); // SelectMode === true 일때만 링크 기능 씹기
-      setItems(current => {
+      setSelectedItems(current => {
         if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
           return [...current, piece.id];
         } else {
@@ -21,12 +25,12 @@ function PieceMemoCard ({piece, sortable, options, buttonState, setButtonState})
         }
       });
     }
-  }, [selectMode, piece.id, setItems]);
+  }, [selectMode, piece.id, setSelectedItems]);
 
   return (
     sortable ? 
     <SortableItem>
-      <Card onClick={clickCard} isSelected={items.indexOf(piece.id) !== -1}>
+      <Card onClick={clickCard} isSelected={selectedItems.indexOf(piece.id) !== -1}>
         <PieceMemoCardCommon piece={piece} setButtonState={setButtonState} />
         <Option>
           <OptionMenu isActive={buttonState} options={options} />
@@ -34,7 +38,7 @@ function PieceMemoCard ({piece, sortable, options, buttonState, setButtonState})
       </Card>
     </SortableItem>
     :
-    <Card onClick={clickCard} isSelected={items.indexOf(piece.id) !== -1}>
+    <Card onClick={clickCard} isSelected={selectedItems.indexOf(piece.id) !== -1}>
       <PieceMemoCardCommon piece={piece} setButtonState={setButtonState} />
       <Option>
         <OptionMenu isActive={buttonState} options={options} />

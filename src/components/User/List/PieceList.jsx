@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import useCustomQuery from "hooks/useCustomQuery";
-import { useRecoilValue } from "recoil";
-import { atomSearch, atomSelectedCategories, atomSortState } from "state/user";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { atomSearch, atomSelectedCategories, atomSelectedItems, atomSelectItemsAll, atomSelectMode, atomSortState } from "state/user";
 import SearchPieceCard from "components/Search/Card/SearchPieceCard";
 import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
@@ -37,9 +37,20 @@ function PieceList () {
       }
   });
 
-  // useEffect(() => {
-  //   console.log(piecesQuery);
-  // }, [piecesQuery])
+  const resetSelectAll = useResetRecoilState(atomSelectItemsAll);
+  const resetSelectMode = useResetRecoilState(atomSelectMode);
+  const resetSelectedItems = useResetRecoilState(atomSelectedItems);
+
+  useEffect(() => {
+    resetSelectAll();
+    resetSelectMode();
+    resetSelectedItems();
+    return () => {
+      resetSelectAll();
+      resetSelectMode();
+      resetSelectedItems();
+    }
+  }, [viewFolderId, resetSelectAll, resetSelectMode, resetSelectedItems]);
 
   return (
     <List>

@@ -7,15 +7,15 @@ import SearchForm from "components/Search/SearchForm";
 import AllMoumFavorite from "components/Search/AllMoumFavorite";
 import AllMoumLatest from "components/Search/AllMoumLatest";
 import Container from "components/Common/Container";
+import AllMoumFollower from "components/Search/AllMoumFollower";
 
 function Search() {
-
   return (
     <Container>
       <Header selected={2}/>
       <SearchForm />
       <Content>
-        {/* <AllMoumFollower /> */}
+        <AllMoumFollower />
         <AllMoumFavorite />
         <AllMoumLatest />
       </Content>

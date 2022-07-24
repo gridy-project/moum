@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import MoumSelectItem from "../Item/MoumSelectItem";
 import { getMoumMineAllAxios } from "utils/api/moum";
@@ -6,30 +6,23 @@ import useCustomQuery from "hooks/useCustomQuery";
 import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { atomScrollState } from "state/common/scroll";
 
 function MoumSelect () {
   const {folderId: viewFolderId = 0} = useParams();
   const navigate = useNavigate();
-  const setScrollState = useSetRecoilState(atomScrollState);
   
   const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
 
   const onClick = (id) => {
     navigate(`/moum/${id}`);
-    setScrollState(true);
   }
-
-  useEffect(() => {
-    console.log(query);
-  }, [query])
 
   return (
     <Line>
       <Location>
         <span className="location-home" onClick={() => { navigate(`/moum`) }}>나의 모음</span>
         <img src={arrowRight} alt="right" />
-        <span className="location-now">{query?.data?.filter((v) => v.id === Number(viewFolderId))[0].name}</span>
+        <span className="location-now">{query?.data?.filter((v) => v.id === Number(viewFolderId))[0]?.name}</span>
       </Location>
       <List>
         <ul>

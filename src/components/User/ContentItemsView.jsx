@@ -1,16 +1,9 @@
-import styled from "styled-components";
 import UserBoard from "./UserBoard";
 
 function ContentItemsView () {
   return (
-    <View>
-      <UserBoard />
-    </View>
+    <UserBoard />
   )
 }
-
-const View = styled.div`
-
-`;
 
 export default ContentItemsView;

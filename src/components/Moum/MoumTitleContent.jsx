@@ -16,13 +16,15 @@ const Box = styled.div`
   align-items: center;
   em {
     font-size: 36px;
-    color: #5B2EDA;
+    color: #FFFFFF;
+    font-weight: 600;
   }
 
   p {
     padding-top: 20px;
     font-size: 20px;
-    color: #9975FF;
+    color: #FFFFFF;
+    font-weight: 400;
   }
 `;
 

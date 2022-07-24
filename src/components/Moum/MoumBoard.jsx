@@ -2,13 +2,13 @@ import MoumList from "components/Moum/List/MoumList";
 import PieceList from "components/Moum/List/PieceList";
 import styled from "styled-components";
 
-function MoumBoard ({folderId, search, moums, selectAll}) {
+function MoumBoard ({moumsQuery, folderId, search, moums, selectAll}) {
 
   return (
     <PieceBoard>
       {
         folderId === 0 ? 
-        <MoumList
+        moumsQuery.isSuccess && <MoumList
           moums={moums}
         />
         :

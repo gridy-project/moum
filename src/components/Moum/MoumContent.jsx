@@ -1,5 +1,5 @@
 import useCustomQuery from "hooks/useCustomQuery";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { instance } from "shared/axios";
@@ -43,7 +43,7 @@ function MoumContent ({categoriesQuery, moumsQuery, floatItemStatus, setFloatSta
           floatItemStatus={floatItemStatus}
         />
       </MoumHeader>
-      {moumsQuery.isSuccess && <MoumBoard folderId={viewFolderId} search={search} moums={moumsQuery?.data.data} selectAll={selectAll}/>}
+      <MoumBoard folderId={viewFolderId} search={search} moumsQuery={moumsQuery} moums={moumsQuery?.data?.data} selectAll={selectAll}/>
     </Content>
   );
 }

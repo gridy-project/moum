@@ -1,25 +1,39 @@
 import styled from "styled-components";
 
-function FollowerCard() {
+function FollowerCard({user}) {
   return (
     <Container>
       <div className="card-image">
-        {/* <img src={noImage} alt="noImage" /> */}
+        {user.imgPath && <img src={user.imgPath} alt="noImage" />}
       </div>
       <div className="card-content">
-        <div className="card-title">계정 이름 들어가는 부분</div>
-        <div className="card-description">계정에 대한 설명</div>
+        <div className="card-title">{user.nickname}</div>
+        <div className="card-description">{user?.information}</div>
         <div className="card-footer">
           <div className="card-follower">
             <em>팔로워</em>
-            <p>10명</p>
+            <p>{user.followerCnt}명</p>
+          </div>
+          <div className="card-piece"> 
+            <em>총 파일</em>
+            <p>{user.boardCnt}개</p>
+          </div>
+        </div>
+      </div>
+      {/* <div className="card-content">
+        <div className="card-title">유저네임{num}</div>
+        <div className="card-description">유저 정보입니다</div>
+        <div className="card-footer">
+          <div className="card-follower">
+            <em>팔로워</em>
+            <p>1명</p>
           </div>
           <div className="card-piece"> 
             <em>총 파일</em>
             <p>100개</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </Container>
   );
 }

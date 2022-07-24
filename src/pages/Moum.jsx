@@ -15,7 +15,7 @@ import { getMoumMineFetch } from "utils/fetch/moum";
 import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
 import MoumTitle from "components/Moum/MoumTitle";
 import MoumContent from "components/Moum/MoumContent";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { atomScrollState } from "state/common/scroll";
 
 function Moum () {
@@ -41,35 +41,29 @@ function Moum () {
 
   useEffect(() => {
     if (scrollState) {
-      scrollRef.current.scrollIntoView({ 
-        // behavior: 'smooth', 
-        block: 'end', 
-        inline: 'nearest' }
-      );
+      // scrollRef.current.scrollIntoView({ 
+      //   // behavior: 'smooth', 
+      //   block: 'end', 
+      //   inline: 'nearest' }
+      // );
       setScrollState(false);
     }
   }, [scrollState, setScrollState]);
 
   return (
     <CustomContainer ref={scrollRef}>
-      {
-      moumsQuery.isSuccess && (
-      <>
-        <MoumTitle moums={moumsQuery?.data?.data} />
-        <MoumContent
-          moumsQuery={moumsQuery}
-          categoriesQuery={categoriesQuery}
-          floatItemStatus={floatItemStatus}
-          setFloatStatus={setFloatStatus}
-          setFloatItemStatus={setFloatItemStatus}
-        />
-        <MoumSelectFloatingBox 
-          floatStatus={floatStatus} 
-          floatItemStatus={floatItemStatus} 
-        />
-      </>
-      )
-      }
+      <MoumTitle moums={moumsQuery?.data?.data} />
+      <MoumContent
+        moumsQuery={moumsQuery}
+        categoriesQuery={categoriesQuery}
+        floatItemStatus={floatItemStatus}
+        setFloatStatus={setFloatStatus}
+        setFloatItemStatus={setFloatItemStatus}
+      />
+      <MoumSelectFloatingBox 
+        floatStatus={floatStatus} 
+        floatItemStatus={floatItemStatus} 
+      />
     </CustomContainer>
   )
 }

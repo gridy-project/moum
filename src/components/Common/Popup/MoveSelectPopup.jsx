@@ -4,23 +4,22 @@ import styled, { css } from "styled-components";
 import moveFolder from "assets/common/Popup/move-folder.svg";
 import CancelButton from "components/Common/CancelButton";
 import ConfirmButton from "components/Common/ConfirmButton";
-import useCustomQuery from "hooks/useCustomQuery";
-import { getMoumMineAllAxios } from "utils/api/moum";
 import { useState } from "react";
 
 import folderNormalSvg from "assets/common/Popup/folder-normal.svg";
 import folderActiveSvg from "assets/common/Popup/folder-active.svg";
 
-function MoveSelectPopup ({close, confirm}) {
-  const { isSuccess, data: moums } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
+function MoveSelectPopup ({query, close, confirm, title}) {
+  console.log(query);
+  const {isSuccess, data: list} = query;
   const [select, setSelect] = useState(0);
 
   return (
     <Popup>
-      <PopupTopView image={moveFolder} title={"이동할 모음 선택하기"} />
+      <PopupTopView image={moveFolder} title={title ?? "이동할 모음 선택하기"} />
       <ShadowBox>
         <ScrollView>
-          {isSuccess && moums.data.map((v, i) => {
+          {isSuccess && list.data.map((v, i) => {
             return (
             <Item key={v.id} isActive={select === i} onClick={() => {setSelect(i)}}>
               <img src={select === i ? folderActiveSvg : folderNormalSvg} alt="folder" />
@@ -39,7 +38,7 @@ function MoveSelectPopup ({close, confirm}) {
           `} 
           text={"이동하기"}
           onClick={() => {
-            confirm(moums.data[select]);
+            confirm(list.data[select]);
             close();
           }}
         />

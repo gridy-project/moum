@@ -1,27 +1,49 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { instance } from "shared/axios";
 import useCustomQuery from "hooks/useCustomQuery";
 import SearchPieceCard from "./Card/SearchPieceCard";
+import { useEffect, useState } from "react";
 
 function AllMoumLatest () {
-  const query = useCustomQuery("search/latestPiece", async () => {
-    const response = await instance.get("/newboards/0/4");
-    return response.data;
-  });
+  const [page, setPage] = useState(0);
+  const [pageCnt, setPageCnt] = useState(0);
+  const [viewPieces, setViewPieces] = useState([]);
+  const {data: pieces, isSuccess} = useCustomQuery(["search/latestPiece", page], () => instance.get(`/newboards/${page}/8`));
+
+  const onClickMore = () => {
+    setPage(current => current + 1);
+  }
+
+  useEffect(() => {
+    if (isSuccess && pieces) {
+      const {
+        data: {
+          content: list, totalPages
+        },
+        result
+      } = pieces;
+      if (result) {
+        setViewPieces(current => {
+          if (current[current.length-1]?.id !== list[list.length - 1].id) {
+            // 마지막의 id 값이 같지 않은 경우에만 추가
+            return [...current, ...list]
+          } else {
+            return current
+          }
+        });
+        setPageCnt(totalPages);
+      }
+    }
+  }, [pieces, isSuccess]);
 
   return (
     <Latest>
       <em>최근 올라온 조각</em>
       <LatestList>
-        {
-          query.isSuccess 
-          && (
-            query.data?.content?.map(piece => <SearchPieceCard key={piece.id} piece={piece} />)
-          )
-        }
+        {viewPieces?.map(piece => <SearchPieceCard key={piece.id} piece={piece} />)}
       </LatestList>
       <div className="latest-more">
-        <button>더보기</button>
+        <More onClick={onClickMore} isHide={page === pageCnt - 1}>더보기</More>
       </div>
     </Latest>
   );
@@ -56,6 +78,7 @@ const Latest = styled.div`
 
 const LatestList = styled.div`
   display: flex;
+  flex-wrap: wrap;
 
   > div {
     width: calc(92% / 4);
@@ -72,6 +95,12 @@ const LatestList = styled.div`
   > div:nth-of-type(n + 5) {
     margin-top: calc(8% / 3);
   }
+`;
+
+const More = styled.button`
+  ${props => props.isHide && css`
+    display: none;
+  `}
 `;
 
 

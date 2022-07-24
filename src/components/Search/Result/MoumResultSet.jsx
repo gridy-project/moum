@@ -1,16 +1,64 @@
-import styled from "styled-components";
+import useCustomQuery from "hooks/useCustomQuery";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { instance } from "shared/axios";
+import styled, { css } from "styled-components";
 import SearchMoumCard from "../Card/SearchMoumCard";
 
-function MoumResultSet ({moumQuery}) {
+function MoumResultSet () {
+  const params = useParams();
+
+  const [page, setPage] = useState(0);
+  const [pageCnt, setPageCnt] = useState(0);
+  const [folders, setFolders] = useState([]);
+
+  const {isSuccess, data: moums} = useCustomQuery(["folderQuery", page], 
+    () => instance.post(`/allfolders/${params.keyword}?page=${page}`));
+
+  const onClickMore = () => {
+    setPage(current => current + 1);
+  }
+
+  useEffect(() => {
+    if (isSuccess && moums) {
+      const {result, data: {
+        folders: list,
+        foldersCnt: count
+      }} = moums;
+
+      if (result) {
+        setFolders(current => {
+          if (current[current.length-1]?.id !== list[list.length - 1]?.id) {
+            // 마지막의 id 값이 같지 않은 경우에만 추가
+            return [...current, ...list]
+          } else {
+            return current
+          }
+        });
+        setPageCnt(Math.ceil(count / 8))
+      }
+    }
+  }, [isSuccess, moums, page]);
+
   return (
     <Wrap>
-      <h2>관련있는 모음<p>모음 검색 결과 {moumQuery.foldersCnt}건</p></h2>
+      <h2>관련있는 모음<p>모음 검색 결과 {isSuccess && moums.data.foldersCnt}건</p></h2>
       <MoumRelationList>
-        {moumQuery.folders.map((moum) => {
-          return <SearchMoumCard key={moum.id} moum={moum} />
-        })}
+        {
+        folders?.map(
+          (moum) => {
+            return (<SearchMoumCard key={moum.id} moum={moum} />)
+          }
+        )
+        }
       </MoumRelationList>
-      {moumQuery.foldersCnt === 0 && <div className="no-item">모음 검색 결과가 없습니다.</div>}
+
+      {moums?.data?.foldersCnt !== 0 && (
+        <div className="latest-more">
+          <More onClick={onClickMore} isHide={page === pageCnt - 1}>더보기</More>
+        </div>
+      )}
+      {moums?.data?.foldersCnt === 0 && <div className="no-item">모음 검색 결과가 없습니다.</div>}
     </Wrap>
   )
 }
@@ -40,7 +88,32 @@ const Wrap = styled.div`
       margin-left: 16px;
     }
   }
+
+
+  .latest-more {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    padding-bottom: 100px;
+    button {
+      width: 280px;
+      height: 56px;
+      border: none;
+      background-color: #E0D6FF;
+      color: #9152FF;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+  }
 `;
+
+const More = styled.button`
+  ${props => props.isHide && css`
+    display: none;
+  `}
+`;
+
 
 const MoumRelationList = styled.div`
   display: flex;

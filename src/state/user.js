@@ -35,11 +35,6 @@ export const atomFloatItemActive = atom({
   default: false
 });
 
-// export const atomViewFolderId = atom({
-//   key: "otherPageFolderViewId",
-//   default: 0
-// });
-
 export const atomSearch = atom({
   key: "otherPageLocalSearch",
   default: ""

@@ -13,38 +13,21 @@ import SelectFloat from "components/User/Float/SelectFloat";
 function User () {
   const {userId} = useParams(); 
 
-  const userQuery = useCustomQuery(["user", userId],
+  const {isSuccess, data: user} = useCustomQuery(["user", userId],
     () => instance.get(`/user/profile/${userId}`)
   );
-
-  const [user, setUser] = useState({
-    result: false,
-    data: {}
-  });
-
-  useEffect(() => {
-    if (userQuery.isSuccess) {
-      const {data, result} = userQuery.data;
-      if (result) {
-        setUser({
-          result,
-          data
-        })
-      }
-    }
-  }, [userQuery.isSuccess, userQuery.data]);
 
   return (
     <Container>
       <Header selected={2} />
       <Content>
-        {user.result && 
-        <>
-          <UserStatusView user={user.data} isOther />
-          <ContentHeaderView />
-          <ContentItemsView />
-          <SelectFloat />
-        </>
+        {isSuccess && 
+          <>
+            <UserStatusView user={user.data} isOther />
+            <ContentHeaderView />
+            <ContentItemsView />
+            <SelectFloat />
+          </>
         }
       </Content>
     </Container>
