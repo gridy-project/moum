@@ -9,7 +9,7 @@ function Container ({children}) {
 }
 
 const Wrap = styled.div`
-  padding-top: 200px;
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;

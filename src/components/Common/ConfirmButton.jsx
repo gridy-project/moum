@@ -1,7 +1,7 @@
 import Button from "components/Common/Tag/Button";
 import { css } from "styled-components";
 
-function ConfirmButton ({text, isActive, onClick, optionStyle}) {
+function ConfirmButton ({text, isActive, onClick, optionStyle, useSubmit}) {
   return (
     <Button
       text={text ?? "확인"}
@@ -10,6 +10,7 @@ function ConfirmButton ({text, isActive, onClick, optionStyle}) {
       activeStyle={createBtnActiveStyle}
       isActive={isActive}
       onClick={onClick}
+      useSubmit={useSubmit}
     />
   );
 }
@@ -22,6 +23,7 @@ const createBtnStyle = css`
   border-radius: 50px;
   background-color: #ECECEC;
   color: #949494;
+  cursor: pointer;
 `;
 
 const createBtnHoverStyle = css`

@@ -3,22 +3,14 @@ import styled from "styled-components";
 
 // image
 import moum from "assets/images/pages/moum/moum-background.png";
-import { useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "state/moum";
 import OptionMenu from "components/Common/OptionMenu";
 
 import MoumCardCommon from "./MoumCardCommon";
 
 
-function MoumCard({moum, options, optionState, setOptionState}) {
-  const setSelectedFolderId = useSetRecoilState(pageMoumSelectedFolderId);
-  
-  const runFolder = (e) => {
-    setSelectedFolderId(moum.id);
-  }
-
+function MoumCard({moum, options, optionState, setOptionState, onClick}) {
   return (
-    <Container onClick={runFolder}>
+    <Container onClick={onClick}>
       <MoumCardCommon 
         setButtonState={setOptionState}
         moum={moum}

@@ -9,8 +9,6 @@ import Float from "components/Popup/Float";
 function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Popup />
-      <Float />
       <GlobalStyle />
       <BrowserRouter>
         <Router />

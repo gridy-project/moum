@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {useRecoilValue} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import SortableList from 'react-easy-sort';
@@ -7,24 +7,25 @@ import arrayMove from 'array-move';
 import { useState } from "react";
 import { useEffect } from "react";
 import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum";
-import PieceLinkCard from "components/Card/PieceLinkCard";
-import PieceMemoCard from "components/Card/PieceMemoCard";
-import PieceCard from "components/Card/PieceCard";
-import MoumPieceCard from "../Card/MoumPieceCard";
+import MoumPieceCard from "components/Moum/Card/MoumPieceCard";
+import { useParams } from "react-router-dom";
+import { atomScrollState } from "state/common/scroll";
 
 function PieceList ({selectAll, search}) {
-  const folderId = useRecoilValue(pageMoumSelectedFolderId);
+  const {folderId: viewFolderId = 0} = useParams();
+
   const categories = useRecoilValue(selectedCategories);
   const sortState = useRecoilValue(moumSort);
-  const piecesQuery = useCustomQuery(["mine/pieces", folderId, categories, search], async () => {
+  const setScrollState = useSetRecoilState(atomScrollState);
+  const piecesQuery = useCustomQuery(["mine/pieces", viewFolderId, categories, search], async () => {
     if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
-      const response = await getPieceMineAllAxios(folderId);
+      const response = await getPieceMineAllAxios(viewFolderId);
       return response.data;
     } else if (search === "") {
-      const response = await getPieceMineByOptionsAxios(folderId, { keyword: "all", categories });
+      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: "all", categories });
       return response.data;
     } else {
-      const response = await getPieceMineByOptionsAxios(folderId, { keyword: search, categories });
+      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: search, categories });
       return response.data;
     }
   });
@@ -37,9 +38,10 @@ function PieceList ({selectAll, search}) {
 
   useEffect(() => {
     if (piecesQuery.isSuccess) {
-      setSortablePieceList([...piecesQuery.data.boardList])
+      setSortablePieceList([...piecesQuery.data.boardList]);
     }
-  }, [piecesQuery.isSuccess, piecesQuery.data]);
+    setScrollState(true);
+  }, [piecesQuery.isSuccess, piecesQuery.data, setScrollState]);
 
   return (
     <List>

@@ -7,8 +7,11 @@ import LinkDetailPopup from "../Popup/LinkDetailPopup";
 import { useState } from "react";
 import MemoDetailPopup from "../Popup/MemoDetailPopup";
 import { globalFloat, globalPopup } from "state/common/popup";
+import { useParams } from "react-router-dom";
 
 function MoumCreateFloat ({piece, moums}) {
+  const {folderId: viewFolderId = 0} = useParams();
+
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
   const setFloat = useSetRecoilState(globalFloat);
@@ -31,8 +34,6 @@ function MoumCreateFloat ({piece, moums}) {
     }
   }
 
-  const folderId = useRecoilValue(pageMoumSelectedFolderId);
-
   const runModifyPopup = (e) => {
     openModal();
     setFloat(current => ({...current, state: false}));
@@ -42,7 +43,7 @@ function MoumCreateFloat ({piece, moums}) {
     <Wrap>
       <img src={fastCreateOptionModify} alt="modify" />
       <div className="desc">
-        <em>{(folderId === 0 || moums === undefined) ? "무제" : moums.filter((v) => v.id === folderId)[0]?.name}</em>
+        <em>{(viewFolderId === 0 || moums === undefined) ? "무제" : moums.filter((v) => v.id === viewFolderId)[0]?.name}</em>
         <p>에 조각 저장 완료</p>
       </div>
       <button onClick={runModifyPopup}>

@@ -18,15 +18,13 @@ function MoumUpdatePopup ({moum}) {
     share: useRef(null)
   }
 
-  const {mutate: modify} = useMutation(async ({id, data}) => {
-    const response = await instance.put(`/folder/${id}`, data);
-    return response.data;
-  }, {
-    onSuccess: data => {
-      queryClient.invalidateQueries("mine/moums");
-    },
-    onError: err => {
-      console.log(err);
+  const {mutate: modify} = useMutation(async ({id, data}) => 
+    {
+      const response = await instance.put(`/folder/${id}`, data);
+      return response.data;
+    }, {
+      onSuccess: data => {
+        queryClient.invalidateQueries("mine/moums");
     }
   });
 

@@ -3,15 +3,16 @@ import iconDelete from "assets/images/pages/moum/delete_icon.png";
 import { selectedItems } from "state/moum";
 import { useRecoilValue } from "recoil";
 import { useQueryClient } from "react-query";
-import { pageMoumSelectedFolderId } from "state/moum";
 import { removePieceMultiAxios } from "utils/api/piece";
 import useCustomMutate from "hooks/useCustomMutate";
 import styled, { css } from "styled-components";
+import { useParams } from "react-router-dom";
 
 function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
+  const {folderId: viewFolderId = 0} = useParams();
+
   const queryClient = useQueryClient();
   const selectedItemList = useRecoilValue(selectedItems);
-  const selectedFolderId = useRecoilValue(pageMoumSelectedFolderId);
 
   // Backend Required Test => File Delete Request Error
   const mutatePieceRemove = useCustomMutate(({folderId, list}) => removePieceMultiAxios(folderId, list), {
@@ -24,7 +25,7 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
     if (selectedItemList.length === 0) {
       alert("조각을 선택해주세요");
     } else {
-      mutatePieceRemove.mutate({folderId: selectedFolderId, list: selectedItemList.map((v) => ({id: v}))});
+      mutatePieceRemove.mutate({folderId: viewFolderId, list: selectedItemList.map((v) => ({id: v}))});
     }
   }
 

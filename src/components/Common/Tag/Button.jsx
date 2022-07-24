@@ -1,8 +1,21 @@
 import styled from "styled-components";
 
-function Button ({text, isActive, defaultStyle, hoverStyle, activeStyle, onClick, ...props}) {
+function Button ({text, isActive, defaultStyle, hoverStyle, activeStyle, onClick, useSubmit, ...props}) {
   return (
+    useSubmit ? 
     <Item
+      type="submit"
+      defaultStyle={defaultStyle}
+      hoverStyle={hoverStyle}
+      activeStyle={activeStyle}
+      isActive={isActive}
+      {...props}
+    >
+    {text}
+    </Item>
+    :
+    <Item
+      type="button"
       onClick={
         (e) => {
           e.preventDefault();

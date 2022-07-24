@@ -1,6 +1,6 @@
+import MoumList from "components/Moum/List/MoumList";
+import PieceList from "components/Moum/List/PieceList";
 import styled from "styled-components";
-import MoumList from "./List/MoumList";
-import PieceList from "./List/PieceList";
 
 function MoumBoard ({folderId, search, moums, selectAll}) {
 

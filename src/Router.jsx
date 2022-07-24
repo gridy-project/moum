@@ -14,6 +14,9 @@ import { useSetRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import Result from "pages/Result";
 import { executeTokenRefreshAxios } from "utils/api/auth";
+import User from "pages/User";
+import Popup from "components/Popup/Popup";
+import Float from "components/Popup/Float";
 
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
@@ -39,18 +42,25 @@ function Router() {
   }, [refreshLogin]);
 
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/newlogin" element={<NewLogin />}/>
-      <Route path="/register" element={<Register />} />
-      <Route path="/search" element={<Search />} />
-      <Route path="/search/:keyword" element={<Result />} />
-      <Route path="/mypage" element={<MyPage />} />
-      <Route path="/moum" element={<Moum />} />
-      <Route path="/test" element={<Test />} />
-      <Route path="/" element={<Intro />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <Popup />
+      <Float />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/newlogin" element={<NewLogin />}/>
+        <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/search/:keyword" element={<Result />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/moum" element={<Moum />} />
+        <Route path="/moum/:folderId" element={<Moum />} />
+        <Route path="/user/:userId" element={<User />} />
+        <Route path="/user/:userId/:folderId" element={<User />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/" element={<Intro />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 

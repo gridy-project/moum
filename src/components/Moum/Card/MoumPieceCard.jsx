@@ -9,20 +9,68 @@ import moveSvg from "assets/common/OptionMenu/move.svg";
 import removeSvg from "assets/common/OptionMenu/delete.svg";
 import privateSvg from "assets/common/OptionMenu/private.svg";
 import publicSvg from "assets/common/OptionMenu/public.svg";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "state/moum";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { useQueryClient } from "react-query";
 import { useState } from "react";
 import { globalPopup } from "state/common/popup";
+import { instance } from "shared/axios";
+import { useParams } from "react-router-dom";
+import MoveSelectPopup from "../Popup/MoveSelectPopup";
+import MemoDetailPopup from "../Popup/MemoDetailPopup";
 
 function MoumPieceCard ({sortable, piece, selectAll}) {
   const queryClient = useQueryClient();
+  const {folderId: viewFolderId = 0} = useParams();
 
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
-  const folderId = useRecoilValue(pageMoumSelectedFolderId);
-  const {mutateAsync: remove} = useCustomMutate((id) => removePieceAxios(folderId, id));
+  const {mutateAsync: remove} = useCustomMutate((id) => removePieceAxios(viewFolderId, id));
   const [buttonState, setButtonState] = useState(false);
+  
+  // console.log(piece);
+
+  const {mutateAsync: getPiece} = useCustomMutate((id) => instance.get(`/board/${id}`));
+  const {mutateAsync: changeStatus} = useCustomMutate(async (piece) => {
+      if (piece.boardType === "LINK") {
+        const {data: detail} = await getPiece(piece.id);
+
+        // Find Image Type
+        const imageTypeIdx = detail.imageList.findIndex(v => v.id === detail.imageId);
+
+        const data = {
+          title: detail.title,
+          explanation: detail.explanation,
+          link: detail.link,
+          imgPath: detail.imgPath,
+          image: {
+            imgPath: detail.imgPath,
+            imageType: detail.imageList[imageTypeIdx].imageType,
+          },
+          folderId: detail.folderId,
+          category: detail.category === "미정" ? null : detail.category,
+          boardType: detail.boardType,
+          status: detail.status === "PUBLIC" ? "PRIVATE" : "PUBLIC"
+        }
+
+        return instance.put(`/board/${piece.id}`, data); // TYPE LINK
+      } else {
+        return instance.put(`/board/${piece.id}`, { // TYPE MEMO
+          ...piece,
+          folderId: viewFolderId,
+          status: piece.status === "PUBLIC" ? "PRIVATE" : "PUBLIC"
+        });
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("mine/pieces");
+      }
+    }
+  );
+
+  const {mutateAsync: movePiece} = useCustomMutate(({folderId, list}) => instance.post(`/folder/${folderId}`, {
+    boardList: list
+  }));
 
   const options = [
     {
@@ -31,15 +79,26 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       onClick: () => {
         setPopup({
           state: true,
-          component: <LinkDetailPopup 
-            piece={piece} 
-            close={() => {
-              resetPopup();
-            }} 
-            width={"630px"} 
-            height={"530px"} 
-            backgroundColor={"#FFFFFF"}
-          />
+          component: (
+            piece.boardType === "LINK" ?
+            <LinkDetailPopup 
+              piece={piece} 
+              close={
+                () => {
+                  resetPopup();
+                }
+              }
+            />
+            :
+            <MemoDetailPopup 
+              piece={piece}
+              close={
+                () => {
+                  resetPopup();
+                }
+              }
+            />
+          )
         });
         setButtonState(false);
       }
@@ -61,14 +120,32 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       name: "다른 모음으로 이동",
       image: moveSvg,
       onClick: () => {
-        alert("미구현 상태입니다.");
+        setPopup({
+          state: true,
+          component: (
+            <MoveSelectPopup
+              close={() => {
+                resetPopup();
+              }}
+              confirm={async (moum) => {
+                const {result} = await movePiece({folderId: moum.id, list: [{id: piece.id}]});
+                if (result) {
+                  queryClient.invalidateQueries("mine/pieces");
+                } else {
+                  console.log("폴더 이동 실패");
+                }
+              }}
+            />
+          )
+        });
+        setButtonState(false);
       }
     },
     {
       name: piece.status === "PRIVATE" ? "공개로 전환" : "비공개로 전환",
       image: piece.status === "PRIVATE" ? publicSvg : privateSvg,
       onClick: () => {
-        alert("미구현 상태입니다.");
+        changeStatus(piece);
       }
     }
   ]

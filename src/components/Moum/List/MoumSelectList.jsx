@@ -1,29 +1,35 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import MoumSelectItem from "../Item/MoumSelectItem";
-import {useRecoilState} from "recoil";
-import { pageMoumSelectedFolderId } from "state/moum";
 import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { atomScrollState } from "state/common/scroll";
 
-function MoumSelect ({moums}) {
-  const [selectedFolderId, setSelectedFolderId] = useRecoilState(pageMoumSelectedFolderId);
+function MoumSelect () {
+  const {folderId: viewFolderId = 0} = useParams();
+  const navigate = useNavigate();
+  const setScrollState = useSetRecoilState(atomScrollState);
   
   const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
 
-  const onClick = (id) => { setSelectedFolderId(id) }
+  const onClick = (id) => {
+    navigate(`/moum/${id}`);
+    setScrollState(true);
+  }
+
+  useEffect(() => {
+    console.log(query);
+  }, [query])
 
   return (
     <Line>
       <Location>
-        <span className="location-home" onClick={
-          () => {
-            setSelectedFolderId(0)
-          }
-        }>나의 모음</span>
+        <span className="location-home" onClick={() => { navigate(`/moum`) }}>나의 모음</span>
         <img src={arrowRight} alt="right" />
-        <span className="location-now">{query?.data?.filter((v) => v.id === selectedFolderId)[0].name}</span>
+        <span className="location-now">{query?.data?.filter((v) => v.id === Number(viewFolderId))[0].name}</span>
       </Location>
       <List>
         <ul>
@@ -33,7 +39,7 @@ function MoumSelect ({moums}) {
               return (
                 <MoumSelectItem 
                 key={v.id} 
-                isActive={v.id === selectedFolderId} 
+                isActive={v.id === Number(viewFolderId)} 
                 _onClick={() => onClick(v.id)}>{v.name}</MoumSelectItem>
               )
             })
@@ -45,7 +51,7 @@ function MoumSelect ({moums}) {
 }
 
 const Line = styled.div`
-  margin-top: 70px;
+  margin-top: 110px;
   width: 100%;
   font-size: 18px;
   font-weight: 600px;
@@ -58,6 +64,7 @@ const Location = styled.div`
 
   span {
     padding: 6px;
+    font-size: 18px;
   }
 
   .location-home {
@@ -86,4 +93,4 @@ const List = styled.div`
   }
 `;
 
-export default React.memo(MoumSelect);
+export default MoumSelect;

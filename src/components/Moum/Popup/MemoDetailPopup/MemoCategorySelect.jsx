@@ -1,4 +1,5 @@
 import useCustomQuery from "hooks/useCustomQuery";
+import { useParams } from "react-router-dom";
 import { getSelectMoumCategory, typeCategory } from "shared/type";
 import styled, { css } from "styled-components";
 import { getMoumMineAllAxios } from "utils/api/moum";

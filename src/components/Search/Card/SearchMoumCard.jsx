@@ -6,12 +6,24 @@ import reportSvg from "assets/common/OptionMenu/report.svg";
 import scrapSvg from "assets/common/OptionMenu/scrap.svg";
 import useCustomMutate from "hooks/useCustomMutate";
 import { instance } from "shared/axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 function SearchMoumCard ({moum}) {
+  const navigate = useNavigate();
+  const params = useParams();
+
   const [state, setState] = useState(false);
 
   const {mutateAsync: scrap} = useCustomMutate((folderId) => instance.post(`/share/folder/${folderId}`, {}));
   const {mutateAsync: report} = useCustomMutate((folderId) => instance.post(`/report/${folderId}`, {}));
+
+  const moumClick = () => {
+    if (moum.userId) {
+      navigate(`/user/${moum.userId}/${moum.id}`);
+    } else {
+      navigate(`/user/${params.userId}/${moum.id}`);
+    }
+  }
 
   const options = [
     {
@@ -48,6 +60,7 @@ function SearchMoumCard ({moum}) {
         optionState={state}
         setOptionState={setState}
         options={options}
+        onClick={moumClick}
         useAuthor
       />
     </Container>

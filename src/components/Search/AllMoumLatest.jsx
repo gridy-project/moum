@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { instance } from "shared/axios";
 import useCustomQuery from "hooks/useCustomQuery";
-import LinkPieceCard from "./LinkPieceCard";
-import MemoPieceCard from "./MemoPieceCard";
+import SearchPieceCard from "./Card/SearchPieceCard";
 
 function AllMoumLatest () {
   const query = useCustomQuery("search/latestPiece", async () => {
@@ -17,11 +16,7 @@ function AllMoumLatest () {
         {
           query.isSuccess 
           && (
-            query.data?.content?.map(piece => {
-              return piece.boardType === "LINK" ? 
-                <LinkPieceCard key={piece.id} piece={piece} /> :
-                <MemoPieceCard key={piece.id} piece={piece} />
-            })
+            query.data?.content?.map(piece => <SearchPieceCard key={piece.id} piece={piece} />)
           )
         }
       </LatestList>

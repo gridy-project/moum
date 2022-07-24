@@ -6,13 +6,14 @@ import SearchMoumCard from "./Card/SearchMoumCard";
 function AllMoumFavorite () {
   const {data: bestMoum, isLoading: bestMoumLoading} = useCustomQuery("search/best", 
   async () => await instance.get("/BestFolders/0/10"));
+
   return (
     <Favorite>
       <em>스크랩 많은 인기 모음</em>
       <FavoriteList>
         {
           bestMoumLoading ? <div>isLoading</div> :
-          bestMoum.data?.content?.map((moum) => {
+          bestMoum.data?.map((moum) => {
             return <SearchMoumCard key={moum.id} moum={moum}/>
           })
         }
