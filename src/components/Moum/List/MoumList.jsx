@@ -8,12 +8,10 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { moumSort } from "state/moum";
 import { changeMoumOrder } from "utils/api/moum";
 import useCustomMutate from "hooks/useCustomMutate";
-import { atomScrollState } from "state/common/scroll";
 
 function MoumList ({moums}) {
   const [sortableMoumList, setSortableMoumList] = useState([]);
   const sortState = useRecoilValue(moumSort);
-  const setScrollState = useSetRecoilState(atomScrollState);
 
   const {mutateAsync: order} = useCustomMutate(
     ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));
@@ -31,7 +29,7 @@ function MoumList ({moums}) {
     if (moums) {
       setSortableMoumList([...moums]);
     }
-  }, [moums, setScrollState]);
+  }, [moums]);
 
   return (
     <List>

@@ -6,29 +6,15 @@ import Header from "components/Common/Header";
 import MoumResultSet from "components/Search/Result/MoumResultSet";
 import PieceResultSet from "components/Search/Result/PieceResultSet";
 import Search from "components/Search/SearchForm";
-import useCustomQuery from "hooks/useCustomQuery";
 
 function Result () {
-  const params = useParams();
-
-  const folderQuery = useCustomQuery(["folderQuery", params], async () => {
-    const response = await instance.post(`/allfolders/${params.keyword}?page=0`);
-    return response.data;
-  });
-
-
-  const fileQuery = useCustomQuery(["fileQuery", params], async () => {
-    const response = await instance.post(`/allboards/${params.keyword}/0`, [{ category: "전체" }]);
-    return response.data;
-  });
-
   return (
     <Container>
       <Box>
         <Header />
         <Search />
-        { folderQuery?.isSuccess && <MoumResultSet moumQuery={folderQuery.data} /> }
-        { fileQuery?.isSuccess && <PieceResultSet pieceQuery={fileQuery.data} /> }
+        <MoumResultSet />
+        <PieceResultSet />
       </Box>
     </Container>
   )

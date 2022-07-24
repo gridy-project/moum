@@ -1,16 +1,74 @@
+import useCustomQuery from "hooks/useCustomQuery";
+import { useParams } from "react-router-dom";
+import { instance } from "shared/axios";
 import styled from "styled-components";
 import SearchPieceCard from "../Card/SearchPieceCard";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 
-function PieceResultSet ({pieceQuery}) {
+const piecesFetch = async ({keyword ,pageParam}) => {
+  const response = await instance.post(`/allboards/${keyword}/${pageParam}`, [{ category: "전체" }]);
+  const { boards, boardsCnt } = response.data;
+  return { pieces: boards, count: boardsCnt, nextPage: pageParam + 1, isLast: Math.floor(boardsCnt/8) === pageParam }
+}
+
+function PieceResultSet () {
+  const params = useParams();
+  const {ref, inView} = useInView();
+
+  // const piecesQuery = useCustomQuery(["fileQuery", params], async () => {
+  //   const response = await instance.post(`/allboards/${params.keyword}/0`, [{ category: "전체" }]);
+  //   return response.data;
+  // });
+
+  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    "filesQuery", 
+    ({pageParam = 0}) => piecesFetch({keyword: params.keyword, pageParam}),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) {
+          return lastPage.nextPage
+        } else {
+          return undefined;
+        }
+      }
+    }
+  )
+
+  const [pieces, setPieces] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setPieces((current) => {
+        let arr = [];
+        for (let i = 0; i < data.pages.length; i++) {
+          arr = [...arr, ...data.pages[i].pieces];
+        }
+
+        return arr;
+      })
+    }
+    console.log(data);
+  }, [data])
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
   return (
+    pieces.length > 0 &&
     <Wrap>
-      <h2>관련있는 조각<p>조각 검색 결과 {pieceQuery.boardsCnt}건</p></h2>
+      <h2>관련있는 조각<p>조각 검색 결과 {data.pages[0].count}건</p></h2>
       <PieceRelationList>
-        {pieceQuery.boards.map((piece) => {
+        {pieces.map((piece) => {
           return <SearchPieceCard key={piece.id} piece={piece} />
         })}
       </PieceRelationList>
-      {pieceQuery.boardsCnt === 0 && <div className="no-item">조각 검색 결과가 없습니다.</div>}
+      {data.pages[0].count === 0 && <div className="no-item">조각 검색 결과가 없습니다.</div>}
+      <div ref={ref}></div>
     </Wrap>
   )
 }

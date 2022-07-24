@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
-import { selectedItems } from "state/moum";
 import { atomFloatItemActive, atomFloatStatus, atomSearch, atomSelectedItems, atomSelectItemsAll, atomSelectMode } from "state/user";
 import styled from "styled-components";
 
@@ -21,7 +20,7 @@ function SortGroup () {
   const setSelectAll = useSetRecoilState(atomSelectItemsAll);
   
   // recoil value
-  const items = useRecoilValue(selectedItems);
+  const items = useRecoilValue(atomSelectedItems);
 
   // recoil state
   const [modeState, setModeState] = useRecoilState(atomSelectMode);

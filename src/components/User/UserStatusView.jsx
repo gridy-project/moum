@@ -8,9 +8,7 @@ import styled from "styled-components";
 function UserStatusView({user, isOther}) {
   const {userId} = useParams();
   const queryClient = useQueryClient();
-
-  console.log(user);
-
+  
   const {mutateAsync: follow} = useCustomMutate((id) => {
     return instance.post(`/follow/${id}`, {
       followerId: id

@@ -9,25 +9,34 @@ import moveSvg from "assets/common/OptionMenu/move.svg";
 import removeSvg from "assets/common/OptionMenu/delete.svg";
 import privateSvg from "assets/common/OptionMenu/private.svg";
 import publicSvg from "assets/common/OptionMenu/public.svg";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { useQueryClient } from "react-query";
 import { useState } from "react";
 import { globalPopup } from "state/common/popup";
 import { instance } from "shared/axios";
 import { useParams } from "react-router-dom";
-import MoveSelectPopup from "../Popup/MoveSelectPopup";
 import MemoDetailPopup from "../Popup/MemoDetailPopup";
+import MoveSelectPopup from "components/Common/Popup/MoveSelectPopup";
+import { getMoumMineAllAxios } from "utils/api/moum";
+import useCustomQuery from "hooks/useCustomQuery";
+import { pieceSelectMode, selectedItems } from "state/moum";
 
 function MoumPieceCard ({sortable, piece, selectAll}) {
   const queryClient = useQueryClient();
   const {folderId: viewFolderId = 0} = useParams();
 
+  // Recoil State
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
+
+  const [items, setItems] = useRecoilState(selectedItems);
+  const selectMode = useRecoilValue(pieceSelectMode);
+
   const {mutateAsync: remove} = useCustomMutate((id) => removePieceAxios(viewFolderId, id));
   const [buttonState, setButtonState] = useState(false);
   
-  // console.log(piece);
+  // React Query
+  const moumsQuery = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
 
   const {mutateAsync: getPiece} = useCustomMutate((id) => instance.get(`/board/${id}`));
   const {mutateAsync: changeStatus} = useCustomMutate(async (piece) => {
@@ -124,10 +133,11 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
           state: true,
           component: (
             <MoveSelectPopup
+              query={moumsQuery}
               close={() => {
                 resetPopup();
               }}
-              confirm={async (moum) => {
+              confirm= {async (moum) => {
                 const {result} = await movePiece({folderId: moum.id, list: [{id: piece.id}]});
                 if (result) {
                   queryClient.invalidateQueries("mine/pieces");
@@ -158,6 +168,9 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       buttonState={buttonState} 
       setButtonState={setButtonState} 
       options={options}
+      selectMode={selectMode}
+      selectedItems={items}
+      setSelectedItems={setItems}
     />
   )
 }

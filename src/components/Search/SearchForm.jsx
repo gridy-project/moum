@@ -24,6 +24,7 @@ function SearchForm () {
 const Form = styled.form`
   display: flex;
   justify-content: center;
+  padding-top: 60px;
 
   input {
     width: 700px;

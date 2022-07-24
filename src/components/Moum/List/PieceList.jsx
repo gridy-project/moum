@@ -9,14 +9,12 @@ import { useEffect } from "react";
 import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum";
 import MoumPieceCard from "components/Moum/Card/MoumPieceCard";
 import { useParams } from "react-router-dom";
-import { atomScrollState } from "state/common/scroll";
 
 function PieceList ({selectAll, search}) {
   const {folderId: viewFolderId = 0} = useParams();
 
   const categories = useRecoilValue(selectedCategories);
   const sortState = useRecoilValue(moumSort);
-  const setScrollState = useSetRecoilState(atomScrollState);
   const piecesQuery = useCustomQuery(["mine/pieces", viewFolderId, categories, search], async () => {
     if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
       const response = await getPieceMineAllAxios(viewFolderId);
@@ -40,8 +38,7 @@ function PieceList ({selectAll, search}) {
     if (piecesQuery.isSuccess) {
       setSortablePieceList([...piecesQuery.data.boardList]);
     }
-    setScrollState(true);
-  }, [piecesQuery.isSuccess, piecesQuery.data, setScrollState]);
+  }, [piecesQuery.isSuccess, piecesQuery.data]);
 
   return (
     <List>

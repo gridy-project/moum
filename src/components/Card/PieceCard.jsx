@@ -1,16 +1,24 @@
 // images
 import PieceMemoCard from "./PieceMemoCard";
 import PieceLinkCard from "./PieceLinkCard";
-import { useSetRecoilState } from "recoil";
-import { selectedItems } from "state/moum";
 import { useEffect } from "react";
 
-function PieceCard ({piece, selectAll, sortable, options, buttonState, setButtonState}) {
-  const setItems = useSetRecoilState(selectedItems);
+function PieceCard ({
+  piece, 
+  selectMode,
+  selectedItems,
+  setSelectedItems,
+  selectAll, 
+  sortable, 
+  options, 
+  buttonState, 
+  setButtonState
+}) {
+  // const setItems = useSetRecoilState(selectedItems);
 
   useEffect(() => {
     if (selectAll) {
-      setItems(current => {
+      setSelectedItems(current => {
         if (current.indexOf(piece.id) === -1) { // 값이 없는 경우 리스트 추가
           return [...current, piece.id];
         } else {
@@ -18,12 +26,15 @@ function PieceCard ({piece, selectAll, sortable, options, buttonState, setButton
         }
       });
     }
-  }, [selectAll, setItems, piece.id]);
+  }, [selectAll, setSelectedItems, piece.id]);
 
   return (
     piece.boardType === "LINK" ? 
     <PieceLinkCard
       piece={piece}
+      selectMode={selectMode}
+      selectedItems={selectedItems}
+      setSelectedItems={setSelectedItems}
       selectAll={selectAll}
       sortable={sortable} 
       options={options}
@@ -32,6 +43,9 @@ function PieceCard ({piece, selectAll, sortable, options, buttonState, setButton
     /> :
     <PieceMemoCard
       piece={piece} 
+      selectMode={selectMode}
+      selectedItems={selectedItems}
+      setSelectedItems={setSelectedItems}
       selectAll={selectAll} 
       sortable={sortable} 
       options={options}

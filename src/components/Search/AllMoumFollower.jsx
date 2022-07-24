@@ -1,42 +1,61 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { instance } from "shared/axios";
-import useGetReactQuery from "../../hooks/useGetReactQuery";
-import FollowerCard from "../card/FollowerCard";
+import FollowerCard from "components/Card/FollowerCard";
+import useCustomQuery from "hooks/useCustomQuery";
+import { useEffect, useState } from "react";
+import { SvgMoveLeft, SvgMoveRight } from "assets/code/Search/SvgMove";
 
 function AllMoumFollower () {
-  const {data: followUserList, isLoading: followUserListLoading} = useGetReactQuery("search/followUserList", async () => {
-    const response = await instance.get("/followinguser/0/4");
-    return response.data;
-  });
+  const [viewFollows, setViewFollows] = useState([]);
+  const [page, setPage] = useState(0);
+  const [pageCnt, setPageCnt] = useState(0);
+
+  const {data: follows, isSuccess} = useCustomQuery(["search/followUserList", page],
+  () => instance.get(`/followinguser/${page}/4`));
+
+  const pagePrev = () => {
+    if (page !== 0) {
+      setPage(current => current - 1);
+    }
+  }
+
+  const pageNext = () => {
+    if (page !== pageCnt - 1) {
+      setPage(current => current + 1)
+    }
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      const {data: {
+        followingCnt,
+        followDtos
+      }, result} = follows;
+
+      if (result) {
+        setViewFollows(followDtos);
+        setPageCnt(Math.ceil(followingCnt/4));
+      }
+    }
+  }, [follows, isSuccess]);
 
   return (
-    <Follower>
-      <div className="content-header">
-        <em>내가 팔로우한 계정</em>
-        <div className="btn-follow">
-          <button>left</button>
-          <button>right</button>
+    pageCnt > 0 && (
+      <Follower>
+        <div className="content-header">
+          <em>내가 팔로우한 계정<span>{follows.data.followingCnt}개</span></em>
+          <div className="btn-follow">
+            <Button isActive={page !== 0} onClick={pagePrev}><SvgMoveLeft /></Button>
+            <Button isActive={page !== pageCnt - 1} onClick={pageNext}><SvgMoveRight /></Button>
+          </div>
         </div>
-      </div>
-      <FollowerList>
-        {
-          followUserListLoading ? <div>isLoading</div> : 
-          followUserList?.content?.map((moum) => {
-            return <FollowerCard />
-          })
-        }
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-        <FollowerCard />
-      </FollowerList>
-    </Follower>
+        <List>
+          {viewFollows.map((user) => {
+            return <FollowerCard key={user.id} user={user} />;
+          })}
+        </List>
+      </Follower>
+    )
   )
 }
 
@@ -51,11 +70,45 @@ const Follower = styled.div`
       display: block;
       font-size: 30px;
       margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 16px;
+        margin-left: 16px;
+        color: #949494;
+      }
     }
   }
 `;
 
-const FollowerList = styled.div`
+const Button = styled.button`
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 10px 1px #DFDFDF;
+  transition: background-color .3s, box-shadow .3s;
+  cursor: pointer;
+
+  svg {
+    path {
+      transition: stroke .3s;
+      stroke: ${props => props.isActive ? "#9152FF" : "#C8C8C8"}
+    }
+  }
+
+  ${props => props.isActive && css`
+    box-shadow: 0px 0px 10px 1px #D2BAFF;
+  `}
+
+  & + & {
+    margin-left: 20px;
+  }
+`;
+
+const List = styled.div`
   display: flex;
   flex-wrap: wrap;
 
