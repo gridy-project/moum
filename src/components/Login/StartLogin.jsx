@@ -70,13 +70,13 @@ const StartLogin = (props) => {
           <input type="text" ref={idRef} placeholder='아이디'/>
           <input type="password" ref={pwRef} placeholder='비밀번호'/>
         </LoginInputBox>
-        <KeepingLogin>
+        {/* <KeepingLogin>
           <LoginImgBox>
             <CircleImg src={circle} alt=""/>
             <CheckImg src={check} alt="" />
           </LoginImgBox>
           <p>로그인 상태 유지</p>
-        </KeepingLogin>
+        </KeepingLogin> */}
         <LoginBtn>로그인</LoginBtn>
       </form>
        <TabBox>
@@ -97,9 +97,9 @@ const StartLogin = (props) => {
  }
 
  const MoumLogo = styled.div`
-  width: 90.56px;
-  height: 23px;
-  margin: 0 auto 33px auto;
+  width: 144px;
+  height: 40px;
+  margin: 110px 0 36px 100px;
 `;
 
 const LineBox = styled.div`
@@ -118,7 +118,7 @@ const LineBox = styled.div`
 `;
 
 const LoginInputBox = styled.div`
-  margin-bottom:5px;
+  margin-bottom:16px;
   input {
     width: 360px;
     height: 44px;

@@ -12,13 +12,13 @@ import googlelogo from "assets/images/pages/login/google_logo.png";
 
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;
+ 
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <SocialLoginButton loginSuccess={loginSuccess}/>
     </GoogleOAuthProvider>
   );
 }
-
 export default SocialLogin;
 
 function SocialLoginButton () {

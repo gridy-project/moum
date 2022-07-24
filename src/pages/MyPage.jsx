@@ -12,7 +12,6 @@ import ChangeEmail from "../components/MyPage/ChangeEmail";
 import ChangePwd from "../components/MyPage/ChangePwd";
 import DeleteAccount from "../components/MyPage/DeleteAccount";
 
-
 function MyPage() {
 
 	return (

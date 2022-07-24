@@ -25,8 +25,10 @@ instance.interceptors.response.use(
     if (config.data?.statusCode) {
       console.log(config.data);
       if (config.data?.statusCode === 200) {
+        alert(config.data.message)
         return { result: true, status: config.data.statusCode, message: config.data.massage, data: config.data.content }
       } else {
+        alert(config.data.message)
         return { result: false, status: config.data.statusCode, message: config.data.massage }
       }
     } else {
@@ -38,12 +40,13 @@ instance.interceptors.response.use(
       config,
       response: { status },
     } = error;
+
     if (status === 402) { // 토큰이 헤더에 없음 : 402
-      window.location.replace("/");
+      // window.location.replace("/");
     }
     if (status === 406) { // 변질된 토큰 : 406
-      removeToken();
-      window.location.replace("/");
+      // removeToken();
+      // window.location.replace("/");
     }
     const originalRequest = config;
     if (status === 410 && !originalRequest._retry) {

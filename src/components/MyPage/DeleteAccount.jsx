@@ -18,7 +18,7 @@ const DeleteAccount = () => {
     },
     {
       onSuccess: (data) => {
-				window.location.replace("/login")
+				window.location.replace("/newlogin")
       },
 			onError: (err) => {
 				console.log(err)
