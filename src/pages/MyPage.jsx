@@ -15,7 +15,7 @@ import DeleteAccount from "../components/MyPage/DeleteAccount";
 function MyPage() {
 
 	return (
-		<Container>
+		<CustomContainer>
 			<Header selected={3}/>
 			<Wrap>
 				<TitleWrap>
@@ -35,9 +35,17 @@ function MyPage() {
 					</Content>
 				</ContentBox>
 			</Wrap>
-		</Container>
+		</CustomContainer>
 	);
 }
+
+const CustomContainer = styled.div`
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	padding-top: 150px;
+	background-color: #FFFFFF !important;
+`;
 
 const Wrap = styled.div`
 	width: 1000px;
