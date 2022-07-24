@@ -18,6 +18,7 @@ const DeleteAccount = () => {
     },
     {
       onSuccess: (data) => {
+        window.alert("성공적으로 탈퇴되었습니다.")
 				window.location.replace("/newlogin")
       },
 			onError: (err) => {

@@ -19,6 +19,7 @@ import check2 from "../../../assets/images/pages/login/check2.png"
 const CreateProfile = () => {
   const arr = [profile1, profile2, profile3, profile4, profile5, profile6]
   const [selected, setSelected] = useState(0);
+
   const nicknameRef = useRef();
 
   const profileZero = "https://i.postimg.cc/2jXgpBV5/profile1.png"
@@ -28,8 +29,8 @@ const CreateProfile = () => {
   const profileFour = "https://i.postimg.cc/154XPTsZ/profile5.png"
   const profileFive = "https://i.postimg.cc/d0cV2Vdq/profile6.png"
 
-  const profiles = [profileZero, profileOne, profileTwo, profileThree, profileFour, profileFive
-  ]
+  const profiles = [profileZero, profileOne, profileTwo, profileThree, profileFour, profileFive]
+
   // 아이디 중복 확인
   const clickIdCheck = () => {
     IdDupCheck(nicknameRef.current.value);
@@ -57,6 +58,7 @@ const CreateProfile = () => {
   ) 
 // 회원가입 프로필 이미지 1장 업로드
   const imageRef = useRef(null);
+
   const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState)
   const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState)
   const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState)
@@ -66,7 +68,7 @@ const CreateProfile = () => {
   // 이미지 보내기
   const [selectImg, setSelectImg] = useState(0);
 
- const choiceImage = (v, i) => {
+ const choiceImage = (i) => {
   setSelectImg(profiles[i])
  }
 
@@ -80,7 +82,6 @@ const CreateProfile = () => {
       email : joinEmailState,
       imgPath: selectImg
     }
-    console.log(data)
     signUp(data);
   }
 
@@ -129,7 +130,7 @@ const CreateProfile = () => {
             onChange={(e)=> {setJoinImgPathState(e.target.value)}}           
             onClick={() => {
               setSelected(v);
-              choiceImage(v,i);
+              choiceImage(i);
             }}>
               <ProfileImg 
                 src={v} 
