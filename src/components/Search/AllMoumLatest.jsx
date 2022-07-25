@@ -1,49 +1,61 @@
 import styled, { css } from "styled-components";
 import { instance } from "shared/axios";
-import useCustomQuery from "hooks/useCustomQuery";
 import SearchPieceCard from "./Card/SearchPieceCard";
 import { useEffect, useState } from "react";
+import { useInfiniteQuery } from "react-query";
+
+const piecesFetch = async ({pageParam}) => {
+  const response = await instance.get(`/newboards/${pageParam}/8`);
+  const { content: data, last } = response.data;
+  return { pieces: data, nextPage: pageParam + 1, isLast: last }
+}
 
 function AllMoumLatest () {
-  const [page, setPage] = useState(0);
-  const [pageCnt, setPageCnt] = useState(0);
-  const [viewPieces, setViewPieces] = useState([]);
-  const {data: pieces, isSuccess} = useCustomQuery(["search/latestPiece", page], () => instance.get(`/newboards/${page}/8`));
+  const [last, setLast] = useState(false);
 
-  const onClickMore = () => {
-    setPage(current => current + 1);
-  }
-
-  useEffect(() => {
-    if (isSuccess && pieces) {
-      const {
-        data: {
-          content: list, totalPages
-        },
-        result
-      } = pieces;
-      if (result) {
-        setViewPieces(current => {
-          if (current[current.length-1]?.id !== list[list.length - 1].id) {
-            // 마지막의 id 값이 같지 않은 경우에만 추가
-            return [...current, ...list]
-          } else {
-            return current
-          }
-        });
-        setPageCnt(totalPages);
+  const { data, fetchNextPage } = useInfiniteQuery(
+    "filesQuery", 
+    ({pageParam = 0}) => piecesFetch({pageParam}),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) {
+          return lastPage.nextPage;
+        } else {
+          return undefined;
+        }
       }
     }
-  }, [pieces, isSuccess]);
+  );
+
+  const [pieces, setPieces] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setPieces((current) => {
+        let arr = [];
+        for (let i = 0; i < data.pages.length; i++) {
+          arr = [...arr, ...data.pages[i].pieces];
+        }
+
+        return arr;
+      })
+    }
+  }, [data]);
 
   return (
     <Latest>
       <em>최근 올라온 조각</em>
       <LatestList>
-        {viewPieces?.map(piece => <SearchPieceCard key={piece.id} piece={piece} />)}
+        {pieces?.map(piece => <SearchPieceCard key={piece.id} piece={piece} />)}
       </LatestList>
       <div className="latest-more">
-        <More onClick={onClickMore} isHide={page === pageCnt - 1}>더보기</More>
+        <More onClick={async () => {
+          const response = await fetchNextPage();
+          const pages = response.data.pages;
+          if (pages[pages.length-1].isLast) {
+            setLast(true);
+          }
+        }} isHide={last}>더보기</More>
       </div>
     </Latest>
   );

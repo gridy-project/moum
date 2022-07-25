@@ -1,8 +1,9 @@
 // image
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import searchIcon from "assets/images/pages/search/icon-search-white.png";
+import { render } from "@testing-library/react";
 
 function SearchForm () {
   const navigate = useNavigate();

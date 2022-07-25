@@ -26,7 +26,7 @@ function SearchPieceCard ({piece}) {
   );
 
   const {mutateAsync: movePiece} = useCustomMutate(
-    (id) => instance.post("/myshare/boards", [{id}])
+    ({moumId, pieceId}) => instance.post(`/myshare/boards/${moumId}`, [{id: pieceId}])
   );
 
   const options = [
@@ -42,7 +42,9 @@ function SearchPieceCard ({piece}) {
               close={resetPopup}
               // 저장시 폴더 선택 백엔드 API에 추가 필요
               confirm={async (moum) => {
-                const {result} = await movePiece(piece.id);
+                console.log(typeof moum.id);
+                console.log(typeof piece.id);
+                const {result} = await movePiece({moumId: moum.id, pieceId: piece.id});
                 if (result) {
                   console.log("저장 성공");
                 }
