@@ -40,6 +40,10 @@ function MoumResultSet () {
     }
   }, [isSuccess, moums, page]);
 
+  useEffect(() => {
+    console.log(moums);
+  }, [moums]);
+
   return (
     <Wrap>
       <h2>관련있는 모음<p>모음 검색 결과 {isSuccess && moums.data.foldersCnt}건</p></h2>

@@ -19,6 +19,10 @@ function AllMoumFavorite () {
     }
   }
 
+  useEffect(() => {
+    console.log(moums);
+  }, [moums])
+
   const pageNext = () => {
     if (page !== Math.ceil(moums.data.length/4) - 1) {
       setPage(current => current + 1)

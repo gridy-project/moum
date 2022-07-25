@@ -27,6 +27,7 @@ function SocialLoginButton () {
 
   const {mutate: login} = useMutation(async (data) => {
     const response = await executeSignInWithGoogleAxios(data.code);
+    console.log(response);
     return response.data;
   }, {
     onSuccess: data => {
@@ -44,6 +45,7 @@ function SocialLoginButton () {
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (data) => {
+      console.log(data);
       login(data);
     },
     onError: (data) => {
