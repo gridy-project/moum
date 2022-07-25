@@ -14,17 +14,12 @@ const piecesFetch = async ({keyword ,pageParam}) => {
 }
 
 function PieceResultSet () {
-  const params = useParams();
+  const {keyword} = useParams();
   const {ref, inView} = useInView();
 
-  // const piecesQuery = useCustomQuery(["fileQuery", params], async () => {
-  //   const response = await instance.post(`/allboards/${params.keyword}/0`, [{ category: "전체" }]);
-  //   return response.data;
-  // });
-
   const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    "filesQuery", 
-    ({pageParam = 0}) => piecesFetch({keyword: params.keyword, pageParam}),
+    ["filesQuery", keyword], 
+    ({pageParam = 0}) => piecesFetch({keyword: keyword, pageParam}),
     {
       getNextPageParam: (lastPage) => {
         if (!lastPage.isLast) {
@@ -49,7 +44,6 @@ function PieceResultSet () {
         return arr;
       })
     }
-    console.log(data);
   }, [data])
 
   useEffect(() => {

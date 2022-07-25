@@ -1,68 +1,73 @@
 import useCustomQuery from "hooks/useCustomQuery";
 import { useEffect, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
 import styled, { css } from "styled-components";
 import SearchMoumCard from "../Card/SearchMoumCard";
 
+const moumsFetch = async ({keyword, pageParam}) => {
+  const response = await instance.post(`/allfolders/${keyword}?page=${pageParam}`);
+  const { folders: moums, foldersCnt } = response.data;
+  return { foldersCnt, moums, nextPage: pageParam + 1, isLast: pageParam === Math.floor(foldersCnt/8) }
+}
+
 function MoumResultSet () {
-  const params = useParams();
+  const {keyword} = useParams();
+  const [moums, setMoums] = useState([]);
 
-  const [page, setPage] = useState(0);
-  const [pageCnt, setPageCnt] = useState(0);
-  const [folders, setFolders] = useState([]);
+  const { data, fetchNextPage } = useInfiniteQuery(
+    ["moumsSearchQuery", keyword], 
+    ({pageParam = 0}) => moumsFetch({keyword, pageParam}),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) {
+          return lastPage.nextPage;
+        } else {
+          return undefined;
+        }
+      }
+    }
+  );
 
-  const {isSuccess, data: moums} = useCustomQuery(["folderQuery", page], 
-    () => instance.post(`/allfolders/${params.keyword}?page=${page}`));
-
-  const onClickMore = () => {
-    setPage(current => current + 1);
+  const onClickMore = async () => {
+    fetchNextPage();
   }
 
   useEffect(() => {
-    if (isSuccess && moums) {
-      const {result, data: {
-        folders: list,
-        foldersCnt: count
-      }} = moums;
+    if (data) {
+      setMoums((current) => {
+        let arr = [];
+        for (let i = 0; i < data.pages.length; i++) {
+          arr = [...arr, ...data.pages[i].moums];
+        }
 
-      if (result) {
-        setFolders(current => {
-          if (current[current.length-1]?.id !== list[list.length - 1]?.id) {
-            // 마지막의 id 값이 같지 않은 경우에만 추가
-            return [...current, ...list]
-          } else {
-            return current
-          }
-        });
-        setPageCnt(Math.ceil(count / 8))
-      }
+        return arr;
+      })
     }
-  }, [isSuccess, moums, page]);
+  }, [data]);
 
-  useEffect(() => {
-    console.log(moums);
-  }, [moums]);
+  const foldersCnt = data?.pages[0]?.foldersCnt ?? 0;
 
   return (
     <Wrap>
-      <h2>관련있는 모음<p>모음 검색 결과 {isSuccess && moums.data.foldersCnt}건</p></h2>
+      <h2>관련있는 모음<p>모음 검색 결과 {foldersCnt}건</p></h2>
       <MoumRelationList>
         {
-        folders?.map(
-          (moum) => {
-            return (<SearchMoumCard key={moum.id} moum={moum} />)
-          }
-        )
+          moums?.map(
+            (moum) => {
+              return (<SearchMoumCard key={moum.id} moum={moum} />)
+            }
+          )
         }
       </MoumRelationList>
 
-      {moums?.data?.foldersCnt !== 0 && (
+      {foldersCnt !== 0 && (
         <div className="latest-more">
-          <More onClick={onClickMore} isHide={page === pageCnt - 1}>더보기</More>
+          <More onClick={onClickMore} isHide={data?.pages[data?.pages?.length-1]?.isLast}>더보기</More>
         </div>
       )}
-      {moums?.data?.foldersCnt === 0 && <div className="no-item">모음 검색 결과가 없습니다.</div>}
+      {foldersCnt === 0 && <div className="no-item">모음 검색 결과가 없습니다.</div>}
     </Wrap>
   )
 }

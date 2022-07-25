@@ -22,9 +22,8 @@ function SelectFloat () {
   const moumsQuery = useCustomQuery(
     "mine/moums/all", () => instance.post("/folders/0/all", [{category:"전체"}]));
 
-  const {mutateAsync: savePieces} = useCustomMutate((data) => {
-    console.log(data);
-    return instance.post("/myshare/boards", data);
+  const {mutateAsync: savePieces} = useCustomMutate(({moumId, data}) => {
+    return instance.post(`/myshare/boards/${moumId}`, data);
   });
 
   const move = () => {
@@ -36,8 +35,7 @@ function SelectFloat () {
             query={moumsQuery}
             close={resetPopup}
             confirm={async (moum) => {
-              console.log(selectedItems);
-              const {result} = await savePieces(selectedItems.map(v => ({id: v})));
+              const {result} = await savePieces({moumId: moum.id, data:selectedItems.map(v => ({id: v}))});
               if (result) {
                 alert("저장 완료");
               }

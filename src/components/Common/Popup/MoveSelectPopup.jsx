@@ -10,7 +10,6 @@ import folderNormalSvg from "assets/common/Popup/folder-normal.svg";
 import folderActiveSvg from "assets/common/Popup/folder-active.svg";
 
 function MoveSelectPopup ({query, close, confirm, title}) {
-  console.log(query);
   const {isSuccess, data: list} = query;
   const [select, setSelect] = useState(0);
 

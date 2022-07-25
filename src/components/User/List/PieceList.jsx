@@ -5,7 +5,7 @@ import { atomSearch, atomSelectedCategories, atomSelectedItems, atomSelectItemsA
 import SearchPieceCard from "components/Search/Card/SearchPieceCard";
 import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function PieceList () {
   const {userId: viewUserId, folderId: viewFolderId} = useParams();
