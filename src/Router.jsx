@@ -1,8 +1,5 @@
 import { useCallback, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import Login from "pages/Login";
-import NewLogin from "pages/NewLogin"
-import Register from "pages/Register";
 import MyPage from "pages/MyPage";
 import Search from "pages/Search";
 import Moum from "pages/Moum";
@@ -17,6 +14,7 @@ import { executeTokenRefreshAxios } from "utils/api/auth";
 import User from "pages/User";
 import Popup from "components/Popup/Popup";
 import Float from "components/Popup/Float";
+import Auth from "pages/Auth";
 
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
@@ -46,9 +44,7 @@ function Router() {
       <Popup />
       <Float />
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/newlogin" element={<NewLogin />}/>
-        <Route path="/register" element={<Register />} />
+        <Route path="/auth" element={<Auth />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:keyword" element={<Result />} />
         <Route path="/mypage" element={<MyPage />} />

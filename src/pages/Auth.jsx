@@ -14,7 +14,7 @@ import ReissuePwd from 'components/Login/ReissuePwd';
 import Join from 'components/Login/SignUp/Join';
 import CreateProfile from 'components/Login/SignUp/CreateProfile';
 
-const NewLogin = () => {
+const Auth = () => {
   const [numberState, setNumberState] = useRecoilState(numberLoginState)
 
   const runLoginPage = () => {
@@ -67,6 +67,7 @@ const Container = styled.div`
   
   > img {
     width: 100%;
+    height: 100vh;
     object-fit: cover;
   }
 `;
@@ -95,4 +96,4 @@ const Content = styled.div`
   margin-top:130px;
 `;
 
-export default NewLogin;
+export default Auth;

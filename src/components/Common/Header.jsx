@@ -53,7 +53,7 @@ function Header({selected}) {
                 navigate("/");
               }}>로그아웃</button>
             ) : (
-              <button className="btn-login" onClick={() => { navigate("/newlogin") }}>로그인</button>
+              <button className="btn-login" onClick={() => { navigate("/auth") }}>로그인</button>
             )
           }
         </Menu>
