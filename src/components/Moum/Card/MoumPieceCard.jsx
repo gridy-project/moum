@@ -19,7 +19,7 @@ import MemoDetailPopup from "../Popup/MemoDetailPopup";
 import MoveSelectPopup from "components/Common/Popup/MoveSelectPopup";
 import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
-import { pieceSelectMode, selectedItems } from "state/moum";
+import { atomPieceSelectMode, atomSelectedItems } from "state/moum";
 
 function MoumPieceCard ({sortable, piece, selectAll}) {
   const queryClient = useQueryClient();
@@ -29,8 +29,8 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
 
-  const [items, setItems] = useRecoilState(selectedItems);
-  const selectMode = useRecoilValue(pieceSelectMode);
+  const [items, setItems] = useRecoilState(atomSelectedItems);
+  const selectMode = useRecoilValue(atomPieceSelectMode);
 
   const {mutateAsync: remove} = useCustomMutate((id) => removePieceAxios(viewFolderId, id));
   const [buttonState, setButtonState] = useState(false);

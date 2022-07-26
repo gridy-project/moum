@@ -1,8 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 function FollowerCard({user}) {
+  const navigate = useNavigate();
+  const runUserPage = () => {
+    navigate(`/user/${user.id}`);
+  }
   return (
-    <Container>
+    <Card onClick={runUserPage}>
       <div className="card-image">
         {user.imgPath && <img src={user.imgPath} alt="noImage" />}
       </div>
@@ -20,26 +25,13 @@ function FollowerCard({user}) {
           </div>
         </div>
       </div>
-      {/* <div className="card-content">
-        <div className="card-title">유저네임{num}</div>
-        <div className="card-description">유저 정보입니다</div>
-        <div className="card-footer">
-          <div className="card-follower">
-            <em>팔로워</em>
-            <p>1명</p>
-          </div>
-          <div className="card-piece"> 
-            <em>총 파일</em>
-            <p>100개</p>
-          </div>
-        </div>
-      </div> */}
-    </Container>
+    </Card>
   );
 }
 
 
-const Container = styled.div`
+const Card = styled.div`
+  cursor: pointer;
   width: 280px;
   height: 350px;
   background-color: #FFFFFF;
@@ -51,6 +43,10 @@ const Container = styled.div`
   align-items: center;
   padding: 24px 16px 16px;
 
+  &:hover {
+    background-color: #FCFCFC;
+  }
+
   .card-image {
     width: 100px;
     height: 100px;
@@ -60,6 +56,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+    overflow: hidden;
 
     img {
       width: 100%;

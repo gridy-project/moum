@@ -76,6 +76,7 @@ const Follower = styled.div`
       span {
         font-size: 16px;
         margin-left: 16px;
+        margin-top: 3px;
         color: #949494;
       }
     }

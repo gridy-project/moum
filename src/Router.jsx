@@ -50,6 +50,8 @@ function Router() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/moum" element={<Moum />} />
         <Route path="/moum/:folderId" element={<Moum />} />
+        <Route path="/scrap" element={<Moum isScrap />} />
+        <Route path="/scrap/:userId/:folderId" element={<Moum isScrap />} />
         <Route path="/user/:userId" element={<User />} />
         <Route path="/user/:userId/:folderId" element={<User />} />
         <Route path="/test" element={<Test />} />
