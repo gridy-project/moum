@@ -1,9 +1,9 @@
 import Header from "components/Common/Header";
 import styled from "styled-components";
-import MoumTitleContent from "./MoumTitleContent";
-import MoumTitleCreateForm from "./MoumTitleCreateForm";
+import MoumTitleContent from "./Header/MoumTitleContent";
+import MoumTitleCreateForm from "./Header/MoumTitleCreateForm";
 
-function MoumTitle ({moums}) {
+function MoumHeader ({moums}) {
   return (
     <Title>
       <Header selected={1} />
@@ -27,4 +27,4 @@ const Title = styled.div`
   position: relative;
 `;
 
-export default MoumTitle;
+export default MoumHeader;

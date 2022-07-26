@@ -50,7 +50,7 @@ function PieceList () {
       resetSelectMode();
       resetSelectedItems();
     }
-  }, [viewFolderId, resetSelectAll, resetSelectMode, resetSelectedItems]);
+  }, [resetSelectAll, resetSelectMode, resetSelectedItems]);
 
   return (
     <List>

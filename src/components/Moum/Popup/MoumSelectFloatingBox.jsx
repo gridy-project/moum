@@ -1,7 +1,7 @@
 import iconMove from "assets/images/pages/moum/move_icon.png";
 import iconDelete from "assets/images/pages/moum/delete_icon.png";
-import { selectedItems } from "state/moum";
-import { useRecoilValue } from "recoil";
+import { atomSelectedItems } from "state/moum";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { useQueryClient } from "react-query";
 import { removePieceMultiAxios } from "utils/api/piece";
 import useCustomMutate from "hooks/useCustomMutate";
@@ -12,7 +12,8 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
   const {folderId: viewFolderId = 0} = useParams();
 
   const queryClient = useQueryClient();
-  const selectedItemList = useRecoilValue(selectedItems);
+  const selectedItemList = useRecoilValue(atomSelectedItems);
+  const resetSelected = useResetRecoilState(atomSelectedItems);
 
   // Backend Required Test => File Delete Request Error
   const mutatePieceRemove = useCustomMutate(({folderId, list}) => removePieceMultiAxios(folderId, list), {
@@ -26,6 +27,7 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
       alert("조각을 선택해주세요");
     } else {
       mutatePieceRemove.mutate({folderId: viewFolderId, list: selectedItemList.map((v) => ({id: v}))});
+      resetSelected();
     }
   }
 
@@ -34,8 +36,8 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
       <FloatItem isActive={floatItemStatus} onClick={() => {alert("폴더 이동 미구현")}}>
         <img src={iconMove} alt="move" />
       </FloatItem>
-      <FloatItem isActive={floatItemStatus}>
-        <img src={iconDelete} alt="remove" onClick={removeFolders}/>
+      <FloatItem isActive={floatItemStatus} onClick={removeFolders}>
+        <img src={iconDelete} alt="remove"/>
       </FloatItem>
     </FloatingBox>
   );
@@ -68,6 +70,9 @@ const FloatItem = styled.div`
     box-shadow: 0px 0px 20px 1px #D2BAFF;
     cursor: pointer;
   `}
+  img {
+    pointer-events: none;
+  }
 `;
 
 

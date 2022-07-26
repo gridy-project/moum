@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 // state
-import { moumSearch, moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
+import { atomMoumSearch, atomMoumSort, atomSelectedCategories } from "state/moum";
 
 // hook
 import useCustomQuery from "hooks/useCustomQuery";
@@ -13,19 +13,23 @@ import useCustomQuery from "hooks/useCustomQuery";
 import { getCategoryAxios } from "utils/api/category";
 import { getMoumMineFetch } from "utils/fetch/moum";
 import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
-import MoumTitle from "components/Moum/MoumTitle";
-import MoumContent from "components/Moum/MoumContent";
 import { useParams } from "react-router-dom";
 import { atomScrollState } from "state/common/scroll";
+import MoumHeader from "components/Moum/MoumHeader";
+import { instance } from "shared/axios";
+import MoumContentProfile from "components/Moum/MoumContentProfile";
+import MoumContentTabMenu from "components/Moum/MoumContentTabMenu";
+import MoumMyContent from "components/Moum/MoumMyContent";
+import MoumScrapContent from "components/Moum/MoumScrapContent";
 
-function Moum () {
+function Moum ({isScrap}) {
   // Hook
   const {folderId: viewFolderId = 0} = useParams();
   
   // Recoil
-  const search = useRecoilValue(moumSearch);
-  const sortState = useRecoilValue(moumSort);
-  const categories = useRecoilValue(selectedCategories);
+  const search = useRecoilValue(atomMoumSearch);
+  const sortState = useRecoilValue(atomMoumSort);
+  const categories = useRecoilValue(atomSelectedCategories);
   const [scrollState, setScrollState] = useRecoilState(atomScrollState);
 
   // State
@@ -35,6 +39,10 @@ function Moum () {
   // Query
   const categoriesQuery = useCustomQuery(["mine/categories", viewFolderId], () => getCategoryAxios(viewFolderId));
   const moumsQuery = useCustomQuery(["mine/moums", categories, search, sortState], () => getMoumMineFetch(categories, search, sortState));
+  const {data: user, isSuccess: userQuerySuccess} = useCustomQuery("user", async () => {
+    const response = await instance.get(`/user/myProfile`);
+    return response.data;
+  });
 
   // Ref
   const scrollRef = useRef();
@@ -52,14 +60,24 @@ function Moum () {
 
   return (
     <CustomContainer ref={scrollRef}>
-      <MoumTitle moums={moumsQuery?.data?.data} />
-      <MoumContent
-        moumsQuery={moumsQuery}
-        categoriesQuery={categoriesQuery}
-        floatItemStatus={floatItemStatus}
-        setFloatStatus={setFloatStatus}
-        setFloatItemStatus={setFloatItemStatus}
-      />
+      <MoumHeader moums={moumsQuery?.data?.data} />
+      <MoumContent>
+        {userQuerySuccess && <MoumContentProfile isSuccess={userQuerySuccess} user={user} />}
+        <MoumContentTabMenu />
+        {
+          isScrap ?
+          <MoumScrapContent />
+          :
+          <MoumMyContent
+            moumsQuery={moumsQuery}
+            categoriesQuery={categoriesQuery}
+            floatItemStatus={floatItemStatus}
+            setFloatStatus={setFloatStatus}
+            setFloatItemStatus={setFloatItemStatus}
+            isScrap={isScrap}
+          />
+        }
+      </MoumContent>
       <MoumSelectFloatingBox 
         floatStatus={floatStatus} 
         floatItemStatus={floatItemStatus} 
@@ -73,6 +91,11 @@ const CustomContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const MoumContent = styled.div`
+  width: 1200px;
+  padding-bottom: 70px;
 `;
 
 export default Moum;

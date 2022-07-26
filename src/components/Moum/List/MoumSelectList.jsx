@@ -5,7 +5,6 @@ import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 
 function MoumSelect () {
   const {folderId: viewFolderId = 0} = useParams();
@@ -44,7 +43,7 @@ function MoumSelect () {
 }
 
 const Line = styled.div`
-  margin-top: 110px;
+  margin-top: 60px;
   width: 100%;
   font-size: 18px;
   font-weight: 600px;

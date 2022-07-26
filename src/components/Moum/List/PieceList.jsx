@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import {useRecoilValue, useSetRecoilState} from "recoil";
-import { moumSort, pageMoumSelectedFolderId, selectedCategories } from "state/moum";
+import {useRecoilValue, useResetRecoilState} from "recoil";
+import { atomMoum, atomMoumSort, atomPieceSelectMode, atomSelectedCategories, atomSelectedItems } from "state/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import SortableList from 'react-easy-sort';
 import arrayMove from 'array-move';
@@ -10,11 +10,11 @@ import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum
 import MoumPieceCard from "components/Moum/Card/MoumPieceCard";
 import { useParams } from "react-router-dom";
 
-function PieceList ({selectAll, search}) {
+function PieceList ({search}) {
   const {folderId: viewFolderId = 0} = useParams();
 
-  const categories = useRecoilValue(selectedCategories);
-  const sortState = useRecoilValue(moumSort);
+  const categories = useRecoilValue(atomSelectedCategories);
+  const sortState = useRecoilValue(atomMoumSort);
   const piecesQuery = useCustomQuery(["mine/pieces", viewFolderId, categories, search], async () => {
     if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
       const response = await getPieceMineAllAxios(viewFolderId);
@@ -39,6 +39,22 @@ function PieceList ({selectAll, search}) {
       setSortablePieceList([...piecesQuery.data.boardList]);
     }
   }, [piecesQuery.isSuccess, piecesQuery.data]);
+
+  const resetSelectAll = useResetRecoilState(atomMoum.modeSelectAll);
+  const resetSelectMode = useResetRecoilState(atomPieceSelectMode);
+  const resetSelectedItems = useResetRecoilState(atomSelectedItems);
+  useEffect(() => {
+    resetSelectAll();
+    resetSelectMode();
+    resetSelectedItems();
+    return () => {
+      resetSelectAll();
+      resetSelectMode();
+      resetSelectedItems();
+    }
+  }, [resetSelectAll, resetSelectMode, resetSelectedItems]);
+
+  const selectAll = useRecoilValue(atomMoum.modeSelectAll);
 
   return (
     <List>

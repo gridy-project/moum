@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { moumCategories, selectedCategories } from "../../state/moum";
+import { atomMoumCategories, atomSelectedCategories } from "../../state/moum";
 import MoumCategoryItem from "./Item/MoumCategoryItem";
 
 function MoumCategoryGroup ({categories, noFolder}) {
-  const [category, setCategory] = useRecoilState(moumCategories);
+  const [category, setCategory] = useRecoilState(atomMoumCategories);
 
   useEffect(() => {
     if (Object.keys(category).length === 0) {
@@ -33,7 +33,7 @@ function MoumCategoryGroup ({categories, noFolder}) {
     }
   }, [categories]);
 
-  const [selected, setSelected] = useRecoilState(selectedCategories);
+  const [selected, setSelected] = useRecoilState(atomSelectedCategories);
 
   useEffect(() => {
     if (selected.length === 0) {
@@ -109,7 +109,7 @@ const CategoryGroup = styled.div`
     font-size: 22px;
     color: #111111;
     font-weight: bold;
-    margin-top: ${props => props.noFolder ? "110px" : "60px"};
+    margin-top: ${props => props.noFolder ? "60px" : "60px"};
     margin-bottom: 20px;
   }
 

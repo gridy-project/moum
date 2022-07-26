@@ -4,12 +4,13 @@ import moumSortBottom from "assets/images/pages/moum/moum-sort-select-bottom.png
 import pieceSelect from "assets/images/pages/moum/piece-select.png";
 import pieceSearch from "assets/images/pages/moum/piece-search.png";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { pieceSelectMode, selectedItems } from "state/moum";
-import { moumSort } from "state/moum";
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { atomPieceSelectMode, atomSelectedItems, atomMoumSort, atomMoum } from "state/moum";
+import { useMatch } from "react-router-dom";
 
 function MoumOptionSort ({active, setActive}) {
-  const [option, setOption] = useRecoilState(moumSort);
+  const match = useMatch("/scrap");
+  const [option, setOption] = useRecoilState(atomMoumSort);
   const toggleOptionSelect = (e) => {
     setActive((current) => !current);
   }
@@ -94,7 +95,6 @@ const SortOptionList = styled.ul`
 
 function MoumOptionGroup ({
   isFolderView, 
-  setSelectAll, 
   setFloatStatus, 
   setFloatItemStatus, 
   floatItemStatus,
@@ -103,9 +103,10 @@ function MoumOptionGroup ({
   const [selectState, setSelectState] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [modeState, setModeState] = useRecoilState(pieceSelectMode);
-  const resetSelectedItems = useResetRecoilState(selectedItems);
-  const items = useRecoilValue(selectedItems);
+  const [modeState, setModeState] = useRecoilState(atomPieceSelectMode);
+  const resetSelectedItems = useResetRecoilState(atomSelectedItems);
+  const items = useRecoilValue(atomSelectedItems);
+  const setSelectAll = useSetRecoilState(atomMoum.modeSelectAll);
 
   const changeSearchText = (e) => {
     if (e.target.value.length > 0) {

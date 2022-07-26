@@ -2,13 +2,12 @@ import UserStatusView from "components/User/UserStatusView";
 import Container from "components/Common/Container";
 import Header from "components/Common/Header";
 import useCustomQuery from "hooks/useCustomQuery";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
 import styled from "styled-components";
 import ContentHeaderView from "components/User/ContentHeaderView";
-import ContentItemsView from "components/User/ContentItemsView";
 import SelectFloat from "components/User/Float/SelectFloat";
+import UserBoard from "components/User/UserBoard";
 
 function User () {
   const {userId} = useParams(); 
@@ -25,7 +24,7 @@ function User () {
           <>
             <UserStatusView user={user.data} isOther />
             <ContentHeaderView />
-            <ContentItemsView />
+            <UserBoard />
             <SelectFloat />
           </>
         }

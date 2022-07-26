@@ -4,14 +4,14 @@ import SortableList from 'react-easy-sort'
 import arrayMove from 'array-move';
 import { useEffect, useState } from "react";
 import MoumFolderCard from "components/Moum/Card/MoumFolderCard";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { moumSort } from "state/moum";
+import { useRecoilValue } from "recoil";
+import { atomMoumSort } from "state/moum";
 import { changeMoumOrder } from "utils/api/moum";
 import useCustomMutate from "hooks/useCustomMutate";
 
 function MoumList ({moums}) {
   const [sortableMoumList, setSortableMoumList] = useState([]);
-  const sortState = useRecoilValue(moumSort);
+  const sortState = useRecoilValue(atomMoumSort);
 
   const {mutateAsync: order} = useCustomMutate(
     ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));
