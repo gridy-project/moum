@@ -8,7 +8,9 @@ import useCustomMutate from "hooks/useCustomMutate";
 import { instance } from "shared/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-function SearchMoumCard ({moum}) {
+import Swal from 'sweetalert2';
+
+function SearchMoumCard ({moum, useAuthor}) {
   const navigate = useNavigate();
   const params = useParams();
 
@@ -32,10 +34,12 @@ function SearchMoumCard ({moum}) {
       onClick: async () => {
         const {result} = await scrap(moum.id);
         if (result) {
-          alert("스크랩 성공");
-        } else {
-          alert("스크랩 실패");
+          Swal.fire({
+            icon: "success",
+            title: "스크랩 성공"
+          });
         }
+        setState(false);
       }
     },
     {
@@ -44,12 +48,17 @@ function SearchMoumCard ({moum}) {
       onClick: async () => {
         const {result, data} = await report(moum.id);
         if (result) {
-          alert("신고 성공");
-          console.log(data);
+          Swal.fire({
+            icon: "success",
+            title: "신고 성공"
+          });
         } else {
-          alert("신고 실패");
-          console.log(data);
+          Swal.fire({
+            icon: "error",
+            title: "신고 실패"
+          });
         }
+        setState(false);
       }
     }
   ]
@@ -61,7 +70,7 @@ function SearchMoumCard ({moum}) {
         setOptionState={setState}
         options={options}
         onClick={moumClick}
-        useAuthor
+        useAuthor={useAuthor}
       />
     </Container>
   )

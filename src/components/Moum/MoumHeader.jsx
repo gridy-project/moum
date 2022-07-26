@@ -3,12 +3,12 @@ import styled from "styled-components";
 import MoumTitleContent from "./Header/MoumTitleContent";
 import MoumTitleCreateForm from "./Header/MoumTitleCreateForm";
 
-function MoumHeader ({moums}) {
+function MoumHeader () {
   return (
     <Title>
       <Header selected={1} />
       <MoumTitleContent />
-      <MoumTitleCreateForm moums={moums} />
+      <MoumTitleCreateForm />
     </Title>
   );
 }

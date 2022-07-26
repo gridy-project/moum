@@ -4,15 +4,13 @@ import { useRecoilValue } from "recoil";
 import { atomMoum } from "state/moum";
 import styled from "styled-components";
 
-function MoumBoard ({moumsQuery, folderId, search, moums}) {
+function MoumBoard ({folderId, search}) {
   const selectAll = useRecoilValue(atomMoum.modeSelectAll);
   return (
     <PieceBoard>
       {
         folderId === 0 ? 
-        moumsQuery.isSuccess && <MoumList
-          moums={moums}
-        />
+        <MoumList />
         :
         <PieceList
           selectAll={selectAll}

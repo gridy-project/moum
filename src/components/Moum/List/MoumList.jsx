@@ -5,13 +5,40 @@ import arrayMove from 'array-move';
 import { useEffect, useState } from "react";
 import MoumFolderCard from "components/Moum/Card/MoumFolderCard";
 import { useRecoilValue } from "recoil";
-import { atomMoumSort } from "state/moum";
+import { atomMoumSearch, atomMoumSort, atomSelectedCategories } from "state/moum";
 import { changeMoumOrder } from "utils/api/moum";
 import useCustomMutate from "hooks/useCustomMutate";
+import { getMoumMineFetch } from "utils/fetch/moum";
+import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
 
-function MoumList ({moums}) {
+const moumsFetch = async ({categories, search, sortState, pageParam}) => {
+  const response = await getMoumMineFetch(categories, search, sortState, pageParam);
+  return { moums: response.data, nextPage: pageParam + 1, isLast: response.totalPage === pageParam }
+}
+
+function MoumList () {
   const [sortableMoumList, setSortableMoumList] = useState([]);
   const sortState = useRecoilValue(atomMoumSort);
+  const search = useRecoilValue(atomMoumSearch);
+  const categories = useRecoilValue(atomSelectedCategories);
+  const {ref, inView} = useInView();
+
+  const { data, fetchNextPage } = useInfiniteQuery(
+    ["mine/moums", categories, search, sortState], 
+    ({pageParam = 0}) => moumsFetch({categories, search, sortState, pageParam}),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) {
+          return lastPage.nextPage
+        } else {
+          return undefined;
+        }
+      }
+    }
+  )
+
+  const [moums, setMoums] = useState([]);
 
   const {mutateAsync: order} = useCustomMutate(
     ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));
@@ -26,17 +53,31 @@ function MoumList ({moums}) {
   }
 
   useEffect(() => {
-    if (moums) {
-      setSortableMoumList([...moums]);
+    if (data) {
+      setMoums((current) => {
+        let arr = [];
+        for (let i = 0; i < data.pages.length; i++) {
+          arr = [...arr, ...data.pages[i].moums];
+        }
+
+        return arr;
+      })
     }
-  }, [moums]);
+  }, [data]);
+
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <List>
       {sortState === "최신 조각순" && (
         <div className="list">
           <MoumAddCard />
-          {sortableMoumList?.map((item, i) => (
+          {moums?.map((item, i) => (
             <MoumFolderCard key={item.id} moum={item} />
           ))}
         </div>
@@ -44,11 +85,12 @@ function MoumList ({moums}) {
       {sortState === "사용자 지정순" && (
         <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
           <MoumAddCard />
-          {sortableMoumList?.map((item, i) => (
+          {moums?.map((item, i) => (
             <MoumFolderCard key={item.id} moum={item} sortable />
           ))}
         </SortableList>
       )}
+      <div className="ref" ref={ref}></div>
     </List>
   )
 }
@@ -90,6 +132,11 @@ const List = styled.div`
     font-size: 24px;
     color: #999999;
     border-radius: 10px;
+  }
+
+  > div.ref {
+    width: 100%;
+    height: 0px;
   }
 `;
 

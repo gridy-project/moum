@@ -5,7 +5,7 @@ import iconPieceCount from "assets/images/pages/moum/icon-piece-count.png";
 import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
 import styled from "styled-components";
 
-function MoumCardCommon ({moum, setButtonState}) {
+function MoumCardCommon ({moum, setButtonState, useAuthor}) {
   function comma(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
@@ -22,6 +22,18 @@ function MoumCardCommon ({moum, setButtonState}) {
           }}><img src={more} alt="" /></div>}
         </div>
         <div className={`card-title ${moum.status === "PUBLIC" && `no-image`}`}>{moum.name}</div>
+        {
+          useAuthor && 
+          <Author>
+            {
+              moum.imgPath &&
+              <div>
+                <img src={moum.imgPath} alt={moum.name} />
+              </div>
+            }
+            <span>{moum.nickname}</span>
+          </Author>
+        }
       </Content>
       <Info>
         <div className="piece-count">
@@ -98,8 +110,34 @@ const Content = styled.div`
     justify-content: center;
     align-items: center;
   }
-
 `;
+
+const Author = styled.div`
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+
+  div {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-sizing: content-box;
+    border: 1px solid #FFFFFF;
+    font-weight: 500;
+    margin-right: 8px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  span {
+    color: #FFFFFF;
+    font-size: 14px;
+  }
+`
 
 const Info = styled.div`
   color: #FFFFFF;

@@ -23,14 +23,18 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (config) => {
     if (config.data?.statusCode) {
-      console.log(config.data);
-      if (config.data?.statusCode === 200) {
-        // alert(config.data.message)
-        return { result: true, status: config.data.statusCode, message: config.data.massage, data: config.data.content }
+      const data = { ...config.data }
+      if (config.data.statusCode === 200) {
+        data.result = true;
       } else {
-        // alert(config.data.message)
-        return { result: false, status: config.data.statusCode, message: config.data.massage }
+        data.result = false;
       }
+      data.status = config.data.statusCode;
+      data.message = config.data.message;
+      if (config.data?.content) {
+        data.data = config.data.content;
+      }
+      return data;
     } else {
       return { result: true, data: config.data, response: config };
     }
@@ -67,6 +71,7 @@ instance.interceptors.response.use(
         }
       }
     }
+    // return ({ result: false, data: error.response.data, error });
     return Promise.reject({ result: false, data: error.response.data, error });
   },
 );

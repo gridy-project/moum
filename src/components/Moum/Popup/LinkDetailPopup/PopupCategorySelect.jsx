@@ -5,10 +5,11 @@ import { getSelectMoumCategory, typeCategory } from "shared/type";
 import PopupButtonGroup from "./PopupButtonGroup";
 import PopupSelectBoxFolder from "../CommonDetailPopup/PopupSelectBoxFolder";
 import PopupSelectBoxCategory from "../CommonDetailPopup/PopupSelectBoxCategory";
+import { instance } from "shared/axios";
 
 
-function PopupCategorySelect ({getter, setter, next, close, folderId}) {
-  const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
+function PopupCategorySelect ({getter, setter, next, close, initFolderId}) {
+  const { isSuccess, data: query } = useCustomQuery(["mine/moums/all"], () => instance.get("/folders"));
 
   return (
     <Box>
@@ -19,6 +20,7 @@ function PopupCategorySelect ({getter, setter, next, close, folderId}) {
           items={query.data}
           setter={setter}
           getter={getter}
+          initFolderId={initFolderId}
         />}
         <div className="name">카테고리 선택</div>
         <PopupSelectBoxCategory

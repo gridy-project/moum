@@ -8,12 +8,13 @@ import OptionMenu from "components/Common/OptionMenu";
 import MoumCardCommon from "./MoumCardCommon";
 
 
-function MoumCard({moum, options, optionState, setOptionState, onClick}) {
+function MoumCard({moum, options, optionState, setOptionState, onClick, useAuthor}) {
   return (
     <Container onClick={onClick}>
       <MoumCardCommon 
         setButtonState={setOptionState}
         moum={moum}
+        useAuthor={useAuthor}
       />
       <Option>
         <OptionMenu

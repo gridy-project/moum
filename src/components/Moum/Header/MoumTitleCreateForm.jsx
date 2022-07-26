@@ -17,7 +17,7 @@ import useCustomMutate from "hooks/useCustomMutate";
 import MoumCreateFloat from "../Float/MoumCreateFloat";
 import { useParams } from "react-router-dom";
 
-function MoumTitleCreateForm ({moums}) {
+function MoumTitleCreateForm () {
   const {folderId: viewFolderId = 0} = useParams();
 
   const setFloat = useSetRecoilState(globalFloat);
@@ -69,7 +69,7 @@ function MoumTitleCreateForm ({moums}) {
       }
       setFloat({
         state: true,
-        component: <MoumCreateFloat piece={data} moums={moums} />
+        component: <MoumCreateFloat piece={data} />
       })
     } else {
       alert("파일 추가 실패");

@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
 import styled from "styled-components";
 
+import Swal from "sweetalert2";
+
 function UserStatusView({user, isOther}) {
   const {userId} = useParams();
   const queryClient = useQueryClient();
@@ -24,20 +26,35 @@ function UserStatusView({user, isOther}) {
   });
 
   const handleFollow = async () => {
-    const {result, data} = await follow(userId);
-
+    const {result, message} = await follow(userId);
     if (result) {
-      console.log(data);
+      Swal.fire({
+        icon: "success",
+        title: message
+      });
       queryClient.invalidateQueries("user");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: message
+      });
     }
   }
 
   const handleUnFollow = async () => {
-    const {result, data} = await unfollow(userId);
-
+    const {result, ...data} = await unfollow(userId);
+    console.log(data);
     if (result) {
-      console.log(data);
+      Swal.fire({
+        icon: "success",
+        title: "언팔로우 성공"
+      });
       queryClient.invalidateQueries("user");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "언팔로우 실패"
+      });
     }
   }
 

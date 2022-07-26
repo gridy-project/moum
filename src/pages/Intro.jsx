@@ -11,7 +11,7 @@ function Intro() {
       <Header selected={0} />
       <Content>
         <ContentView>
-          <img src="https://i.ibb.co/WyvTM7J/Group-272.png" alt="intro1" />
+          <img src="https://i.ibb.co/VDF4t2K/Group-272.jpg" alt="intro1" />
         </ContentView>
         <ContentView>
           <img src="https://i.ibb.co/D8JqkH4/Group-273.jpg" alt="intro2" />

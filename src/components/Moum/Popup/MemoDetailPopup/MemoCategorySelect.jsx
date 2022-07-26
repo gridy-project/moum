@@ -1,5 +1,6 @@
 import useCustomQuery from "hooks/useCustomQuery";
 import { useParams } from "react-router-dom";
+import { instance } from "shared/axios";
 import { getSelectMoumCategory, typeCategory } from "shared/type";
 import styled, { css } from "styled-components";
 import { getMoumMineAllAxios } from "utils/api/moum";
@@ -8,7 +9,7 @@ import PopupSelectBoxFolder from "../CommonDetailPopup/PopupSelectBoxFolder";
 import PopupButtonGroup from "../LinkDetailPopup/PopupButtonGroup";
 
 function MemoCategorySelect ({getter, setter, close, next}) {
-  const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
+  const { isSuccess, data: query } = useCustomQuery(["mine/all/moums"], () => instance.get("/folders"));
 
   return (
     <Box>

@@ -9,18 +9,18 @@ import useCustomQuery from "hooks/useCustomQuery";
 import { instance } from "shared/axios";
 import useCustomMutate from "hooks/useCustomMutate";
 
-function SelectFloat () {
-  const {folderId: viewFolderId = 0} = useParams();
+import Swal from "sweetalert2";
 
+function SelectFloat () {
   const floatStatus = useRecoilValue(atomFloatStatus);
   const floatItemActive = useRecoilValue(atomFloatItemActive);
   const selectedItems = useRecoilValue(atomSelectedItems);
+  const resetSelectedItems = useResetRecoilState(atomSelectedItems);
 
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
 
-  const moumsQuery = useCustomQuery(
-    "mine/moums/all", () => instance.post("/folders/0/all", [{category:"전체"}]));
+  const moumsQuery = useCustomQuery(["mine/all/moums"], () => instance.get("/folders"));
 
   const {mutateAsync: savePieces} = useCustomMutate(({moumId, data}) => {
     return instance.post(`/myshare/boards/${moumId}`, data);
@@ -37,7 +37,11 @@ function SelectFloat () {
             confirm={async (moum) => {
               const {result} = await savePieces({moumId: moum.id, data:selectedItems.map(v => ({id: v}))});
               if (result) {
-                alert("저장 완료");
+                Swal.fire({
+                  icon: "success",
+                  title: "저장 완료"
+                });
+                resetSelectedItems();
               }
             }}
           />

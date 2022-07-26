@@ -3,7 +3,7 @@ import more from "assets/images/pages/moum/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 import PieceScrollVertical from "../Moum/PieceScrollVertical";
 import privateLock from "assets/images/pages/moum/private-lock.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { instance } from "shared/axios";
 import queryClient from "shared/query";
@@ -18,9 +18,6 @@ function MemoPieceCard ({piece}) {
     onSuccess: data => {
       queryClient.invalidateQueries("mine/pieces");
       alert("복사 성공");
-    },
-    onError: err => {
-      console.log(err);
     }
   });
 

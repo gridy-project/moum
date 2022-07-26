@@ -17,7 +17,7 @@ function PieceResultSet () {
   const {keyword} = useParams();
   const {ref, inView} = useInView();
 
-  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+  const { data, fetchNextPage } = useInfiniteQuery(
     ["filesQuery", keyword], 
     ({pageParam = 0}) => piecesFetch({keyword: keyword, pageParam}),
     {

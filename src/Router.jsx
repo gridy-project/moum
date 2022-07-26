@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import MyPage from "pages/MyPage";
 import Search from "pages/Search";
 import Moum from "pages/Moum";
@@ -16,19 +16,27 @@ import Popup from "components/Popup/Popup";
 import Float from "components/Popup/Float";
 import Auth from "pages/Auth";
 
+import ReactGA from "react-ga";
+
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!window.location.href.includes("localhost")) {
+      ReactGA.set({ page: location.pathname });
+      ReactGA.pageview(location.pathname);
+    }
+  }, [location]);
 
   const refreshLogin = useCallback(async () => {
     const token = getRefreshToken();
     if (token) {
       try {
         const response = await executeTokenRefreshAxios(token);
-        console.log("토큰 갱신 성공");
         setToken(response.data.accessToken, response.data.refreshToken);
         setLogin(true);
       } catch (err) {
-        console.log("토큰 갱신 실패");
         removeToken();
         setLogin(false);
       }

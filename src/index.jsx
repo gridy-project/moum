@@ -6,7 +6,9 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from "react-query/devtools";
 import {RecoilRoot} from "recoil";
 import queryClient from "./shared/query";
+import ReactGA from 'react-ga';
 
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>

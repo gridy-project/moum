@@ -27,7 +27,6 @@ function AllMoumFavorite () {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(moums)
       const {data: list, result} = moums;
 
       if (result) {
@@ -49,7 +48,7 @@ function AllMoumFavorite () {
       <FavoriteList>
         {
           viewMoums?.map((moum) => {
-            return <SearchMoumCard key={moum.id} moum={moum}/>
+            return <SearchMoumCard key={moum.id} moum={moum} useAuthor/>
           })
         }
       </FavoriteList>

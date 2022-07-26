@@ -1,17 +1,12 @@
 import styled from "styled-components";
 import fastCreateOptionModify from "assets/images/pages/moum/fast-create-option-modify.png";
 import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-arrow.png";
-import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
-import { pageMoumSelectedFolderId } from "state/moum";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import LinkDetailPopup from "../Popup/LinkDetailPopup";
-import { useState } from "react";
 import MemoDetailPopup from "../Popup/MemoDetailPopup";
 import { globalFloat, globalPopup } from "state/common/popup";
-import { useParams } from "react-router-dom";
 
-function MoumCreateFloat ({piece, moums}) {
-  const {folderId: viewFolderId = 0} = useParams();
-
+function MoumCreateFloat ({piece}) {
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
   const setFloat = useSetRecoilState(globalFloat);
@@ -43,7 +38,9 @@ function MoumCreateFloat ({piece, moums}) {
     <Wrap>
       <img src={fastCreateOptionModify} alt="modify" />
       <div className="desc">
-        <em>{(viewFolderId === 0 || moums === undefined) ? "무제" : moums.filter((v) => v.id === viewFolderId)[0]?.name}</em>
+        <em>
+          {piece.folderName}
+        </em>
         <p>에 조각 저장 완료</p>
       </div>
       <button onClick={runModifyPopup}>

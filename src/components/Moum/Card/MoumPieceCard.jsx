@@ -21,6 +21,8 @@ import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import { atomPieceSelectMode, atomSelectedItems } from "state/moum";
 
+import Swal from "sweetalert2";
+
 function MoumPieceCard ({sortable, piece, selectAll}) {
   const queryClient = useQueryClient();
   const {folderId: viewFolderId = 0} = useParams();
@@ -36,7 +38,7 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
   const [buttonState, setButtonState] = useState(false);
   
   // React Query
-  const moumsQuery = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
+  const moumsQuery = useCustomQuery(["mine/all/moums"], () => instance.get("/folders"));
 
   const {mutateAsync: getPiece} = useCustomMutate((id) => instance.get(`/board/${id}`));
   const {mutateAsync: changeStatus} = useCustomMutate(async (piece) => {
@@ -118,10 +120,16 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       onClick: async () => {
         const {result} = await remove(piece.id);
         if (result) {
-          alert("삭제 성공");
+          Swal.fire({
+            icon: "success",
+            title: "삭제 성공"
+          });
           queryClient.invalidateQueries("mine/pieces");
         } else {
-          alert("삭제 실패");
+          Swal.fire({
+            icon: "error",
+            title: "삭제 실패"
+          });
         }
       }
     },

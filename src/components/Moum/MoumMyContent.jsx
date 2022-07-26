@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { atomMoum, atomMoumSearch } from "state/moum";
+import { atomMoumSearch } from "state/moum";
 import styled from "styled-components";
 import MoumSelectList from "./List/MoumSelectList";
 import MoumBoard from "./MoumBoard";
@@ -10,7 +9,6 @@ import MoumOptionGroup from "./MoumOptionGroup";
 
 function MoumMyContent ({
   categoriesQuery,
-  moumsQuery, 
   floatItemStatus, 
   setFloatStatus, 
   setFloatItemStatus,
@@ -22,7 +20,7 @@ function MoumMyContent ({
   return (
     <Content>
       <MoumHeader>
-        {moumsQuery?.isSuccess && (viewFolderId !== 0 && <MoumSelectList />)}
+        {viewFolderId !== 0 && <MoumSelectList />}
         {categoriesQuery?.isSuccess && <MoumCategoryGroup categories={categoriesQuery.data.data} noFolder={viewFolderId === 0} /> }
         <MoumOptionGroup
           search={search}
@@ -36,8 +34,6 @@ function MoumMyContent ({
       <MoumBoard 
         folderId={viewFolderId} 
         search={search} 
-        moumsQuery={moumsQuery} 
-        moums={moumsQuery?.data?.data}
       />
     </Content>
   );

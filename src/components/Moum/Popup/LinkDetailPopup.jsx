@@ -9,11 +9,8 @@ import PopupContentField from "./LinkDetailPopup/PopupContentField";
 import PopupImageChange from "./LinkDetailPopup/PopupImageChange";
 import DetailPopupHeader from "./DetailPopupHeader";
 import useCustomQuery from "hooks/useCustomQuery";
-import { useParams } from "react-router-dom";
 
-function LinkDetailPopup ({close, piece, isUpdate}) {
-  const {folderId: viewFolderId = 0} = useParams();
-
+function LinkDetailPopup ({close, piece}) {
   const queryClient = useQueryClient();
   const [menu] = useState(["카테고리 선택", "작성한 내용", "이미지 변경"]);
   const [pageNum, setPageNum] = useState(0);
@@ -114,6 +111,7 @@ function LinkDetailPopup ({close, piece, isUpdate}) {
               close={close} 
               setter={setInput} 
               getter={input}
+              initFolderId={piece.folderId}
             />
           }
           {

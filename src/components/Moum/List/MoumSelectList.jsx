@@ -1,16 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import MoumSelectItem from "../Item/MoumSelectItem";
-import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
 import { useNavigate, useParams } from "react-router-dom";
+import { instance } from "shared/axios";
 
 function MoumSelect () {
   const {folderId: viewFolderId = 0} = useParams();
   const navigate = useNavigate();
   
-  const { isSuccess, data: query } = useCustomQuery("mine/moums/all", async () => await getMoumMineAllAxios());
+  const { isSuccess, data: query } = useCustomQuery(["mine/moums/all"], () => instance.get("/folders"));
+  
 
   const onClick = (id) => {
     navigate(`/moum/${id}`);

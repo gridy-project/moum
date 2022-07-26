@@ -10,6 +10,8 @@ import { setToken } from 'shared/localStorage';
 
 import googlelogo from "assets/images/pages/login/google_logo.png";
 
+import Swal from "sweetalert2";
+
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;
  
@@ -27,17 +29,18 @@ function SocialLoginButton () {
 
   const {mutate: login} = useMutation(async (data) => {
     const response = await executeSignInWithGoogleAxios(data.code);
-    console.log(response);
     return response.data;
   }, {
     onSuccess: data => {
-      alert("로그인 성공");
       setToken(data.accessToken, data.refreshToken);
       setLogin(true);
       navigate("/");
     },
     onError: err => {
-      alert("로그인 실패");
+      Swal.fire({
+        icon: "error",
+        title: "소셜 로그인 실패"
+      })
       setLogin(false);
     }
   });
@@ -45,11 +48,9 @@ function SocialLoginButton () {
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (data) => {
-      console.log(data);
       login(data);
     },
     onError: (data) => {
-      alert(data);
     }
   });
 

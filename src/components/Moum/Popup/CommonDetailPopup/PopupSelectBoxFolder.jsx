@@ -3,9 +3,9 @@ import styled, { css } from "styled-components";
 import folderIcon from "assets/images/pages/moum/popup/folder-icon.png";
 import folderIconGrey from "assets/images/pages/moum/popup/folder-icon-grey.png";
 import arrowDown from "assets/images/pages/moum/popup/arrow_down.png";
-import { useMatch, useParams } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 
-function PopupSelectBoxFolder ({ items, setter, getter }) {
+function PopupSelectBoxFolder ({ items, setter, getter, initFolderId }) {
   const match = useMatch("/moum/:folderId");
   const { folderId: viewFolderId = 0 } = match?.params ?? { folderId: 0 }
   const folderIdx = Number(viewFolderId) === 0 ? items.findIndex((v) => v.name === "무제") : items.findIndex((v) => v.id === Number(viewFolderId));

@@ -27,9 +27,6 @@ function Moum ({isScrap}) {
   const {folderId: viewFolderId = 0} = useParams();
   
   // Recoil
-  const search = useRecoilValue(atomMoumSearch);
-  const sortState = useRecoilValue(atomMoumSort);
-  const categories = useRecoilValue(atomSelectedCategories);
   const [scrollState, setScrollState] = useRecoilState(atomScrollState);
 
   // State
@@ -38,7 +35,6 @@ function Moum ({isScrap}) {
 
   // Query
   const categoriesQuery = useCustomQuery(["mine/categories", viewFolderId], () => getCategoryAxios(viewFolderId));
-  const moumsQuery = useCustomQuery(["mine/moums", categories, search, sortState], () => getMoumMineFetch(categories, search, sortState));
   const {data: user, isSuccess: userQuerySuccess} = useCustomQuery("user", async () => {
     const response = await instance.get(`/user/myProfile`);
     return response.data;
@@ -60,7 +56,7 @@ function Moum ({isScrap}) {
 
   return (
     <CustomContainer ref={scrollRef}>
-      <MoumHeader moums={moumsQuery?.data?.data} />
+      <MoumHeader />
       <MoumContent>
         {userQuerySuccess && <MoumContentProfile isSuccess={userQuerySuccess} user={user} />}
         <MoumContentTabMenu />
@@ -69,7 +65,6 @@ function Moum ({isScrap}) {
           <MoumScrapContent />
           :
           <MoumMyContent
-            moumsQuery={moumsQuery}
             categoriesQuery={categoriesQuery}
             floatItemStatus={floatItemStatus}
             setFloatStatus={setFloatStatus}
