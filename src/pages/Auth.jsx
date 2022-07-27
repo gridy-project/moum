@@ -24,7 +24,7 @@ const Auth = () => {
     if (match.pathname === "/login") {
       setNumberState(0);
     } else if (match.pathname === "/register") {
-      setNumberState(1);
+      setNumberState(3);
     }
   }, [match, setNumberState]);
 
@@ -36,9 +36,6 @@ const Auth = () => {
   }
   const runIdPage = () => {
     setNumberState(2)
-  }
-  const runJoinPage = () => {
-    setNumberState(3)
   }
   const runCreateProfilePage = () => {
     setNumberState(4)
@@ -55,7 +52,6 @@ const Auth = () => {
               runlogin={runLoginPage}
               runpwd={runPwdPage}
               runid={runIdPage}
-              runjoin={runJoinPage}
             />}
             {numberState === 1 && <ReissuePwd />}
             {numberState === 2 && <SearchId/>}

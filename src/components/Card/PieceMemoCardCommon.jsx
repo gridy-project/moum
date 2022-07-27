@@ -1,7 +1,7 @@
 import PieceCategory from "components/Moum/PieceCategory";
 import PieceScrollVertical from "components/Moum/PieceScrollVertical";
 import styled from "styled-components";
-import privateLock from "assets/images/pages/moum/private-lock.png";
+import privateLock from "assets/svg/card/lock.svg";
 import more from "assets/images/pages/moum/menu-black.png";
 
 function PieceMemoCardCommon ({piece, setButtonState}) {
