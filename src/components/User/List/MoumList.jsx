@@ -5,6 +5,36 @@ import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { atomSearch, atomSelectedCategories, atomSortState } from "state/user";
 import { instance } from "shared/axios";
+import { useInfiniteQuery } from "react-query";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+
+const query = async (userId, search, sortState, categories, pageParam) => {
+  let searchString = `/folders/`; // API LINK
+  searchString += `${userId}/`; // User ID
+  if (search === "") {
+    searchString += `all`;
+  } else {
+    searchString += `${search}`; 
+  }
+
+  searchString += "?page="+pageParam;
+
+  if (sortState === "CUSTOM") {
+    searchString += "&sort=folderOrder,asc";
+  }
+
+  if (categories.length === 0) {
+    return instance.post(searchString, [{ category: "전체" }]);
+  } else {
+    return instance.post(searchString, categories)
+  }
+}
+
+const moumsFetch = async ({userId, categories, search, sortState, pageParam}) => {
+  const response = await query(userId, search, sortState, categories, pageParam);
+  return { moums: response.data, nextPage: pageParam + 1, isLast: response.totalPage === pageParam }
+}
 
 function MoumList () {
   const {userId} = useParams();
@@ -12,38 +42,51 @@ function MoumList () {
   const [sortState] = useRecoilState(atomSortState);
   const [categories] = useRecoilState(atomSelectedCategories)
 
-  // Search Folder
-  const {isSuccess, data: moumsQuery} = useCustomQuery(
-    ["moums", userId, search, sortState], 
-    () => {
-      let searchString = `/folders/`; // API LINK
-      searchString += `${userId}/`; // User ID
-      if (search === "") {
-        searchString += `all`;
-      } else {
-        searchString += `${search}`; 
-      }
+  const [moums, setMoums] = useState([]);
 
-      searchString += "?page=0";
+  const {ref, inView} = useInView();
 
-      if (sortState === "CUSTOM") {
-        searchString += "&sort=folderOrder,asc";
+  const { data, fetchNextPage } = useInfiniteQuery(
+    ["other/moums", categories, search, sortState], 
+    ({pageParam = 0}) => moumsFetch({userId, categories, search, sortState, pageParam}),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) {
+          return lastPage.nextPage
+        } else {
+          return undefined;
+        }
       }
+    }
+  )
 
-      if (categories.length === 0) {
-        return instance.post(searchString, [{ category: "전체" }]);
-      } else {
-        return instance.post(searchString, categories)
-      }
-    });
+  useEffect(() => {
+    if (data) {
+      setMoums((current) => {
+        let arr = [];
+        for (let i = 0; i < data.pages.length; i++) {
+          arr = [...arr, ...data.pages[i].moums];
+        }
+
+        return arr;
+      })
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <List>
       <div className="list">
-        {isSuccess && moumsQuery.data.map((item, i) => (
+        {moums.map((item, i) => (
           <SearchMoumCard key={item.id} moum={item} />
         ))}
       </div>
+      <div className="ref" ref={ref}></div>
     </List>
   )
 }
@@ -53,6 +96,10 @@ const List = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+
+  .ref {
+    width: 100%;
+  }
 
   .list {
     width: 100%;

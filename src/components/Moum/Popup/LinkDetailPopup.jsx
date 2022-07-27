@@ -66,7 +66,8 @@ function LinkDetailPopup ({close, piece}) {
       newUrl = input.imageItems.og;
       typeText = "og";
     } else if (type === 1) { // 추천 이미지
-      // newUrl = input.image
+      newUrl = uploadUrl
+      typeText = "basic"
     } else if (type === 2) { // 내 PC에서 불러오기
       newUrl = uploadUrl;
       typeText = "self";

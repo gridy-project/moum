@@ -42,8 +42,7 @@ function UserStatusView({user, isOther}) {
   }
 
   const handleUnFollow = async () => {
-    const {result, ...data} = await unfollow(userId);
-    console.log(data);
+    const {result} = await unfollow(userId);
     if (result) {
       Swal.fire({
         icon: "success",

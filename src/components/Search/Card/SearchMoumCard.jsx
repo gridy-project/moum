@@ -17,7 +17,7 @@ function SearchMoumCard ({moum, useAuthor}) {
   const [state, setState] = useState(false);
 
   const {mutateAsync: scrap} = useCustomMutate((folderId) => instance.post(`/share/folder/${folderId}`, {}));
-  const {mutateAsync: report} = useCustomMutate((folderId) => instance.post(`/report/${folderId}`, {}));
+  const {mutateAsync: report} = useCustomMutate((folderId) => instance.post(`/reportfolder/${folderId}`, {}));
 
   const moumClick = () => {
     if (moum.userId) {
@@ -46,7 +46,7 @@ function SearchMoumCard ({moum, useAuthor}) {
       name: "신고하기",
       image: reportSvg,
       onClick: async () => {
-        const {result, data} = await report(moum.id);
+        const {result} = await report(moum.id);
         if (result) {
           Swal.fire({
             icon: "success",
