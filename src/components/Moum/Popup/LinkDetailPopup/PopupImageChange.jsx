@@ -8,6 +8,47 @@ import addImage from "assets/images/pages/moum/popup/add-image.png"
 import { apiCommon } from "utils/api/common";
 import useCustomMutate from "hooks/useCustomMutate";
 
+import Swal from "sweetalert2";
+
+function getCategoryImage (name) {
+  switch (name) {
+    case "건강":
+      return "https://i.ibb.co/8s42mKX/image.jpg";
+    case "경제":
+      return "https://i.ibb.co/4pf40M4/image.jpg";
+    case "공부":
+      return "https://i.ibb.co/chhxXDr/image.jpg";
+    case "기타":
+      return "https://i.ibb.co/YbyMgyF/image.jpg";
+    case "스포츠":
+      return "https://i.ibb.co/zPdgngZ/image.jpg";
+    case "영화":
+      return "https://i.ibb.co/Y2GpqX1/image.jpg";
+    case "디자인":
+      return "https://i.ibb.co/FntgHR9/image.jpg";
+    case "음악":
+      return "https://i.ibb.co/56S9Jwd/image.jpg";
+    case "쇼핑":
+      return "https://i.ibb.co/XydFqx1/image.jpg";
+    case "전시":
+      return "https://i.ibb.co/WFQKLfS/image.jpg";
+    case "공연":
+      return "https://i.ibb.co/phn5rTT/image.jpg";
+    case "여행":
+      return "https://i.ibb.co/Kz7yYSr/image.jpg";
+    case "취미":
+      return "https://i.ibb.co/stB9S5X/image.jpg";
+    case "비즈니스":
+      return "https://i.ibb.co/WD28hfy/image.jpg";
+    case "카페":
+      return "https://i.ibb.co/BqVZ0vR/image.jpg";
+    case "식당":
+      return "https://i.ibb.co/tHfnkNN/image.jpg";
+    default:
+      return "https://i.ibb.co/51YGqmc/image.jpg";
+  }
+}
+
 function PopupImageChange ({finish, close, getter, setter}) {
   const [imageType, setImageType] = useState(getter.select);
   const [customImageState, setCustomImageState] = useState(false);
@@ -22,20 +63,21 @@ function PopupImageChange ({finish, close, getter, setter}) {
     if (imageType === 0) {
       finish(imageType);
     } else if (imageType === 1) {
-      alert("미구현 상태");
+      finish(imageType, getCategoryImage(getter.category))
       return;
     } else if (imageType === 2) {
       console.log(ref.file.current.files);
       if (ref.file.current.files.length > 0) {
         const formData = new FormData();
         formData.append("image", ref.file.current.files[0]);
-        const {result, data, error} = await upload(formData);
+        const {result, data} = await upload(formData);
         if (result) {
-          alert("파일 업로드 성공");
           finish(imageType, data);
         } else {
-          alert("파일 업로드 실패");
-          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "파일 업로드 실패"
+          });
         }
       } else {
         console.log(getter.imageItems)
@@ -86,8 +128,10 @@ function PopupImageChange ({finish, close, getter, setter}) {
           </Item>
           <Item onClick={() => {setImageType(1)}} isActive={imageType === 1}>
             <Name>추천 이미지</Name>
-            {/* <Image></Image> */}
-            <NoImage></NoImage>
+            <Image>
+              <img src={getCategoryImage(getter.category)} alt="" />
+            </Image>
+            {/* <NoImage></NoImage> */}
           </Item>
           <Item onClick={() => {setImageType(2)}} isActive={imageType === 2}>
             <Name>내 PC에서 불러오기</Name>

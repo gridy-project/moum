@@ -28,6 +28,7 @@ function MoumFolderCard ({moum, sortable}) {
 
   const [buttonState, setButtonState] = useState(false);
   const setPopup = useSetRecoilState(globalPopup);
+  const resetPopup = useResetRecoilState(globalPopup);
 
   const {mutate: remove} = useMutation((data) => instance.delete(`/folders`, {data}), 
     {
@@ -48,7 +49,7 @@ function MoumFolderCard ({moum, sortable}) {
     setButtonState(false);
     setPopup({
       state: true,
-      component: <MoumUpdatePopup moum={moum} />
+      component: <MoumUpdatePopup moum={moum} close={resetPopup} />
     });
   }
 

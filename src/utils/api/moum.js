@@ -3,7 +3,7 @@ import { instance } from "shared/axios";
 export const getMoumMineAllAxios = (page) => instance.post(`/folders/0/all?page=${page}`, [{ category: "전체" }]);
 export const getMoumMineByOptionsAxios = ({ keyword, categories, sort, page }) => {
   if (sort) {
-    return instance.post(`/folders/0/${keyword}?page=${page}sort=folderOrder,asc`, categories.length === 0 ? [{ category: "전체" }] : categories);
+    return instance.post(`/folders/0/${keyword}?page=${page}&sort=folderOrder,asc`, categories.length === 0 ? [{ category: "전체" }] : categories);
   } else {
     return instance.post(`/folders/0/${keyword}?page=${page}`, categories);
   }

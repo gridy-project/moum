@@ -38,7 +38,7 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
   const [buttonState, setButtonState] = useState(false);
   
   // React Query
-  const moumsQuery = useCustomQuery(["mine/all/moums"], () => instance.get("/folders"));
+  const moumsQuery = useCustomQuery(["mine/all/moums"], () => instance.get("/folders"), {staleTime: 10000});
 
   const {mutateAsync: getPiece} = useCustomMutate((id) => instance.get(`/board/${id}`));
   const {mutateAsync: changeStatus} = useCustomMutate(async (piece) => {

@@ -18,7 +18,7 @@ const moumsFetch = async ({categories, search, sortState, pageParam}) => {
 }
 
 function MoumList () {
-  const [sortableMoumList, setSortableMoumList] = useState([]);
+  const [moums, setMoums] = useState([]);
   const sortState = useRecoilValue(atomMoumSort);
   const search = useRecoilValue(atomMoumSearch);
   const categories = useRecoilValue(atomSelectedCategories);
@@ -38,17 +38,16 @@ function MoumList () {
     }
   )
 
-  const [moums, setMoums] = useState([]);
 
   const {mutateAsync: order} = useCustomMutate(
     ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));
 
   const onSortEnd = async (oldIndex, newIndex) => {
-    const oldId = sortableMoumList[oldIndex].id;
+    const oldId = moums[oldIndex].id;
 
     const {result} = await order({folderId: oldId, afterOrder: moums[newIndex].folderOrder});
     if (result) {
-      setSortableMoumList((array) => arrayMove(array, oldIndex, newIndex));
+      setMoums((array) => arrayMove(array, oldIndex, newIndex));
     }
   }
 

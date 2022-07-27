@@ -28,6 +28,8 @@ function SearchPieceCard ({piece}) {
     ({moumId, pieceId}) => instance.post(`/myshare/boards/${moumId}`, [{id: pieceId}])
   );
 
+  const {mutateAsync: report} = useCustomMutate((boardId) => instance.post(`/reportboard/${boardId}`, {}));
+
   const options = [
     {
       name: "내 모음에 저장하기",
@@ -39,7 +41,6 @@ function SearchPieceCard ({piece}) {
             <MoveSelectPopup 
               query={moumsQuery}
               close={resetPopup}
-              // 저장시 폴더 선택 백엔드 API에 추가 필요
               confirm={async (moum) => {
                 const {result} = await movePiece({moumId: moum.id, pieceId: piece.id});
                 if (result) {
@@ -58,11 +59,20 @@ function SearchPieceCard ({piece}) {
     {
       name: "신고하기",
       image: reportSvg,
-      onClick: () => {
-        Swal.fire({
-          icon: "error",
-          title: "아직 구현되지 않은 기능입니다"
-        });
+      onClick: async() => {
+        const {result} = await report(piece.id);
+        if (result) {
+          Swal.fire({
+            icon: "success",
+            title: "신고 성공"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "신고 실패"
+          });
+        }
+        setOptionState(false);
       }
     }
   ]
