@@ -1,6 +1,6 @@
 import imageNone from "assets/images/pages/moum/images-none.png";
 import more from "assets/images/pages/moum/menu-black.png";
-import privateLock from "assets/images/pages/moum/private-lock.png";
+import privateLock from "assets/svg/card/lock.svg";
 import PieceCategory from "components/Moum/PieceCategory";
 import styled, { css } from "styled-components";
 

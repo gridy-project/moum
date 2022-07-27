@@ -97,9 +97,9 @@ const StartLogin = (props) => {
         }}>비밀번호 재발급</Tab>
         <span>|</span>
         <Tab onClick={() => {
-         props.runjoin()
+          navigate("/register");
         }}>회원가입</Tab>
-      </TabBox>     
+      </TabBox>
     </div>
   )
  }

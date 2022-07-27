@@ -46,13 +46,13 @@ function UserStatusView({user, isOther}) {
     if (result) {
       Swal.fire({
         icon: "success",
-        title: "언팔로우 성공"
+        title: "팔로우 취소 성공"
       });
       queryClient.invalidateQueries("user");
     } else {
       Swal.fire({
         icon: "error",
-        title: "언팔로우 실패"
+        title: "팔로우 취소 실패"
       });
     }
   }
@@ -72,7 +72,7 @@ function UserStatusView({user, isOther}) {
             <FollowButton onClick={handleFollow}>팔로우</FollowButton>
           }
           {isOther && user.follow && 
-            <UnFollowButton onClick={handleUnFollow}>언팔로우</UnFollowButton>
+            <UnFollowButton onClick={handleUnFollow}>팔로잉</UnFollowButton>
           }
           </em>
           {user.information && <p>{user.information}</p>}
@@ -166,7 +166,12 @@ const FollowButton = styled.button`
 `;
 
 const UnFollowButton = styled(FollowButton)`
-  width: 100px;
+  width: 80px;
+  background-color: #ECECEC;
+  color: #777777;
+  &:hover {
+    background-color: #E0E0E0;
+  }
 `;
 
 const Follow = styled.div`
