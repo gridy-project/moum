@@ -75,8 +75,8 @@ const StartLogin = (props) => {
       </LineBox>
       <form onSubmit={loginSubmit}>
         <LoginInputBox>
-          <input type="text" ref={idRef} placeholder='아이디'/>
-          <input type="password" ref={pwRef} placeholder='비밀번호'/>
+          <input type="text" ref={idRef} placeholder='아이디' autoComplete='username'/>
+          <input type="password" ref={pwRef} placeholder='비밀번호' autoComplete='password'/>
         </LoginInputBox>
         {/* <KeepingLogin>
           <LoginImgBox>

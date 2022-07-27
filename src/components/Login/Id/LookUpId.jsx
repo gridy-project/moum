@@ -50,7 +50,7 @@ import Swal from "sweetalert2";
       <form onSubmit={searchIdForm}>
         <IdContent>
           <p>이메일로 본인 확인</p>
-          <input type="text" ref={idEmailRef} />
+          <input type="text" ref={idEmailRef} autoComplete="email" />
         </IdContent>
         <IdBtn>아이디 찾기</IdBtn>
       </form>  

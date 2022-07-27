@@ -135,6 +135,7 @@ const CreateProfile = () => {
             placeholder="공백 포함 최대 10글자 입력 가능"
             maxLength="10"
             onChange={(e)=> {setJoinNinknameState(e.target.value)}}
+            autoComplete="nickname"
           />
           <button onClick={clickIdCheck}>중복 확인</button>
         </InputBox>
