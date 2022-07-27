@@ -3,14 +3,12 @@ import React, { useState, useRef } from "react";
 // css
 import styled, {css} from 'styled-components';
 import human from "assets/images/pages/mypage/human.png";
-
+import Swal from "sweetalert2";
 // modal
 import Modal from "react-modal";
-
 // React Query
 import {  useMutation, useQuery } from "react-query";
 import queryClient from "shared/query";
-
 // axios
 import { instance } from "shared/axios"
 
@@ -35,7 +33,6 @@ const ChangeNickname = () => {
       onSuccess: (data) => {
 			},
       onError: (err) => {
-        console.log(err);
       }
     }
   );
@@ -59,7 +56,10 @@ const ChangeNickname = () => {
         queryClient.invalidateQueries("profile");
       },
 			onError: (err) => {
-				 window.alert(err.response.data.message);
+				Swal.fire({
+          icon: "error",
+          title: err.data.message
+        })
 			}
     }
   )
