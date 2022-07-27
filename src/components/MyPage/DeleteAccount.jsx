@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useMutation } from "react-query";
 // axios
 import { instance } from "shared/axios"
+import Swal from "sweetalert2";
 
 const DeleteAccount = () => {
   // 회원 탈퇴 
@@ -18,11 +19,13 @@ const DeleteAccount = () => {
     },
     {
       onSuccess: (data) => {
-        window.alert("성공적으로 탈퇴되었습니다.")
-				window.location.replace("/newlogin")
+        Swal.fire({
+          icon: "success",
+          title: "성공적으로 탈퇴되었습니다."
+        })
+				window.location.replace("/")
       },
 			onError: (err) => {
-				console.log(err)
 			}
     }
   )

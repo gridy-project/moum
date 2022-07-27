@@ -5,6 +5,7 @@ import {  useMutation } from "react-query";
 // React-hook-form
 import { useForm } from "react-hook-form";
 // css
+import Swal from "sweetalert2";
 import styled, { css } from "styled-components";
 import human from "assets/images/pages/mypage/human.png";
 import xbutton from "assets/images/pages/mypage/xbutton.png";
@@ -33,14 +34,18 @@ const ChangePwd = () => {
     {
       onSuccess: (data) => {
 				localStorage.removeItem("accessToken")
-				localStorage.removeItem("refreshToken")
-				window.location.replace('/login');
+				localStorage.removeItem("refreshToken")	
+				window.location.replace('/auth');
       },
 			onError: (err) => {
-				console.log(err)
+					Swal.fire({
+						icon: "error",
+						title: "기존 비밀번호가 틀렸습니다."
+					})
 			}
     }
   )
+
 	// react-hook-form 에서 쓸 애들 꺼내 쓰기
   const {
     register,
@@ -127,118 +132,118 @@ const ChangePwd = () => {
 	} 
 }
 
-  return (
-   <PwdArticle>
-								<PwdTitle>비밀번호</PwdTitle>
-								<PwdArea>
-									<PwdBtn onClick={() => setPasswordModalIsOpen(true)}>비밀번호 변경하기</PwdBtn>
-								</PwdArea>
-								<Modal
-									isOpen={passwordModalIsOpen}
-									onRequestClose={() => {setPasswordModalIsOpen(false); resetPwd();}}
-									style={{
-										overlay: {
-											position: "fixed",
-											top: 0,
-											left: 0,
-											right: 0,
-											bottom: 0,
-											backgroundColor: "rgba(0,0,0,0.5)"
-										},
-										content: {
-											background:"#fff",
-											borderRadius:"30px",
-											color: "#111",
-											width: "438px",				
-											height: "600px",
-											top: "20%",
-											left: "39%",
-											padding:"24px"
-										},
-									}}
-								>
-									<ModalPasswordHeader>
-										<Modalimagebox>
-											<img src={human} alt="human"></img>
-										</Modalimagebox>	
-									<h1>비밀번호 변경하기</h1>
-									</ModalPasswordHeader>
-									<form onSubmit={handleSubmit(onValid)}>
-										<ModalPasswordContent>										
-											<ExistPwdWrap
-											isExitFilled={existPwdLen} >
-												<p>기존 비밀번호</p>
-												<input
-												id="password"
-												type="password" 
-												placeholder="비밀번호를 입력하세요."								
-												onChange={e => checkExistPwd(e)}
-												{...register("password", {
-													pattern:{
-														  value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-															message: "현재 비밀번호와 다릅니다.",
-													},
-												})}
-												/>
-												<span>{errors?.password?.message}</span>
-												{onChangePwd > 0 && <img 
-												src={xbutton} 
-												alt=""
-												onClick={() => {removeExistPwd(watch("password"))}
-													}
-												/>}							
-											</ExistPwdWrap>
-											<PwdWrap isNewPwdFilled={newPwdLen}>
-												<p>새 비밀번호</p>
-												<input
-												id="newpassword"
-												type="password"
-												placeholder="새 비밀번호를 입력하세요."
-												onChange={e => checkNewPwd(e)}
-												{...register("newpassword", {
-												required:"새 비밀번호를 입력하세요.",
-												pattern:{
-														value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-														message: "숫자 + 영문자 조합으로 최소 4자 이상 입력해주세요.",
-												},	
-												})}	
-												/>
-												<span>{errors?.newpassword?.message}</span>
-												{onChangeNewPwd > 0 && <img 
-												src={xbutton} 
-												alt=""
-												onClick={removeNewPwd} />}									
-											</PwdWrap>
-											<RePwdWrap isReNewPwdFilled={reNewPwdLen}>
-												<p>새 비밀번호 확인</p>
-												<input
-												id="renewpassword"
-												type="password"
-												placeholder="새 비밀번호를 재입력하세요."						
-												onChange={e => checkReNewPwd(e)}		
-														{...register("renewpassword", {
-												required:"새 비밀번호를 재입력하세요.",
-												pattern:{
-														value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
-														message: ""
-												},	
-												})}			
-												/>
-												<span>{errors?.renewpassword?.message}</span>
-												{onChangeReNewPwd > 0 && <img 
-												src={xbutton} 
-												alt=""
-												onClick={removeReNewPwd} />}	
-											</RePwdWrap>												
-									</ModalPasswordContent>
-									<ModalPasswrodBtnWrap>
-										<CancelPwdBtn onClick={() => 
-											{setPasswordModalIsOpen(false); resetPwd();}}>취소</CancelPwdBtn>
-										<ChangePwdBtn disabled={!isPwdActive}>비밀번호 변경</ChangePwdBtn>
-									</ModalPasswrodBtnWrap>
-									</form>								
-								</Modal>
-							</PwdArticle>
+return (
+	<PwdArticle>
+			<PwdTitle>비밀번호</PwdTitle>
+			<PwdArea>
+				<PwdBtn onClick={() => setPasswordModalIsOpen(true)}>비밀번호 변경하기</PwdBtn>
+			</PwdArea>
+			<Modal
+				isOpen={passwordModalIsOpen}
+				onRequestClose={() => {setPasswordModalIsOpen(false); resetPwd();}}
+				style={{
+					overlay: {
+						position: "fixed",
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						backgroundColor: "rgba(0,0,0,0.5)"
+					},
+					content: {
+						background:"#fff",
+						borderRadius:"30px",
+						color: "#111",
+						width: "438px",				
+						height: "600px",
+						top: "20%",
+						left: "39%",
+						padding:"24px"
+					},
+				}}
+			>
+				<ModalPasswordHeader>
+					<Modalimagebox>
+						<img src={human} alt="human"></img>
+					</Modalimagebox>	
+				<h1>비밀번호 변경하기</h1>
+				</ModalPasswordHeader>
+				<form onSubmit={handleSubmit(onValid)}>
+					<ModalPasswordContent>										
+						<ExistPwdWrap
+						isExitFilled={existPwdLen} >
+							<p>기존 비밀번호</p>
+							<input
+							id="password"
+							type="password" 
+							placeholder="비밀번호를 입력하세요."								
+							onChange={e => checkExistPwd(e)}
+							{...register("password", {
+								pattern:{
+										value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
+										message: "현재 비밀번호와 다릅니다.",
+								},
+							})}
+							/>
+							<span>{errors?.password?.message}</span>
+							{onChangePwd > 0 && <img 
+							src={xbutton} 
+							alt=""
+							onClick={() => {removeExistPwd(watch("password"))}
+								}
+							/>}							
+						</ExistPwdWrap>
+						<PwdWrap isNewPwdFilled={newPwdLen}>
+							<p>새 비밀번호</p>
+							<input
+							id="newpassword"
+							type="password"
+							placeholder="새 비밀번호를 입력하세요."
+							onChange={e => checkNewPwd(e)}
+							{...register("newpassword", {
+							required:"새 비밀번호를 입력하세요.",
+							pattern:{
+									value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
+									message: "숫자 + 영문자 조합으로 최소 4자 이상 입력해주세요.",
+							},	
+							})}	
+							/>
+							<span>{errors?.newpassword?.message}</span>
+							{onChangeNewPwd > 0 && <img 
+							src={xbutton} 
+							alt=""
+							onClick={removeNewPwd} />}									
+						</PwdWrap>
+						<RePwdWrap isReNewPwdFilled={reNewPwdLen}>
+							<p>새 비밀번호 확인</p>
+							<input
+							id="renewpassword"
+							type="password"
+							placeholder="새 비밀번호를 재입력하세요."						
+							onChange={e => checkReNewPwd(e)}		
+									{...register("renewpassword", {
+							required:"새 비밀번호를 재입력하세요.",
+							pattern:{
+									value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/,
+									message: ""
+							},	
+							})}			
+							/>
+							<span>{errors?.renewpassword?.message}</span>
+							{onChangeReNewPwd > 0 && <img 
+							src={xbutton} 
+							alt=""
+							onClick={removeReNewPwd} />}	
+						</RePwdWrap>												
+				</ModalPasswordContent>
+				<ModalPasswrodBtnWrap>
+					<CancelPwdBtn onClick={() => 
+						{setPasswordModalIsOpen(false); resetPwd();}}>취소</CancelPwdBtn>
+					<ChangePwdBtn disabled={!isPwdActive}>비밀번호 변경</ChangePwdBtn>
+				</ModalPasswrodBtnWrap>
+				</form>								
+			</Modal>
+		</PwdArticle>
   );
 };
 

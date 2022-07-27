@@ -18,7 +18,6 @@ const ChangeEmail = () => {
       onSuccess: (data) => {
 			},
       onError: (err) => {
-        console.log(err);
       }
     }
   );
