@@ -3,8 +3,8 @@ import { executeTokenRefreshAxios } from "utils/api/auth";
 import { getAccessToken, getRefreshToken, removeToken, setToken } from "shared/localStorage";
 
 export const instance = axios.create({
-  baseURL: process.env.REACT_APP_SERVER_IP
   // baseURL: process.env.REACT_APP_SERVER_IP
+  baseURL: process.env.REACT_APP_HTTPS_SERVER_DOMAIN
 });
 
 instance.interceptors.request.use(
@@ -46,11 +46,11 @@ instance.interceptors.response.use(
     } = error;
 
     if (status === 402) { // 토큰이 헤더에 없음 : 402
-      window.location.replace("/");
+      // window.location.replace("/");
     }
     if (status === 406) { // 변질된 토큰 : 406
       removeToken();
-      window.location.replace("/");
+      // window.location.replace("/");
     }
     const originalRequest = config;
     if (status === 410 && !originalRequest._retry) {

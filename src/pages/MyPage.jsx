@@ -4,7 +4,6 @@ import React from "react";
 import styled from "styled-components";
 // component
 import Header from "components/Common/Header";
-import Container from "components/Common/Container";
 import ProfileImage from "../components/MyPage/ProfileImage";
 import ChangeNickname from "../components/MyPage/ChangeNickname";
 import ChangeDesc from "../components/MyPage/ChangeDesc";
@@ -43,7 +42,8 @@ const CustomContainer = styled.div`
 	width: 100%;
 	min-height: 100vh;
 	display: flex;
-	padding-top: 150px;
+	justify-content: center;
+	align-items: center;
 	background-color: #FFFFFF !important;
 `;
 

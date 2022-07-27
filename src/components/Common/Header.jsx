@@ -6,6 +6,9 @@ import { isLogin } from "state/common/user";
 import { useEffect, useState } from "react";
 import logoSvg from "assets/common/Header/logo.svg";
 
+import presentImg from "assets/once/present.png";
+import runSvg from "assets/once/run.svg";
+
 function Header({selected}) {
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
@@ -29,6 +32,13 @@ function Header({selected}) {
 
   return (
     <Container isFixed={headerFixed}>
+      <Banner>
+        <img className="img-present" src={presentImg} alt="event" />
+        <div>
+          8월 31일(일)까지 단 4일! moum <span>설문조사 참여하고 이벤트 상품</span> 받아가세요
+        </div>
+        <img className="img-run" src={runSvg} alt="run" />
+      </Banner>
       <Box>
         <Logo><Link to="/"><img src={logoSvg} alt="moum" /></Link></Logo>
         <Menu>
@@ -67,20 +77,52 @@ const Container = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 90px;
+  height: 160px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   z-index: 5;
 
   ${props => props.isFixed && css`
     background-color: #FFFFFF;
-    height: 90px;
+    height: 160px;
     position: fixed;
   `}
 `;
 
+const Banner = styled.div`
+  display: flex;
+  width: 100%;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+  background-color: #9e67ff;
+  font-weight: 400;
+  color: #F7F3FD;
+  cursor: pointer;
+  font-size: 19px;
+
+  span {
+    font-weight: 500;
+    color: #FFFFFF;
+  }
+
+  img {
+    margin: 0 10px;
+  }
+
+  img.img-present {
+    width: 22px;
+  }
+
+  img.img-run {
+
+  }
+`;
+
 const Box = styled.div`
   width: 1200px;
+  height: 90px;
   display: flex;
   justify-content: space-between;
 `;

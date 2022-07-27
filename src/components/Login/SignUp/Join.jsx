@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 
 const Join = (props) => {
   const [active, setActive] = useState(false);
+  const [sendStatus, setSendStatus] = useState(false);
   
   const ref = {
     username: useRef(),
@@ -31,10 +32,13 @@ const Join = (props) => {
 
   // 회원가입 이메일인증 메일전송
   const CheckEmailRegister = () => {
+    if (!sendStatus) { // 비활성화시에는 실행 불가
      const data = {
-      email : ref.email.current.value
+        email : ref.email.current.value
+      }
+      sendEmailCheckJoinCode(data);
+      setSendStatus(true);
     }
-    sendEmailCheckJoinCode(data);
   }
 
   const { mutate: sendEmailCheckJoinCode } = useMutation(
@@ -52,6 +56,7 @@ const Join = (props) => {
               title: message
           })
         }
+        setSendStatus(false);
       },
 			onError: (err) => {
 			}
@@ -207,7 +212,7 @@ const filledRePwd = (e)=> {
             }
             }
             />
-            <button onClick={CheckEmailRegister}>인증요청</button>
+            <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>인증요청</SendMail>
           </JoinEmailBox>
           <JoinCodeBox isActive={active}>
             <input 
@@ -300,17 +305,23 @@ const JoinEmailBox = styled.div`
 		  outline: 1px solid #9152FF;
 	  }
   }
-  button {
-    width: 84px;
-    height: 44px;
-    background: #9E67FF;
-    border-radius: 10px;
-    margin-left:8px;
-    border:none;
-    color:#fff;
-    cursor: pointer;
-  }
 `;
+
+const SendMail = styled.button`
+  width: 84px;
+  height: 44px;
+  background: #9E67FF;
+  border-radius: 10px;
+  margin-left:8px;
+  border:none;
+  color:#fff;
+  cursor: pointer;
+
+  ${props => props.disabled && css`
+    background: #EEEEEE;
+  `}
+`;
+
 const JoinCodeBox = styled.div`
   input {
     width: 268px;

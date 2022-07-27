@@ -41,6 +41,7 @@ function Intro() {
 }
 
 const Content = styled.div`
+  padding-top: 70px;
   width: 100%;
   position: absolute;
   top: 0;
