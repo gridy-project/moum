@@ -8,6 +8,7 @@ import { instance } from "shared/axios"
 // css
 import pen from "assets/images/pages/mypage/pen.png";
 import styled from 'styled-components';
+import Swal from "sweetalert2";
 
 const ProfileImage = () => {
 
@@ -22,7 +23,6 @@ const ProfileImage = () => {
       onSuccess: (data) => {
 			},
       onError: (err) => {
-        console.log(err);
       }
     }
   );
@@ -50,10 +50,13 @@ const ProfileImage = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("profile");
-        console.log(data);
       },
 			onError: (err) => {
-				 window.alert(err.response.data.message);
+				console.log(err)
+				 Swal.fire({
+          icon: "error",
+          title: err.data.message
+        })
 			}
     }
   )
