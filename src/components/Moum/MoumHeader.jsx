@@ -14,16 +14,18 @@ function MoumHeader () {
 }
 
 const Title = styled.div`
-  padding-top: 180px;
+  padding-top: 90px;
   width: 100%;
-  height: 480px;
+  height: 550px;
   background-image: url("https://i.ibb.co/G98Qn89/Rectangle-1808.png");
+  background-position-y: 70px;
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 0 0 60px 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
 `;
 

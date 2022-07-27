@@ -82,7 +82,6 @@ function Moum ({isScrap}) {
 }
 
 const CustomContainer = styled.div`
-  padding-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -35,6 +35,7 @@ function User () {
 
 const Content = styled.div`
   width: 1200px;
+  padding-top: 150px;
   padding-bottom: 70px;
 `;
 
