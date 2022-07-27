@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { removeToken } from "shared/localStorage";
 import { useRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
@@ -11,6 +11,8 @@ import runSvg from "assets/once/run.svg";
 
 function Header({selected}) {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
   const [headerFixed, setHeaderFixed] = useState(false);
 
@@ -32,13 +34,18 @@ function Header({selected}) {
 
   return (
     <Container isFixed={headerFixed}>
-      <Banner>
-        <img className="img-present" src={presentImg} alt="event" />
-        <div>
-          8월 31일(일)까지 단 4일! moum <span>설문조사 참여하고 이벤트 상품</span> 받아가세요
-        </div>
-        <img className="img-run" src={runSvg} alt="run" />
-      </Banner>
+      {
+        !(location.pathname === "/login" || location.pathname === "/register") &&
+        <Banner onClick={() => {
+          window.open("https://docs.google.com/forms/d/e/1FAIpQLSeh0TbZXtvfmEyEbbPSyS8w9pOLZmrK7FCidbZUGdl2IdNnjw/viewform?usp=sf_link");
+        }}>
+          <img className="img-present" src={presentImg} alt="event" />
+          <div>
+            7월 31일(일)까지 단 4일! moum <span>설문조사 참여하고 이벤트 상품</span> 받아가세요
+          </div>
+          <img className="img-run" src={runSvg} alt="run" />
+        </Banner>
+      }
       <Box>
         <Logo><Link to="/"><img src={logoSvg} alt="moum" /></Link></Logo>
         <Menu>

@@ -3,8 +3,12 @@ import Header from "components/Common/Header";
 import styled from "styled-components";
 import logoWhite from "assets/common/Header/logo_white.png";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLogin } from "state/common/user";
+import Swal from "sweetalert2";
 
 function Intro() {
+  const login = useRecoilValue(isLogin);
   const navigate = useNavigate("/auth");
   return (
     <Container>
@@ -26,7 +30,14 @@ function Intro() {
           <img src="https://i.ibb.co/2tnMvJR/Group-275.jpg" alt="intro5" />
           <button onClick={
             () => {
-              navigate("/register");
+              if (login) {
+                Swal.fire({
+                  icon: "error",
+                  title: "이미 로그인이 되어 있는 상태입니다"
+                });
+              } else {
+                navigate("/register");
+              }
             }
           }>30초 회원가입 하러가기</button>
         </ContentView>

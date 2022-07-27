@@ -60,7 +60,7 @@ function SearchPieceCard ({piece}) {
       name: "신고하기",
       image: reportSvg,
       onClick: async() => {
-        const {result} = await report(piece.id);
+        const {result, message} = await report(piece.id);
         if (result) {
           Swal.fire({
             icon: "success",
@@ -69,7 +69,7 @@ function SearchPieceCard ({piece}) {
         } else {
           Swal.fire({
             icon: "error",
-            title: "신고 실패"
+            title: message
           });
         }
         setOptionState(false);

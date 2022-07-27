@@ -14,8 +14,8 @@ function PieceList () {
   const search = useRecoilValue(atomSearch);
   const sortState = useRecoilValue(atomSortState);
 
-  const {isSuccess, data: piecesQuery} = useCustomQuery(["pieces", viewFolderId, categories, search], async () => {
-      let searchString = `/boards/`; // API LINK
+  const {isSuccess, data: piecesQuery} = useCustomQuery(["pieces", viewFolderId, categories, search, sortState], async () => {
+      let searchString = `/boards2/`; // API LINK
       searchString += `${viewUserId}/`; // User ID
       searchString += `${viewFolderId}/`;
       if (search === "") {
@@ -24,10 +24,16 @@ function PieceList () {
         searchString += `${search}`; 
       }
 
-      searchString += "?page=0";
+      // searchString += "?page=0";
+
+      // if (sortState === "CUSTOM") {
+      //   searchString += "&sort=boardOrder,asc";
+      // }
 
       if (sortState === "CUSTOM") {
-        searchString += "&sort=boardOrder,asc";
+        searchString += "/b";
+      } else {
+        searchString += "/a";
       }
 
       if (categories.length === 0) {

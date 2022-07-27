@@ -28,13 +28,20 @@ function SocialLoginButton () {
   const navigate = useNavigate();
 
   const {mutate: login} = useMutation(async (data) => {
-    const response = await executeSignInWithGoogleAxios(data.code);
-    return response.data;
+    return await executeSignInWithGoogleAxios(data.code);
   }, {
-    onSuccess: data => {
-      setToken(data.accessToken, data.refreshToken);
-      setLogin(true);
-      navigate("/");
+    onSuccess: response => {
+      if (response.data) {
+        setToken(response.data.accessToken, response.data.refreshToken);
+        setLogin(true);
+        navigate("/");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "해당 이메일로 가입된 계정이 있습니다."
+        });
+        setLogin(false);
+      }
     },
     onError: err => {
       Swal.fire({

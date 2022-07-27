@@ -10,6 +10,7 @@ import { instance }  from "shared/axios"
 // css
 import styled, { css }  from "styled-components";
 import Swal from "sweetalert2";
+import useCustomMutate from "hooks/useCustomMutate";
 
 const Join = (props) => {
   const [active, setActive] = useState(false);
@@ -100,53 +101,6 @@ const Join = (props) => {
     }
   }
 
-  // 아이디 중복 확인
-  const clickIdCheck = () => {
-    IdCheckJoin(ref.username.current.value);
-  }
-
-  const { mutate: IdCheckJoin} = useMutation(
-    async (username) => {
-      const response = await instance.get(`/user/emailDupCheck/${username}`);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        if (data === true){
-        //   Swal.fire({
-        //     icon: "success",
-        //     title: "사용가능한 아이디입니다."
-				// }) 
-          props.runProfile();
-        } else if (data === false){ 
-            Swal.fire({
-            icon: "error",
-            title: "중복된 아이디입니다."
-				}) 
-          return;
-        }       
-      }
-    }
-  ) 
-
-  // 비밀번호 일치/불일치 확인
-  const clickPwdCheck = () => {
-    const password = ref.password.current.value;
-    const passwordConfirm = ref.passwordConfirm.current.value;
-
-     if ( password !== passwordConfirm ) {
-           Swal.fire({
-            icon: "error",
-            title: "비밀번호가 일치하지 않습니다."
-				}) 
-        return            
-     } else if (password === passwordConfirm) {
-        props.runProfile();
-     }
-      return false;
-     
-  }
-
 // input 값이 다 채워져야 버튼 활성화
 const [filled, setFilled] = useState(false)
 
@@ -157,41 +111,79 @@ const [idLen, setIdLen] = useState(false);
 const [PwdLen, setPwdLen] = useState(false); 
 const [rePwdLen, setRePwdLen] = useState(false);
 
-const filledEmail = (e)=> {
-  		if (ref.email.current.value.length > 0){
-			setEmailLen(true)
-		} else {
-      setEmailLen(false)
-		}
-}
-const filledCode = (e)=> {
-  		if (ref.certification.current.value.length > 0){
-			setCodeLen(true)
-		} else {
-			setCodeLen(false)
-		}
-}
-const filledId = (e)=> {
-  		if (ref.username.current.value.length > 0){
-			setIdLen(true)
-		} else {
-			setIdLen(false)
-		}
-}
-const filledPwd = (e) => {
-  		if (ref.password.current.value.length > 0){
-			setPwdLen(true)
-		} else {
-			setPwdLen(false)
-		}
-}
-const filledRePwd = (e)=> {
-  		if (ref.passwordConfirm.current.value.length > 0){
-			setRePwdLen(true)
-		} else {
-			setRePwdLen(false)
-		}
-}
+  const filledEmail = (e)=> {
+        if (ref.email.current.value.length > 0){
+        setEmailLen(true)
+      } else {
+        setEmailLen(false)
+      }
+  }
+  const filledCode = (e)=> {
+        if (ref.certification.current.value.length > 0){
+        setCodeLen(true)
+      } else {
+        setCodeLen(false)
+      }
+  }
+  const filledId = (e)=> {
+        if (ref.username.current.value.length > 0){
+        setIdLen(true)
+      } else {
+        setIdLen(false)
+      }
+  }
+  const filledPwd = (e) => {
+        if (ref.password.current.value.length > 0){
+        setPwdLen(true)
+      } else {
+        setPwdLen(false)
+      }
+  }
+
+  const filledRePwd = (e)=> {
+        if (ref.passwordConfirm.current.value.length > 0){
+        setRePwdLen(true)
+      } else {
+        setRePwdLen(false)
+      }
+  }
+
+
+  const { mutateAsync: IdCheckJoin} = useCustomMutate((username) => instance.get(`/user/emailDupCheck/${username}`));
+
+  const nextPage = async (e) => {
+    // 아이디 중복체크
+    const {data} = await IdCheckJoin(ref.username.current.value);
+    if (!data) {
+      Swal.fire({
+        icon: "error",
+        title: "중복된 아이디입니다."
+      })
+    }
+
+    // 비밀번호 유효성 검사
+    const password = ref.password.current.value;
+    const passwordConfirm = ref.passwordConfirm.current.value;
+
+    const passwordReg = /^(?=.[A-Za-z])(?=.\d)[A-Za-z\d]{4,}$/;
+    if (passwordReg.test(password)) {
+      alert("비밀번호 체크 성공");
+      return;
+    } else {
+      alert("비밀번호 체크 실패");
+      return;
+    }
+
+    // if ( password !== passwordConfirm ) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "비밀번호가 일치하지 않습니다."
+    //   }) 
+    //   return false;
+    // } else if (password === passwordConfirm) {
+    //   props.runProfile();
+    // }
+  }
 
 
   return (
@@ -206,10 +198,11 @@ const filledRePwd = (e)=> {
             placeholder='이메일' 
             autoComplete="email"
             required
-            onChange={(e)=> {
-              setJoinEmailState(e.target.value);
-              filledEmail();
-            }
+            onChange={
+              (e)=> {
+                setJoinEmailState(e.target.value);
+                filledEmail();
+              }
             }
             />
             <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>인증요청</SendMail>
@@ -266,11 +259,7 @@ const filledRePwd = (e)=> {
         <JoinBtn 
         type="button" 
         disabled={!(emailLen && codeLen && idLen && PwdLen && rePwdLen)}
-        onClick={() => {
-          clickIdCheck();   
-          clickPwdCheck();
-          // props.runProfile();
-        }}>다음</JoinBtn>
+        onClick={nextPage}>다음</JoinBtn>
     </JoinContainer>
   )
  }

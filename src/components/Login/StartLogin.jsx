@@ -47,14 +47,22 @@ const StartLogin = (props) => {
       return;
     }
 
-    const {result, data} = await login({username, password});
-    
-    if (result === true) {
-      setToken(data.accessToken, data.refreshToken);
-      setLoginStatus(true);
-      navigate("/");
-    } else if (result === false) {
-       Swal.fire({
+    try {
+      const {result, data} = await login({username, password});
+      
+      if (result === true) {
+        setToken(data.accessToken, data.refreshToken);
+        setLoginStatus(true);
+        navigate("/");
+      } else if (result === false) {
+        Swal.fire({
+          icon: "error",
+          title: "로그인 실패"
+        })
+        setLoginStatus(false);
+      }
+    } catch (err) {
+      Swal.fire({
         icon: "error",
         title: "로그인 실패"
       })

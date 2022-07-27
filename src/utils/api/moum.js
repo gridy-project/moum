@@ -10,5 +10,14 @@ export const getMoumMineByOptionsAxios = ({ keyword, categories, sort, page }) =
 };
 export const addMoumAxios = (data) => instance.post("/folder", data);
 export const changeMoumOrder = (moveFolderId, afterFolderOrder) => instance.post(`/folders`, { folderId: moveFolderId, afterOrder: afterFolderOrder });
-export const getPieceMineAllAxios = (folderId) => instance.post(`/boards/0/${folderId}/all`, [{ category: "전체" }]);
-export const getPieceMineByOptionsAxios = (folderId, { keyword, categories }) => instance.post(`/boards/0/${folderId}/${keyword}`, categories);
+export const getPieceMineAllAxios = (folderId, sort) => {
+  // /boards2/{userId}/{folderId}/{keyword}/{sort}
+  // const queryString = `/boards2/0/${folderId}/all` + (sort ? "?sort=boardOrder,asc" : "");
+  const queryString = `/boards2/0/${folderId}/all/${sort ? "b" : "a"}`;
+  return instance.post(queryString, [{ category: "전체" }]);
+};
+export const getPieceMineByOptionsAxios = (folderId, { keyword, categories, sort }) => {
+  // const queryString = `/boards2/0/${folderId}/${keyword}` + (sort ? "?sort=boardOrder,asc" : "");
+  const queryString = `/boards2/0/${folderId}/${keyword}/${sort ? "b" : "a"}`;
+  return instance.post(queryString, categories);
+};
