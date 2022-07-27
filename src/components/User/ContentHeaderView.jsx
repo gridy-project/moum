@@ -5,23 +5,27 @@ import SortGroup from "./SortGroup";
 import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import CategoryGroup from "./CategoryGroup";
+import { instance } from "shared/axios";
+import useCustomQuery from "hooks/useCustomQuery";
 
 function ContentHeaderView () {
   const navigate = useNavigate();
   const {userId: viewUserId, folderId: viewFolderId = 0} = useParams();
+  
+  const { data: query } = useCustomQuery(["mine/moums/all"], () => instance.get(`/folders?userId=${viewUserId}`));
 
   return (
     <View>
       {viewFolderId === 0 ? 
         <Location>모음 목록</Location> :
-        <Location isGrey margin>
+        <Location isGrey isSmall margin>
           <span className="location-home" onClick={
             () => {
               navigate(`/user/${viewUserId}`)
             }
-          }>나의 모음</span>
+          }>모음 목록</span>
           <img src={arrowRight} alt="right" />
-          <span className="location-now">모음 이름</span>
+          <span className="location-now">{query?.data?.filter((v) => v.id === Number(viewFolderId))[0]?.name}</span>
         </Location>
       }
       {viewFolderId !== 0 && <MoumMenu />}
@@ -36,7 +40,7 @@ const View = styled.div`
 `;
 
 const Location = styled.div`
-  font-size: 22px;
+  font-size: ${props => props.isSmall ? "18px" : "22px"};
   line-height: 24px;
   font-weight: 600;
   color: ${props => props.isGrey ? "#949494" : "#303030"};

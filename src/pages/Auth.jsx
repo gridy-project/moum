@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useEffect } from 'react';
 // Recoil
 import { useRecoilState } from "recoil";
 import { numberLoginState } from 'state/login';
@@ -13,9 +13,20 @@ import SearchId from 'components/Login/Id/SearchId';
 import ReissuePwd from 'components/Login/ReissuePwd';
 import Join from 'components/Login/SignUp/Join';
 import CreateProfile from 'components/Login/SignUp/CreateProfile';
+import { useLocation } from 'react-router-dom';
 
 const Auth = () => {
+  const match = useLocation();
+
   const [numberState, setNumberState] = useRecoilState(numberLoginState)
+
+  useEffect(() => {
+    if (match.pathname === "/login") {
+      setNumberState(0);
+    } else if (match.pathname === "/register") {
+      setNumberState(1);
+    }
+  }, [match, setNumberState]);
 
   const runLoginPage = () => {
     setNumberState(0)

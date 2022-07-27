@@ -10,6 +10,8 @@ import noImage from "assets/images/pages/moum/images-none.png";
 import more from "assets/images/pages/moum/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 
+import Swal from "sweetalert2";
+
 
 function LinkPieceCard({piece}) {
   const [buttonState, setButtonState] = useState(false);
@@ -20,10 +22,10 @@ function LinkPieceCard({piece}) {
   }, {
     onSuccess: data => {
       queryClient.invalidateQueries("mine/pieces");
-      alert("복사 성공");
-    },
-    onError: err => {
-      console.log(err);
+      Swal.fire({
+        icon: "success",
+        title: "복사 성공"
+      });
     }
   });
 

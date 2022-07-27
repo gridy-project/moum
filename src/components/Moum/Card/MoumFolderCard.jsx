@@ -17,6 +17,8 @@ import MoumCard from "components/Card/MoumCard";
 import { SortableItem } from "react-easy-sort";
 import { globalPopup } from "state/common/popup";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import useCustomMutate from "hooks/useCustomMutate";
 
 function MoumFolderCard ({moum, sortable}) {
   const navigate = useNavigate();
@@ -30,17 +32,20 @@ function MoumFolderCard ({moum, sortable}) {
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
 
-  const {mutate: remove} = useMutation((data) => instance.delete(`/folders`, {data}), 
-    {
-      onSuccess: data => queryClient.invalidateQueries("mine/moums")
-    }
-  );
+  const {mutateAsync: remove} = useCustomMutate((data) => instance.delete(`/folders`, {data}));
 
-  const removeFolder = (e) => {
+  const removeFolder = async (e) => {
     e.preventDefault();
     e.stopPropagation(); 
     setButtonState(false);
-    remove([{ id: moum.id }]);
+    const {result} = await remove([{ id: moum.id }]);
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "삭제 완료"
+      })
+      queryClient.invalidateQueries("mine/moums");
+    }
   }
 
   const modifyFolder = (e) => {
@@ -62,9 +67,6 @@ function MoumFolderCard ({moum, sortable}) {
   }, {
     onSuccess: data => {
       queryClient.invalidateQueries("mine/moums");
-    },
-    onError: err => {
-      console.log(err);
     }
   });
 

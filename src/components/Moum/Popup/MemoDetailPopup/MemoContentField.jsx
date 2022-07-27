@@ -3,7 +3,6 @@ import styled from "styled-components";
 import PopupButtonGroup from "../LinkDetailPopup/PopupButtonGroup";
 
 function MemoContentField ({finish, close, setter, getter}) {
-  console.log(getter);
   const ref = {
     subject: useRef(null),
     content: useRef(null)

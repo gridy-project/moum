@@ -92,7 +92,6 @@ const CreateProfile = () => {
   const { mutate: signUp } = useMutation(
     async (data) => {
       const response = await instance.post("/user/signup", data);
-      console.log(response)
       return response;
     },
     {
