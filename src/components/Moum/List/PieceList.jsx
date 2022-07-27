@@ -9,29 +9,36 @@ import { useEffect } from "react";
 import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum";
 import MoumPieceCard from "components/Moum/Card/MoumPieceCard";
 import { useParams } from "react-router-dom";
+import useCustomMutate from "hooks/useCustomMutate";
+import { instance } from "shared/axios";
 
 function PieceList ({search}) {
   const {folderId: viewFolderId = 0} = useParams();
 
   const categories = useRecoilValue(atomSelectedCategories);
   const sortState = useRecoilValue(atomMoumSort);
-  const piecesQuery = useCustomQuery(["mine/pieces", viewFolderId, categories, search], async () => {
+  const piecesQuery = useCustomQuery(["mine/pieces", viewFolderId, categories, search, sortState], async () => {
     if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
-      const response = await getPieceMineAllAxios(viewFolderId);
+      const response = await getPieceMineAllAxios(viewFolderId, sortState === "사용자 지정순" ? true : false );
       return response.data;
     } else if (search === "") {
-      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: "all", categories });
+      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: "all", categories, sort: sortState === "사용자 지정순" ? true : false });
       return response.data;
     } else {
-      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: search, categories });
+      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: search, categories, srot: sortState === "사용자 지정순" ? true : false });
       return response.data;
     }
   });
 
   const [sortablePieceList, setSortablePieceList] = useState([]);
+  const {mutateAsync: order} = useCustomMutate(
+    ({folderId, boardId, afterOrder}) => instance.post("/boards", {folderId, boardId, afterOrder}));
 
-  const onSortEnd = (oldIndex, newIndex) => {
-    setSortablePieceList((array) => arrayMove(array, oldIndex, newIndex))
+  const onSortEnd = async (oldIndex, newIndex) => {
+    const {result} = await order({folderId: viewFolderId, boardId: sortablePieceList[oldIndex].id, afterOrder: sortablePieceList[newIndex].boardOrder});
+    if (result) {
+      setSortablePieceList((array) => arrayMove(array, oldIndex, newIndex));
+    }
   }
 
   useEffect(() => {

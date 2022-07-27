@@ -42,7 +42,7 @@ function MoumUpdatePopup ({moum, close}) {
       <Form onSubmit={onModify}>
         <div className="moum-name">
           <label htmlFor="name">모음 이름</label>
-          <input type="text" id="name" ref={ref.name} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
+          <input type="text" id="name" ref={ref.name} maxLength={20} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
         </div>
         <div className="btn-group">
           <CancelButton

@@ -43,7 +43,7 @@ function AllMoumFollower () {
     pageCnt > 0 && (
       <Follower>
         <div className="content-header">
-          <em>내가 팔로우한 계정<span>{follows.data.followingCnt}개</span></em>
+          <em>내가 팔로우한 계정<span>{follows?.data?.followingCnt}개</span></em>
           <div className="btn-follow">
             <Button isActive={page !== 0} onClick={pagePrev}><SvgMoveLeft /></Button>
             <Button isActive={page !== pageCnt - 1} onClick={pageNext}><SvgMoveRight /></Button>

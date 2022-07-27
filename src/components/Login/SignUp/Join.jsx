@@ -10,6 +10,7 @@ import { instance }  from "shared/axios"
 // css
 import styled, { css }  from "styled-components";
 import Swal from "sweetalert2";
+import useCustomMutate from "hooks/useCustomMutate";
 
 const Join = (props) => {
   const [active, setActive] = useState(false);
@@ -24,11 +25,13 @@ const Join = (props) => {
     certification: useRef()
   }
 
-  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState)
-  const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState)
-  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState)
-  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState)
-  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState)
+  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState);
+  const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState);
+  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState);
+  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState);
+  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState);
+
+  const [checkPass, setCheckPass] = useState(false);
 
   // 회원가입 이메일인증 메일전송
   const CheckEmailRegister = () => {
@@ -80,12 +83,14 @@ const Join = (props) => {
           Swal.fire({
             icon: "success",
             title: "인증번호가 일치합니다."
-          })
+          });
+          setCheckPass(true);
         } else {
           Swal.fire({
             icon: "error",
             title: "인증번호가 일치하지 않습니다."
 				  }) 
+          setCheckPass(false);
         }
       }
     }
@@ -100,53 +105,6 @@ const Join = (props) => {
     }
   }
 
-  // 아이디 중복 확인
-  const clickIdCheck = () => {
-    IdCheckJoin(ref.username.current.value);
-  }
-
-  const { mutate: IdCheckJoin} = useMutation(
-    async (username) => {
-      const response = await instance.get(`/user/emailDupCheck/${username}`);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        if (data === true){
-        //   Swal.fire({
-        //     icon: "success",
-        //     title: "사용가능한 아이디입니다."
-				// }) 
-          props.runProfile();
-        } else if (data === false){ 
-            Swal.fire({
-            icon: "error",
-            title: "중복된 아이디입니다."
-				}) 
-          return;
-        }       
-      }
-    }
-  ) 
-
-  // 비밀번호 일치/불일치 확인
-  const clickPwdCheck = () => {
-    const password = ref.password.current.value;
-    const passwordConfirm = ref.passwordConfirm.current.value;
-
-     if ( password !== passwordConfirm ) {
-           Swal.fire({
-            icon: "error",
-            title: "비밀번호가 일치하지 않습니다."
-				}) 
-        return            
-     } else if (password === passwordConfirm) {
-        props.runProfile();
-     }
-      return false;
-     
-  }
-
 // input 값이 다 채워져야 버튼 활성화
 const [filled, setFilled] = useState(false)
 
@@ -157,41 +115,86 @@ const [idLen, setIdLen] = useState(false);
 const [PwdLen, setPwdLen] = useState(false); 
 const [rePwdLen, setRePwdLen] = useState(false);
 
-const filledEmail = (e)=> {
-  		if (ref.email.current.value.length > 0){
-			setEmailLen(true)
-		} else {
-      setEmailLen(false)
-		}
-}
-const filledCode = (e)=> {
-  		if (ref.certification.current.value.length > 0){
-			setCodeLen(true)
-		} else {
-			setCodeLen(false)
-		}
-}
-const filledId = (e)=> {
-  		if (ref.username.current.value.length > 0){
-			setIdLen(true)
-		} else {
-			setIdLen(false)
-		}
-}
-const filledPwd = (e) => {
-  		if (ref.password.current.value.length > 0){
-			setPwdLen(true)
-		} else {
-			setPwdLen(false)
-		}
-}
-const filledRePwd = (e)=> {
-  		if (ref.passwordConfirm.current.value.length > 0){
-			setRePwdLen(true)
-		} else {
-			setRePwdLen(false)
-		}
-}
+  const filledEmail = (e)=> {
+        if (ref.email.current.value.length > 0){
+        setEmailLen(true)
+      } else {
+        setEmailLen(false)
+      }
+  }
+  const filledCode = (e)=> {
+        if (ref.certification.current.value.length > 0){
+        setCodeLen(true)
+      } else {
+        setCodeLen(false)
+      }
+  }
+  const filledId = (e)=> {
+        if (ref.username.current.value.length > 0){
+        setIdLen(true)
+      } else {
+        setIdLen(false)
+      }
+  }
+  const filledPwd = (e) => {
+        if (ref.password.current.value.length > 0){
+        setPwdLen(true)
+      } else {
+        setPwdLen(false)
+      }
+  }
+
+  const filledRePwd = (e)=> {
+        if (ref.passwordConfirm.current.value.length > 0){
+        setRePwdLen(true)
+      } else {
+        setRePwdLen(false)
+      }
+  }
+
+
+  const { mutateAsync: IdCheckJoin} = useCustomMutate((username) => instance.get(`/user/emailDupCheck/${username}`));
+
+  const nextPage = async (e) => {
+    // 아이디 중복체크
+    const {data} = await IdCheckJoin(ref.username.current.value);
+    if (!data) {
+      Swal.fire({
+        icon: "error",
+        title: "중복된 아이디입니다."
+      })
+    }
+
+    // 비밀번호 유효성 검사
+    const password = ref.password.current.value;
+    const passwordConfirm = ref.passwordConfirm.current.value;
+    const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/;
+    if (passwordReg.test(password) === false) {
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호 오류",
+        text: "비밀번호는 1개 이상의 숫자, 1개 이상의 문자로 조합해야 하며 최소 4자 이상 입력해야 합니다."
+      });
+      return false;
+    }
+
+    if ( password !== passwordConfirm ) {
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호가 일치하지 않습니다."
+      });
+      return false;
+    }
+
+    if (checkPass) {
+      props.runProfile();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "이메일 인증을 완료해주세요."
+      });
+    }
+  }
 
 
   return (
@@ -206,10 +209,11 @@ const filledRePwd = (e)=> {
             placeholder='이메일' 
             autoComplete="email"
             required
-            onChange={(e)=> {
-              setJoinEmailState(e.target.value);
-              filledEmail();
-            }
+            onChange={
+              (e)=> {
+                setJoinEmailState(e.target.value);
+                filledEmail();
+              }
             }
             />
             <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>인증요청</SendMail>
@@ -266,11 +270,7 @@ const filledRePwd = (e)=> {
         <JoinBtn 
         type="button" 
         disabled={!(emailLen && codeLen && idLen && PwdLen && rePwdLen)}
-        onClick={() => {
-          clickIdCheck();   
-          clickPwdCheck();
-          // props.runProfile();
-        }}>다음</JoinBtn>
+        onClick={nextPage}>다음</JoinBtn>
     </JoinContainer>
   )
  }

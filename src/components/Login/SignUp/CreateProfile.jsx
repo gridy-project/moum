@@ -16,8 +16,10 @@ import profile4 from "../../../assets/images/pages/login/profile4.png";
 import profile5 from "../../../assets/images/pages/login/profile5.png";
 import profile6 from "../../../assets/images/pages/login/profile6.png";
 import check2 from "../../../assets/images/pages/login/check2.png"
+import { useNavigate } from 'react-router-dom';
 
 const CreateProfile = () => {
+  const navigate = useNavigate();
   const arr = [profile1, profile2, profile3, profile4, profile5, profile6]
   const [selected, setSelected] = useState(0);
 
@@ -34,7 +36,15 @@ const CreateProfile = () => {
 
   // 아이디 중복 확인
   const clickIdCheck = () => {
-    IdDupCheck(nicknameRef.current.value);
+    if (nicknameRef.current.value.length > 10) {
+      Swal.fire({
+        icon: "error",
+        title: "닉네임은 10자 이하로 입력해 주세요"
+      })
+      return false;
+    } else {
+      IdDupCheck(nicknameRef.current.value);
+    }
   }
 
   const { mutate: IdDupCheck } = useMutation(
@@ -97,7 +107,7 @@ const CreateProfile = () => {
     {
       onSuccess: (data) => {
         if (data.result === true) {
-          window.location.reload();
+          navigate("/login");
         } else if (data.statusCode === 404){
           Swal.fire({
             icon: "error",
@@ -114,9 +124,7 @@ const CreateProfile = () => {
             title: data.message
           }) 
         }
-      },
-			onError: (err) => {   
-			}
+      }
     }
   )
 

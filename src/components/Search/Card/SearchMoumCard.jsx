@@ -32,11 +32,16 @@ function SearchMoumCard ({moum, useAuthor}) {
       name: "모음 스크랩하기",
       image: scrapSvg,
       onClick: async () => {
-        const {result} = await scrap(moum.id);
+        const {result, message} = await scrap(moum.id);
         if (result) {
           Swal.fire({
             icon: "success",
             title: "스크랩 성공"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: message
           });
         }
         setState(false);
@@ -46,7 +51,7 @@ function SearchMoumCard ({moum, useAuthor}) {
       name: "신고하기",
       image: reportSvg,
       onClick: async () => {
-        const {result} = await report(moum.id);
+        const {result, message} = await report(moum.id);
         if (result) {
           Swal.fire({
             icon: "success",
@@ -55,7 +60,7 @@ function SearchMoumCard ({moum, useAuthor}) {
         } else {
           Swal.fire({
             icon: "error",
-            title: "신고 실패"
+            title: message
           });
         }
         setState(false);

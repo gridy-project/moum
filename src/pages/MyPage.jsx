@@ -39,11 +39,10 @@ function MyPage() {
 }
 
 const CustomContainer = styled.div`
+	padding-top: 200px;
 	width: 100%;
 	min-height: 100vh;
 	display: flex;
-	justify-content: center;
-	align-items: center;
 	background-color: #FFFFFF !important;
 `;
 
