@@ -3,7 +3,7 @@ import { executeTokenRefreshAxios } from "utils/api/auth";
 import { getAccessToken, getRefreshToken, removeToken, setToken } from "shared/localStorage";
 
 export const instance = axios.create({
-  baseURL: process.env.REACT_APP_HTTPS_SERVER_DOMAIN
+  baseURL: process.env.REACT_APP_SERVER_IP
   // baseURL: process.env.REACT_APP_SERVER_IP
 });
 
@@ -60,11 +60,9 @@ instance.interceptors.response.use(
         if (token) {
           try {
             const response = await executeTokenRefreshAxios(token);
-            console.log("토큰 자동 리프레시 성공");
             setToken(response.data.accessToken, response.data.refreshToken);
             return instance(originalRequest);
           } catch (err) {
-            console.log("토큰 갱신 실패");
             removeToken();
             window.location.replace("/");
           }

@@ -149,8 +149,6 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
                 const {result} = await movePiece({folderId: moum.id, list: [{id: piece.id}]});
                 if (result) {
                   queryClient.invalidateQueries("mine/pieces");
-                } else {
-                  console.log("폴더 이동 실패");
                 }
               }}
             />

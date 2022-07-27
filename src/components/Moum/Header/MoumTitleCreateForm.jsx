@@ -67,6 +67,7 @@ function MoumTitleCreateForm () {
       } else {
         queryClient.invalidateQueries("mine/pieces");
       }
+      queryClient.invalidateQueries("user");
       setFloat({
         state: true,
         component: <MoumCreateFloat piece={data} />

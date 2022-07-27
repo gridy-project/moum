@@ -25,9 +25,6 @@ function MemoPieceModifyPopup({piece}) {
     onSuccess: data => {
       queryClient.invalidateQueries("mine/pieces");
       queryClient.invalidateQueries("mine/categories");
-    },
-    onError: err => {
-      console.log(err);
     }
   });
 

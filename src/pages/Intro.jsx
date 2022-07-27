@@ -26,7 +26,7 @@ function Intro() {
           <img src="https://i.ibb.co/2tnMvJR/Group-275.jpg" alt="intro5" />
           <button onClick={
             () => {
-              navigate("/auth");
+              navigate("/register");
             }
           }>30초 회원가입 하러가기</button>
         </ContentView>

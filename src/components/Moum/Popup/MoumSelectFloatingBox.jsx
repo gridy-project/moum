@@ -26,6 +26,10 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
   const mutatePieceRemove = useCustomMutate(({folderId, list}) => removePieceMultiAxios(folderId, list), {
     onSuccess: () => {
       queryClient.invalidateQueries("mine/pieces")
+      Swal.fire({
+        icon: "success",
+        title: "삭제 성공"
+      });
     }
   });
 

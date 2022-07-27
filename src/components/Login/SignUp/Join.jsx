@@ -74,14 +74,12 @@ const Join = (props) => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);
         Swal.fire({
           icon: "success",
           title: "인증번호가 일치합니다."
 				})      
       },
 			onError: (err) => {
-				console.log(err)
           Swal.fire({
             icon: "error",
             title: "인증번호가 불일치합니다."
@@ -124,10 +122,7 @@ const Join = (props) => {
 				}) 
           return;
         }       
-      },
-			onError: (err) => {
-				console.log(err)
-			}
+      }
     }
   ) 
 

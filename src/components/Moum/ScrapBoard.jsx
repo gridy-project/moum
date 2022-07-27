@@ -10,10 +10,6 @@ function ScrapBoard () {
     () => instance.get(`/shares/0/all`)
   );
 
-  useEffect(() => {
-    console.log(moums);
-  }, [moums]);
-
   return (
     <Board>
       <List>

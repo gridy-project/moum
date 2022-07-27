@@ -35,7 +35,7 @@ const ChangePwd = () => {
       onSuccess: (data) => {
 				localStorage.removeItem("accessToken")
 				localStorage.removeItem("refreshToken")	
-				window.location.replace('/auth');
+				window.location.replace('/login');
       },
 			onError: (err) => {
 					Swal.fire({

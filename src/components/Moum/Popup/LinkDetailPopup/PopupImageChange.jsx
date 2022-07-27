@@ -66,7 +66,6 @@ function PopupImageChange ({finish, close, getter, setter}) {
       finish(imageType, getCategoryImage(getter.category))
       return;
     } else if (imageType === 2) {
-      console.log(ref.file.current.files);
       if (ref.file.current.files.length > 0) {
         const formData = new FormData();
         formData.append("image", ref.file.current.files[0]);
@@ -80,7 +79,6 @@ function PopupImageChange ({finish, close, getter, setter}) {
           });
         }
       } else {
-        console.log(getter.imageItems)
         if (getter.imageItems.upload) {
           finish(imageType, getter.imageItems.upload);
         } else {
@@ -92,7 +90,6 @@ function PopupImageChange ({finish, close, getter, setter}) {
 
   useEffect(() => {
     if (getter?.imageItems?.upload && ref.image) {
-      // console.log(ref.image);
       ref.image.current.src = getter.imageItems.upload;
     }
   }, [getter.imageItems.upload, ref.image]);

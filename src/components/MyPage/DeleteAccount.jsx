@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 // axios
 import { instance } from "shared/axios"
 import Swal from "sweetalert2";
+import { removeToken } from 'shared/localStorage';
 
 const DeleteAccount = () => {
   // 회원 탈퇴 
@@ -22,8 +23,12 @@ const DeleteAccount = () => {
         Swal.fire({
           icon: "success",
           title: "성공적으로 탈퇴되었습니다."
-        })
-				window.location.replace("/")
+        }).then(
+          () => {
+            removeToken();
+				    window.location.replace("/")
+          }
+        )
       },
 			onError: (err) => {
 			}

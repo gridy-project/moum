@@ -52,7 +52,6 @@ const ProfileImage = () => {
         queryClient.invalidateQueries("profile");
       },
 			onError: (err) => {
-				console.log(err)
 				 Swal.fire({
           icon: "error",
           title: err.data.message

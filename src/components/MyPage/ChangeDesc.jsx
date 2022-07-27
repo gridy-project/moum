@@ -50,11 +50,7 @@ const ChangeDesc = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("profile");
-        console.log(data);
-      },
-			onError: (err) => {
-				console.log(err)
-			}
+      }
     }
   )
 		// 글자 수 세기 / 제한
