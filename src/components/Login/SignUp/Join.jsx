@@ -68,23 +68,21 @@ const Join = (props) => {
   }
 
   const { mutate: EmailCheckJoin} = useMutation(
-    async (data) => {
-      const response = await instance.post("/email/check", data);
-      return response.data;
-    },
+    (data) => instance.post("/email/check", data),
     {
-      onSuccess: (data) => {
-        Swal.fire({
-          icon: "success",
-          title: "인증번호가 일치합니다."
-				})      
-      },
-			onError: (err) => {
+      onSuccess: ({result}) => {
+        if (result) {
+          Swal.fire({
+            icon: "success",
+            title: "인증번호가 일치합니다."
+          })
+        } else {
           Swal.fire({
             icon: "error",
-            title: "인증번호가 불일치합니다."
-				}) 
-			}
+            title: "인증번호가 일치하지 않습니다."
+				  }) 
+        }
+      }
     }
   ) 
 

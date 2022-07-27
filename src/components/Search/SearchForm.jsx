@@ -14,7 +14,7 @@ function SearchForm () {
   const keywordRef = useRef(null);
   return (
     <Form onSubmit={search}>
-      <input type="text" ref={keywordRef}/>
+      <input type="text" ref={keywordRef} autoComplete="search" placeholder="전체 모음명, 조각명 검색으로 쉽게 찾아보세요." />
       <button>
         <img src={searchIcon} alt="search" />
       </button>
@@ -35,8 +35,12 @@ const Form = styled.form`
     border: none;
     background-color: #FAFAFA;
     padding: 0 20px;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 400;
     outline: none;
+    &::placeholder {
+      color: #B7B7B7;
+    }
   }
 
   button {
