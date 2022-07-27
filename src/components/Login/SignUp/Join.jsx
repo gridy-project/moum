@@ -206,7 +206,7 @@ const filledRePwd = (e)=> {
             onChange={(e)=> {
               setJoinEmailState(e.target.value);
               filledEmail();
-            }     
+            }
             }
             />
             <button onClick={CheckEmailRegister}>인증요청</button>
@@ -220,6 +220,7 @@ const filledRePwd = (e)=> {
               filledCode();
               }
             }
+            autoComplete="code"
             placeholder='인증코드를 입력해주세요.'
             ref={ref.certification}  />
             <button 
@@ -234,6 +235,7 @@ const filledRePwd = (e)=> {
           ref={ref.username} 
           placeholder='아이디'
           required
+          autoComplete="username"
           onChange={(e)=> {
             setJoinIdState(e.target.value)
             filledId();

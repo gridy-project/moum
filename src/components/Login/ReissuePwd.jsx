@@ -118,12 +118,12 @@ const ReissuePwd = () => {
       <PwdTitle>비밀번호 재발급하기</PwdTitle>
       <PwdCheckId>
         <p>아이디</p>
-        <input type="text" ref={idCheckRef} placeholder='아이디 입력' />
+        <input type="text" ref={idCheckRef} placeholder='아이디 입력' autoComplete='username' />
       </PwdCheckId>
       <PwdCheckEmail>
         <p>이메일로 본인 확인</p>
         <PwdEmailBox>
-          <input type="text" ref={emailCheckRef} placeholder='이메일'/>
+          <input type="text" ref={emailCheckRef} placeholder='이메일' autoComplete='email' />
           <button onClick={ClickResetPwdCode}>인증요청</button>
         </PwdEmailBox>
         <PwdCodeBox isActive={active}>
