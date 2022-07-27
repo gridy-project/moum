@@ -46,7 +46,7 @@ function MoumAddPopup ({close}) {
       <Form onSubmit={submitAddFolder}>
         <div className="moum-name">
           <label htmlFor="name">모음 이름</label>
-          <input type="text" id="name" onChange={handleChange("name")} value={input.name} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
+          <input type="text" id="name" maxLength={20} onChange={handleChange("name")} value={input.name} placeholder="공백 포함 20자 이내로 작성이 가능해요." />
         </div>
         <div className="moum-share">
           <label>공유설정</label>

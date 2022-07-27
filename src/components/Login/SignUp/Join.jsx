@@ -25,11 +25,13 @@ const Join = (props) => {
     certification: useRef()
   }
 
-  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState)
-  const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState)
-  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState)
-  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState)
-  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState)
+  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState);
+  const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState);
+  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState);
+  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState);
+  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState);
+
+  const [checkPass, setCheckPass] = useState(false);
 
   // 회원가입 이메일인증 메일전송
   const CheckEmailRegister = () => {
@@ -81,12 +83,14 @@ const Join = (props) => {
           Swal.fire({
             icon: "success",
             title: "인증번호가 일치합니다."
-          })
+          });
+          setCheckPass(true);
         } else {
           Swal.fire({
             icon: "error",
             title: "인증번호가 일치하지 않습니다."
 				  }) 
+          setCheckPass(false);
         }
       }
     }
@@ -164,25 +168,32 @@ const [rePwdLen, setRePwdLen] = useState(false);
     // 비밀번호 유효성 검사
     const password = ref.password.current.value;
     const passwordConfirm = ref.passwordConfirm.current.value;
-
-    const passwordReg = /^(?=.[A-Za-z])(?=.\d)[A-Za-z\d]{4,}$/;
-    if (passwordReg.test(password)) {
-      alert("비밀번호 체크 성공");
-      return;
-    } else {
-      alert("비밀번호 체크 실패");
-      return;
+    const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/;
+    if (passwordReg.test(password) === false) {
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호 오류",
+        text: "비밀번호는 1개 이상의 숫자, 1개 이상의 문자로 조합해야 하며 최소 4자 이상 입력해야 합니다."
+      });
+      return false;
     }
 
-    // if ( password !== passwordConfirm ) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "비밀번호가 일치하지 않습니다."
-    //   }) 
-    //   return false;
-    // } else if (password === passwordConfirm) {
-    //   props.runProfile();
-    // }
+    if ( password !== passwordConfirm ) {
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호가 일치하지 않습니다."
+      });
+      return false;
+    }
+
+    if (checkPass) {
+      props.runProfile();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "이메일 인증을 완료해주세요."
+      });
+    }
   }
 
 

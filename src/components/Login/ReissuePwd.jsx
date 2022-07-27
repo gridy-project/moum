@@ -1,7 +1,9 @@
 // React
+import useCustomMutate from 'hooks/useCustomMutate';
 import React, { useState, useRef } from 'react';
 // React Query
 import { useMutation } from "react-query";
+import { useNavigate } from 'react-router-dom';
 // axios
 import { instance }  from "shared/axios"
 // css
@@ -9,41 +11,53 @@ import styled, { css } from "styled-components";
 import Swal from "sweetalert2";
 
 const ReissuePwd = () => {
+  const navigate = useNavigate();
   const idCheckRef = useRef();
   const emailCheckRef = useRef();
   const codeCheckRef = useRef();
 
   const [active, setActive] = useState(false);
+  const [check, setCheck] = useState(false);
+
+
+  const { mutateAsync: sendResetPwdCode } = useCustomMutate((data) => instance.post("/email/sendResetPwCode", data))
 
   // 비밀번호 발급을 위한 인증 메일 발송
-  const ClickResetPwdCode = () => {
+  const clickResetPwdCode = async () => {
      const data = {
       username : idCheckRef.current.value,
       email : emailCheckRef.current.value
     }
-    sendResetPwdCode(data);
-  }
 
-  const { mutate: sendResetPwdCode } = useMutation(
-    async (data) => {
-      const response = await instance.post("/email/sendResetPwCode", data);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        Swal.fire({
-          icon: "success",
-          title: "이메일 전송 완료"
-        })
-      },
-			onError: (err) => {
-        Swal.fire({
-          icon: "error",
-          title: "유저를 찾을 수 없습니다."
-        })
-			}
+    if (data.username === "") {
+      Swal.fire({
+        icon: "error",
+        title: "아이디를 입력해주세요."
+      });
+      return false;
     }
-  )
+
+    if (data.email === "") {
+      Swal.fire({
+        icon: "error",
+        title: "이메일을 입력해주세요."
+      });
+      return false;
+    }
+
+    const {result} = await sendResetPwdCode(data);
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "이메일 전송 완료"
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "유저를 찾을 수 없습니다."
+      });
+    }
+  }
 
  // 비밀번호 발급을 위한 인증번호 확인
   const clickEmailCheck = () => {
@@ -55,54 +69,61 @@ const ReissuePwd = () => {
   }
 
   const { mutate: EmailCheck} = useMutation(
-    async (data) => {
-      const response = await instance.post("/email/password/check", data);
-      return response.data;
-    },
+    (data) => instance.post("/email/password/check", data),
     {
-      onSuccess: (data) => {
-        Swal.fire({
-          icon: "success",
-          title: "인증 번호가 일치합니다."
-        })   
-      },
-			onError: (err) => {
-        Swal.fire({
-          icon: "error",
-          title: "인증 번호가 불일치합니다."
-        }) 
-			}
+      onSuccess: ({result}) => {
+        if (result) {
+          Swal.fire({
+            icon: "success",
+            title: "인증 번호가 일치합니다."
+          });
+          setCheck(true);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "인증 번호가 불일치합니다."
+          });
+          setCheck(false);
+        }
+      }
     }
   ) 
 
-  // 임시 비밀번호 발급
-    const clickSendNewPwd = () => {
-     const data = {
-      email : emailCheckRef.current.value,
-    }
-    sendNewPwd(data);
-  }
 
   const { mutate: sendNewPwd } = useMutation(
-    async (data) => {
-      const response = await instance.post("/email/sendNewPw", data);
-      return response.data;
-    },
+    async (data) => instance.post("/email/sendNewPw", data),
     {
-      onSuccess: (data) => {
-        Swal.fire({
-          icon: "success",
-          title: "임시 비밀번호 발급 성공"
-        })       
-      },
-			onError: (err) => {
-        Swal.fire({
-          icon: "error",
-          title: "인증을 하지 않은 회원입니다."
-        }) 
-			}
+      onSuccess: ({result}) => {
+        if (result) {
+          Swal.fire({
+            icon: "success",
+            title: "임시 비밀번호 발급 성공"
+          });
+          navigate("/login");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "인증을 하지 못한 회원입니다."
+          });
+        }
+      }
     }
   )
+
+  // 임시 비밀번호 발급
+  const clickSendNewPwd = () => {
+    if (check) {
+      const data = {
+        email : emailCheckRef.current.value,
+      }
+      sendNewPwd(data);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "인증번호 확인이 필요합니다."
+      })
+    }
+  }
 
   // input 에 값이 있을 경우 확인 버튼 활성화
   const checkInputCount = () => {
@@ -124,7 +145,7 @@ const ReissuePwd = () => {
         <p>이메일로 본인 확인</p>
         <PwdEmailBox>
           <input type="text" ref={emailCheckRef} placeholder='이메일' autoComplete='email' />
-          <button onClick={ClickResetPwdCode}>인증요청</button>
+          <button onClick={clickResetPwdCode}>인증요청</button>
         </PwdEmailBox>
         <PwdCodeBox isActive={active}>
           <input 

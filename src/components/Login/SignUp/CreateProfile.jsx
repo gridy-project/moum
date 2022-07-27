@@ -36,7 +36,15 @@ const CreateProfile = () => {
 
   // 아이디 중복 확인
   const clickIdCheck = () => {
-    IdDupCheck(nicknameRef.current.value);
+    if (nicknameRef.current.value.length > 10) {
+      Swal.fire({
+        icon: "error",
+        title: "닉네임은 10자 이하로 입력해 주세요"
+      })
+      return false;
+    } else {
+      IdDupCheck(nicknameRef.current.value);
+    }
   }
 
   const { mutate: IdDupCheck } = useMutation(

@@ -47,7 +47,7 @@ function MoumList () {
   const {ref, inView} = useInView();
 
   const { data, fetchNextPage } = useInfiniteQuery(
-    ["other/moums", categories, search, sortState], 
+    ["other/moums", userId, categories, search, sortState], 
     ({pageParam = 0}) => moumsFetch({userId, categories, search, sortState, pageParam}),
     {
       getNextPageParam: (lastPage) => {
