@@ -9,6 +9,7 @@ import { viewAccountState } from 'state/login';
 import { instance } from "shared/axios"
 // css
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 // sparta3@dev.com
  const LookUpId = (props) => {
@@ -31,12 +32,14 @@ import styled from "styled-components";
     },
     {
       onSuccess: (data) => {
-        console.log(data);
         setViewID(data);
         props.runSuccessFindId();
       },
 			onError: (err) => {
-				console.log(err)
+        Swal.fire({
+          icon: "error",
+          title: "회원가입되지 않은 이메일입니다."
+        })
 			}
     }
   )

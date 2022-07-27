@@ -7,6 +7,7 @@ import { instance } from 'shared/axios';
 import { useRecoilState } from "recoil";
 import { JoinIdState, JoinNicknameState, JoinPasswordState, JoinEmailState, JoinImgPathState } from 'state/login';
 // css
+import Swal from "sweetalert2";
 import styled, { css }  from "styled-components";
 import profile1 from "../../../assets/images/pages/login/profile1.png";
 import profile2 from "../../../assets/images/pages/login/profile2.png";
@@ -39,20 +40,23 @@ const CreateProfile = () => {
   const { mutate: IdDupCheck } = useMutation(
     async (nickname) => {
       const response = await instance.get(`/user/nameDupCheck/${nickname}`);
-      console.log(response)
       return response.data;
     },
     {
       onSuccess: (data) => {
-        console.log(data);
         if (data === true){
-          window.alert("사용 가능한 닉네임입니다.")
+          Swal.fire({
+            icon: "success",
+            title: "사용 가능한 닉네임입니다."
+          }) 
         } else if (data === false){
-          window.alert("중복된 닉네임입니다.")
+            Swal.fire({
+              icon: "error",
+              title: "중복된 닉네임입니다."
+            }) 
         }
       },
 			onError: (err) => {
-				// console.log(err)
 			}
     }
   ) 
@@ -89,15 +93,30 @@ const CreateProfile = () => {
     async (data) => {
       const response = await instance.post("/user/signup", data);
       console.log(response)
-      return response.data;
+      return response;
     },
     {
       onSuccess: (data) => {
-        console.log(data);
-        window.location.replace("/newlogin")
+        if (data.result === true) {
+          window.location.reload();
+        } else if (data.statusCode === 404){
+          Swal.fire({
+            icon: "error",
+            title: data.message
+          }) 
+        } else if (data.statusCode === 501) {
+          Swal.fire({
+            icon: "error",
+            title: data.message
+          }) 
+        } else if (data.statusCode === 502) {
+          Swal.fire({
+            icon: "error",
+            title: data.message
+          }) 
+        }
       },
-			onError: (err) => {
-				console.log(err)     
+			onError: (err) => {   
 			}
     }
   )

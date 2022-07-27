@@ -9,6 +9,7 @@ import { JoinIdState, JoinNicknameState, JoinPasswordState, JoinEmailState, Join
 import { instance }  from "shared/axios"
 // css
 import styled, { css }  from "styled-components";
+import Swal from "sweetalert2";
 
 const Join = (props) => {
   const [active, setActive] = useState(false);
@@ -37,21 +38,22 @@ const Join = (props) => {
   }
 
   const { mutate: sendEmailCheckJoinCode } = useMutation(
-    async (data) => {
-      const response = await instance.post("/email", data);
-      return response.data;
-    },
+    (data) => instance.post("/email", data),
     {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: ({result, message}) => {
+        if (result) {
+          Swal.fire({
+            icon: "success",
+            title: message
+          })
+        } else {
+          Swal.fire({
+              icon: "error",
+              title: message
+          })
+        }
       },
 			onError: (err) => {
-				console.log(err)
-        if (err.statusCode === 501) {
-          window.alert(err.message);
-        } else if (err.statusCode === 500) {
-          window.alert(err.message);
-        }
 			}
     }
   )
@@ -72,10 +74,18 @@ const Join = (props) => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);       
+        console.log(data);
+        Swal.fire({
+          icon: "success",
+          title: "인증번호가 일치합니다."
+				})      
       },
 			onError: (err) => {
 				console.log(err)
+          Swal.fire({
+            icon: "error",
+            title: "인증번호가 불일치합니다."
+				}) 
 			}
     }
   ) 
@@ -102,10 +112,16 @@ const Join = (props) => {
     {
       onSuccess: (data) => {
         if (data === true){
-          // window.alert("사용 가능한 아이디입니다.")
-          // props.runProfile();
+        //   Swal.fire({
+        //     icon: "success",
+        //     title: "사용가능한 아이디입니다."
+				// }) 
+          props.runProfile();
         } else if (data === false){ 
-          window.alert("중복된 아이디입니다.")
+            Swal.fire({
+            icon: "error",
+            title: "중복된 아이디입니다."
+				}) 
           return;
         }       
       },
@@ -121,10 +137,13 @@ const Join = (props) => {
     const passwordConfirm = ref.passwordConfirm.current.value;
 
      if ( password !== passwordConfirm ) {
-        window.alert("비밀번호가 일치하지 않습니다.");
+           Swal.fire({
+            icon: "error",
+            title: "비밀번호가 일치하지 않습니다."
+				}) 
         return            
      } else if (password === passwordConfirm) {
-        // props.runProfile();
+        props.runProfile();
      }
       return false;
      
@@ -224,7 +243,6 @@ const filledRePwd = (e)=> {
             setJoinIdState(e.target.value)
             filledId();
           }
-            
           }
           />
           <input 
@@ -251,7 +269,7 @@ const filledRePwd = (e)=> {
         onClick={() => {
           clickIdCheck();   
           clickPwdCheck();
-          props.runProfile();
+          // props.runProfile();
         }}>다음</JoinBtn>
     </JoinContainer>
   )

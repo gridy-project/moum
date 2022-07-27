@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import { instance }  from "shared/axios"
 // css
 import styled, { css } from "styled-components";
+import Swal from "sweetalert2";
 
 const ReissuePwd = () => {
   const idCheckRef = useRef();
@@ -16,7 +17,6 @@ const ReissuePwd = () => {
 
   // 비밀번호 발급을 위한 인증 메일 발송
   const ClickResetPwdCode = () => {
-   
      const data = {
       username : idCheckRef.current.value,
       email : emailCheckRef.current.value
@@ -31,15 +31,16 @@ const ReissuePwd = () => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);
+        Swal.fire({
+          icon: "success",
+          title: "이메일 전송 완료"
+        })
       },
 			onError: (err) => {
-				console.log(err)
-        if (err.statusCode === 501) {
-          window.alert(err.message);
-        } else if (err.statusCode === 500) {
-          window.alert(err.message);
-        }
+        Swal.fire({
+          icon: "error",
+          title: "유저를 찾을 수 없습니다."
+        })
 			}
     }
   )
@@ -60,10 +61,16 @@ const ReissuePwd = () => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);       
+        Swal.fire({
+          icon: "success",
+          title: "인증 번호가 일치합니다."
+        })   
       },
 			onError: (err) => {
-				console.log(err)
+        Swal.fire({
+          icon: "error",
+          title: "인증 번호가 불일치합니다."
+        }) 
 			}
     }
   ) 
@@ -73,7 +80,6 @@ const ReissuePwd = () => {
      const data = {
       email : emailCheckRef.current.value,
     }
-    console.log(data)
     sendNewPwd(data);
   }
 
@@ -84,10 +90,16 @@ const ReissuePwd = () => {
     },
     {
       onSuccess: (data) => {
-        console.log(data);       
+        Swal.fire({
+          icon: "success",
+          title: "임시 비밀번호 발급 성공"
+        })       
       },
 			onError: (err) => {
-				console.log(err)
+        Swal.fire({
+          icon: "error",
+          title: "인증을 하지 않은 회원입니다."
+        }) 
 			}
     }
   )
@@ -234,7 +246,7 @@ const PwdBtn = styled.button`
   font-size: 17px;
   color:#fff;
   border:none;
-
+  cursor: pointer;
 `;
 
 export default ReissuePwd;

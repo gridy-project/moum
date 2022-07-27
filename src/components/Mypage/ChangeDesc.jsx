@@ -29,7 +29,6 @@ const ChangeDesc = () => {
       onSuccess: (data) => {
 			},
       onError: (err) => {
-        console.log(err);
       }
     }
   );
@@ -51,10 +50,8 @@ const ChangeDesc = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("profile");
-        console.log(data);
       },
 			onError: (err) => {
-				console.log(err)
 			}
     }
   )

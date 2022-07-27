@@ -1,16 +1,17 @@
 // React
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 // Recoil
 import { useSetRecoilState } from "recoil";
 import useCustomMutate from "hooks/useCustomMutate";
 import { executeSignInAxios } from "utils/api/auth";
 // css
+import Swal from "sweetalert2";
 import styled from "styled-components";
 import moumlogo from "../../assets/images/pages/login/moum_logo.png"
 import line from "../../assets/images/pages/login/Line.png";
-import check from "../../assets/images/pages/login/check.png";
-import circle from "../../assets/images/pages/login/circle.png";
+// import check from "../../assets/images/pages/login/check.png";
+// import circle from "../../assets/images/pages/login/circle.png";
 // shared
 import { setToken } from "shared/localStorage";
 // component
@@ -20,8 +21,13 @@ import { isLogin } from 'state/common/user';
 const StartLogin = (props) => {
   const navigate = useNavigate();
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  //아이디, 비밀번호 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  // 유효성 검사
+  const [isUsername, setIsUsername] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
 
   const setLoginStatus = useSetRecoilState(isLogin);
 
@@ -37,19 +43,21 @@ const StartLogin = (props) => {
     let password = pwRef.current.value; 
 
     if (username === "" || password === "") {
-      alert("아이디, 비밀번호를 모두 입력해주세요.");
+      // alert("아이디, 비밀번호를 모두 입력해주세요.");
       return;
     }
 
     const {result, data} = await login({username, password});
     
-    if (result) {
-      alert("로그인 성공");
+    if (result === true) {
       setToken(data.accessToken, data.refreshToken);
       setLoginStatus(true);
       navigate("/");
-    } else {
-      alert("로그인 실패");
+    } else if (result === false) {
+       Swal.fire({
+        icon: "error",
+        title: "로그인 실패"
+      })
       setLoginStatus(false);
     }
   };
