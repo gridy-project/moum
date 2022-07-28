@@ -47,16 +47,29 @@ function Header({selected}) {
         </Banner>
       }
       <Box>
-        <Logo><Link to="/"><img src={logoSvg} alt="moum" /></Link></Logo>
+        <Logo>
+          <Link 
+            to="/" 
+            tabIndex={-1}
+          ><img src={logoSvg} alt="moum" /></Link>
+        </Logo>
         <Menu>
           <nav>
             <ul>
-              <Item isActive={selected === 0}><Link to="/">moum 소개</Link></Item>
+              <Item isActive={selected === 0}>
+                <Link to="/" tabIndex={-1}>moum 소개</Link>
+              </Item>
               {loginStatus && (
                 <>
-                  <Item isActive={selected === 1}><Link to="/moum">나의 모음</Link></Item>
-                  <Item isActive={selected === 2}><Link to="/search">전체 모음</Link></Item>
-                  <Item isActive={selected === 3}><Link to="/mypage">마이페이지</Link></Item>
+                  <Item isActive={selected === 1}>
+                    <Link to="/moum">나의 모음</Link>
+                  </Item>
+                  <Item isActive={selected === 2}>
+                    <Link to="/search">전체 모음</Link>
+                    </Item>
+                  <Item isActive={selected === 3}>
+                    <Link to="/mypage">마이페이지</Link>
+                  </Item>
                 </>
               )
               }

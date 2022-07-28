@@ -16,25 +16,27 @@ function MoumScrapContent () {
     () => instance.get(`/shares/0/all`)
   );
 
-  return <Box>
-    {
-      match ? 
-      <>
-        <Line>
-          <Location>
-            <span className="location-home" onClick={() => { navigate(`/scrap`) }}>스크랩 모음</span>
-            <img src={arrowRight} alt="right" />
-            {isSuccess && <span className="location-now">{moums?.data?.filter((v) => v.id === Number(viewFolderId))[0]?.name}</span>}
-          </Location>
-        </Line>
-        <ScrapPieces />
-      </>
-      :
-      <>
-        <ScrapBoard />
-      </>
-    }
-  </Box>
+  return (
+    <Box>
+      {
+        match ? 
+        <>
+          <Line>
+            <Location>
+              <span className="location-home" onClick={() => { navigate(`/scrap`) }}>스크랩 모음</span>
+              <img src={arrowRight} alt="right" />
+              {isSuccess && <span className="location-now">{moums?.data?.filter((v) => v.id === Number(viewFolderId))[0]?.name}</span>}
+            </Location>
+          </Line>
+          <ScrapPieces />
+        </>
+        :
+        <>
+          <ScrapBoard />
+        </>
+      }
+    </Box>
+  )
 } 
 
 const Box = styled.div`

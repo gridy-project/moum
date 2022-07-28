@@ -115,7 +115,8 @@ const StartLogin = (props) => {
  const MoumLogo = styled.div`
   width: 144px;
   height: 40px;
-  margin: 110px 0 36px 100px;
+  margin: 0 auto 40px;
+  padding-right: 10px;
 `;
 
 const LineBox = styled.div`

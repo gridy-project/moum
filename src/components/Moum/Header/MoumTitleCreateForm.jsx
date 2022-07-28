@@ -16,6 +16,7 @@ import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom
 import useCustomMutate from "hooks/useCustomMutate";
 import MoumCreateFloat from "../Float/MoumCreateFloat";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function MoumTitleCreateForm () {
   const {folderId: viewFolderId = 0} = useParams();
@@ -38,17 +39,31 @@ function MoumTitleCreateForm () {
     e.preventDefault();
 
     if (input.type === "NONE") {
-      alert("타입을 선택해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "타입을 선택해주세요"
+      });
       return;
     }
 
     if (input.content === "") {
-      alert("값을 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "값을 입력해주세요"
+      });
       return;
     }
 
     let obj = {}
     if (input.type === "LINK") {
+      const regExp = RegExp("^((http|https)://)?(www.)?([a-zA-Z0-9]+)\\.[a-z]+([a-zA-Z0-9.?#]+)?");
+      if (!regExp.test(input.content)) {
+        Swal.fire({
+          icon: "error",
+          title: "올바른 주소 형식으로 입력해주세요"
+        });
+        return false;
+      }
       obj = {
         link: input.content,
         boardType: input.type,

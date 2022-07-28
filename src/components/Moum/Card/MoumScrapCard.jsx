@@ -11,6 +11,8 @@ import deleteSvg from "assets/common/OptionMenu/delete.svg";
 import MoumCard from "components/Card/MoumCard";
 import { useNavigate, useParams } from "react-router-dom";
 
+import Swal from "sweetalert2";
+
 function MoumScrapCard ({moum}) {
   const navigate = useNavigate();
   const {folderId: viewFolderId = 0} = useParams();
@@ -27,11 +29,22 @@ function MoumScrapCard ({moum}) {
     }
   );
 
-  const cancelScrap = (e) => {
+  const cancelScrap = async (e) => {
     e.preventDefault();
     e.stopPropagation(); 
     setButtonState(false);
-    cancel(moum.id);
+    const {result} = await cancel(moum.id);
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "스크랩 취소 성공"
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "스크랩 취소 실패"
+      });
+    }
   }
 
   const options = [

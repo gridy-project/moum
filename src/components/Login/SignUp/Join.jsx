@@ -51,18 +51,16 @@ const Join = (props) => {
         if (result) {
           Swal.fire({
             icon: "success",
-            title: message
+            title: "이메일 전송 성공"
           })
         } else {
           Swal.fire({
               icon: "error",
-              title: message
+              title: "이메일 전송 실패"
           })
         }
         setSendStatus(false);
-      },
-			onError: (err) => {
-			}
+      }
     }
   )
 
