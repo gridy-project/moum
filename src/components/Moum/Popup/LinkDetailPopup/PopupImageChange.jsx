@@ -49,7 +49,7 @@ function getCategoryImage (name) {
   }
 }
 
-function PopupImageChange ({finish, close, getter, setter}) {
+function PopupImageChange ({finish, close, getter, setter, handleChange}) {
   const [imageType, setImageType] = useState(getter.select);
   const [customImageState, setCustomImageState] = useState(false);
   const ref = {
@@ -110,7 +110,11 @@ function PopupImageChange ({finish, close, getter, setter}) {
     <Box>
       <form>
         <SelectBox>
-          <Item onClick={() => {setImageType(0)}} isActive={imageType === 0}>
+          <Item onClick={
+            () => {
+              setImageType(0);
+            }
+          } isActive={imageType === 0}>
             <Name>불러온 이미지</Name> 
             {
               getter.imageItems ?
@@ -123,7 +127,11 @@ function PopupImageChange ({finish, close, getter, setter}) {
               </NoImage>
             }
           </Item>
-          <Item onClick={() => {setImageType(1)}} isActive={imageType === 1}>
+          <Item onClick={
+            () => {
+              setImageType(1)
+              }
+            } isActive={imageType === 1}>
             <Name>추천 이미지</Name>
             <Image>
               <img src={getCategoryImage(getter.category)} alt="" />
