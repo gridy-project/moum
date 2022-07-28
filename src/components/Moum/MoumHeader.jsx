@@ -3,6 +3,8 @@ import styled from "styled-components";
 import MoumTitleContent from "./Header/MoumTitleContent";
 import MoumTitleCreateForm from "./Header/MoumTitleCreateForm";
 
+import moumTopImage from "assets/images/pages/moum/moum-top.jpg";
+
 function MoumHeader () {
   return (
     <Title>
@@ -14,10 +16,10 @@ function MoumHeader () {
 }
 
 const Title = styled.div`
-  padding-top: 90px;
+  padding-top: 120px;
   width: 100%;
-  height: 550px;
-  background-image: url("https://i.ibb.co/G98Qn89/Rectangle-1808.png");
+  height: 480px;
+  background-image: url(${moumTopImage});
   background-position-y: 70px;
   background-repeat: no-repeat;
   background-size: cover;

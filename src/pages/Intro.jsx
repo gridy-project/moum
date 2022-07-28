@@ -7,6 +7,12 @@ import { useRecoilValue } from "recoil";
 import { isLogin } from "state/common/user";
 import Swal from "sweetalert2";
 
+import introOneImage from "assets/images/pages/intro/intro-1.jpg";
+import introTwoImage from "assets/images/pages/intro/intro-2.png";
+import introThreeImage from "assets/images/pages/intro/intro-3.png";
+import introFourImage from "assets/images/pages/intro/intro-4.png";
+import introFiveImage from "assets/images/pages/intro/intro-5.png";
+
 function Intro() {
   const login = useRecoilValue(isLogin);
   const navigate = useNavigate("/auth");
@@ -15,19 +21,19 @@ function Intro() {
       <Header selected={0} />
       <Content>
         <ContentView>
-          <img src="https://i.ibb.co/VDF4t2K/Group-272.jpg" alt="intro1" />
+          <img src={introOneImage} alt="intro1" />
         </ContentView>
         <ContentView>
-          <img src="https://i.ibb.co/D8JqkH4/Group-273.jpg" alt="intro2" />
+          <img src={introTwoImage} alt="intro2" />
         </ContentView>
         <ContentView>
-          <img src="https://i.ibb.co/GTM6nCJ/Group-276.jpg" alt="intro3" />
+          <img src={introThreeImage} alt="intro3" />
         </ContentView>
         <ContentView>
-          <img src="https://i.ibb.co/0X8x2Yp/Group-274.jpg" alt="intro4" />
+          <img src={introFourImage} alt="intro4" />
         </ContentView>
         <ContentView>
-          <img src="https://i.ibb.co/2tnMvJR/Group-275.jpg" alt="intro5" />
+          <img src={introFiveImage} alt="intro5" />
           <button onClick={
             () => {
               if (login) {
@@ -67,29 +73,66 @@ const ContentView = styled.div`
   display: flex;
   justify-content: center;
   overflow-x: hidden;
-  img {
-    width: 1920px;
-  }
 
   &:nth-of-type(1) {
     background-color: #D1B7FE;
+    img {
+      width: 1920px;
+    }
   }
 
   &:nth-of-type(2) {
     background-color: #F7F3FD;
+    width: 100%;
+    height: 1229px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 1179px;
+    }
   }
 
   &:nth-of-type(3) {
     background-color: #FFFFFF;
+    width: 100%;
+    height: 888px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 1200px;
+    }
   }
 
   &:nth-of-type(4) {
     background-color: #E8E1FC;
+    width: 100%;
+    height: 660px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 1675px;
+    }
   }
 
   &:nth-of-type(5) {
     position: relative;
     background-color: #FFFFFF;
+    width: 100%;
+    height: 1920px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    img {
+      width: 1200px;
+    }
+
     button {
       position: absolute;
       bottom: 170px;

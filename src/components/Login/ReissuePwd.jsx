@@ -10,6 +10,14 @@ import { instance }  from "shared/axios"
 import styled, { css } from "styled-components";
 import Swal from "sweetalert2";
 
+import PulseLoader from "react-spinners/PulseLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+
 const ReissuePwd = () => {
   const navigate = useNavigate();
   const idCheckRef = useRef();
@@ -18,6 +26,7 @@ const ReissuePwd = () => {
 
   const [active, setActive] = useState(false);
   const [check, setCheck] = useState(false);
+  const [codeRequestState, setCodeRequestState] = useState(false);
 
 
   const { mutateAsync: sendResetPwdCode } = useCustomMutate((data) => instance.post("/email/sendResetPwCode", data))
@@ -45,6 +54,7 @@ const ReissuePwd = () => {
       return false;
     }
 
+    setCodeRequestState(true);
     const {result} = await sendResetPwdCode(data);
     if (result) {
       Swal.fire({
@@ -57,6 +67,7 @@ const ReissuePwd = () => {
         title: "유저를 찾을 수 없습니다."
       });
     }
+    setCodeRequestState(false);
   }
 
  // 비밀번호 발급을 위한 인증번호 확인
@@ -145,7 +156,9 @@ const ReissuePwd = () => {
         <p>이메일로 본인 확인</p>
         <PwdEmailBox>
           <input type="text" ref={emailCheckRef} placeholder='이메일' autoComplete='email' />
-          <button onClick={clickResetPwdCode}>인증요청</button>
+          <SendMail onClick={clickResetPwdCode} disabled={codeRequestState}>
+            {codeRequestState ? <PulseLoader color={"#000000"} cssOverride={override} size={5} /> : "인증요청" }
+          </SendMail>
         </PwdEmailBox>
         <PwdCodeBox isActive={active}>
           <input 
@@ -213,17 +226,23 @@ const PwdEmailBox = styled.div`
 		  outline: 1px solid #9152FF;
 	  }
   }
-  button {
-    width: 84px;
-    height: 44px;
-    background: #9E67FF;
-    border-radius: 10px;
-    border:none;
-    color: #fff;
-    margin-left:8px;
-    cursor: pointer;
-  }
-`
+`;
+
+const SendMail = styled.button`
+  width: 84px;
+  height: 44px;
+  background: #9E67FF;
+  border-radius: 10px;
+  border:none;
+  color: #fff;
+  margin-left:8px;
+  cursor: pointer;
+
+  ${props => props.disabled && css`
+    background: #EEEEEE;
+  `}
+`;
+
 const PwdCodeBox = styled.div`
   input {
     width: 268px;

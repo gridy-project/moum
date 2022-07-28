@@ -12,6 +12,14 @@ import styled, { css }  from "styled-components";
 import Swal from "sweetalert2";
 import useCustomMutate from "hooks/useCustomMutate";
 
+import PulseLoader from "react-spinners/PulseLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+
 const Join = (props) => {
   const [active, setActive] = useState(false);
   const [sendStatus, setSendStatus] = useState(false);
@@ -47,17 +55,24 @@ const Join = (props) => {
   const { mutate: sendEmailCheckJoinCode } = useMutation(
     (data) => instance.post("/email", data),
     {
-      onSuccess: ({result, message}) => {
+      onSuccess: ({result, status}) => {
         if (result) {
           Swal.fire({
             icon: "success",
             title: "이메일 전송 성공"
           })
         } else {
-          Swal.fire({
-              icon: "error",
-              title: "이메일 전송 실패"
-          })
+          if (status === 501) {
+            Swal.fire({
+                icon: "error",
+                title: "중복된 이메일 입니다"
+            })
+          } else {
+            Swal.fire({
+                icon: "error",
+                title: "이메일 전송 실패"
+            });
+          }
         }
         setSendStatus(false);
       }
@@ -114,11 +129,11 @@ const [PwdLen, setPwdLen] = useState(false);
 const [rePwdLen, setRePwdLen] = useState(false);
 
   const filledEmail = (e)=> {
-        if (ref.email.current.value.length > 0){
-        setEmailLen(true)
-      } else {
-        setEmailLen(false)
-      }
+    if (ref.email.current.value.length > 0){
+      setEmailLen(true)
+    } else {
+      setEmailLen(false)
+    }
   }
   const filledCode = (e)=> {
         if (ref.certification.current.value.length > 0){
@@ -161,6 +176,7 @@ const [rePwdLen, setRePwdLen] = useState(false);
         icon: "error",
         title: "중복된 아이디입니다."
       })
+      return false;
     }
 
     // 비밀번호 유효성 검사
@@ -214,7 +230,9 @@ const [rePwdLen, setRePwdLen] = useState(false);
               }
             }
             />
-            <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>인증요청</SendMail>
+            <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>
+              {sendStatus ? <PulseLoader color={"#000000"} cssOverride={override} size={5} /> : "인증요청" }
+            </SendMail>
           </JoinEmailBox>
           <JoinCodeBox isActive={active}>
             <input 
@@ -293,6 +311,7 @@ const JoinCheckBox = styled.div`
 `;
 const JoinEmailBox = styled.div`
   margin-bottom:12px;
+  display: flex;
   input {
     width: 268px;
     height: 44px;
@@ -314,6 +333,9 @@ const SendMail = styled.button`
   border:none;
   color:#fff;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${props => props.disabled && css`
     background: #EEEEEE;

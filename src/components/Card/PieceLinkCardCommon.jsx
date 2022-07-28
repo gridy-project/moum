@@ -1,4 +1,4 @@
-import imageNone from "assets/images/pages/moum/images-none.png";
+import imageNone from "assets/images/pages/moum/piece-none.png";
 import more from "assets/images/pages/moum/menu-black.png";
 import privateLock from "assets/svg/card/lock.svg";
 import PieceCategory from "components/Moum/PieceCategory";
@@ -6,17 +6,14 @@ import { useState } from "react";
 import styled, { css } from "styled-components";
 
 function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
-  const [noImage, setNoImage] = useState(false);
   return (
     <LinkBox onClick={onClick} isSelected={isSelected}>
       <div className="card-image">
         <img
-          className={noImage ? "no-image" : ""}
           src={piece.imgPath}
           alt="noImage" 
           onError={(e) => {
             e.target.src = imageNone;
-            setNoImage(true);
           }}
         />
         <div className="menu" onClick={
@@ -99,10 +96,7 @@ const LinkBox = styled.div`
       height: 100%;
       object-fit: cover;
     }
-    img.no-image {
-      width: auto;
-      height: auto;
-    }
+
   }
 
   .card-header {
