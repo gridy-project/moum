@@ -11,6 +11,9 @@ import { instance } from "shared/axios"
 const ChangeDesc = () => {
   const descInfoRef = useRef(null);
 
+	// textArea onChange 값 저장하기
+	const [descText, setDescText] = useState("")
+
   // 글자 수 세기
 	const [len, setLen] = useState(0); // 계정 설명
 
@@ -36,10 +39,9 @@ const ChangeDesc = () => {
 	const updateDesc = (e) => {
 		e.preventDefault();
 			const data = {
-				information: descInfoRef.current.value
-		}		
+				information: descText
+		}
 		modifyDesc(data);
-		actived ? descInfoRef.current.blur() : descInfoRef.current.focus();
 	};
 
 	const { mutate: modifyDesc } = useMutation(
@@ -56,10 +58,8 @@ const ChangeDesc = () => {
 		// 글자 수 세기 / 제한
 	const descTextChange = (e) => {
 		setLen(e.target.value.length);
-		
-		if (descInfoRef.current.value.length > 40){
-			descInfoRef.current.value = descInfoRef.current.value.slice(0,39);
-		}
+		setDescText(e.target.value)
+	
 	}
 
   return (
@@ -70,7 +70,8 @@ const ChangeDesc = () => {
 					<DescNumber>
 						<p id="textCount">{len}자 / 40자</p>
 					</DescNumber>
-				)}
+				)}	
+				{active ? 
 				<DescTextarea
 					id="tesxtArea"
 					maxLength="40"
@@ -80,9 +81,14 @@ const ChangeDesc = () => {
 						"나의 계정/모음/채널에 대해 설명해주세요." : data?.information
 					}
 					isActive={active}
-					ref={descInfoRef}
 					onChange={descTextChange}
-				/>
+				/> :
+					<DescDiv
+						>
+							{data?.information === null ? 
+						"나의 계정/모음/채널에 대해 설명해주세요." : data?.information}
+					</DescDiv>
+			}		
 				<DescBtn
 					isActive={active} 
 					onClick={() => setActive(!active)}
@@ -111,8 +117,8 @@ const DescNumber = styled.div`
 	font-size: 12px;
 	display: flex;
 	position: absolute;
-	right: 65px;
-	top: 10px;
+	right: -23px;
+	top: 8px;
 `;
 const DescTextarea = styled.textarea`
 	width: 410px;
@@ -123,7 +129,6 @@ const DescTextarea = styled.textarea`
 	border-radius: 10px;
 	border: none;
 	font-size: 15px;
-	pointer-events: none;
 	resize: none;
 	&:focus {
 		background: #ffffff;
@@ -132,10 +137,25 @@ const DescTextarea = styled.textarea`
 	${(props) =>
 		props.isActive
 			? css`
-					pointer-events: auto;
 					background-color: #fff;
 			  `
 			: null}
+`;
+
+const DescDiv = styled.div`
+	width: 410px;
+	height: 80px;
+	padding: 20px 16px;
+	color: #303030;
+	background: #e8e1fc;
+	border-radius: 10px;
+	border: none;
+	${(props) =>
+	props.isActive
+		? css`
+				
+			`
+		: null}
 `;
 
 const DescBtn = styled.button`
@@ -143,9 +163,9 @@ const DescBtn = styled.button`
 	border: 1px solid #bc98fc;
 	border-radius: 50px;
 	padding: 12px 16px;
-	position: relative;
-	left: 16px;
-	bottom: 16px;
+	position: absolute;
+	right: -106px;
+	bottom: 0;
 	&:hover {
 		cursor: pointer;
 	}
