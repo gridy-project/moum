@@ -6,8 +6,7 @@ import { instance } from "shared/axios"
 import { useQuery } from "react-query";
 
 const ChangeEmail = () => {
-  	// 계정 조회
-
+  // 계정 조회
 	const { data } = useQuery(
     "profile",
     async () => {

@@ -25,7 +25,7 @@ const ChangePwd = () => {
 	const [newPwdLen, setNewPwdLen] = useState(false); // 새 비밀번호
 	const [reNewPwdLen, setReNewPwdLen] = useState(false); // 새 비밀번호 재입력
 
-  // 비밀번호 변경 ==========================================
+  // 비밀번호 변경 
 		const { mutate: modifyPassword } = useMutation(
     async (newData) => {
       const response = await instance.put("/user/pw/update/", newData);
@@ -271,7 +271,6 @@ const PwdBtn = styled.button`
 	&:hover {
 		cursor: pointer;
 	}
-
 `;
 
 // ModalPassword
