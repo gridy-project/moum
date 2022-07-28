@@ -61,12 +61,14 @@ const Title = styled.p`
 	line-height: 24px;
 	font-weight: 500;
 	padding: 8px 0px 19px 15px;
+	color:#111111;
 `;
 const TitleDesc = styled.p`
 	font-size: 20px;
 	line-height: 24px;
 	font-weight: 400;
 	padding: 0px 0px 3px 15px;
+	color:#949494;
 `;
 
 // Content

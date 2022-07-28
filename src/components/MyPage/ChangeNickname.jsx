@@ -182,8 +182,10 @@ const ModalNicknameInput = styled.input`
 	border-radius: 100px;
 	padding: 18px 20px;
 	margin-bottom:28px;
+	color: #B7B7B7;
 	&:focus {
-		outline: 1px solid #9152FF;
+		outline: 1px solid #D2BAFF;
+		color: #111111;
 	}
 `;
 
@@ -209,7 +211,7 @@ const CancelNicknameBtn = styled.button`
 `;
 
 const ChangeNicknameBtn = styled.button`
-	width: 100px;
+	width: 103px;
 	height: 48px;
 	border-radius: 50px;
 	padding: 18px;
