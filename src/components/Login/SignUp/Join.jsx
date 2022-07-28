@@ -60,17 +60,17 @@ const Join = (props) => {
           Swal.fire({
             icon: "success",
             title: "이메일 전송 성공"
-          })
+          });
         } else {
           if (status === 501) {
             Swal.fire({
-                icon: "error",
-                title: "중복된 이메일 입니다"
-            })
+              icon: "error",
+              title: "중복된 이메일 입니다"
+            });
           } else {
             Swal.fire({
-                icon: "error",
-                title: "이메일 전송 실패"
+              icon: "error",
+              title: "이메일 전송 실패"
             });
           }
         }

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import PopupButtonGroup from "../LinkDetailPopup/PopupButtonGroup";
 
-function MemoContentField ({finish, close, setter, getter}) {
+function MemoContentField ({finish, close, setter, getter, handleChange}) {
   const ref = {
     subject: useRef(null),
     content: useRef(null)
@@ -16,11 +16,12 @@ function MemoContentField ({finish, close, setter, getter}) {
     <Box>
       <form>
         <label className="subject-label" htmlFor="subject">제목</label>
-        <input id="subject" type="text" placeholder="해당 링크에 대한 제목을 적어주세요." ref={ref.subject} defaultValue={getter.subject}/>
+        <input id="subject" type="text" placeholder="해당 링크에 대한 제목을 적어주세요." onChange={handleChange("subject")} ref={ref.subject} defaultValue={getter.subject}/>
         <label className="content-label" htmlFor="content">내용</label>
         <textarea 
           id="content"
           placeholder="해당 링크에 대한 설명을 적어주세요."
+          onChange={handleChange("content")}
           ref={ref.content}
           defaultValue={getter.content}
         ></textarea>

@@ -14,7 +14,7 @@ function LinkDetailPopup ({close, piece}) {
   const queryClient = useQueryClient();
   const [menu] = useState(["카테고리 선택", "작성한 내용", "이미지 변경"]);
   const [pageNum, setPageNum] = useState(0);
-  const {input, setInput} = useHandleChange({});
+  const {input, setInput, handleChange} = useHandleChange({});
 
   const {isSuccess, data} = useCustomQuery(["detail/piece", piece.id], () => instance.get(`/board/${piece.id}`));
 
@@ -122,6 +122,7 @@ function LinkDetailPopup ({close, piece}) {
               close={close} 
               setter={setInput} 
               getter={input}
+              handleChange={handleChange}
             />
           }
           {
@@ -131,6 +132,7 @@ function LinkDetailPopup ({close, piece}) {
               close={close} 
               setter={setInput} 
               getter={input} 
+              handleChange={handleChange}
             />}
         </>
       }

@@ -14,7 +14,7 @@ function MemoDetailPopup ({piece, close}) {
   const [menu] = useState(["카테고리 선택", "작성한 내용"]);
   const [pageNum, setPageNum] = useState(0);
 
-  const {input, setInput} = useHandleChange({
+  const {input, setInput, handleChange} = useHandleChange({
     id: piece.id,
     category: piece.category === "미정" ? "카테고리 없음" : piece.category,
     subject: piece.title,
@@ -54,8 +54,8 @@ function MemoDetailPopup ({piece, close}) {
   return (
     <Box>
       <DetailPopupHeader pageNum={pageNum} setPageNum={setPageNum} menu={menu} />
-      {pageNum === 0 && <MemoCategorySelect getter={input} setter={setInput} close={close} next={pageNext}/>}
-      {pageNum === 1 && <MemoContentField getter={input} setter={setInput} close={close} finish={pageEnd} />}
+      {pageNum === 0 && <MemoCategorySelect getter={input} setter={setInput} handleChange={handleChange} close={close} next={pageNext}/>}
+      {pageNum === 1 && <MemoContentField getter={input} setter={setInput} handleChange={handleChange} close={close} finish={pageEnd} />}
     </Box>
   )
 }
