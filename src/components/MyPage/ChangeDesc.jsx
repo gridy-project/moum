@@ -1,5 +1,5 @@
 // React, React-redux
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 // css
 import styled, {css} from 'styled-components';
 // React Query
@@ -9,8 +9,6 @@ import queryClient from "shared/query";
 import { instance } from "shared/axios"
 
 const ChangeDesc = () => {
-  const descInfoRef = useRef(null);
-
 	// textArea onChange 값 저장하기
 	const [descText, setDescText] = useState("")
 
@@ -55,11 +53,10 @@ const ChangeDesc = () => {
       }
     }
   )
-		// 글자 수 세기 / 제한
+		// textArea 글자 수 세기, 값 지켜보기 
 	const descTextChange = (e) => {
 		setLen(e.target.value.length);
 		setDescText(e.target.value)
-	
 	}
 
   return (
@@ -150,12 +147,14 @@ const DescDiv = styled.div`
 	background: #e8e1fc;
 	border-radius: 10px;
 	border: none;
-	${(props) =>
-	props.isActive
-		? css`
-				
-			`
-		: null}
+	white-space:pre-line;
+	overflow:scroll;
+	overflow-x:hidden;
+	-ms-overflow-style: none;
+	&::-webkit-scrollbar { 
+    display: none;
+    width: 0 !important;
+	}
 `;
 
 const DescBtn = styled.button`
