@@ -86,21 +86,28 @@ const Box = styled.div`
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+  @media screen and (max-width: 1600px) {
+    height: 660px;
+  }
 `;
 
 const ChangeContainer = styled.div`
   width: 540px;
-  height: 700px;
+  height: 100%;
   background-color:#fff;
   border-radius: 24px;
   float:right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 1600px) {
+    width: 500px;
+  }
 `;
 
 const Content = styled.div`
   width: 370px;
   height: 435px;
-  margin-left:90px;
-  margin-top:130px;
 `;
 
 export default Auth;
