@@ -66,6 +66,7 @@ const ContentView = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
   img {
     width: 1920px;
   }
