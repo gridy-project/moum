@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import ghostImg from "assets/common/Card/ghost.png";
 
 function FollowerCard({user}) {
   const navigate = useNavigate();
@@ -9,7 +10,9 @@ function FollowerCard({user}) {
   return (
     <Card onClick={runUserPage}>
       <div className="card-image">
-        {user.imgPath && <img src={user.imgPath} alt="noImage" />}
+        {user.imgPath && <img src={user.imgPath} onError={(e) => {
+          e.target.src = ghostImg;
+        }} alt="noImage" />}
       </div>
       <div className="card-content">
         <div className="card-title">{user.nickname}</div>

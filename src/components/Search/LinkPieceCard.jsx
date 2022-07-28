@@ -6,7 +6,7 @@ import queryClient from "shared/query";
 import styled, { css } from "styled-components";
 
 // image
-import noImage from "assets/images/pages/moum/images-none.png";
+import noImage from "assets/images/pages/moum/piece-none.png";
 import more from "assets/images/pages/moum/menu-black.png";
 import PieceCategory from "../Moum/PieceCategory";
 
