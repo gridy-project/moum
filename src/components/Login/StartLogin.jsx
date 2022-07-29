@@ -43,8 +43,12 @@ const StartLogin = (props) => {
     let password = pwRef.current.value; 
 
     if (username === "" || password === "") {
-      // alert("아이디, 비밀번호를 모두 입력해주세요.");
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패",
+        text: "아이디, 비밀번호를 모두 입력해주세요"
+      });
+      return false;
     }
 
     try {
@@ -65,7 +69,7 @@ const StartLogin = (props) => {
       Swal.fire({
         icon: "error",
         title: "로그인 실패"
-      })
+      });
       setLoginStatus(false);
     }
   };

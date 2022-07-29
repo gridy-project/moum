@@ -3,10 +3,12 @@ import React, { useState } from "react";
 // css
 import styled, {css} from 'styled-components';
 // React Query
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import queryClient from "shared/query";
 // axios
 import { instance } from "shared/axios"
+import useCustomQuery from "hooks/useCustomQuery";
+import Swal from "sweetalert2";
 
 const ChangeDesc = () => {
 	// textArea onChange 값 저장하기
@@ -20,44 +22,52 @@ const ChangeDesc = () => {
 	const actived = active ? false : true;
 
   // 계정 조회
-	const { data } = useQuery(
+	const { data } = useCustomQuery(
     "profile",
     async () => {
       const response = await instance.get("/user/profile");
       return response.data;
-    },
-    {
-      onSuccess: (data) => {
-			},
-      onError: (err) => {
-      }
     }
   );
-  // 계정 설명 수정 
-	const updateDesc = (e) => {
-		e.preventDefault();
-			const data = {
-				information: descText
-		}
-		modifyDesc(data);
-	};
 
-	const { mutate: modifyDesc } = useMutation(
-    async (data) => {
-      const response = await instance.put("/user/updateInfo/", data);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries("profile");
-      }
-    }
-  )
-		// textArea 글자 수 세기, 값 지켜보기 
+	// textArea 글자 수 세기, 값 지켜보기 
 	const descTextChange = (e) => {
 		setLen(e.target.value.length);
 		setDescText(e.target.value)
 	}
+
+	const { mutate: modifyDesc } = useMutation(
+    async (data) => instance.put("/user/updateInfo/", data),
+    {
+      onSuccess: ({result, status}) => {
+				if (result) {
+        	queryClient.invalidateQueries("profile");
+				} else {
+					if (status === 500) {
+						Swal.fire({
+							icon: "error",
+							title: "유저 설명 수정 실패",
+							text: "글자 수를 확인해 주세요"
+						});
+					}
+				}
+      },
+			onError: () => {
+				Swal.fire({
+					icon: "error",
+					title: "서비스 에러"
+				});
+			}
+    }
+  )
+  // 계정 설명 수정 
+	const updateDesc = (e) => {
+		e.preventDefault();
+		const data = {
+			information: descText
+		}
+		modifyDesc(data);
+	};
 
   return (
     <DescArticle>

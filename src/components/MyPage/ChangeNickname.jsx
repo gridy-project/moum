@@ -11,6 +11,7 @@ import {  useMutation, useQuery } from "react-query";
 import queryClient from "shared/query";
 // axios
 import { instance } from "shared/axios"
+import useCustomQuery from "hooks/useCustomQuery";
 
 Modal.setAppElement("#root");
 
@@ -23,42 +24,58 @@ const ChangeNickname = () => {
 	const [nicknameModalIsOpen, setNicknameModalIsOpen] = useState(false);
 
   // 계정 조회 
-	const { data } = useQuery(
+	const { data } = useCustomQuery(
     "profile",
     async () => {
       const response = await instance.get("/user/profile");
       return response.data;
-    },
-    {
-      onSuccess: (data) => {
-			},
-      onError: (err) => {
-      }
     }
   );
 
   // 닉네임 변경 
-	const clickModifyNickname = () => {
-			setNickFill(false)
-			const data = {
+	const clickModifyNickname = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		const data = {
 			nickname: nicknameRef.current.value
-		}		
+		}
 		modifyNickname(data);
 	};
 
 	const { mutate: modifyNickname } = useMutation(
-    async (data) => {
-      const response = await instance.put("/user/updateName/", data);
-      return response.data;
-    },
+    async (data) => await instance.put("/user/updateName/", data),
     {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries("profile");
+      onSuccess: ({result, status}) => {
+				if (result) {
+        	queryClient.invalidateQueries("profile");
+					setNicknameModalIsOpen(false);
+					setNickFill(false)
+				} else {
+					if (status === 501) {
+						Swal.fire({
+							icon: "error",
+							title: "변경 실패",
+							text: "중복된 닉네임입니다."
+						});
+					} else if (status === 505) {
+						Swal.fire({
+							icon: "error",
+							title: "변경 실패",
+							text: "사용할 수 없는 닉네임입니다."
+						});
+					} else if (status === 500) {
+						Swal.fire({
+							icon: "error",
+							title: "변경 실패",
+							text: "글자 수를 확인해 주세요."
+						});
+					}
+				}
       },
 			onError: (err) => {
 				Swal.fire({
           icon: "error",
-          title: err.data.message
+          title: "서비스 에러"
         })
 			}
     }
@@ -114,8 +131,8 @@ const ChangeNickname = () => {
 											/>
 										<ModalBtnWrap>
 											<CancelNicknameBtn onClick={() => setNicknameModalIsOpen(false)}>취소</CancelNicknameBtn>
-											<ChangeNicknameBtn 
-											onClick={() => {clickModifyNickname(); setNicknameModalIsOpen(false);}}
+											<ChangeNicknameBtn
+											onClick={clickModifyNickname}
 											disabled={nickFill === false}
 											>닉네임 변경</ChangeNicknameBtn>
 											<div>										

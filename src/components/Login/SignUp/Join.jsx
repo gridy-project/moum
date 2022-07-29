@@ -294,7 +294,6 @@ const [rePwdLen, setRePwdLen] = useState(false);
  // Join
  const JoinContainer = styled.div`
   position:relative;
-  top:-37px;
 `;
 
 const JoinTitle = styled.h1`

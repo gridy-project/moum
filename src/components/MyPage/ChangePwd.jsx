@@ -13,10 +13,15 @@ import xbutton from "assets/images/pages/mypage/xbutton.png";
 import Modal from "react-modal";
 // axios
 import { instance } from "shared/axios"
+import { removeToken } from "shared/localStorage";
+import useCustomMutate from "hooks/useCustomMutate";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 const ChangePwd = () => {
+	const navigate = useNavigate();
+
   // modal
 	const [passwordModalIsOpen, setPasswordModalIsOpen] = useState(false);
 
@@ -26,25 +31,37 @@ const ChangePwd = () => {
 	const [reNewPwdLen, setReNewPwdLen] = useState(false); // 새 비밀번호 재입력
 
   // 비밀번호 변경 
-		const { mutate: modifyPassword } = useMutation(
-    async (newData) => {
-      const response = await instance.put("/user/pw/update/", newData);
-      return response.newData;
-    },
-    {
-      onSuccess: (data) => {
-				localStorage.removeItem("accessToken")
-				localStorage.removeItem("refreshToken")	
-				window.location.replace('/login');
-      },
+	const { mutate: modifyPassword } = useCustomMutate(
+		async (newData) => await instance.put("/user/pw/update/", newData),
+		{
+			onSuccess: ({result, status}) => {
+				if (result) {
+					removeToken();
+					navigate('/login');
+				} else {
+					if (status === 505) {
+						Swal.fire({
+							icon: "error",
+							title: "비밀번호 변경 실패",
+							text: "사용할 수 없는 비밀번호 입니다."
+						});
+					} else if (status === 501) {
+						Swal.fire({
+							icon: "error",
+							title: "비밀번호 변경 실패",
+							text: "기존 비밀번호가 틀렸습니다."
+						});
+					}
+				}
+			},
 			onError: (err) => {
-					Swal.fire({
-						icon: "error",
-						title: "기존 비밀번호가 틀렸습니다."
-					})
+				Swal.fire({
+					icon: "error",
+					title: "서비스 에러"
+				});
 			}
-    }
-  )
+		}
+	);
 
 	// react-hook-form 에서 쓸 애들 꺼내 쓰기
   const {
@@ -237,9 +254,12 @@ return (
 						</RePwdWrap>												
 				</ModalPasswordContent>
 				<ModalPasswrodBtnWrap>
-					<CancelPwdBtn onClick={() => 
-						{setPasswordModalIsOpen(false); resetPwd();}}>취소</CancelPwdBtn>
-					<ChangePwdBtn disabled={!isPwdActive}>비밀번호 변경</ChangePwdBtn>
+					<CancelPwdBtn type="button" onClick={(e) => 
+						{
+							setPasswordModalIsOpen(false);
+							resetPwd();
+						}}>취소</CancelPwdBtn>
+					<ChangePwdBtn type="submit" disabled={!isPwdActive}>비밀번호 변경</ChangePwdBtn>
 				</ModalPasswrodBtnWrap>
 				</form>								
 			</Modal>

@@ -178,9 +178,7 @@ const CreateProfile = () => {
 };
 
 const Container = styled.div`
-  margin-top:-60px;
   width: 360px;
-  height: 565px;
 `
 const ProfileTitle = styled.div`
 margin-bottom:42px;

@@ -3,8 +3,8 @@ import { executeTokenRefreshAxios } from "utils/api/auth";
 import { getAccessToken, getRefreshToken, removeToken, setToken } from "shared/localStorage";
 
 export const instance = axios.create({
-  // baseURL: process.env.REACT_APP_SERVER_IP
-  baseURL: process.env.REACT_APP_HTTPS_SERVER_DOMAIN
+  baseURL: process.env.REACT_APP_SERVER_IP
+  // baseURL: process.env.REACT_APP_HTTPS_SERVER_DOMAIN
 });
 
 instance.interceptors.request.use(
@@ -34,6 +34,7 @@ instance.interceptors.response.use(
       if (config.data?.content) {
         data.data = config.data.content;
       }
+
       return data;
     } else {
       return { result: true, data: config.data, response: config };
