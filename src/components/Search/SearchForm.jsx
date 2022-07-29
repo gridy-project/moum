@@ -3,7 +3,8 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import searchIcon from "assets/images/pages/search/icon-search-white.png";
-import { render } from "@testing-library/react";
+
+import tw from "twin.macro";
 
 function SearchForm () {
   const navigate = useNavigate();
@@ -23,38 +24,23 @@ function SearchForm () {
 }
 
 const Form = styled.form`
-  display: flex;
-  justify-content: center;
-  padding-top: 200px;
-
+  ${tw`flex justify-center pt-[200px] shadow-[]`};
+  
   input {
-    width: 700px;
-    height: 50px;
+    ${tw`w-[700px] h-[50px] rounded-[25px] border-0 bg-[#FAFAFA] px-[20px] text-[16px] font-normal outline-0`};
     box-shadow: 0px 2px 16px 2px rgba(145, 82, 255, 0.2);
-    border-radius: 25px;
-    border: none;
-    background-color: #FAFAFA;
-    padding: 0 20px;
-    font-size: 16px;
-    font-weight: 400;
-    outline: none;
+
     &::placeholder {
       color: #B7B7B7;
     }
   }
 
   button {
-    margin-left: 20px;
-    width: 60px;
-    height: 50px;
-    background-color: #9152FF;
+    ${tw`ml-[20px] w-[60px] h-[50px] bg-[#9152FF] rounded-[25px] border-0 flex justify-center items-center`}
     box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
-    border-radius: 25px;
-    border: none;
 
     img {
-      width: 24px;
-      height: 24px;
+      ${tw`w-[24px] h-[24px]`}
     }
   }
 `;
