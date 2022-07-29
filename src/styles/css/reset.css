@@ -134,3 +134,7 @@ table {
 	box-sizing: border-box;
 }
 /* Reset CSS End */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

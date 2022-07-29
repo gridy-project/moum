@@ -69,7 +69,11 @@ function PieceList ({search}) {
         <div className="list">
           {
             sortablePieceList.map(
-              (piece) => <MoumPieceCard key={piece.id} piece={piece} selectAll={selectAll} />
+              (piece) => <MoumPieceCard 
+              key={piece.id} 
+              piece={piece} 
+              selectAll={selectAll}
+              />
             )
           }
         </div>

@@ -1,17 +1,14 @@
 // module
 import { React, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useRecoilState, useRecoilValue } from "recoil";
-
-// state
-import { atomMoumSearch, atomMoumSort, atomSelectedCategories } from "state/moum";
+import { useRecoilState } from "recoil";
+import tw from "twin.macro";
 
 // hook
 import useCustomQuery from "hooks/useCustomQuery";
 
 // asset
 import { getCategoryAxios } from "utils/api/category";
-import { getMoumMineFetch } from "utils/fetch/moum";
 import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
 import { useParams } from "react-router-dom";
 import { atomScrollState } from "state/common/scroll";
@@ -82,14 +79,15 @@ function Moum ({isScrap}) {
 }
 
 const CustomContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  ${tw`
+    flex flex-col items-center
+  `}
 `;
 
 const MoumContent = styled.div`
-  width: 1200px;
-  padding-bottom: 70px;
+  ${tw`
+    w-[1200px] pb-[70px]
+  `}
 `;
 
 export default Moum;
