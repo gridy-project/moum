@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import moumAddButton from "assets/images/pages/moum/moum-add-button.png";
 import moum from "assets/images/pages/moum/moum-background.png";
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
-import { popupState, globalPopup } from "state/common/popup";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { globalPopup } from "state/common/popup";
 import MoumAddPopup from "../Popup/MoumAddPopup";
 
 function MoumAddCard () {
-  const [popup, setPopup] = useRecoilState(globalPopup);
+  const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
 
   const closePopup = () => {

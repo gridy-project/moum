@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { instance } from "shared/axios";
 import moumModify from "assets/svg/moum_modify.svg";
 import styled, { css } from "styled-components";
+import Swal from "sweetalert2";
 
 function MoumUpdatePopup ({moum, close}) {
   const queryClient = useQueryClient();
@@ -27,12 +28,26 @@ function MoumUpdatePopup ({moum, close}) {
 
   const onModify = async (e) => {
     e.preventDefault();
-    const {result} = await modify({id: moum.id, data: {
+    const {result, status} = await modify({id: moum.id, data: {
       name: ref.name.current.value,
       status: moum.status
     }});
     if (result) {
       close();
+    } else {
+      if (status === 500) {
+        Swal.fire({
+          icon: "error",
+          title: "수정 실패",
+          text: "글자 수를 확인해주세요"
+        });
+      } else if (status === 505) {
+        Swal.fire({
+          icon: "error",
+          title: "수정 실패",
+          text: "사용할 수 없는 제목입니다"
+        });
+      }
     }
   }
 

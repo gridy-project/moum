@@ -45,6 +45,11 @@ function MoumFolderCard ({moum, sortable}) {
         title: "삭제 완료"
       })
       queryClient.invalidateQueries("mine/moums");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "삭제 실패"
+      });
     }
   }
 

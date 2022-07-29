@@ -4,12 +4,12 @@ function useCustomMutate (fetch, query) {
   const mutate = useMutation(fetch, {
     onSuccess: data => {
       if (query?.onSuccess) {
-        query.onSuccess();
+        query.onSuccess(data);
       }
     },
     onError: err => {
       if (query?.onError) {
-        query.onError();
+        query.onError(err);
       }
     }
   });

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // css
 import styled, {css} from 'styled-components';
 // React Query
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import queryClient from "shared/query";
 // axios
 import { instance } from "shared/axios"

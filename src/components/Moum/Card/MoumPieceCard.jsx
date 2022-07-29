@@ -117,7 +117,7 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       name: "삭제",
       image: removeSvg,
       onClick: async () => {
-        const {result} = await remove(piece.id);
+        const {result, status} = await remove(piece.id);
         if (result) {
           Swal.fire({
             icon: "success",
@@ -125,10 +125,19 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
           });
           queryClient.invalidateQueries("mine/pieces");
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "삭제 실패"
-          });
+          if (status === 500) {
+            Swal.fire({
+              icon: "error",
+              title: "삭제 실패",
+              text: "모음을 찾을 수 없습니다"
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "삭제 실패",
+              text: "서비스 오류"
+            });
+          }
         }
       }
     },

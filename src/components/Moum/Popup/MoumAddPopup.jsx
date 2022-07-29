@@ -8,6 +8,7 @@ import CancelButton from "components/Common/CancelButton";
 import ConfirmButton from "components/Common/ConfirmButton";
 import ToggleSwitch from "components/Common/ToggleSwitch";
 import useCustomMutate from "hooks/useCustomMutate";
+import Swal from "sweetalert2";
 
 function MoumAddPopup ({close}) {
   const {input, setInput, handleChange} = useHandleChange({
@@ -29,11 +30,24 @@ function MoumAddPopup ({close}) {
       status: input.share ? "PUBLIC" : "PRIVATE"
     }
 
-    const {result} = await addMoum(moum);
-    if (!result) {
-      alert("폴더 추가 실패");
+    const {result, status} = await addMoum(moum);
+    if (result) {
+      close();
+    } else {
+      if (status === 500) {
+        Swal.fire({
+          icon: "error",
+          title: "폴더 추가 실패",
+          text: "글자 수를 확인해주세요"
+        });
+      } else if (status === 505) {
+        Swal.fire({
+          icon: "error",
+          title: "폴더 추가 실패",
+          text: "사용할 수 없는 제목입니다"
+        });
+      }
     }
-    close();
   };
 
   const toggleShare = () => {

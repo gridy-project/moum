@@ -34,6 +34,7 @@ instance.interceptors.response.use(
       if (config.data?.content) {
         data.data = config.data.content;
       }
+
       return data;
     } else {
       return { result: true, data: config.data, response: config };

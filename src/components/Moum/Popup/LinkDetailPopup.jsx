@@ -9,6 +9,7 @@ import PopupContentField from "./LinkDetailPopup/PopupContentField";
 import PopupImageChange from "./LinkDetailPopup/PopupImageChange";
 import DetailPopupHeader from "./DetailPopupHeader";
 import useCustomQuery from "hooks/useCustomQuery";
+import Swal from "sweetalert2";
 
 function LinkDetailPopup ({close, piece}) {
   const queryClient = useQueryClient();
@@ -88,15 +89,33 @@ function LinkDetailPopup ({close, piece}) {
       status: input.share ? "PUBLIC" : "PRIVATE",
     }
 
-    const { result } = await modify({id, data});
+    try {
+      const { result, status } = await modify({id, data});
 
-    if (result) {
-      queryClient.invalidateQueries("mine/pieces");
-      queryClient.invalidateQueries("mine/categories");
-      close();
-    } else {
-      alert("작성에 실패했습니다");
-      close();
+      if (result) {
+        queryClient.invalidateQueries("mine/pieces");
+        queryClient.invalidateQueries("mine/categories");
+        close();
+      } else {
+        if (status === 500) {
+          Swal.fire({
+            icon: "error",
+            title: "수정 실패",
+            text: "모음을 찾을 수 없습니다"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "수정 실패",
+          });
+        }
+      }
+    } catch (e) {
+      Swal.fire({
+        icon: "error",
+        title: "수정 실패",
+        text: "서비스 오류"
+      });
     }
   }
 

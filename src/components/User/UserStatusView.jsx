@@ -6,6 +6,7 @@ import { instance } from "shared/axios";
 import styled from "styled-components";
 
 import Swal from "sweetalert2";
+import ghostImg from "assets/common/Card/ghost.png";
 
 function UserStatusView({user, isOther}) {
   const {userId} = useParams();
@@ -36,13 +37,14 @@ function UserStatusView({user, isOther}) {
     } else {
       Swal.fire({
         icon: "error",
-        title: message
+        title: "팔로우 실패",
+        text: message
       });
     }
   }
 
   const handleUnFollow = async () => {
-    const {result} = await unfollow(userId);
+    const {result, status} = await unfollow(userId);
     if (result) {
       Swal.fire({
         icon: "success",
@@ -50,10 +52,13 @@ function UserStatusView({user, isOther}) {
       });
       queryClient.invalidateQueries("user");
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "팔로우 취소 실패"
-      });
+      if (status === 500) {
+        Swal.fire({
+          icon: "error",
+          title: "팔로우 취소 실패",
+          text: "대상을 찾을 수 없습니다"
+        });
+      }
     }
   }
 
@@ -62,7 +67,9 @@ function UserStatusView({user, isOther}) {
       <Box>
         <Image>
           <div>
-            {user.imgPath && <img src={user.imgPath} alt="유저 이미지" />}
+            {user.imgPath && <img src={user.imgPath} onError={(e) => {
+              e.target.src = ghostImg;
+            }} alt="유저 이미지" />}
           </div>
         </Image>
         <Content>

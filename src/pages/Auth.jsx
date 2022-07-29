@@ -107,7 +107,6 @@ const ChangeContainer = styled.div`
 
 const Content = styled.div`
   width: 370px;
-  height: 435px;
 `;
 
 export default Auth;
