@@ -7,6 +7,8 @@ import { useRecoilValue } from "recoil";
 import { isLogin } from "state/common/user";
 import Swal from "sweetalert2";
 
+import tw from "twin.macro";
+
 import introOneImage from "assets/images/pages/intro/intro-1.jpg";
 import introTwoImage from "assets/images/pages/intro/intro-2.png";
 import introThreeImage from "assets/images/pages/intro/intro-3.png";
@@ -58,110 +60,75 @@ function Intro() {
 }
 
 const Content = styled.div`
-  padding-top: 70px;
-  width: 100%;
-  position: absolute;
-  top: 0;
+  ${tw`w-full pt-[70px] absolute top-0`}
 
   img {
-    width: 100%;
+    ${tw`w-full`}
   }
 `;
 
 const ContentView = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  overflow-x: hidden;
+  ${tw`w-full flex justify-center overflow-x-hidden`}
 
   &:nth-of-type(1) {
-    background-color: #D1B7FE;
+    ${tw`bg-[#D1B7FE]`}
     img {
-      width: 1920px;
+      ${tw`w-[1920px]`}
     }
   }
 
   &:nth-of-type(2) {
     background-color: #F7F3FD;
-    width: 100%;
-    height: 1229px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    ${tw`bg-[#F7F3FD] w-full h-[1229px] flex justify-center items-center`}
     img {
-      width: 1179px;
+      ${tw`w-[1179px]`}
     }
   }
 
   &:nth-of-type(3) {
-    background-color: #FFFFFF;
-    width: 100%;
-    height: 888px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    ${tw`bg-[#FFFFFF] w-full h-[888px] flex justify-center items-center`}
     img {
-      width: 1200px;
+      ${tw`w-[1200px]`}
     }
   }
 
   &:nth-of-type(4) {
-    background-color: #E8E1FC;
-    width: 100%;
-    height: 660px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    ${tw`bg-[#E8E1FC] w-full h-[660px] flex justify-center items-center`}
     img {
-      width: 1675px;
+      ${tw`w-[1675px]`}
     }
   }
 
   &:nth-of-type(5) {
-    position: relative;
-    background-color: #FFFFFF;
-    width: 100%;
-    height: 1920px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    ${tw`relative bg-[#FFFFFF] w-full h-[1920px] flex justify-center items-center`}
     
     img {
-      width: 1200px;
+      ${tw`w-[1200px]`}
     }
 
     button {
-      position: absolute;
-      bottom: 170px;
-      margin-right: 775px;
-      width: 270px;
-      height: 55px;
-      background-color: transparent;
-      border: none;
-      font-size: 0;
-      cursor: pointer;
+      ${tw`
+      absolute bottom-[207px] bg-[#000000] 
+      mr-[750px] w-[270px] h-[55px] bg-transparent
+      border-0 text-[0px] cursor-pointer
+      `}
     }
   }
 `;
 
 const Footer = styled.div`
-  width: 100%;
-  height: 80px;
-  background-color: #AC7DFF;
+  ${tw`
+    w-full h-[80px] bg-[#AC7DFF]
+  `}
   img {
-    width: auto;
+    ${tw`w-auto`}
   }
 `;
 
 const Box = styled.div`
-  width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
+  ${tw`
+    w-[1200px] h-full mx-auto flex items-center
+  `}
 `;
 
 export default Intro;

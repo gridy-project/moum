@@ -211,6 +211,9 @@ const Form = styled.form`
   }
 
   button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-shrink: 0;
     width: 115px;
     height: 100%;
@@ -223,7 +226,8 @@ const Form = styled.form`
     cursor: pointer;
 
     img {
-      margin-left: 5px;
+      margin-left: 10px;
+      margin-top: -2px
     }
   }
 `;

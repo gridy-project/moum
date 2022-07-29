@@ -54,8 +54,26 @@ function MemoDetailPopup ({piece, close}) {
   return (
     <Box>
       <DetailPopupHeader pageNum={pageNum} setPageNum={setPageNum} menu={menu} />
-      {pageNum === 0 && <MemoCategorySelect getter={input} setter={setInput} handleChange={handleChange} close={close} next={pageNext}/>}
-      {pageNum === 1 && <MemoContentField getter={input} setter={setInput} handleChange={handleChange} close={close} finish={pageEnd} />}
+      {
+        pageNum === 0 && 
+        <MemoCategorySelect 
+          getter={input} 
+          setter={setInput} 
+          handleChange={handleChange} 
+          close={close} 
+          next={pageNext}
+        />
+      }
+      {
+        pageNum === 1 && 
+        <MemoContentField 
+          getter={input} 
+          setter={setInput} 
+          handleChange={handleChange} 
+          close={close} 
+          finish={pageEnd} 
+        />
+      }
     </Box>
   )
 }

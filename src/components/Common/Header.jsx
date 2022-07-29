@@ -9,6 +9,8 @@ import logoSvg from "assets/common/Header/logo.svg";
 import presentImg from "assets/once/present.png";
 import runSvg from "assets/once/run.svg";
 
+import tw from "twin.macro";
+
 function Header({selected}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,135 +95,112 @@ function Header({selected}) {
 }
 
 const Container = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 5;
+  ${tw`
+    absolute top-0 left-0 w-full h-[160px] flex flex-col items-center z-[5]
+  `}
 
   ${props => props.isFixed && css`
-    background-color: #FFFFFF;
-    height: 160px;
-    position: fixed;
+    ${tw`
+      bg-[#FFFFFF] h-[160px] fixed
+    `}
   `}
 `;
 
 const Banner = styled.div`
-  display: flex;
-  width: 100%;
-  height: 70px;
-  justify-content: center;
-  align-items: center;
-  background-color: #9e67ff;
-  font-weight: 400;
-  color: #F7F3FD;
-  cursor: pointer;
-  font-size: 19px;
+  ${tw`
+    flex w-full h-[70px] justify-center items-center bg-[#9E67FF] font-normal text-[#F7F3FD] cursor-pointer text-[19px]
+  `}
 
   span {
-    font-weight: 500;
-    color: #FFFFFF;
+    ${tw`font-medium text-[#FFFFFF]`}
   }
 
   img {
-    margin: 0 10px;
+    ${tw`mx-[10px]`}
   }
 
   img.img-present {
-    width: 22px;
-  }
-
-  img.img-run {
-
+    ${tw`w-[22px]`}
   }
 `;
 
 const Box = styled.div`
-  width: 1200px;
-  height: 90px;
-  display: flex;
-  justify-content: space-between;
+  ${tw`
+    w-[1200px] h-[90px] flex justify-between
+  `}
 `;
 
 const Logo = styled.div`
-  display: flex;
-  font-weight: bold;
-  align-items: center;
-  height: 100%;
+  ${tw`
+    flex font-bold items-center h-full
+  `}
 
   a {
-    display: flex;
-    font-size: 21px;
-    align-items: center;
+    ${tw`
+      flex text-[21px] items-center
+    `}
 
     span {
-      display: block;
-      width: 22px;
-      height: 22px;
-      background-color: #9152FF;;
-      border-radius: 5px;
-      margin-right: 10px;
+      ${tw`
+        block w-[22px] h-[22px] bg-[#9152FF] rounded-[5px] mr-[10px]
+      `}
     }
   }
 `;
 
 const marginLeft = "40px";
 const Menu = styled.div`
-  display: flex;
-  align-items: center;
+  ${tw`flex items-center`}
 
   nav {
     ul {
-      display: flex;
+      ${tw`flex`}
 
       li {
-        font-size: 16px;
+        ${tw`text-[16px]`}
       }
 
       li + li {
-        margin-left: ${marginLeft};
+        ${tw`ml-[${marginLeft}]`}
       }
     }
   }
 
   div {
-    margin-left: ${marginLeft};
+    ${tw`ml-[${marginLeft}]`}
   }
 
   button {
-    margin-left: ${marginLeft};
-    width: 90px;
-    height: 35px;
-    border: 1px solid #BF98FF;
-    color: #BF98FF;
-    border-radius: 10px;
-    cursor: pointer;
+    ${tw`
+    ml-[${marginLeft}]
+    w-[90px] h-[35px] border border-solid border-[#BF98FF] text-[#BF98FF] rounded-[10px] cursor-pointer
+    `}
 
     &.btn-login {
-      font-weight: 600;
-      background-color: #FFFFFF;
+      ${tw`
+        font-semibold bg-[#FFFFFF]
+      `}
     }
 
     &.btn-logout {
-      font-weight: 600;
-      background-color: transparent;
-      border: 1px solid #777777;
-      color: #949494;
+      ${tw`
+        font-semibold bg-transparent border border-solid border-[#777777] text-[#949494]
+      `}
     }
   }
 
   button:hover {
-    background-color: #ddd;
-    color: #444;
+    ${tw`
+      bg-[#DDDDDD]
+      text-[#444444]
+    `}
   }
 `;
 
 const Item = styled.li`
-  font-weight: 600;
+  ${tw`
+    font-semibold
+  `}
   ${({isActive}) => isActive && css`
     color: #721EFC;
   `};

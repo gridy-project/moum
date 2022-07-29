@@ -17,7 +17,6 @@ import { instance } from "shared/axios";
 import { useParams } from "react-router-dom";
 import MemoDetailPopup from "../Popup/MemoDetailPopup";
 import MoveSelectPopup from "components/Common/Popup/MoveSelectPopup";
-import { getMoumMineAllAxios } from "utils/api/moum";
 import useCustomQuery from "hooks/useCustomQuery";
 import { atomPieceSelectMode, atomSelectedItems } from "state/moum";
 
