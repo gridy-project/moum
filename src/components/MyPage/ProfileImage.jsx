@@ -6,6 +6,7 @@ import queryClient from "shared/query";
 // axios
 import { instance } from "shared/axios"
 // css
+import tw from "twin.macro";
 import pen from "assets/images/pages/mypage/pen.png";
 import styled from 'styled-components';
 import Swal from "sweetalert2";
@@ -95,44 +96,39 @@ const ProfileImage = () => {
 
 const ImageArea = styled.div``;
 const ImageBox = styled.div`
-	position: relative;
+	${tw`
+    relative
+  `}
 `;
 const Image = styled.div`
   background-color:#c9aaff;
-  width:187px;
-  height:180px;
-  border-radius:100%;
-  position:relative;
+	${tw`
+    relative w-[187px] h-[180px] rounded-[100%] 
+  `}
 `
 const FileBox = styled.div`
 	input {
-		position: absolute;
-		width: 0;
-		height: 0;
-		padding: 0;
-		overflow: hidden;
 		border: 0;
+		${tw`
+    absolute w-[0] h-[0] p-[0] overflow-hidden border-[0]
+  	`}
 	}
 `;
 const FileLabel = styled.label`
-	width: 53px;
-	height: 53px;
 	background-color: #9152ff;
-	border-radius: 100%;
-	position: absolute;
-	top: 127px;
-	right: 0px;
-	padding: 17px 17px;
 	&:hover {
 		cursor: pointer;
 	}
+	${tw`
+		absolute w-[53px] h-[53px] p-[17px 17px] top-[127px] right-[0] rounded-[100%]
+	`}
 `;
 const FileImagePhoto = styled.img`
-	width: 21px;
-	height: 21px;
-	position: absolute;
 	z-index: 1;
 	color: #999;
+	${tw`
+		absolute w-[21px] h-[21px]
+	`}
 `;
 const FileImageBtn = styled.div``;
 

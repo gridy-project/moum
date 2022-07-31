@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import tw from "twin.macro";
 // React Query
 import { useMutation } from "react-query";
 // modal
@@ -87,58 +88,56 @@ const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
 
 // DeleteAccount
 const DeleteAccountArticle = styled.div`
-	margin-top: 40px;
+  ${tw`
+    mt-[40px]  
+  `}
 `;
 
 const DeleteAccountBtn = styled.p`
 	color: #8b8b8b;
 	font-size: 14px;
-	text-decoration: underline;
-	cursor: pointer;
+  ${tw`
+    underline cursor-pointer
+  `}
 `;
 
 // modal
 const ModalDeleteAccountHeader = styled.div`
-  	display:flex;
-	align-items:center;
-	margin-bottom:28px;
+  ${tw`
+    flex items-center mb-[28px]
+  `}
 	h1 {
 		color:#303030;
 		font-size:20px;
-		font-weight:600;
+    ${tw`
+      font-semibold
+    `}
 	}
 `;
 const ModalBtnWrap = styled.div`
-  	display:flex;
-	position:absolute;
-	bottom: 24px;
-	right:24px;
+  ${tw`
+    flex absolute bottom-[24px] right-[24px]
+  `}
 `;
 
 const CancelBtn = styled.button`
-  	width: 62px;
-	height: 48px;
 	background: #F7F3FD;
-	border-radius: 26px;
 	font-size:14px;
 	line-height:14px;
 	color:#9E67FF;
-	padding:18px;
-	margin-right:12px;
-	border:none;
-	cursor: pointer;
+  ${tw`
+    w-[62px] h-[48px] rounded-[26px] p-[18px] mr-[12px] border-none cursor-pointer
+  `}
 `;
 
 const RemoveAccountBtn = styled.button`
-  	width: 103px;
-	height: 48px;
-	border-radius: 50px;
-	padding: 18px;
 	font-size:14px;
 	line-height:14px;
-	border:none;
 	background-color: #ECECEC;
 	color:#949494;
+  ${tw`
+    w-[103px] h-[48px] rounded-[50px] p-[18px] border-none 
+  `}
 `;
 
 export default DeleteAccount;

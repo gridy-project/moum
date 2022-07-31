@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import styled, {css} from 'styled-components';
 import human from "assets/images/pages/mypage/human.png";
 import Swal from "sweetalert2";
+import tw from "twin.macro";
 // modal
 import Modal from "react-modal";
 // React Query
@@ -144,99 +145,93 @@ const ChangeNickname = () => {
 };
 
 const NicknameArticle = styled.div`
-	display: flex;
-	align-items: center;
-	margin-bottom: 45px;
+	${tw`
+    mb-[45px] flex items-center
+  `}
 `;
 const Nickname = styled.p`
 	font-size: 24px;
-	font-weight: 500;
+	${tw`
+    font-medium
+  `}
 `;
 const NicknameBtn = styled.button`
-	margin-left: 16px;
-	padding: 12px 16px;
 	color: #9152ff;
 	background-color: #f6f5fb;
-	border: 1px solid #bc98fc;
-	border-radius: 50px;
+	border: #bc98fc;
 	font-size: 12px;
 	line-height: 12px;
-	box-sizing: border-box;
 	&:hover {
 		cursor: pointer;
 	}
+	${tw`
+    ml-[16px] p-[12px 16px] border-solid border-[1px] rounded-[50px] box-border
+  `}
 `;
 
 // ModalNickname
 const ModalNicknameHeader = styled.div`
-	display:flex;
-	align-items:center;
-	margin-bottom:28px;
+	${tw`
+    flex items-center mb-[28px]
+  `}
 	h1 {
 		color:#303030;
 		font-size:20px;
-		font-weight:600;
+		${tw`
+    font-semibold
+  	`}
 	}
 `;
 
 const Modalimagebox = styled.div`
-	width: 44px;
-	height: 44px;
 	background-color:#E8E1FC;
-	border-radius:50%;
-	margin-right:12px;
+	${tw`
+    w-[44px] h-[44px] rounded-[50%] mr-[12px]
+  `}
 	img {
-		position:relative;
-		left: 35.6%;
-		top: 25%;
+		${tw`
+    	relative left-[35.6%] top-[25%]
+  	`}
 	}
 `;
 
 const ModalNicknameInput = styled.input`
-	width: 390px;
-	height: 50px;
-	border: 1px solid #D2BAFF;
-	border-radius: 100px;
-	padding: 18px 20px;
-	margin-bottom:28px;
+	border: #D2BAFF;
 	color: #B7B7B7;
 	&:focus {
 		outline: 1px solid #D2BAFF;
 		color: #111111;
 	}
+	${tw`
+    w-[390px] h-[50px] rounded-[100px] mb-[28px] border-solid border-[1px] p-[18px 20px]
+  `}
 `;
 
 const ModalBtnWrap = styled.div`
-	display:flex;
-	position:absolute;
-	bottom: 24px;
-	right:24px;
+	${tw`
+    flex absolute bottom-[24px] right-[24px]
+  `}
 `;
 
 const CancelNicknameBtn = styled.button`
-	width: 62px;
-	height: 48px;
 	background: #F7F3FD;
-	border-radius: 26px;
 	font-size:14px;
 	line-height:14px;
 	color:#9E67FF;
-	padding:18px;
-	margin-right:12px;
-	border:none;
 	cursor: pointer;
+	${tw`
+    w-[62px] h-[48px] rounded-[26px] p-[18px] mr-[12px] border-none cursor-pointer
+  `}
 `;
 
 const ChangeNicknameBtn = styled.button`
-	width: 103px;
-	height: 48px;
-	border-radius: 50px;
-	padding: 18px;
 	font-size:14px;
 	line-height:14px;
-	border:none;
 	background-color: #ECECEC;
 	color:#949494;
+	${tw`
+    w-[103px] h-[48px] rounded-[50px] p-[18px] border-none 
+  `}
 	${(props) =>
 		props.disabled
 			? css`
