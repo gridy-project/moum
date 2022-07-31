@@ -11,6 +11,7 @@ import { setToken } from 'shared/localStorage';
 import googlelogo from "assets/images/pages/login/google_logo.png";
 
 import Swal from "sweetalert2";
+import tw from "twin.macro";
 
 function SocialLogin ({loginSuccess}) {
   const clientId = process.env.REACT_APP_GOOGLE_SOCIAL_CLIENT_ID;
@@ -74,22 +75,20 @@ function SocialLoginButton () {
 }
 
 const GoogleLogin = styled.div`
-  width: 360px;
-  height: 44px;
   background: #F8F8F8;
-  border: 1px solid #E9E9E9;
-  border-radius: 50px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position: relative;
-  cursor: pointer;
+  border: #E9E9E9;
+  ${tw`
+    w-[360px] h-[44px] rounded-[50px] border-solid border-[1px] flex justify-center items-center relative cursor-pointer
+  `} 
   img {
-    width: 16px;
-    height: 16px;
+    ${tw`
+    w-[16px] h-[16px] 
+    `} 
   }
   p {
-    margin-left:10px;
+    ${tw`
+      ml-[10px]
+    `} 
   }
   &:hover {
     background: #E9E9E9;

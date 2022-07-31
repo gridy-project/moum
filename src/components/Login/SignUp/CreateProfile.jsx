@@ -7,6 +7,7 @@ import { instance } from 'shared/axios';
 import { useRecoilState } from "recoil";
 import { JoinIdState, JoinNicknameState, JoinPasswordState, JoinEmailState, JoinImgPathState } from 'state/login';
 // css
+import tw from "twin.macro";
 import Swal from "sweetalert2";
 import styled, { css }  from "styled-components";
 import profile1 from "../../../assets/images/pages/login/profile1.png";
@@ -178,68 +179,74 @@ const CreateProfile = () => {
 };
 
 const Container = styled.div`
-  width: 360px;
+  ${tw`
+    w-[360px]
+  `}
 `
 const ProfileTitle = styled.div`
-margin-bottom:42px;
+ ${tw`
+    mb-[42px]
+  `}
 h1, h2 {
-  font-weight: 600;
   font-size: 24px;
   color:#303030;
+   ${tw`
+    font-semibold
+  `}
 }
 h1 {
-  margin-bottom:15px;
+  ${tw`
+    mb-[15px]
+  `}
 }
 `;
 
 const NicknameBox = styled.div`
 p {
-  font-weight: 500;
   font-size: 17px;
-  margin-bottom:18px;
   color:#303030;
+  ${tw`
+    font-medium mb-[18px]
+  `}
 }
 `;
 
 const InputBox = styled.div`
-margin-bottom:40px;
+ ${tw`
+    mb-[40px]
+  `}
 input {
-  width: 264px;
-  height: 44px;
-  border: 1px solid #B7B7B7;
-  border-radius: 10px;
-  margin-right:8px;
-  padding: 14px;
-  font-weight: 500;
+  border: #B7B7B7;
   font-size: 16px;
   color:#949494;
   &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+  ${tw`
+    w-[264px] h-[44px] border-solid border-[1px] rounded-[10px] mr-[8px] p-[14px] font-medium
+  `}
 }
 button {
-  width: 88px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 10px;
   color:#fff;
-  border:none;
-  cursor: pointer;
+  ${tw`
+    w-[88px] h-[44px] border-solid border-none cursor-pointer
+  `}
 }
 `
 const SelectProfileBox = styled.div`
 p {
-  font-weight: 500;
   font-size: 17px;
   color:#303030;
-  margin-bottom:27px;
+  ${tw`
+    font-medium mb-[27px]
+  `}
 }
 `
 const ProfileImg = styled.img`
-  margin-bottom:17px;
-    width: 100px; 
-  height: 100px;
-  cursor: pointer;
+  ${tw`
+    mb-[17px] w-[100px] h-[100px] cursor-pointer
+  `}
     ${(props) =>
     props.isActive ? 
     css`   
@@ -254,19 +261,17 @@ const ProfileImg = styled.img`
 `;
 
 const ImageBox = styled.div`
-display:grid;
 grid-template-columns: 130px 130px 130px;
 grid-template-rows: 120px 120px;
-position:relative;
+ ${tw`
+    grid relative
+  `}
 `
 const CheckImgCircle = styled.div`
-  width: 32px;
-  height: 31.7px;
   background: #9152FF;
-  border-radius:100%;
-  position:relative;
-  top:-120px;
-  left:75px;
+  ${tw`
+    w-[32px] h-[31.7px] relative rounded-[100%] top-[-120px] left-[75px]
+  `}
   ${(props) =>
     props.isActive ? 
     css`   
@@ -279,12 +284,9 @@ const CheckImgCircle = styled.div`
 `
 
 const CheckImg = styled.img`
-  width:12.73px;
-  height: 8.93px;
-  position:relative;
-  top:7.5px;
-  left:10.34px;
-  /* background-color:#000; */
+  ${tw`
+    w-[12.73px] h-[8.93px] relative top-[7.5px] left-[10.34px]
+  `}
   ${(props) =>
     props.isActive ? 
     css`   
@@ -297,15 +299,11 @@ const CheckImg = styled.img`
 `
 
 const StartBtn = styled.button`
-  margin-top:24px;
-  width: 360px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 50px;
-  font-weight: 600;
   font-size: 17px;
-  border:none;
   color:#fff;
-  cursor: pointer;
+  ${tw`
+    w-[360px] h-[44px] mt-[24px] rounded-[50px] font-semibold border-none cursor-pointer
+  `}
 `
 export default CreateProfile;

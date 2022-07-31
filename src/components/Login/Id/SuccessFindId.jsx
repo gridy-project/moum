@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { numberLoginState, viewAccountState } from 'state/login';
 // css
 import styled from "styled-components";
+import tw from "twin.macro";
 
 const SuccessFindId = () => {
   const [viewId, setViewID] = useRecoilState(viewAccountState)
@@ -34,75 +35,68 @@ const SuccessFindId = () => {
  }  
 
 const IdContainer = styled.div`
-  position:relative;
-  top:-37px;
+  ${tw`
+    relative top-[-37px]
+  `}
 `;
 
 const IdTitle = styled.h1`
   font-size:28px;
-  margin-bottom:52px;
-  font-weight: 600;
   color:#303030;
+  ${tw`
+    mb-[52px] font-semibold
+  `}
 `;
 
 const IdContent = styled.div`
   p {
     font-size:17px;
-    margin-bottom: 18px;
+    ${tw`
+    mb-[18px] 
+    `}
   }
   input {
-    width: 360px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
       outline: 1px solid #9152FF;
     }
+    ${tw`
+    w-[360px] h-[44px] border-solid border-[1px] p-[14px]
+    `}
   }
 `;
 
 const IdBtn = styled.button`
-  width: 360px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 50px;
   color:#fff;
-  border:none;
-  margin-top:32px;
   font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
+  ${tw`
+  w-[360px] h-[44px] rounded-[50px] border-none mt-[32px] font-semibold cursor-pointer
+  `}
 `;
 
 const FoundIdBox = styled.div`
-  width: 360px;
-  height: 44px;
   background: #F7F3FD;
-  border-radius: 10px;
-  display: table;
-  table-layout: fixed;
+  ${tw`
+  w-[360px] h-[44px] rounded-[10px] table table-fixed
+  `}
   p {
-    text-align:center;
-    display: table-cell; 
-    vertical-align:middle;
     color: #721EFC;
     font-size: 16px;
-    font-weight: 600;
+    ${tw`
+    text-center table-cell align-middle font-semibold
+  `}
   }
 `
 
 const IdPwdBtn = styled.button`
-  width: 360px;
-  height: 44px;
-  border: 1px solid #D2BAFF;
+  border: #D2BAFF;
   background: #FFFFFF;
-  border-radius: 50px;
   color: #AC7DFF;
-  font-weight: 600;
   font-size: 17px;
-  margin-top:12px;
-  cursor: pointer;
+  ${tw`
+  w-[360px] h-[44px] rounded-[50px] font-semibold mt-[12px] cursor-pointer border-solid border-[1px]
+  `}
 `;
 
 export default SuccessFindId;
