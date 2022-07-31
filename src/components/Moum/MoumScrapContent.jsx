@@ -5,6 +5,7 @@ import ScrapBoard from "./ScrapBoard";
 import ScrapPieces from "./ScrapPieces";
 import arrowRight from "assets/images/pages/moum/location/arrow-right.svg";
 import { instance } from "shared/axios";
+import tw from "twin.macro";
 
 function MoumScrapContent () {
   const match = useMatch("/scrap/:userId/:folderId");
@@ -12,12 +13,20 @@ function MoumScrapContent () {
   const navigate = useNavigate();
 
   const {isSuccess, data: moums} = useCustomQuery(
-    "mine/scrap", 
+    "mine/scrap",
     () => instance.get(`/shares/0/all`)
   );
 
   return (
-    <Box>
+    <div>
+      {/* <Option>
+        <Search>
+          <form onSubmit={onSubmit}>
+            <input type="text" placeholder="나의 조각 검색하기" onChange={changeSearchText} />
+            <button><img src={pieceSearch} alt="검색" /></button>
+          </form>
+        </Search>
+      </Option> */}
       {
         match ? 
         <>
@@ -35,43 +44,70 @@ function MoumScrapContent () {
           <ScrapBoard />
         </>
       }
-    </Box>
+    </div>
   )
-} 
-
-const Box = styled.div`
-
-`;
+}
 
 const Line = styled.div`
-  margin-top: 60px;
+  ${tw`mt-[60px] w-full text-[18px] font-semibold`}
+`;
+
+const Search = styled.div`
   width: 100%;
-  font-size: 18px;
-  font-weight: 600px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  form {
+    display: flex;
+    align-items: center;
+    width: 400px;
+    height: 44px;
+    border-radius: 22px;
+    transition: background .3s;
+    background-color: ${props => props.isActive ? "#FFFFFF": "#E8E1FC"};
+    justify-content: space-between;
+    input {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: #303030;
+      padding: 0 0 0 20px;
+
+      &::placeholder {
+        color: #9E67FF;
+        font-size: 15px;
+      }
+    }
+
+    button {
+      padding: 0 20px 0 10px;
+      height: 100%;
+      border: none;
+      background-color: transparent;
+    }
+  }
 `;
 
 const Location = styled.div`
-  color: #949494;
-  display: flex;
-  gap: 4px;
+  ${tw`text-[#949494] flex gap-[4px]`}
 
   span {
-    padding: 6px;
-    font-size: 18px;
+    ${tw`p-[6px] text-[18px]`}
   }
 
   .location-home {
-    cursor: pointer;
+    ${tw`cursor-pointer`}
     transition: background-color .3s, color .3s;
     &:hover {
-      background-color: #E8E1FC;
-      border-radius: 10px;
-      color: #9152FF;
+      ${tw`bg-[#E8E1FC] rounded-[10px] text-[#9152FF]`}
     }
   }
 
   .location-now {
-    color: #555555;
+    ${tw`text-[#555555]`};
   }
 `;
 

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { atomPieceSelectMode, atomSelectedItems, atomMoumSort, atomMoum } from "state/moum";
 import { useMatch } from "react-router-dom";
+import tw from "twin.macro";
 
 function MoumOptionSort ({active, setActive}) {
   const match = useMatch("/scrap");
@@ -177,96 +178,54 @@ function MoumOptionGroup ({
 }
 
 const OptionGroup = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
-  align-items: center;
+  ${tw`w-full flex justify-between mt-[40px] items-center`};
 `;
 
 const Search = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
+  ${tw`w-full h-full flex items-center px-[15px]`};
   form {
-    display: flex;
-    align-items: center;
-    width: 400px;
-    height: 44px;
-    border-radius: 22px;
+    ${tw`flex items-center w-[400px] h-[44px] rounded-[22px] justify-between`};
     transition: background .3s;
     background-color: ${props => props.isActive ? "#FFFFFF": "#E8E1FC"};
-    justify-content: space-between;
     input {
-      width: 100%;
-      height: 100%;
-      background-color: transparent;
-      border: none;
-      outline: none;
-      color: #303030;
-      padding: 0 0 0 20px;
+      ${tw`w-full h-full bg-transparent border-0 outline-0 text-[#303030] pl-[20px]`};
 
       &::placeholder {
-        color: #9E67FF;
-        font-size: 15px;
+        ${tw`text-[#9E67FF] text-[15px]`};
       }
     }
 
     button {
-      padding: 0 20px 0 10px;
-      height: 100%;
-      border: none;
-      background-color: transparent;
+      ${tw`pr-[20px] pl-[10px] h-full border-0 bg-transparent`};
     }
   }
 `;
 
 const Option = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  height: 44px;
+  ${tw`flex shrink-0 h-[44px]`}
   .piece-select-mode {
-    display: flex;
-    align-items: center;
+    ${tw`flex items-center`};
     span {
-      color: #949494;
+      ${tw`text-[#949494]`};
     }
 
     button {
-      height: 100%;
-      padding: 0 18px;
-      border-radius: 22px;
-      margin-left: 16px;
-      cursor: pointer;
+      ${tw`h-full px-[18px] rounded-[22px] ml-[16px] cursor-pointer`};
     }
 
     .btn-cancel {
-      background-color: #E8E1FC;
-      border: none;
-      color: #9152FF;
+      ${tw`bg-[#E8E1FC] border-0 text-[#9152FF]`};
     }
 
     .btn-select {
-      border: 1px solid #BE9AFF;
-      background-color: #FFFFFF;
-      color: #9152FF;
+      ${tw`border border-solid border-[#BE9AFF] bg-[#FFFFFF] text-[#9152FF]`};
     }
   }
 
   .piece-select-button {
-    border: 1px solid #BE9AFF;
-    background-color: #FFFFFF;
-    padding: 0 18px;
-    font-size: 16px;
-    color: #9152FF;
-    display: flex;
-    align-items: center;
-    border-radius: 50px;
-    cursor: pointer;
+    ${tw`border border-solid border-[#BE9AFF] bg-[#FFFFFF] px-[18px] text-[16px] text-[#9152FF] flex items-center rounded-[50px] cursor-pointer`};
     span {
-      margin-left: 10px;
+      ${tw`ml-[10px]`};
     }
   }
 `;

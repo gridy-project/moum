@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 // Recoil
 import { useSetRecoilState } from "recoil";
 import useCustomMutate from "hooks/useCustomMutate";
-import { executeSignInAxios } from "utils/api/auth";
 // css
 import Swal from "sweetalert2";
 import styled from "styled-components";
@@ -17,6 +16,8 @@ import { setToken } from "shared/localStorage";
 // component
 import SocialLogin from './SocialLogin';
 import { isLogin } from 'state/common/user';
+import { apiUser } from 'utils/api/user';
+import { useExecuteLogin } from 'hooks/query/useQueryUser';
 
 const StartLogin = (props) => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const StartLogin = (props) => {
   const pwRef = React.useRef(null);
 
   // 로그인
-  const {mutateAsync: login} = useCustomMutate(async (data) => await executeSignInAxios(data));
+  const {mutateAsync: login} = useExecuteLogin();
 
   const loginSubmit = async (e) => {
     e.preventDefault();

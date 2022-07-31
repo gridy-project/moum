@@ -4,12 +4,14 @@ import privateLock from "assets/svg/card/lock.svg";
 import PieceCategory from "components/Moum/PieceCategory";
 import { useState } from "react";
 import styled, { css } from "styled-components";
+import tw from "twin.macro";
 
 function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
   return (
     <LinkBox onClick={onClick} isSelected={isSelected}>
       <div className="card-image">
         <img
+          className="pointer-events-none w-full h-full object-cover"
           src={piece.imgPath}
           alt="noImage" 
           onError={(e) => {
@@ -23,7 +25,7 @@ function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
             setButtonState(current => !current);
           }
         }>
-          <img src={more} alt="" />
+          <img src={more} alt="" className="w-18 h-18 object-cover" />
         </div>
       </div>
       <div className="card-content">
@@ -33,121 +35,45 @@ function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
         </div>
         
         <div className="card-title">{piece.title}</div>
-        <div className="card-description"><span>{piece.explanation}</span></div>
+        <div className="card-description"><span className="w-[100%] whitespace-nowrap">{piece.explanation}</span></div>
       </div>
     </LinkBox>
   )
 }
 
 const LinkBox = styled.div`
-  width: 100%;
-  height: 314px;
-  background-color: #FFFFFF;
-  border-radius: 15px;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  overflow: hidden;
-  cursor: pointer;
-
-  img {
-    pointer-events: none;
-  }
-
+  ${tw`w-full h-314 bg-[#FFFFFF] rounded-15 border-0 flex flex-col justify-start overflow-hidden cursor-pointer`}
   
   ${props => props.isSelected && css`
-    background-color: #E0D6FF;
-    border: 2px solid #AC7DFF;
+    ${tw`bg-[#E0D6FF] border-2 border-solid border-[#AC7DFF]`}
   `}
 
   .card-image {
-    width: 100%;
-    height: 150px;
-    background-color: #D9D9D9;
-    border-radius: 0px 0px 15px 15px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+    ${tw`w-full h-150 bg-[#D9D9D9] rounded-[0 0 15px 15px] overflow-hidden flex justify-center items-center relative`};
     .menu {
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      width: 28px;
-      height: 28px;
-      background-color: #FFFFFF;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1;
-      cursor: pointer;
-
-      img {
-        width: 18px;
-        height: 18px;
-        object-fit: cover;
-      }
+      ${tw`absolute right-12 top-12 w-28 h-28 bg-[#FFFFFF] rounded-8 flex justify-center items-center z-1 cursor-pointer`};
     }
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
   }
 
   .card-header {
-    width: 100%;
-    display: flex;
-    padding: 12px 16px 16px;
-    flex-shrink: 0;
-    align-items: center;
+    ${tw`w-full flex p-[12px 16px 16px] shrink-0 items-center`};
   }
 
   .card-title {
-    flex-shrink: 0;
-    padding: 0 20px;
-    font-size: 16px;
-    line-height: 24px;
-    width: 100%;
-    height: 48px;
+    ${tw`shrink-0 px-20 text-16 leading-24 w-full h-48 overflow-hidden text-ellipsis`};
     display:-webkit-box; 
     word-wrap:break-word; 
     -webkit-line-clamp:2; 
-    -webkit-box-orient:vertical; 
-    overflow:hidden; 
-    text-overflow:ellipsis;
+    -webkit-box-orient:vertical;
   }
 
   .card-description {
-    margin-top: 15px;
-    margin-bottom: 20px;
-    padding: 0 20px;
-    line-height: 1.2;
-    color: #595959;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    span {
-      width: 100%;
-      white-space: nowrap;
-    }
+    ${tw`mt-15 mb-20 px-20 leading-[1.2] text-[#595959] overflow-hidden text-ellipsis`};
   }
 `;
 
 const PrivateIcon = styled.div`
-  width: 28px;
-  height: 28px;
-  padding-bottom: 2px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #9152FF;
-  margin-right: 8px;
+  ${tw`w-28 h-28 pb-2 rounded-[50%] flex justify-center items-center bg-[#9152FF] mr-8`};
 `;
 
 export default PieceLinkCardCommon;

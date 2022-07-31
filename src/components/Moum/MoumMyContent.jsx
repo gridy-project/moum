@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { atomMoumSearch } from "state/moum";
 import styled from "styled-components";
+import tw from "twin.macro";
 import MoumSelectList from "./List/MoumSelectList";
 import MoumBoard from "./MoumBoard";
 import MoumCategoryGroup from "./MoumCategoryGroup";
@@ -9,8 +10,8 @@ import MoumOptionGroup from "./MoumOptionGroup";
 
 function MoumMyContent ({
   categoriesQuery,
-  floatItemStatus, 
-  setFloatStatus, 
+  floatItemStatus,
+  setFloatStatus,
   setFloatItemStatus,
   isScrap
 }) {
@@ -40,14 +41,11 @@ function MoumMyContent ({
 }
 
 const Content = styled.div`
-  width: 1200px;
-  padding-bottom: 70px;
+  ${tw`w-[1200px] pb-[70px]`};
 `;
 
 const MoumHeader = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  ${tw`flex flex-col w-full`};
 `;
 
 export default MoumMyContent;

@@ -10,13 +10,13 @@ import { getRefreshToken, removeToken, setToken } from "shared/localStorage";
 import { useSetRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import Result from "pages/Result";
-import { executeTokenRefreshAxios } from "utils/api/auth";
 import User from "pages/User";
 import Popup from "components/Popup/Popup";
 import Float from "components/Popup/Float";
 import Auth from "pages/Auth";
 
 import ReactGA from "react-ga";
+import { apiUser } from "utils/api/user";
 
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
@@ -33,7 +33,7 @@ function Router() {
     const token = getRefreshToken();
     if (token) {
       try {
-        const response = await executeTokenRefreshAxios(token);
+        const response = await apiUser.refresh({refreshToken: token});
         setToken(response.data.accessToken, response.data.refreshToken);
         setLogin(true);
       } catch (err) {

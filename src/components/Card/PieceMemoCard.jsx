@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import PieceMemoCardCommon from "./PieceMemoCardCommon";
 import { SortableItem } from "react-easy-sort";
 import OptionMenu from "components/Common/OptionMenu";
+import tw from "twin.macro";
 
 function PieceMemoCard ({
   piece, 
@@ -48,28 +49,15 @@ function PieceMemoCard ({
 }
 
 const Card = styled.div`
-  position: relative;
-  display: flex;
-  width: 100%;
-  height: 314px;
-  background-color: #FFFFFF;
-  border-radius: 15px;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  ${tw`relative flex w-full h-[314px] bg-[#FFFFFF] rounded-[15px] border-0 flex-col justify-start`}
   
   ${props => props.isSelected && css`
-    background-color: #E0D6FF;
-    border: 2px solid #AC7DFF;
+    ${tw`bg-[#E0D6FF] border-2 border-solid border-[#AC7DFF]`};
   `}
 `;
 
 const Option = styled.div`
-  position: absolute;
-  top: 60px;
-  right: -130px;
-  z-index: 1;
+  ${tw`absolute top-60 right-[-130px] z-1`}
 `;
 
 export default PieceMemoCard;

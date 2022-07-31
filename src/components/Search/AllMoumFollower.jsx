@@ -4,6 +4,7 @@ import FollowerCard from "components/Card/FollowerCard";
 import useCustomQuery from "hooks/useCustomQuery";
 import { useEffect, useState } from "react";
 import { SvgMoveLeft, SvgMoveRight } from "assets/code/Search/SvgMove";
+import tw from "twin.macro";
 
 function AllMoumFollower () {
   const [viewFollows, setViewFollows] = useState([]);
@@ -44,10 +45,10 @@ function AllMoumFollower () {
       <Follower>
         <div className="content-header">
           <em>내가 팔로우한 계정<span>{follows?.data?.followingCnt}개</span></em>
-          <div className="btn-follow">
+          <ButtonGroup>
             <Button isActive={page !== 0} onClick={pagePrev}><SvgMoveLeft /></Button>
             <Button isActive={page !== pageCnt - 1} onClick={pageNext}><SvgMoveRight /></Button>
-          </div>
+          </ButtonGroup>
         </div>
         <List>
           {viewFollows.map((user) => {
@@ -83,15 +84,22 @@ const Follower = styled.div`
   }
 `;
 
+const ButtonGroup = styled.div`
+  ${tw`flex`}
+`;
+
 const Button = styled.button`
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #FFFFFF;
+  ${tw`flex justify-center items-center border-0 w-[36px] h-[36px] rounded-[50%] bg-[#FFFFFF] cursor-pointer`}
   box-shadow: 0px 0px 10px 1px #DFDFDF;
   transition: background-color .3s, box-shadow .3s;
-  cursor: pointer;
+
+  &:nth-of-type(1) svg {
+    margin-left: -2px;
+  }
+
+  &:nth-of-type(2) svg {
+    margin-left: 2px;
+  }
 
   svg {
     path {
@@ -110,8 +118,7 @@ const Button = styled.button`
 `;
 
 const List = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  ${tw`flex flex-wrap`}
 
   > div {
     width: calc(92% / 4);

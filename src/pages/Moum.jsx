@@ -1,23 +1,18 @@
 // module
 import { React, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import tw from "twin.macro";
-
-// hook
-import useCustomQuery from "hooks/useCustomQuery";
 
 // asset
-import { getCategoryAxios } from "utils/api/category";
 import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
 import { useParams } from "react-router-dom";
 import { atomScrollState } from "state/common/scroll";
 import MoumHeader from "components/Moum/MoumHeader";
-import { instance } from "shared/axios";
 import MoumContentProfile from "components/Moum/MoumContentProfile";
 import MoumContentTabMenu from "components/Moum/MoumContentTabMenu";
 import MoumMyContent from "components/Moum/MoumMyContent";
 import MoumScrapContent from "components/Moum/MoumScrapContent";
+import { useGetUserProfileMine } from "hooks/query/useQueryUser";
+import useGetCategoriesMine from "hooks/query/useQueryCategory";
 
 function Moum ({isScrap}) {
   // Hook
@@ -31,11 +26,8 @@ function Moum ({isScrap}) {
   const [floatItemStatus, setFloatItemStatus] = useState(false);
 
   // Query
-  const categoriesQuery = useCustomQuery(["mine/categories", viewFolderId], () => getCategoryAxios(viewFolderId));
-  const {data: user, isSuccess: userQuerySuccess} = useCustomQuery("user", async () => {
-    const response = await instance.get(`/user/myProfile`);
-    return response.data;
-  });
+  const categoriesQuery = useGetCategoriesMine({folderId: viewFolderId});
+  const {data: user, isSuccess: userQuerySuccess} = useGetUserProfileMine();
 
   // Ref
   const scrollRef = useRef();
@@ -52,10 +44,10 @@ function Moum ({isScrap}) {
   }, [scrollState, setScrollState]);
 
   return (
-    <CustomContainer ref={scrollRef}>
+    <div className="flex flex-col items-center" ref={scrollRef}>
       <MoumHeader />
-      <MoumContent>
-        {userQuerySuccess && <MoumContentProfile isSuccess={userQuerySuccess} user={user} />}
+      <div className="w-[1200px] pb-[70px]">
+        {userQuerySuccess && <MoumContentProfile isSuccess={userQuerySuccess} user={user?.data} />}
         <MoumContentTabMenu />
         {
           isScrap ?
@@ -69,25 +61,13 @@ function Moum ({isScrap}) {
             isScrap={isScrap}
           />
         }
-      </MoumContent>
+      </div>
       <MoumSelectFloatingBox 
         floatStatus={floatStatus} 
         floatItemStatus={floatItemStatus} 
       />
-    </CustomContainer>
+    </div>
   )
 }
-
-const CustomContainer = styled.div`
-  ${tw`
-    flex flex-col items-center
-  `}
-`;
-
-const MoumContent = styled.div`
-  ${tw`
-    w-[1200px] pb-[70px]
-  `}
-`;
 
 export default Moum;

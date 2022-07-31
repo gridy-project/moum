@@ -55,13 +55,13 @@ function PieceResultSet () {
   return (
     pieces.length > 0 &&
     <Wrap>
-      <h2>관련있는 조각<p>조각 검색 결과 {data.pages[0].count}건</p></h2>
+      <h2>관련있는 조각<p>조각 검색 결과 {data?.pages[0].count}건</p></h2>
       <PieceRelationList>
-        {pieces.map((piece) => {
+        {pieces?.map((piece) => {
           return <SearchPieceCard key={piece.id} piece={piece} />
         })}
       </PieceRelationList>
-      {data.pages[0].count === 0 && <div className="no-item">조각 검색 결과가 없습니다.</div>}
+      {data?.pages[0].count === 0 && <div className="no-item">조각 검색 결과가 없습니다.</div>}
       <div ref={ref}></div>
     </Wrap>
   )
