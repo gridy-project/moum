@@ -9,6 +9,7 @@ import { instance }  from "shared/axios"
 // css
 import styled, { css } from "styled-components";
 import Swal from "sweetalert2";
+import tw from "twin.macro";
 
 import PulseLoader from "react-spinners/PulseLoader";
 
@@ -177,67 +178,69 @@ const ReissuePwd = () => {
  }
 
 const PwdContainer = styled.div`
-  position:relative;
-  top:-37px;
+  ${tw`
+    relative top-[-37px]
+  `}
 `;
 
 const PwdTitle = styled.h1`
   font-size:28px;
-  font-weight: 600;
   color:#303030;
-  margin-bottom:52px;
+  ${tw`
+    font-semibold mb-[52px]
+  `}
 `
 const PwdCheckId = styled.div`
   p {
     font-size:17px;
     color:#303030;
-    margin-bottom:18px;
-    font-weight:500;
+    ${tw`
+      font-medium mb-[18px]
+    `}
   }
   input {
-    width: 360px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+      w-[360px] h-[44px] border-solid border-[1px] rounded-[10px] p-[14px]
+    `}
   }
 `
 
 const PwdCheckEmail = styled.div`
-  margin-top:40px;
+  ${tw`
+    mt-[40px]
+  `}
   p {
-    font-weight:500;
+    ${tw`
+     font-medium
+    `}
   }
 `;
 
 const PwdEmailBox = styled.div`
-  margin-bottom:12px;
+  ${tw`
+    mb-[12px]
+  `}
   input {
-    margin-top:18px;
-    width: 268px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+      mt-[18px] w-[268px] h-[44px] border-solid border-[1px] rounded-[10px] p-[14px]
+    `}
   }
 `;
 
 const SendMail = styled.button`
-  width: 84px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 10px;
-  border:none;
   color: #fff;
-  margin-left:8px;
-  cursor: pointer;
-
+  ${tw`
+    w-[84px] h-[44px] rounded-[10px] border-none ml-[8px] cursor-pointer
+  `}
   ${props => props.disabled && css`
     background: #EEEEEE;
   `}
@@ -245,24 +248,20 @@ const SendMail = styled.button`
 
 const PwdCodeBox = styled.div`
   input {
-    width: 268px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+      w-[268px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
+    `}
   }
   button {
-    width: 84px;
-    height: 44px;
     background: #ECECEC;
-    border-radius: 10px;
-    border:none;
     color: #8B8B8B;
-    margin-left:8px;
-    cursor: pointer;
+    ${tw`
+      w-[84px] h-[44px] rounded-[10px] border-none ml-[8px] cursor-pointer
+    `}
     ${(props) =>
       props.isActive ? 
       css`
@@ -277,16 +276,13 @@ const PwdCodeBox = styled.div`
   }
 `
 const PwdBtn = styled.button`
-  width: 360px;
-  height: 44px;
   margin-top:32px;
   background: #9E67FF;
-  border-radius: 50px;
-  font-weight: 600;
   font-size: 17px;
   color:#fff;
-  border:none;
-  cursor: pointer;
+  ${tw`
+    w-[360px] h-[44px] rounded-[50px] border-none cursor-pointer font-semibold mt-[32px]
+  `}
 `;
 
 export default ReissuePwd;

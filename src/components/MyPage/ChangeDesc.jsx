@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 // css
 import styled, {css} from 'styled-components';
+import tw from "twin.macro";
 // React Query
 import { useMutation } from "react-query";
 import queryClient from "shared/query";
@@ -109,38 +110,36 @@ const ChangeDesc = () => {
 
 // Desc
 const DescArticle = styled.div`
-	position: relative;
+	${tw`
+		relative
+	`}
 `;
 
 const Desc = styled.p`
 	font-size: 20px;
-	margin-bottom: 16px;
+	${tw`
+		mb-[16px]
+	`}
 `;
 
 const DescNumber = styled.div`
-	width: 80px;
-	height: 12px;
 	color: #b7b7b7;
 	font-size: 12px;
-	display: flex;
-	position: absolute;
-	right: -23px;
-	top: 8px;
+	${tw`
+		w-[80px] h-[12px] flex absolute right-[-23px] top-[8px]
+	`}
 `;
 const DescTextarea = styled.textarea`
-	width: 410px;
-	height: 80px;
-	padding: 20px 16px;
 	color: #303030;
 	background: #e8e1fc;
-	border-radius: 10px;
-	border: none;
 	font-size: 15px;
-	resize: none;
 	&:focus {
 		background: #ffffff;
 		outline: none;
 	}
+	${tw`
+		w-[410px] h-[80px] p-[20px 16px] rounded-[10px] border-none resize-none
+	`} 
 	${(props) =>
 		props.isActive
 			? css`
@@ -150,34 +149,27 @@ const DescTextarea = styled.textarea`
 `;
 
 const DescDiv = styled.div`
-	width: 410px;
-	height: 80px;
-	padding: 20px 16px;
 	color: #303030;
 	background: #e8e1fc;
-	border-radius: 10px;
-	border: none;
-	white-space:pre-line;
-	overflow:scroll;
-	overflow-x:hidden;
 	-ms-overflow-style: none;
 	&::-webkit-scrollbar { 
     display: none;
     width: 0 !important;
 	}
+	${tw`
+		w-[410px] h-[80px] p-[20px 16px] rounded-[10px] border-none whitespace-pre-line overflow-scroll overflow-x-hidden
+	`} 
 `;
 
 const DescBtn = styled.button`
 	color: #9152ff;
-	border: 1px solid #bc98fc;
-	border-radius: 50px;
-	padding: 12px 16px;
-	position: absolute;
-	right: -106px;
-	bottom: 0;
+	border: #bc98fc;
 	&:hover {
 		cursor: pointer;
 	}
+	${tw`
+		border-solid border-[1px] rounded-[50px] p-[12px 16px] absolute right-[-106px] bottom-[0]
+	`} 
 	${(props) =>
 		props.isActive
 			? css`

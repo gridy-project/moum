@@ -11,6 +11,7 @@ import { instance }  from "shared/axios"
 import styled, { css }  from "styled-components";
 import Swal from "sweetalert2";
 import useCustomMutate from "hooks/useCustomMutate";
+import tw from "twin.macro";
 
 import PulseLoader from "react-spinners/PulseLoader";
 
@@ -293,49 +294,50 @@ const [rePwdLen, setRePwdLen] = useState(false);
 
  // Join
  const JoinContainer = styled.div`
-  position:relative;
+  ${tw`
+    relative
+  `}
 `;
 
 const JoinTitle = styled.h1`
   font-size: 28px;
-  margin-bottom:52px;
+  ${tw`
+    mb-[52px]
+  `}
 `;
 
 const JoinCheckBox = styled.div`
-  margin-bottom:40px;
+  ${tw`
+    mb-[40px]
+  `}
   p {
     font-size: 17px;
-    margin-bottom:18px;
+    ${tw`
+    mb-[18px]
+    `}
   }
 `;
 const JoinEmailBox = styled.div`
-  margin-bottom:12px;
-  display: flex;
+  ${tw`
+    mb-[12px] flex
+  `}
   input {
-    width: 268px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+    w-[268px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
+    `}
   }
 `;
 
 const SendMail = styled.button`
-  width: 84px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 10px;
-  margin-left:8px;
-  border:none;
   color:#fff;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+  ${tw`
+    w-[84px] h-[44px] rounded-[10px] border-none ml-[8px] cursor-pointer flex justify-center items-center
+  `}
   ${props => props.disabled && css`
     background: #EEEEEE;
   `}
@@ -343,23 +345,20 @@ const SendMail = styled.button`
 
 const JoinCodeBox = styled.div`
   input {
-    width: 268px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+    w-[268px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
+    `}
   }
   button {
-    width: 84px;
-    height: 44px;
     background: #ECECEC;
-    border-radius: 10px;
-    border:none;
     color: #8B8B8B;
-    margin-left:8px; 
+    ${tw`
+    w-[84px] h-[44px] rounded-[10px] border-none ml-[8px]
+    `}
     ${(props) =>
       props.isActive ? 
       css`
@@ -378,26 +377,24 @@ const CreateBox = styled.div`
   p {
     color:#303030;
     font-size: 17px;
-    margin-bottom:18px;
+    ${tw`
+    mb-[18px]
+    `}
   }
   input {
-    width: 360px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom:12px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+    w-[360px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px] mb-[12px]
+    `}
   }
 `;
 const JoinBtn = styled.button`
-  width: 360px;
-  height: 44px;
-  border-radius: 50px;
-  border:none;
-  margin-top:16px;
+  ${tw`
+    w-[360px] h-[44px] rounded-[50px] border-none mt-[16px]
+  `}
       ${(props) =>
       props.disabled ? 
       css`

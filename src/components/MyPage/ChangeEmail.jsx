@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import tw from "twin.macro";
 // axios
 import { instance } from "shared/axios"
 // React Query
@@ -30,12 +31,16 @@ const ChangeEmail = () => {
 
 // Email
 const EmailArticle = styled.div`
-	margin-top: 40px;
+  ${tw`
+    mt-[40px]
+  `}
 `;
 const EmailTitle = styled.p`
 	font-size: 20px;
-	margin-bottom: 12px;
 	color: #111111;
+  ${tw`
+    mb-[12px]
+  `}
 `;
 const Email = styled.p`
 	font-size: 16px;
