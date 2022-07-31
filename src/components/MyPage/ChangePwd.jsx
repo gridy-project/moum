@@ -5,6 +5,7 @@ import {  useMutation } from "react-query";
 // React-hook-form
 import { useForm } from "react-hook-form";
 // css
+import tw from "twin.macro";
 import Swal from "sweetalert2";
 import styled, { css } from "styled-components";
 import human from "assets/images/pages/mypage/human.png";
@@ -269,146 +270,153 @@ return (
 
 // Pwd
 const PwdArticle = styled.div`
-	margin-top: 40px;
+	${tw`
+    mt-[40px]
+  `}
 `;
 
 const PwdTitle = styled.div`
 	font-size: 20px;
 	color: #111111;
-	margin-bottom: 16px;
+	${tw`
+    mb-[16px]
+  `}
 `;
 const PwdArea = styled.div`
 `;
 
 const PwdBtn = styled.button`
-	border: none;
 	font-size: 12px;
 	color: #9152ff;
 	background: #f6f5fb;
-	border: 1px solid #bc98fc;
-	border-radius: 50px;
-	padding: 12px 16px;
+	border: #bc98fc;
 	&:hover {
 		cursor: pointer;
 	}
+	${tw`
+    border-none border-solid border-[1px] rounded-[50px] p-[12px 16px]
+  `}
 `;
 
 // ModalPassword
 const ModalPasswordHeader = styled.div`
-	display:flex;
-	align-items:center;
-	margin-bottom:32px;
+	${tw`
+    flex items-center mb-[32px]
+  `}
 	h1 {
 		color:#303030;
 		font-size:20px;
-		font-weight:600;
+		${tw`
+    	font-semibold
+ 	 	`}
 	}
 	`
 const ModalPasswordContent = styled.div`
-	position:relative;
+	${tw`
+		relative
+	`}
 	p {
 		font-size:16px;
-		margin-bottom:12px;
+		${tw`
+			mb-[12px]
+		`}
 	}
 	input {
-		width: 390px;
-		height: 50px;
-		border: 1px solid #D2BAFF;
-		border-radius: 100px;
-		padding: 18px 20px;
+		border: #D2BAFF;
 		&:focus {
 			outline: 1px solid #9152FF;
-	}
+		}
+		${tw`
+			w-[390px] h-[50px] border-solid border-[1px] rounded-[100px] p-[18px 20px]
+		`}
 	}
 `;
 
 const Modalimagebox = styled.div`
-	width: 44px;
-	height: 44px;
 	background-color:#E8E1FC;
-	border-radius:50%;
-	margin-right:12px;
+	${tw`
+		w-[44px] h-[44px] rounded-[50%] mr-[12px]
+	`}
 	img {
-		position:relative;
-		left: 35.6%;
-		top: 25%;
+		${tw`
+			relative left-[35.6%] top-[25%]
+		`}
 	}
 `;
 
 const ExistPwdWrap = styled.div`
-	position:relative;
+	${tw`
+		relative
+	`}
 	span {
 		color:#FF5C5C;
-		margin-top:10px;
-		/* height:15px; */
-		display:inline-block;
+		${tw`
+			mt-[10px] inline-block
+		`}
 	}
 	img {
-		position:absolute;
-		top:42px;
-		right:15px;
-		display:block;
+		${tw`
+			absolute block top-[42px] right-[15px]
+		`}
 	}
 `
 const PwdWrap = styled.div`
-	margin-top:15px;
-	position:relative;
+	${tw`
+		relative mt-[15px]
+	`}
 	span {
 		color:#FF5C5C;
-		margin-top:10px;
-		display:inline-block;
+		${tw`
+			mt-[10px] inline-block
+		`}
 	}
 	img {
-		position:absolute;
-		top:42px;
-		right:15px;
+		${tw`
+			absolute top-[42px] right-[15px]
+		`}
 	}
 `
 const RePwdWrap = styled.div`
-	margin-top:15px;
-	position:relative;
+	${tw`
+		relative mt-[15px]
+	`}
 	span {
 		color:#FF5C5C;
-		display:inline-block;
-		margin-top:10px;
+		${tw`
+		mt-[10px] inline-block
+		`}
 	}
 	img {
-		position:absolute;
-		top:42px;
-		right:15px;
+		${tw`
+			absolute top-[42px] right-[15px]
+		`}
 	}
 `
 const ModalPasswrodBtnWrap = styled.div`
-	display:flex;
-	position:absolute;
-	right:24px;
-	bottom:24px;
+	${tw`
+		absolute right-[24px] bottom-[24px] flex
+	`}
 `;
 
 const CancelPwdBtn = styled.button`
-	width: 62px;
-	height: 48px;
 	background: #F7F3FD;
-	border-radius: 26px;
 	font-size:14px;
 	line-height:14px;
 	color:#9E67FF;
-	padding:18px;
-	margin-right:12px;
-	border:none;
-	cursor: pointer;
+	${tw`
+		w-[62px] h-[48px] rounded-[26px] p-[18px] mr-[12px] border-none cursor-pointer
+	`}
 `
 
 const ChangePwdBtn = styled.button`
-	width: 113px;
-	height: 48px;
-	border-radius: 50px;
 	padding: 18px;
 	font-size:14px;
 	line-height:14px;
-	border:none;
 	background-color: #ECECEC;
 	color:#949494;
+	${tw`
+		w-[113px] h-[48px] rounded-[50px] border-none
+	`}
 		${(props) =>
 		props.disabled
 			? css`

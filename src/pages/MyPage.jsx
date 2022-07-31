@@ -2,6 +2,7 @@
 import React from "react";
 // css
 import styled from "styled-components";
+import tw from "twin.macro";
 // component
 import Header from "components/Common/Header";
 import ProfileImage from "../components/MyPage/ProfileImage";
@@ -39,57 +40,59 @@ function MyPage() {
 }
 
 const CustomContainer = styled.div`
-	padding-top: 200px;
-	width: 100%;
-	min-height: 100vh;
-	display: flex;
 	background-color: #FFFFFF !important;
+	${tw`
+    w-[100%] pt-[200px] min-h-screen flex
+  `}
 `;
 
 const Wrap = styled.div`
-	width: 1000px;
-	margin: 0 auto 100px auto;
+	${tw`
+    w-[1000px] m-[0 auto 100px auto]
+  `}
 `;
 
 // Title
 const TitleWrap = styled.div`
-	width: 100%;
-	margin-bottom: 50px;
+	${tw`
+    w-[100%] mb-[50px]
+  `}
 `;
 const Title = styled.p`
 	font-size: 30px;
 	line-height: 24px;
-	font-weight: 500;
-	padding: 8px 0px 19px 15px;
 	color:#111111;
+	${tw`
+    font-medium p-[8px 0 19px 15px]
+  `}
 `;
 const TitleDesc = styled.p`
 	font-size: 20px;
 	line-height: 24px;
-	font-weight: 400;
-	padding: 0px 0px 3px 15px;
 	color:#949494;
+	${tw`
+    font-normal p-[0px 0px 3px 15px]
+  `}
 `;
 
 // Content
 const ContentBox = styled.div`
-	width: 1000px;
-	height: 610px;
-	border: none;
-	border-radius: 30px;
 	background: #f6f5fb;
-	position: relative;
-	padding: 65px 105px 70px 104px;
+	${tw`
+    w-[1000px] h-[610px] border-none rounded-[30px] relative p-[65px 105px 70px 104px]
+  `}
 `;
 const Content = styled.div`
-	width: 900px;
-	height: 470px;
-	display: flex;
+	${tw`
+    w-[900px] h-[470px] flex
+  `}
 `;
 
 // TextArea
 const TextArea = styled.div`
-	margin-left: 100px;
+	${tw`
+    ml-[100px]
+  `}
 `;
 
 
