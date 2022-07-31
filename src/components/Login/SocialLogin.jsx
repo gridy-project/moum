@@ -4,13 +4,13 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
-import { executeSignInWithGoogleAxios } from 'utils/api/auth';
 import { isLogin } from 'state/common/user';
 import { setToken } from 'shared/localStorage';
 
 import googlelogo from "assets/images/pages/login/google_logo.png";
 
 import Swal from "sweetalert2";
+import { apiUser } from 'utils/api/user';
 import tw from "twin.macro";
 
 function SocialLogin ({loginSuccess}) {
@@ -29,7 +29,7 @@ function SocialLoginButton () {
   const navigate = useNavigate();
 
   const {mutate: login} = useMutation(async (data) => {
-    return await executeSignInWithGoogleAxios(data.code);
+    return await apiUser.signInSocial({code: data.code});
   }, {
     onSuccess: response => {
       if (response.data) {

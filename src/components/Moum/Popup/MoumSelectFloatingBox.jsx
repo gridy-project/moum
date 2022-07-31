@@ -3,7 +3,6 @@ import iconDelete from "assets/images/pages/moum/delete_icon.png";
 import { atomSelectedItems } from "state/moum";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { useQueryClient } from "react-query";
-import { removePieceMultiAxios } from "utils/api/piece";
 import useCustomMutate from "hooks/useCustomMutate";
 import styled, { css } from "styled-components";
 import { useParams } from "react-router-dom";
@@ -13,6 +12,7 @@ import { instance } from "shared/axios";
 import { globalPopup } from "state/common/popup";
 import MoveSelectPopup from "components/Common/Popup/MoveSelectPopup";
 import useCustomQuery from "hooks/useCustomQuery";
+import { removePieceMultiAxios } from "utils/api/piece";
 
 function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
   const {folderId: viewFolderId = 0} = useParams();

@@ -8,14 +8,8 @@ import { useRecoilValue } from "recoil";
 import { atomMoumSearch, atomMoumSort, atomSelectedCategories } from "state/moum";
 import { changeMoumOrder } from "utils/api/moum";
 import useCustomMutate from "hooks/useCustomMutate";
-import { getMoumMineFetch } from "utils/fetch/moum";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
-
-const moumsFetch = async ({categories, search, sortState, pageParam}) => {
-  const response = await getMoumMineFetch(categories, search, sortState, pageParam);
-  return { moums: response.data, nextPage: pageParam + 1, isLast: response.totalPage === pageParam }
-}
+import { useGetMoumMineInfinite } from "hooks/query/useQueryMoum";
 
 function MoumList () {
   const [moums, setMoums] = useState([]);
@@ -24,20 +18,7 @@ function MoumList () {
   const categories = useRecoilValue(atomSelectedCategories);
   const {ref, inView} = useInView();
 
-  const { data, fetchNextPage } = useInfiniteQuery(
-    ["mine/moums", categories, search, sortState], 
-    ({pageParam = 0}) => moumsFetch({categories, search, sortState, pageParam}),
-    {
-      getNextPageParam: (lastPage) => {
-        if (!lastPage.isLast) {
-          return lastPage.nextPage
-        } else {
-          return undefined;
-        }
-      }
-    }
-  )
-
+  const { data, fetchNextPage } = useGetMoumMineInfinite({categories, search, sortState});
 
   const {mutateAsync: order} = useCustomMutate(
     ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));

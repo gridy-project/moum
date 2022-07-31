@@ -3,6 +3,7 @@ import PieceScrollVertical from "components/Moum/PieceScrollVertical";
 import styled from "styled-components";
 import privateLock from "assets/svg/card/lock.svg";
 import more from "assets/images/pages/moum/menu-black.png";
+import tw from "twin.macro";
 
 function PieceMemoCardCommon ({piece, setButtonState}) {
   return (
@@ -76,8 +77,7 @@ const More = styled.div`
 `;
 
 const CardContent = styled.div`
-  width: 100%;
-  height: 100%;
+  ${tw`w-full h-full break-all`}
 `;
 
 export default PieceMemoCardCommon;

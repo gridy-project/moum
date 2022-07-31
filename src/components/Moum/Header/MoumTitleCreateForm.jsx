@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
-import { instance } from "shared/axios"
 import { globalFloat } from "state/common/popup";
 
 // custom hook
@@ -13,10 +12,11 @@ import useHandleChange from "hooks/useHandleChange";
 import arrowSave from "assets/images/pages/moum/arrow-moum-save.png"
 import queryClient from "shared/query";
 import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom.png";
-import useCustomMutate from "hooks/useCustomMutate";
 import MoumCreateFloat from "../Float/MoumCreateFloat";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import tw from "twin.macro";
+import { useAddPiece } from "hooks/query/useQueryPiece";
 
 function MoumTitleCreateForm () {
   const {folderId: viewFolderId = 0} = useParams();
@@ -27,13 +27,7 @@ function MoumTitleCreateForm () {
     content: ""
   });
 
-  const {mutateAsync: addPiece} = useCustomMutate(async (data) => {
-    if (viewFolderId === 0) {
-      return await instance.post("/board", data);
-    } else {
-      return await instance.put("/folder", {folderId: viewFolderId, ...data});
-    }
-  })
+  const {mutateAsync: addPiece} = useAddPiece();
 
   const addPieceSimple = async (e) => {
     e.preventDefault();
@@ -65,13 +59,19 @@ function MoumTitleCreateForm () {
         return false;
       }
       obj = {
-        link: input.content,
-        boardType: input.type,
+        folderId: viewFolderId,
+        data: {
+          link: input.content,
+          boardType: input.type,
+        }
       }
     } else if (input.type === "MEMO") {
       obj = {
-        content: input.content,
-        boardType: input.type,
+        folderId: viewFolderId,
+        data: {
+          content: input.content,
+          boardType: input.type,
+        }
       }
     }
 
@@ -129,105 +129,71 @@ function MoumTitleCreateForm () {
 }
 
 const SelectWrap = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
+  ${tw`relative w-full h-full `};
 `;
 
 const SelectBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
+  ${tw`flex items-center justify-between cursor-pointer `};
+
   img {
     margin-left: 8px;
   }
 `;
 
 const SelectBoxOption = styled.div`
-  position: absolute;
-  top: 50px;
-  width: 80px;
-  height: 80px;
-  box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
-  background-color: #FFFFFF;
-  padding: 6px;
-  border-radius: 12px;
-  cursor: pointer;
+  ${tw`
+    absolute top-[50px] w-[80px] h-[80px] 
+    bg-[#FFFFFF] p-[6px] rounded-[12px] cursor-pointer
+  `}
   display: ${props => props.toggle ? "block" : "none"};
 `;
 
 const Option = styled.div`
-  width: 100%;
-  height: 34px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 6px;
-  cursor: pointer;
+  ${tw`
+    w-full h-[50%] flex justify-center 
+    items-center rounded-[6px] cursor-pointer
+  `};
   transition: background .3s;
 
   &:hover {
-    background-color: #F1EAFF;
+    ${tw`bg-[#F1EAFF]`}
   }
 `;
 
 const Form = styled.form`
-  margin-top: 90px;
-  width: 620px;
-  height: 50px;
-  background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
+  ${tw`
+    mt-[90px] w-[620px] h-[50px] 
+    bg-[#FFFFFF] flex items-center rounded-[25px]
+  `}
   box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
-  border-radius: 25px;
 
   > div {
-    flex-shrink: 0;
-    width: 80px;
-    height: 70%;
-    border-right: 1px solid #ddd;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    ${tw`
+      shrink-0 w-[80px] h-[70%] 
+      border-r-[1px] border-[#DDDDDD] border-solid 
+      flex justify-center items-center
+    `};
 
     select {
-      border: none;
-      width: 60%;
-      height: 100%;
+      ${tw`border-0 w-[60%] h-full`}
     }
   }
 
   input {
-    border: none;
-    width: 100%;
-    height: 40px;
-    margin: 0 20px;
-    outline: none;
-    font-size: 16px;
+    ${tw`border-0 w-full h-[40px] mx-[20px] outline-0 text-[16px]`}
     &::placeholder {
       color: #B7B7B7;
     }
   }
 
   button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    width: 115px;
-    height: 100%;
-    border-radius: 25px;
-    font-size: 16px;
-    border: none;
-    background: #9152FF;
-    color: #FFFFFF;
+    ${tw`
+      flex justify-center items-center shrink-0 w-[115px] h-full rounded-[25px] text-[16px] border-0 bg-[#9152FF] text-[#FFFFFF] cursor-pointer
+    `};
     box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
-    cursor: pointer;
 
     img {
-      margin-left: 10px;
-      margin-top: -2px
+      ${tw`ml-[10px] mt-[-2px]`}
     }
   }
 `;

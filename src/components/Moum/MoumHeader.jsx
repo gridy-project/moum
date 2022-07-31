@@ -1,6 +1,5 @@
 import Header from "components/Common/Header";
 import styled from "styled-components";
-import MoumTitleContent from "./Header/MoumTitleContent";
 import MoumTitleCreateForm from "./Header/MoumTitleCreateForm";
 
 import tw from "twin.macro";
@@ -11,7 +10,14 @@ function MoumHeader () {
   return (
     <Title>
       <Header selected={1} />
-      <MoumTitleContent />
+      <div className="flex flex-col items-center w-full">
+        <em className="text-36 text-[#FFFFFF] font-semibold">
+          간편한 정보 아카이빙, moum
+        </em>
+        <p className="pt-20 text-20 text-[#FFFFFF] font-normal">
+          링크, 글, 이미지 조각을 모아두고 쉽게 찾을 수 있어요.
+        </p>
+      </div>
       <MoumTitleCreateForm />
     </Title>
   );
