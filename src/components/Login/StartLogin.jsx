@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import useCustomMutate from "hooks/useCustomMutate";
 import { executeSignInAxios } from "utils/api/auth";
 // css
+import tw from "twin.macro";
 import Swal from "sweetalert2";
 import styled from "styled-components";
 import moumlogo from "../../assets/images/pages/login/moum_logo.png"
@@ -117,84 +118,82 @@ const StartLogin = (props) => {
  }
 
  const MoumLogo = styled.div`
-  width: 144px;
-  height: 40px;
-  margin: 0 auto 40px;
-  padding-right: 10px;
+  ${tw`
+    w-[144px] h-[40px] m-[0 auto 40px] pr-[10px]
+  `}
 `;
 
 const LineBox = styled.div`
-  display:flex;
-  align-items:center;
-  margin: 32px 0;
+  ${tw`
+    m-[32px 0] flex items-center
+  `}
   img {
-    width: 160px;
-    height: 1px;
+    ${tw`
+      w-[160px] h-[1px]
+    `}
   }
   p {
     color : #949494;
     font-size: 14px;
-    margin: 0 9px;
+    ${tw`
+      m-[0 9px]
+    `}
   }
 `;
 
 const LoginInputBox = styled.div`
-  margin-bottom:16px;
+  ${tw`
+      mb-[16px]
+    `}
   input {
-    width: 360px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom:12px;
+    border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
+    ${tw`
+      w-[360px] h-[44px] border-solid border-[1px] rounded-[10px] p-[14px] mb-[12px]
+    `}
   }
 `;
 
-const KeepingLogin = styled.div`
-  display:flex;
-  align-items:center;
-  margin-bottom:33px;
-  p { 
-    color:#909090;
-  }
-`;
+// 로그인 유지
+// const KeepingLogin = styled.div`
+//   display:flex;
+//   align-items:center;
+//   margin-bottom:33px;
+//   p { 
+//     color:#909090;
+//   }
+// `;
 
-const LoginImgBox = styled.div`
-   position:relative;
-   cursor: pointer;
-`;
+// const LoginImgBox = styled.div`
+//    position:relative;
+//    cursor: pointer;
+// `;
 
-const CircleImg = styled.img`
- margin-right:6.83px;
-`
-const CheckImg = styled.img`
-  width: 9.17px;
-  height:6.33px;
-  position:absolute;
-  top: 7.5px;
-  left: 5.5px;
-`
+// const CircleImg = styled.img`
+//  margin-right:6.83px;
+// `
+// const CheckImg = styled.img`
+//   width: 9.17px;
+//   height:6.33px;
+//   position:absolute;
+//   top: 7.5px;
+//   left: 5.5px;
+// `
 
 const LoginBtn = styled.button`
-  width: 360px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 50px;
-  border:none;
   color:#fff;
-  cursor: pointer;
+  ${tw`
+    w-[360px] h-[44px] border-none rounded-[50px] cursor-pointer
+  `}
 `;
 
 const TabBox = styled.div`
-  width: 310px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin-top:14px;
-  margin-left:15px;
+  ${tw`
+    w-[310px] flex justify-center items-center mt-[14px] ml-[15px]
+  `}
   span {
     color:#A4A4A4;
   }
@@ -203,8 +202,9 @@ const TabBox = styled.div`
 const Tab = styled.p`
   color:#606060;
   font-size: 12px;
-  padding: 12px 20px;
-  cursor: pointer;
+  ${tw`
+    p-[12px 20px] cursor-pointer
+  `}
 `;
 
 export default StartLogin;

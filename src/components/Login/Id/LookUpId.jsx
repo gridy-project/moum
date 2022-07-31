@@ -10,6 +10,7 @@ import { instance } from "shared/axios"
 // css
 import styled from "styled-components";
 import Swal from "sweetalert2";
+import tw from "twin.macro";
 
 // sparta3@dev.com
  const LookUpId = (props) => {
@@ -59,44 +60,44 @@ import Swal from "sweetalert2";
  }
 
  const IdContainer = styled.div`
-  position:relative;
-  top:-37px;
+  ${tw`
+    relative top-[-37px]
+  `}
 `;
 
 const IdTitle = styled.h1`
   font-size:28px;
-  margin-bottom:52px;
   font-weight: 600;
   color:#303030;
+  ${tw`
+    mb-[52px] font-semibold
+  `}
 `;
 const IdContent = styled.div`
   p {
     font-size:17px;
-    margin-bottom: 18px;
+    ${tw`
+    mb-[18px]
+    `}
   }
   input {
-    width: 360px;
-    height: 44px;
-    border: 1px solid #B7B7B7;
-    border-radius: 10px;
-    padding: 14px;
+    border: #B7B7B7;
     &:focus {
       outline: 1px solid #9152FF;
-    }
+    } 
+    ${tw`
+      w-[360px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
+    `}
   }
 `;
 
 const IdBtn = styled.button`
-  width: 360px;
-  height: 44px;
   background: #9E67FF;
-  border-radius: 50px;
   color:#fff;
-  border:none;
-  margin-top:32px;
   font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
+   ${tw`
+      w-[360px] h-[44px] rounded-[50px] border-none mt-[32px] font-semibold cursor-pointer
+    `}
 `;
 
 export default LookUpId;

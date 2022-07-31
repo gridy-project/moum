@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useRecoilState } from "recoil";
 import { numberLoginState } from 'state/login';
 // css
+import tw from "twin.macro";
 import styled from "styled-components";
 import background from "../assets/images/pages/login/background.png"
 // component
@@ -67,46 +68,40 @@ const Auth = () => {
 };
 
 const Container = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  
+  ${tw`
+    absolute w-[100%] h-[100vh] overflow-hidden
+  `}
   > img {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
+    ${tw`
+      w-[100%] h-[100vh] object-cover
+    `}
   }
 `;
 
 const Box = styled.div`
-  width: 1300px;
-  height: 700px;
-  position:absolute;
-  top: 50%;
-  left: 50%;
   transform: translateX(-50%) translateY(-50%);
   @media screen and (max-width: 1600px) {
     height: 660px;
   }
+  ${tw`
+    w-[1300px] h-[700px] absolute top-[50%] left-[50%]
+  `}
 `;
 
 const ChangeContainer = styled.div`
-  width: 540px;
-  height: 100%;
   background-color:#fff;
-  border-radius: 24px;
-  float:right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   @media screen and (max-width: 1600px) {
     width: 500px;
   }
+  ${tw`
+    w-[540px] h-[100%] rounded-[24px] float-right flex justify-center items-center
+  `}
 `;
 
 const Content = styled.div`
-  width: 370px;
+  ${tw`
+    w-[370px]
+  `}
 `;
 
 export default Auth;
