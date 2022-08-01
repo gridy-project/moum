@@ -99,14 +99,11 @@ const DeleteAccountBtn = styled.p`
 
 // modal
 const ModalDeleteAccountHeader = styled.div`
-  ${tw`
-    flex items-center mb-[28px]
-  `}
-	h1 {
 		color:#303030;
-		font-size:20px;
-    ${tw`font-semibold `}
-	}
+		font-size:23px;
+    ${tw`
+      font-semibold mt-[10px] ml-[5px]
+    `}
 `;
 const ModalBtnWrap = styled.div`
   ${tw`
@@ -125,6 +122,11 @@ const CancelBtn = styled.button`
 `;
 
 const RemoveAccountBtn = styled.button`
+	font-size:14px;
+	line-height:14px;
+
+	background-color: #ECECEC;
+	color:#949494;
   ${tw`
     w-[103px] h-[48px] rounded-[50px] p-[18px] border-none text-14 leading-14 bg-[#9152FF] text-[#FFFFFF]
   `}

@@ -183,22 +183,18 @@ const CreateProfile = () => {
 
 const Container = styled.div`
   ${tw`
-    w-[360px]
+    w-[360px] h-[565px]
   `}
 `
 const ProfileTitle = styled.div`
+/* margin-bottom:42px; */
  ${tw`
-    mb-[42px]
+    mb-[28px]
   `}
 h1, h2 {
   font-size: 24px;
   color:#303030;
    ${tw`font-semibold `}
-}
-h1 {
-  ${tw`
-    mb-[15px]
-  `}
 }
 `;
 
@@ -207,14 +203,14 @@ p {
   font-size: 17px;
   color:#303030;
   ${tw`
-    font-medium mb-[18px]
+    font-medium mb-[15px]
   `}
 }
 `;
 
 const InputBox = styled.div`
  ${tw`
-    mb-[40px]
+    mb-[28px]
   `}
 input {
   border: #B7B7B7;
@@ -231,7 +227,7 @@ button {
   background: #9E67FF;
   color:#fff;
   ${tw`
-    w-[88px] h-[44px] border-solid border-none cursor-pointer
+    w-[88px] h-[44px] border-solid border-none cursor-pointer rounded-[10px]
   `}
 }
 `
@@ -240,7 +236,7 @@ p {
   font-size: 17px;
   color:#303030;
   ${tw`
-    font-medium mb-[27px]
+    font-medium mb-[22px]
   `}
 }
 `
@@ -302,7 +298,7 @@ const StartBtn = styled.button`
   font-size: 17px;
   color:#fff;
   ${tw`
-    w-[360px] h-[44px] mt-[24px] rounded-[50px] font-semibold border-none cursor-pointer
+    w-[360px] h-[44px] mt-[20px] rounded-[50px] font-semibold border-none cursor-pointer
   `}
 `
 export default CreateProfile;
