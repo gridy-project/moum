@@ -74,7 +74,7 @@ function SocialLoginButton () {
 
 const GoogleLogin = styled.div`
   ${tw`
-    bg-[#F8F8F8] border-[#E9E9E9] w-[360px] h-[44px] rounded-[50px] border-solid border-[1px] flex justify-center items-center relative cursor-pointer
+    bg-[#F8F8F8] border-[#d8d8d8] w-[360px] h-[44px] rounded-[50px] border-solid border-[1px] flex justify-center items-center relative cursor-pointer
   `} 
   img {
     ${tw`
@@ -83,7 +83,7 @@ const GoogleLogin = styled.div`
   }
   p {
     ${tw`
-      ml-[10px]
+      ml-[10px] font-semibold
     `} 
   }
   &:hover {
