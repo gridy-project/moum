@@ -123,7 +123,6 @@ function PopupImageChange ({finish, close, getter, setter, handleChange}) {
               </Image>
               :
               <NoImage>
-
               </NoImage>
             }
           </Item>

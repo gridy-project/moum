@@ -25,10 +25,10 @@ function MoumHeader () {
 
 const Title = styled.div`
   ${tw`
-    pt-[120px] w-full h-[480px] bg-no-repeat bg-cover rounded-[0 0 60px 60px] flex flex-col items-center justify-center relative
+  pt-40
+  w-full h-[480px] bg-no-repeat bg-cover rounded-[0 0 60px 60px] flex flex-col items-center justify-center relative
   `}
   background-image: url(${moumTopImage});
-  background-position-y: 70px;
 `;
 
 export default MoumHeader;

@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import folderNormalSvg from "assets/common/Popup/folder-normal.svg";
 import folderActiveSvg from "assets/common/Popup/folder-active.svg";
+import tw from "twin.macro";
 
 function MoveSelectPopup ({query, close, confirm, title}) {
   const {isSuccess, data: list} = query;
@@ -22,7 +23,7 @@ function MoveSelectPopup ({query, close, confirm, title}) {
             return (
             <Item key={v.id} isActive={select === i} onClick={() => {setSelect(i)}}>
               <img src={select === i ? folderActiveSvg : folderNormalSvg} alt="folder" />
-              {v.name}
+              <div>{v.name}</div>
             </Item>
             )
           })}
@@ -47,39 +48,21 @@ function MoveSelectPopup ({query, close, confirm, title}) {
 }
 
 const Popup = styled.div`
-  width: 435px;
-  height: 510px;
-  background-color: #FFFFFF;
-  border-radius: 30px;
-  padding: 32px;
-  position: relative;
+  ${tw`w-435 h-510 bg-[#FFFFFF] rounded-30 p-32 relative`};
 `;
 
 const ShadowBox = styled.div`
-  margin-top: 32px;
-  width: 370px;
-  height: 290px;
+  ${tw`mt-32 w-370 h-290 rounded-12`};
   box-shadow: 0px 2px 12px 2px #E8E1FC;
-  border-radius: 12px;
 `;
 
 const ScrollView = styled.div`
-  padding: 20px;
-  width: 100%;
-  height: 100%;
+  ${tw`p-20 w-[100%] h-[100%]`}
   overflow-y: auto;
 `;
 
 const Item = styled.div`
-  width: 100%;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  line-height: 45px;
-  border: 1px solid #D8D8D8;
-  border-radius: 25px;
-  padding: 0 17px;
-  cursor: pointer;
+  ${tw`w-[100%] h-45 flex items-center leading-45 border border-solid border-[#D8D8D8] rounded-25 px-17 cursor-pointer`};
 
   img {
     margin-right: 10px;
@@ -88,18 +71,18 @@ const Item = styled.div`
   & + & {
     margin-top: 14px;
   }
+  
+  div {
+    ${tw`truncate`}
+  }
 
   ${props => props.isActive && css`
-    background-color: #AC7DFF;
-    color: #FFFFFF;
-    font-weight: 600;
+    ${tw`bg-[#AC7DFF] text-[#FFFFFF] font-semibold`};
   `}
 `;
 
 const ButtonGroup = styled.div`
-  position: absolute;
-  right: 32px;
-  bottom: 32px;
+  ${tw`absolute right-32 bottom-32`};
 `;
 
 export default MoveSelectPopup;

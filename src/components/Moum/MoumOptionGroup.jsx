@@ -6,11 +6,9 @@ import pieceSearch from "assets/images/pages/moum/piece-search.png";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { atomPieceSelectMode, atomSelectedItems, atomMoumSort, atomMoum } from "state/moum";
-import { useMatch } from "react-router-dom";
 import tw from "twin.macro";
 
-function MoumOptionSort ({active, setActive}) {
-  const match = useMatch("/scrap");
+function MoumOptionSort ({active, setActive}) { 
   const [option, setOption] = useRecoilState(atomMoumSort);
   const toggleOptionSelect = (e) => {
     setActive((current) => !current);
@@ -29,29 +27,15 @@ function MoumOptionSort ({active, setActive}) {
 
 
 const Sort = styled.div`
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  cursor: pointer;
-  position: relative;
+  ${tw`relative flex items-center cursor-pointer shrink-0`};
 `;
 
 const NowOption = styled.div`
-  padding: 16px;
-  border: 1px solid #DFDFDF;
-  background-color: #FFFFFF;
-  border-radius: 50px;
-  color: #303030;
-  display: flex;
-  align-items: center;
-  width: 145px;
-  font-size: 15px;
-  box-shadow: none;
+  ${tw`h-44 px-16 border-1 border-solid border-[#DFDFDF] bg-[#FFFFFF] rounded-50 text-[#303030] flex items-center w-145 text-15 shadow-transparent justify-between`};
   transition: border .3s, box-shadow .3s;
-  justify-content: space-between;
 
   img {
-    margin-left: 18px;
+    ${tw`ml-18`};
   }
 
   ${props => props.isActive && css`
@@ -61,14 +45,8 @@ const NowOption = styled.div`
 `;
 
 const SortOptionList = styled.ul`
+  ${tw`absolute top-65 w-full bg-[#FFFFFF] z-1 rounded-12 flex-col`}
   display: ${props => props.isActive ? "flex" : "none"};
-  position: absolute;
-  top: 65px;
-  width: 100%;
-  background-color: #FFFFFF;
-  z-index: 1;
-  border-radius: 12px;
-  flex-direction: column;
 
   ${props => props.isActive && css`
     border: 1px solid #E0D6FF;
@@ -76,21 +54,16 @@ const SortOptionList = styled.ul`
   `}
 
   li {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 14px;
-    padding: 18px;
+    ${tw`flex items-center justify-start w-full text-14 p-18`};
     transition: color .3s;
   }
 
   li:hover {
-    color: #9152FF;
+    ${tw`text-[#9152FF]`};
   }
 
   li + li {
-    padding-top: 9px;
+    ${tw`pt-9`};
   }
 `;
 
@@ -134,7 +107,7 @@ function MoumOptionGroup ({
       resetSelectedItems();
       setFloatStatus(false);
     }
-  }, [modeState]);
+  }, [modeState, setFloatStatus, setSelectAll, resetSelectedItems]);
 
   useEffect(() => {
     if (items.length > 0 && floatItemStatus === false) {
@@ -150,7 +123,7 @@ function MoumOptionGroup ({
   }
 
   return (
-    <OptionGroup>
+    <div className="w-full flex justify-between mt-[40px] items-center">
       <MoumOptionSort active={selectState} setActive={setSelectState} />
       <Search isActive={searchActive}>
         <form onSubmit={onSubmit}>
@@ -172,14 +145,10 @@ function MoumOptionGroup ({
           </button>
         )}
       </Option>
-    </OptionGroup>
+    </div>
   );
 
 }
-
-const OptionGroup = styled.div`
-  ${tw`w-full flex justify-between mt-[40px] items-center`};
-`;
 
 const Search = styled.div`
   ${tw`w-full h-full flex items-center px-[15px]`};

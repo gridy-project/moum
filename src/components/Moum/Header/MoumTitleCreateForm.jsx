@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
-import { globalFloat } from "state/common/popup";
+import { globalBottomFloat } from "state/common/popup";
 
 // custom hook
 import useHandleChange from "hooks/useHandleChange";
@@ -21,7 +21,7 @@ import { useAddPiece } from "hooks/query/useQueryPiece";
 function MoumTitleCreateForm () {
   const {folderId: viewFolderId = 0} = useParams();
 
-  const setFloat = useSetRecoilState(globalFloat);
+  const setFloat = useSetRecoilState(globalBottomFloat);
   const {input, setInput, handleChange} = useHandleChange({
     type: "LINK",
     content: ""
@@ -191,6 +191,11 @@ const Form = styled.form`
       flex justify-center items-center shrink-0 w-[115px] h-full rounded-[25px] text-[16px] border-0 bg-[#9152FF] text-[#FFFFFF] cursor-pointer
     `};
     box-shadow: 0px 2px 16px 4px rgba(145, 82, 255, 0.2);
+    transition: background-color .3s;
+
+    &:hover {
+      ${tw`bg-[#7c49d6]`};
+    }
 
     img {
       ${tw`ml-[10px] mt-[-2px]`}

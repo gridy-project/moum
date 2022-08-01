@@ -60,7 +60,7 @@ function Intro() {
 }
 
 const Content = styled.div`
-  ${tw`w-full pt-[70px] absolute top-0`}
+  ${tw`absolute top-0 w-full`}
 
   img {
     ${tw`w-full`}
@@ -68,7 +68,7 @@ const Content = styled.div`
 `;
 
 const ContentView = styled.div`
-  ${tw`w-full flex justify-center overflow-x-hidden`}
+  ${tw`flex justify-center w-full overflow-x-hidden`}
 
   &:nth-of-type(1) {
     ${tw`bg-[#D1B7FE]`}

@@ -42,7 +42,7 @@ function MyPage() {
 const CustomContainer = styled.div`
 	background-color: #FFFFFF !important;
 	${tw`
-    w-[100%] pt-[200px] min-h-screen flex
+    w-[100%] pt-[150px] min-h-screen flex
   `}
 `;
 

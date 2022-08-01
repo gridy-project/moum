@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import MyPage from "pages/MyPage";
 import Search from "pages/Search";
@@ -7,16 +7,16 @@ import NotFound from "pages/NotFound";
 import Intro from "pages/Intro";
 import Test from "pages/Test";
 import { getRefreshToken, removeToken, setToken } from "shared/localStorage";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import Result from "pages/Result";
 import User from "pages/User";
-import Popup from "components/Popup/Popup";
-import Float from "components/Popup/Float";
 import Auth from "pages/Auth";
 
 import ReactGA from "react-ga";
 import { apiUser } from "utils/api/user";
+import GlobalComponent from "components/Popup/GlobalComponent";
+import { atomScrollState } from "state/common/scroll";
 
 function Router() {
   const setLogin = useSetRecoilState(isLogin);
@@ -47,10 +47,27 @@ function Router() {
     refreshLogin();
   }, [refreshLogin]);
 
+  // Recoil
+  const [scrollState, setScrollState] = useRecoilState(atomScrollState);
+
+  // Ref
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    if (scrollState) {
+      scrollRef.current.scrollIntoView({ 
+        // behavior: 'smooth', 
+        block: 'end', 
+        inline: 'nearest'
+      });
+      setScrollState(false);
+    }
+  }, [scrollState, setScrollState]);
+
   return (
     <>
-      <Popup />
-      <Float />
+      <div ref={scrollRef}></div>
+      <GlobalComponent />
       <Routes>
         <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Auth />} />

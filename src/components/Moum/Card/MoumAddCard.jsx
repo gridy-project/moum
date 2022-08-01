@@ -4,6 +4,7 @@ import moum from "assets/images/pages/moum/moum-background.png";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { globalPopup } from "state/common/popup";
 import MoumAddPopup from "../Popup/MoumAddPopup";
+import tw from "twin.macro";
 
 function MoumAddCard () {
   const setPopup = useSetRecoilState(globalPopup);
@@ -32,44 +33,23 @@ function MoumAddCard () {
 }
 
 const MoumAddCardBackground = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  ${tw`absolute w-full h-full opacity-40`}
   background-image: url(${moum});
   background-size: 100%;
   background-repeat: no-repeat;
-  opacity: 0.4;
   transition: opacity .3s;
 `;
 
 const MoumAddCardContent = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  ${tw`absolute flex flex-col items-center justify-center w-full h-full`};
 
   .moum-new {
-    font-size: 14px;
-    margin-top: 10px;
-    padding: 12px;
-    color: #AC7DFF;
-    background-color: #FFFFFF;
-    border-radius: 50px;
+    ${tw`text-14 mt-10 p-12 text-[#AC7DFF] bg-[#FFFFFF] rounded-50`};
   }
 `;
 
 const Card = styled.div`
-  width: 282px;
-  height: 314px;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  position: relative;
-  cursor: pointer;
+  ${tw`relative flex flex-col justify-start border-0 cursor-pointer w-282 h-314`};
 
   &:hover ${MoumAddCardBackground} {
     opacity: 0.7;

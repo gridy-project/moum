@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 // Axios
 import { instance } from 'shared/axios';
 // Recoil
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { JoinIdState, JoinNicknameState, JoinPasswordState, JoinEmailState, JoinImgPathState } from 'state/login';
 // css
 import tw from "twin.macro";
@@ -18,9 +18,11 @@ import profile5 from "../../../assets/images/pages/login/profile5.png";
 import profile6 from "../../../assets/images/pages/login/profile6.png";
 import check2 from "../../../assets/images/pages/login/check2.png"
 import { useNavigate } from 'react-router-dom';
+import useMessageFloat from 'hooks/useMessageFloat';
 
 const CreateProfile = () => {
   const navigate = useNavigate();
+  const toast = useMessageFloat();
   const arr = [profile1, profile2, profile3, profile4, profile5, profile6]
   const [selected, setSelected] = useState(0);
 
@@ -74,11 +76,11 @@ const CreateProfile = () => {
 // 회원가입 프로필 이미지 1장 업로드
   const imageRef = useRef(null);
 
-  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState)
+  const joinIdState = useRecoilValue(JoinIdState)
   const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState)
-  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState)
-  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState)
-  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState)
+  const joinPwdState = useRecoilValue(JoinPasswordState)
+  const joinEmailState = useRecoilValue(JoinEmailState)
+  const setJoinImgPathState = useSetRecoilState(JoinImgPathState)
   
   // 이미지 보내기
   const [selectImg, setSelectImg] = useState(0);
@@ -108,6 +110,7 @@ const CreateProfile = () => {
     {
       onSuccess: (data) => {
         if (data.result === true) {
+          toast("회원가입이 완료되었습니다");
           navigate("/login");
         } else if (data.statusCode === 404){
           Swal.fire({
@@ -191,9 +194,7 @@ const ProfileTitle = styled.div`
 h1, h2 {
   font-size: 24px;
   color:#303030;
-   ${tw`
-    font-semibold
-  `}
+   ${tw`font-semibold `}
 }
 `;
 
@@ -259,9 +260,7 @@ const ProfileImg = styled.img`
 const ImageBox = styled.div`
 grid-template-columns: 130px 130px 130px;
 grid-template-rows: 120px 120px;
- ${tw`
-    grid relative
-  `}
+ ${tw`relative grid `}
 `
 const CheckImgCircle = styled.div`
   background: #9152FF;

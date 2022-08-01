@@ -21,10 +21,12 @@ import useCustomQuery from "hooks/useCustomQuery";
 import { atomPieceSelectMode, atomSelectedItems } from "state/moum";
 
 import Swal from "sweetalert2";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumPieceCard ({sortable, piece, selectAll}) {
   const queryClient = useQueryClient();
   const {folderId: viewFolderId = 0} = useParams();
+  const toast = useMessageFloat();
 
   // Recoil State
   const setPopup = useSetRecoilState(globalPopup);
@@ -119,10 +121,8 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       onClick: async () => {
         const {result, status} = await remove(piece.id);
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "삭제 성공"
-          });
+          toast("조각이 삭제되었습니다");
+          queryClient.invalidateQueries("mine/profile");
           queryClient.invalidateQueries("mine/pieces");
         } else {
           if (status === 500) {
@@ -169,6 +169,7 @@ function MoumPieceCard ({sortable, piece, selectAll}) {
       name: piece.status === "PRIVATE" ? "공개로 전환" : "비공개로 전환",
       image: piece.status === "PRIVATE" ? publicSvg : privateSvg,
       onClick: () => {
+        setButtonState(false);
         changeStatus(piece);
       }
     }

@@ -9,8 +9,10 @@ import { instance } from "shared/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Swal from 'sweetalert2';
+import useMessageFloat from "hooks/useMessageFloat";
 
 function SearchMoumCard ({moum, useAuthor}) {
+  const toast = useMessageFloat();
   const navigate = useNavigate();
   const params = useParams();
 
@@ -32,38 +34,32 @@ function SearchMoumCard ({moum, useAuthor}) {
       name: "모음 스크랩하기",
       image: scrapSvg,
       onClick: async () => {
+        setState(false);
         const {result, message} = await scrap(moum.id);
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "스크랩 성공"
-          });
+          toast("모음을 스크랩 했습니다");
         } else {
           Swal.fire({
             icon: "error",
             title: message
           });
         }
-        setState(false);
       }
     },
     {
       name: "신고하기",
       image: reportSvg,
       onClick: async () => {
+        setState(false);
         const {result, message} = await report(moum.id);
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "신고 성공"
-          });
+          toast("모음을 신고했습니다");
         } else {
           Swal.fire({
             icon: "error",
             title: message
           });
         }
-        setState(false);
       }
     }
   ]

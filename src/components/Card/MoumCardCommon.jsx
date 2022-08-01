@@ -4,6 +4,7 @@ import iconPrivate from "assets/images/pages/moum/icon-private.png";
 import iconPieceCount from "assets/images/pages/moum/icon-piece-count.png";
 import iconScrapCount from "assets/images/pages/moum/icon-scrap-count.png";
 import styled from "styled-components";
+import tw from "twin.macro";
 
 function MoumCardCommon ({moum, setButtonState, useAuthor}) {
   function comma(x) {
@@ -14,160 +15,61 @@ function MoumCardCommon ({moum, setButtonState, useAuthor}) {
     <>
       <Content>
         <div className="card-header">
-          {moum.status === "PRIVATE" && <img src={iconPrivate} alt="private" />}
-          {moum.name !== "무제" && <div className="menu" onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setButtonState((current) => !current);
-          }}><img src={more} alt="" /></div>}
+          {moum.status === "PRIVATE" && <img src={iconPrivate} alt="private" className="mt-10" />}
+          {moum.name !== "무제" &&
+            <div className="absolute right-25 top-50" onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setButtonState((current) => !current);
+            }}>
+              <img src={more} alt="" />
+            </div>
+          }
         </div>
         <div className={`card-title ${moum.status === "PUBLIC" && `no-image`}`}>{moum.name}</div>
         {
           useAuthor && 
-          <Author>
+          <div className="flex items-center px-20 py-12">
             {
               moum.imgPath &&
-              <div>
-                <img src={moum.imgPath} alt={moum.name} />
+              <div className="w-20 h-20 rounded-[50%] overflow-hidden box-content border-1 border-solid border-[#FFFFFF] font-medium mr-8">
+                <img className="w-full h-full" src={moum.imgPath} alt={moum.name} />
               </div>
             }
-            <span>{moum.nickname}</span>
-          </Author>
+            <span className="text-[#FFFFFF] text-14">{moum.nickname}</span>
+          </div>
         }
       </Content>
-      <Info>
-        <div className="piece-count">
+      <div className="text-[#FFFFFF] absolute bottom-25 left-25">
+        <div className="flex">
           <Icon><img src={iconPieceCount} alt="전체 조각 개수" /></Icon>
           <Text>전체 조각</Text>
           <Count>{comma(moum.boardCnt)}개</Count>
         </div>
-        <div className="scrap-count">
+        <div className="flex mt-15">
           <Icon><img src={iconScrapCount} alt="스크랩 횟수" /></Icon>
           <Text>스크랩</Text>
           <Count>{comma(moum.sharedCount)}회</Count>
         </div>
-      </Info>
+      </div>
     </>
   );
 }
 
 const Content = styled.div`
-  .menu {
-    position: absolute;
-    right: 25px;
-    top: 50px;
-  }
-
   .card-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    flex-shrink: 0;
-
-    > img {
-      margin-top: 10px;
-    }
-
-    .category {
-      width: 70px;
-      height: 25px;
-      font-size: 12px;
-      background-color: #D9D9D9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 12.ㄴ5px;
-    }
-  }
-
+    ${tw`flex justify-between w-full px-20 py-10 shrink-0`};
+  };
   .card-title {
-    padding: 20px 20px 0;
-    font-size: 20px;
-    line-height: 1.2;
-    color: #FFFFFF;
-  }
-
+    ${tw`pt-20 px-20 text-20 leading-[1.2] text-[#FFFFFF]`};
+  };
   .card-title.no-image {
-    padding: 62px 20px 0;
-  }
-
-  .card-description {
-    margin-top: 15px;
-    margin-bottom: 20px;
-    padding: 0 20px;
-    line-height: 1.2;
-    color: #FFFFFF;
-  }
-
-  .card-image {
-    width: 100%;
-    height: 100%;
-    background-color: #ABABAB;
-    border-radius: 0 0 15px 15px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    ${tw`px-20 pt-62`};
+  };
 `;
 
-const Author = styled.div`
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-
-  div {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    overflow: hidden;
-    box-sizing: content-box;
-    border: 1px solid #FFFFFF;
-    font-weight: 500;
-    margin-right: 8px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  span {
-    color: #FFFFFF;
-    font-size: 14px;
-  }
-`
-
-const Info = styled.div`
-  color: #FFFFFF;
-  position: absolute;
-  bottom: 25px;
-  left: 25px;
-
-  .piece-count, .scrap-count {
-    display: flex;
-  }
-
-  .scrap-count {
-    margin-top: 10px;
-  }
-`;
-
-const Icon = styled.div`
-  width: 20px;
-`;
-
-const Text = styled.div`
-  width: 60px;
-  font-size: 14px;
-  margin-left: 5px;
-`;
-
-const Count = styled.div`
-  font-size: 14px;
-  margin-left: 10px;
-  letter-spacing: 1px;
-`;
+const Icon = styled.div`${tw`w-20`}`;
+const Text = styled.div`${tw`ml-5 w-60 text-14`}`;
+const Count = styled.div`${tw`text-14 ml-10 tracking-[1px]`}`;
 
 export default MoumCardCommon;

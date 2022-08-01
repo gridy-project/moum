@@ -1,4 +1,3 @@
-import useCustomQuery from "hooks/useCustomQuery";
 import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
 import styled from "styled-components";
@@ -50,7 +49,7 @@ function PieceResultSet () {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   return (
     pieces.length > 0 &&

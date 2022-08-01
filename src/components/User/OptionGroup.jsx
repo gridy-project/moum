@@ -4,6 +4,7 @@ import moumSortBottom from "assets/images/pages/moum/moum-sort-select-bottom.png
 import { useRecoilState } from "recoil";
 import { atomSortState } from "state/user";
 import { useState } from "react";
+import tw from "twin.macro";
 
 function OptionGroup () {
   const [option, setOption] = useRecoilState(atomSortState);
@@ -43,21 +44,11 @@ const Group = styled.div`
 `;
 
 const Selected = styled.div`
-  padding: 16px;
-  border: 1px solid #DFDFDF;
-  background-color: #FFFFFF;
-  border-radius: 50px;
-  color: #303030;
-  display: flex;
-  align-items: center;
-  width: 145px;
-  font-size: 15px;
-  box-shadow: none;
+  ${tw`p-16 border-1 border-solid border-[#DFDFDF] bg-[#FFFFFF] rounded-50 text-[#303030] flex items-center w-145 text-15 shadow-transparent justify-between`};
   transition: border .3s, box-shadow .3s;
-  justify-content: space-between;
 
   img {
-    margin-left: 18px;
+    ${tw`ml-18`};
   }
 
   ${props => props.isActive && css`

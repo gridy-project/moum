@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 // React Query
 import { useMutation } from "react-query";
 // Recoil
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { viewAccountState } from 'state/login';
 // axios
 import { instance } from "shared/axios"
@@ -16,7 +16,7 @@ import tw from "twin.macro";
  const LookUpId = (props) => {
   const idEmailRef = useRef(null);
 
-  const [viewId, setViewID] = useRecoilState(viewAccountState)
+  const setViewID = useSetRecoilState(viewAccountState)
 
   const searchIdForm = (e) => {
     e.preventDefault();

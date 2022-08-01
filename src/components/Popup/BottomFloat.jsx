@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { globalBottomFloat } from "state/common/popup";
 import styled, { css } from "styled-components";
-import { globalFloat } from "state/common/popup";
 
-function Float () {
-  const [float, setFloat] = useRecoilState(globalFloat);
+function BottomFloat () {
+  const [float, setFloat] = useRecoilState(globalBottomFloat);
 
   useEffect(() => {
     if (float.state) {
@@ -48,4 +48,4 @@ const Box = styled.div`
   z-index: 999;
 `;
 
-export default Float;
+export default BottomFloat;

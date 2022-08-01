@@ -71,7 +71,7 @@ function SortGroup () {
   }
 
   return (
-    <Group>
+    <div className="flex items-center justify-between w-full mt-60">
       <OptionGroup />
       <Search isActive={searchActive}>
         <form onSubmit={onSubmit}>
@@ -93,17 +93,9 @@ function SortGroup () {
           </button>
         )}
       </Option>
-    </Group>
+    </div>
   )
 }
-
-const Group = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 60px;
-  align-items: center;
-`;
 
 const Search = styled.div`
   width: 100%;

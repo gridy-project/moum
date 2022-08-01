@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import useCustomQuery from "hooks/useCustomQuery";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { atomSearch, atomSelectedCategories, atomSelectedItems, atomSelectItemsAll, atomSelectMode, atomSortState } from "state/user";
 import SearchPieceCard from "components/Search/Card/SearchPieceCard";
 import { useParams } from "react-router-dom";
-import { instance } from "shared/axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useGetPiecesInfinite } from "hooks/query/useQueryPiece";
+import { useInView } from "react-intersection-observer";
 
 function PieceList () {
   const {userId: viewUserId, folderId: viewFolderId} = useParams();
@@ -14,34 +14,8 @@ function PieceList () {
   const search = useRecoilValue(atomSearch);
   const sortState = useRecoilValue(atomSortState);
 
-  const {isSuccess, data: piecesQuery} = useCustomQuery(["pieces", viewFolderId, categories, search, sortState], async () => {
-      let searchString = `/boards2/`; // API LINK
-      searchString += `${viewUserId}/`; // User ID
-      searchString += `${viewFolderId}/`;
-      if (search === "") {
-        searchString += `all`;
-      } else {
-        searchString += `${search}`; 
-      }
-
-      // searchString += "?page=0";
-
-      // if (sortState === "CUSTOM") {
-      //   searchString += "&sort=boardOrder,asc";
-      // }
-
-      if (sortState === "CUSTOM") {
-        searchString += "/b";
-      } else {
-        searchString += "/a";
-      }
-
-      if (categories.length === 0) {
-        return instance.post(searchString, [{ category: "전체" }]);
-      } else {
-        return instance.post(searchString, categories)
-      }
-  });
+  const {data, fetchNextPage} = useGetPiecesInfinite({userId: viewUserId, folderId: viewFolderId, categories, search, sortState});
+  const [pieces, setPieces] = useState([]);
 
   const resetSelectAll = useResetRecoilState(atomSelectItemsAll);
   const resetSelectMode = useResetRecoilState(atomSelectMode);
@@ -58,12 +32,31 @@ function PieceList () {
     }
   }, [resetSelectAll, resetSelectMode, resetSelectedItems]);
 
+  useEffect(() => {
+    if (data) {
+      setPieces((current) => {
+        let arr = [];
+        for (let i = 0; i < data.pages.length; i++) {
+          arr = [...arr, ...data.pages[i].data];
+        }
+
+        return arr;
+      });
+    }
+  }, [data]);
+
+  const {ref, inView} = useInView();
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
   return (
     <List>
-      { isSuccess && piecesQuery.data.boardList.length > 0 && (
+      { pieces?.length > 0 && (
         <div className="list">
           {
-            piecesQuery.data.boardList.map(
+            pieces?.map(
               (piece) => <SearchPieceCard key={piece.id} piece={piece} />
             )
           }
@@ -71,8 +64,9 @@ function PieceList () {
       )
       }
       {
-        isSuccess && piecesQuery.data.boardList.length === 0 && <div className="no-piece">해당 모음에 조각이 없습니다.</div>
+        pieces?.length === 0 && <div className="no-piece">해당 모음에 조각이 없습니다.</div>
       }
+      <div className="w-[100%]" ref={ref}></div>
     </List>
   );
 }

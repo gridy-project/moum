@@ -1,11 +1,9 @@
 // module
-import { React, useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
+import { React, useState } from "react";
 
 // asset
 import MoumSelectFloatingBox from "components/Moum/Popup/MoumSelectFloatingBox";
 import { useParams } from "react-router-dom";
-import { atomScrollState } from "state/common/scroll";
 import MoumHeader from "components/Moum/MoumHeader";
 import MoumContentProfile from "components/Moum/MoumContentProfile";
 import MoumContentTabMenu from "components/Moum/MoumContentTabMenu";
@@ -17,9 +15,6 @@ import useGetCategoriesMine from "hooks/query/useQueryCategory";
 function Moum ({isScrap}) {
   // Hook
   const {folderId: viewFolderId = 0} = useParams();
-  
-  // Recoil
-  const [scrollState, setScrollState] = useRecoilState(atomScrollState);
 
   // State
   const [floatStatus, setFloatStatus] = useState(false);
@@ -29,22 +24,9 @@ function Moum ({isScrap}) {
   const categoriesQuery = useGetCategoriesMine({folderId: viewFolderId});
   const {data: user, isSuccess: userQuerySuccess} = useGetUserProfileMine();
 
-  // Ref
-  const scrollRef = useRef();
-
-  useEffect(() => {
-    if (scrollState) {
-      // scrollRef.current.scrollIntoView({ 
-      //   // behavior: 'smooth', 
-      //   block: 'end', 
-      //   inline: 'nearest' }
-      // );
-      setScrollState(false);
-    }
-  }, [scrollState, setScrollState]);
 
   return (
-    <div className="flex flex-col items-center" ref={scrollRef}>
+    <div className="flex flex-col items-center">
       <MoumHeader />
       <div className="w-[1200px] pb-[70px]">
         {userQuerySuccess && <MoumContentProfile isSuccess={userQuerySuccess} user={user?.data} />}

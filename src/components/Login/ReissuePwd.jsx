@@ -1,5 +1,4 @@
 // React
-import useCustomMutate from 'hooks/useCustomMutate';
 import React, { useState, useRef } from 'react';
 // React Query
 import { useMutation } from "react-query";
@@ -12,6 +11,8 @@ import Swal from "sweetalert2";
 import tw from "twin.macro";
 
 import PulseLoader from "react-spinners/PulseLoader";
+import { useExecuteChangePasswordCode } from 'hooks/query/useQueryUser';
+import useMessageFloat from 'hooks/useMessageFloat';
 
 const override = {
   display: "block",
@@ -20,6 +21,7 @@ const override = {
 };
 
 const ReissuePwd = () => {
+  const toast = useMessageFloat();
   const navigate = useNavigate();
   const idCheckRef = useRef();
   const emailCheckRef = useRef();
@@ -30,7 +32,7 @@ const ReissuePwd = () => {
   const [codeRequestState, setCodeRequestState] = useState(false);
 
 
-  const { mutateAsync: sendResetPwdCode } = useCustomMutate((data) => instance.post("/email/sendResetPwCode", data))
+  const { mutateAsync: sendResetPwdCode } = useExecuteChangePasswordCode();
 
   // 비밀번호 발급을 위한 인증 메일 발송
   const clickResetPwdCode = async () => {
@@ -58,10 +60,7 @@ const ReissuePwd = () => {
     setCodeRequestState(true);
     const {result} = await sendResetPwdCode(data);
     if (result) {
-      Swal.fire({
-        icon: "success",
-        title: "이메일 전송 완료"
-      });
+      toast("메일로 인증코드를 전송했어요");
     } else {
       Swal.fire({
         icon: "error",
@@ -107,10 +106,7 @@ const ReissuePwd = () => {
     {
       onSuccess: ({result}) => {
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "임시 비밀번호 발급 성공"
-          });
+          toast("메일로 임시 비밀번호가 발급되었습니다");
           navigate("/login");
         } else {
           Swal.fire({
@@ -214,9 +210,7 @@ const PwdCheckEmail = styled.div`
     mt-[40px]
   `}
   p {
-    ${tw`
-     font-medium
-    `}
+    ${tw`font-medium `}
   }
 `;
 

@@ -9,8 +9,10 @@ import ConfirmButton from "components/Common/ConfirmButton";
 import ToggleSwitch from "components/Common/ToggleSwitch";
 import useCustomMutate from "hooks/useCustomMutate";
 import Swal from "sweetalert2";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumAddPopup ({close}) {
+  const toast = useMessageFloat();
   const {input, setInput, handleChange} = useHandleChange({
     name: "",
     share: false
@@ -32,6 +34,7 @@ function MoumAddPopup ({close}) {
 
     const {result, status} = await addMoum(moum);
     if (result) {
+      toast("모음이 추가되었습니다");
       close();
     } else {
       if (status === 500) {

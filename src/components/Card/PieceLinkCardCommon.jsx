@@ -2,7 +2,6 @@ import imageNone from "assets/images/pages/moum/piece-none.png";
 import more from "assets/images/pages/moum/menu-black.png";
 import privateLock from "assets/svg/card/lock.svg";
 import PieceCategory from "components/Moum/PieceCategory";
-import { useState } from "react";
 import styled, { css } from "styled-components";
 import tw from "twin.macro";
 
@@ -11,7 +10,7 @@ function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
     <LinkBox onClick={onClick} isSelected={isSelected}>
       <div className="card-image">
         <img
-          className="pointer-events-none w-full h-full object-cover"
+          className="object-cover w-full h-full pointer-events-none"
           src={piece.imgPath}
           alt="noImage" 
           onError={(e) => {
@@ -25,7 +24,7 @@ function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
             setButtonState(current => !current);
           }
         }>
-          <img src={more} alt="" className="w-18 h-18 object-cover" />
+          <img src={more} alt="" className="object-cover w-18 h-18" />
         </div>
       </div>
       <div className="card-content">
@@ -42,7 +41,11 @@ function PieceLinkCardCommon ({piece, onClick, setButtonState, isSelected}) {
 }
 
 const LinkBox = styled.div`
-  ${tw`w-full h-314 bg-[#FFFFFF] rounded-15 border-0 flex flex-col justify-start overflow-hidden cursor-pointer`}
+  ${tw`w-full h-314 bg-[#FFFFFF] rounded-15 border-0 flex flex-col justify-start overflow-hidden cursor-pointer`};
+  transition: opacity .3s;
+  &:hover {
+    ${tw`opacity-80`}
+  }
   
   ${props => props.isSelected && css`
     ${tw`bg-[#E0D6FF] border-2 border-solid border-[#AC7DFF]`}
@@ -52,6 +55,10 @@ const LinkBox = styled.div`
     ${tw`w-full h-150 bg-[#D9D9D9] rounded-[0 0 15px 15px] overflow-hidden flex justify-center items-center relative`};
     .menu {
       ${tw`absolute right-12 top-12 w-28 h-28 bg-[#FFFFFF] rounded-8 flex justify-center items-center z-1 cursor-pointer`};
+      transition: background .3s;
+      &:hover {
+        ${tw`bg-[#DDDDDD]`}
+      }
     }
   }
 
@@ -60,7 +67,7 @@ const LinkBox = styled.div`
   }
 
   .card-title {
-    ${tw`shrink-0 px-20 text-16 leading-24 w-full h-48 overflow-hidden text-ellipsis`};
+    ${tw`w-full h-48 px-20 overflow-hidden shrink-0 text-16 leading-24 text-ellipsis`};
     display:-webkit-box; 
     word-wrap:break-word; 
     -webkit-line-clamp:2; 

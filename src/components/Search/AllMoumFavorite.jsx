@@ -62,10 +62,9 @@ const Favorite = styled.div`
   ${tw`mt-[70px]`}
 
   .content-header {
-    ${tw`w-full flex justify-between`}
+    ${tw`flex justify-between w-full`}
     em {
       ${tw`text-[30px] mb-[30px] flex items-center`}
-
       span {
         ${tw`text-[16px] ml-[16px] text-[#949494]`}
       }

@@ -3,8 +3,8 @@ import React, { useRef, useState } from "react";
 // React Query
 import { useMutation } from "react-query";
 // Recoil
-import { useRecoilState } from "recoil";
-import { JoinIdState, JoinNicknameState, JoinPasswordState, JoinEmailState, JoinImgPathState } from 'state/login';
+import { useSetRecoilState } from "recoil";
+import { JoinIdState, JoinPasswordState, JoinEmailState } from 'state/login';
 // axios
 import { instance }  from "shared/axios"
 // css
@@ -14,6 +14,7 @@ import useCustomMutate from "hooks/useCustomMutate";
 import tw from "twin.macro";
 
 import PulseLoader from "react-spinners/PulseLoader";
+import useMessageFloat from "hooks/useMessageFloat";
 
 const override = {
   display: "block",
@@ -24,6 +25,7 @@ const override = {
 const Join = (props) => {
   const [active, setActive] = useState(false);
   const [sendStatus, setSendStatus] = useState(false);
+  const toast = useMessageFloat();
   
   const ref = {
     username: useRef(),
@@ -34,11 +36,9 @@ const Join = (props) => {
     certification: useRef()
   }
 
-  const [joinIdState, setJoinIdState] = useRecoilState(JoinIdState);
-  const [joinNicknameState, setJoinNinknameState] = useRecoilState(JoinNicknameState);
-  const [joinPwdState, setJoinPwdState] = useRecoilState(JoinPasswordState);
-  const [joinEmailState, setJoinEmailState] = useRecoilState(JoinEmailState);
-  const [joinImgPathState, setJoinImgPathState] = useRecoilState(JoinImgPathState);
+  const setJoinIdState = useSetRecoilState(JoinIdState);
+  const setJoinPwdState = useSetRecoilState(JoinPasswordState);
+  const setJoinEmailState = useSetRecoilState(JoinEmailState);
 
   const [checkPass, setCheckPass] = useState(false);
 
@@ -58,10 +58,7 @@ const Join = (props) => {
     {
       onSuccess: ({result, status}) => {
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "이메일 전송 성공"
-          });
+          toast("메일로 인증코드를 전송했어요");
         } else {
           if (status === 501) {
             Swal.fire({
@@ -94,10 +91,7 @@ const Join = (props) => {
     {
       onSuccess: ({result}) => {
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "인증번호가 일치합니다."
-          });
+          toast("인증번호가 일치합니다");
           setCheckPass(true);
         } else {
           Swal.fire({
@@ -113,21 +107,18 @@ const Join = (props) => {
   // input 에 값이 있을 경우 확인 버튼 활성화
   const checkInputCount = () => {
     if (ref.certification.current.value.length > 0){
-			setActive(true);
-		} else {
+      setActive(true);
+    } else {
       setActive(false);
     }
   }
 
-// input 값이 다 채워져야 버튼 활성화
-const [filled, setFilled] = useState(false)
-
-// 글자 수 세기
-const [emailLen, setEmailLen] = useState(false);
-const [codeLen, setCodeLen] = useState(false);
-const [idLen, setIdLen] = useState(false);
-const [PwdLen, setPwdLen] = useState(false); 
-const [rePwdLen, setRePwdLen] = useState(false);
+  // 글자 수 세기
+  const [emailLen, setEmailLen] = useState(false);
+  const [codeLen, setCodeLen] = useState(false);
+  const [idLen, setIdLen] = useState(false);
+  const [PwdLen, setPwdLen] = useState(false); 
+  const [rePwdLen, setRePwdLen] = useState(false);
 
   const filledEmail = (e)=> {
     if (ref.email.current.value.length > 0){
@@ -294,9 +285,7 @@ const [rePwdLen, setRePwdLen] = useState(false);
 
  // Join
  const JoinContainer = styled.div`
-  ${tw`
-    relative
-  `}
+  ${tw`relative `}
 `;
 
 const JoinTitle = styled.h1`

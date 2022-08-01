@@ -1,5 +1,10 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { apiMoum } from "utils/api/moum";
+
+export const moumQueryKey = {
+  MY_MOUMS: "MY_MOUMS",
+  MY_MOUMS_ALL: "MY_MOUMS_ALL"
+}
 
 export function useGetMoumMineInfinite ({categories, search, sortState}, option) {
   const fetch = async ({categories, search, sort, pageParam}) => {
@@ -20,6 +25,10 @@ export function useGetMoumMineInfinite ({categories, search, sortState}, option)
       ...option
     },
   );
+}
+
+export function useGetMoumSimple () {
+  return useQuery(["mine/moums/all"], () => apiMoum.getMoumSimple(), {staleTime : 100000});
 }
 
 export function useSortMoum () {
