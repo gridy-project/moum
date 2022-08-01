@@ -1,34 +1,24 @@
 import styled from "styled-components";
 import {useRecoilValue, useResetRecoilState} from "recoil";
 import { atomMoum, atomMoumSort, atomPieceSelectMode, atomSelectedCategories, atomSelectedItems } from "state/moum";
-import useCustomQuery from "hooks/useCustomQuery";
 import SortableList from 'react-easy-sort';
 import arrayMove from 'array-move';
 import { useState } from "react";
 import { useEffect } from "react";
-import { getPieceMineAllAxios, getPieceMineByOptionsAxios } from "utils/api/moum";
 import MoumPieceCard from "components/Moum/Card/MoumPieceCard";
 import { useParams } from "react-router-dom";
 import useCustomMutate from "hooks/useCustomMutate";
 import { instance } from "shared/axios";
+import { useGetPiecesMineInfinite } from "hooks/query/useQueryPiece";
+import { useInView } from "react-intersection-observer";
 
 function PieceList ({search}) {
   const {folderId: viewFolderId = 0} = useParams();
 
   const categories = useRecoilValue(atomSelectedCategories);
   const sortState = useRecoilValue(atomMoumSort);
-  const piecesQuery = useCustomQuery(["mine/pieces", viewFolderId, categories, search, sortState], async () => {
-    if (search === "" && (categories[0]?.category === "전체" || categories.length === 0)) {
-      const response = await getPieceMineAllAxios(viewFolderId, sortState === "사용자 지정순" ? true : false );
-      return response.data;
-    } else if (search === "") {
-      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: "all", categories, sort: sortState === "사용자 지정순" ? true : false });
-      return response.data;
-    } else {
-      const response = await getPieceMineByOptionsAxios(viewFolderId, { keyword: search, categories, srot: sortState === "사용자 지정순" ? true : false });
-      return response.data;
-    }
-  });
+
+  const {data: pieces, fetchNextPage} = useGetPiecesMineInfinite({folderId: viewFolderId, categories, search, sortState});
 
   const [sortablePieceList, setSortablePieceList] = useState([]);
   const {mutateAsync: order} = useCustomMutate(
@@ -42,10 +32,17 @@ function PieceList ({search}) {
   }
 
   useEffect(() => {
-    if (piecesQuery.isSuccess) {
-      setSortablePieceList([...piecesQuery.data.boardList]);
+    if (pieces) {
+      setSortablePieceList((current) => {
+        let arr = [];
+        for (let i = 0; i < pieces.pages.length; i++) {
+          arr = [...arr, ...pieces.pages[i].data];
+        }
+
+        return arr;
+      });
     }
-  }, [piecesQuery.isSuccess, piecesQuery.data]);
+  }, [pieces]);
 
   const resetSelectAll = useResetRecoilState(atomMoum.modeSelectAll);
   const resetSelectMode = useResetRecoilState(atomPieceSelectMode);
@@ -62,6 +59,13 @@ function PieceList ({search}) {
   }, [resetSelectAll, resetSelectMode, resetSelectedItems]);
 
   const selectAll = useRecoilValue(atomMoum.modeSelectAll);
+
+  const {ref, inView} = useInView();
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <List>
@@ -90,8 +94,9 @@ function PieceList ({search}) {
       )
       }
       {
-        piecesQuery.isSuccess && sortablePieceList.length === 0 && <div className="no-piece">조각을 생성해 주세요</div>
+        pieces && sortablePieceList.length === 0 && <div className="no-piece">조각을 생성해 주세요</div>
       }
+      <div className="w-[100%]" ref={ref}></div>
     </List>
   );
 }

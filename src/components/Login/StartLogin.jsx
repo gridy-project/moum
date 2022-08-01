@@ -1,9 +1,8 @@
 // React
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from "react-router-dom";
 // Recoil
 import { useSetRecoilState } from "recoil";
-import useCustomMutate from "hooks/useCustomMutate";
 // css
 import tw from "twin.macro";
 import Swal from "sweetalert2";
@@ -17,19 +16,12 @@ import { setToken } from "shared/localStorage";
 // component
 import SocialLogin from './SocialLogin';
 import { isLogin } from 'state/common/user';
-import { apiUser } from 'utils/api/user';
 import { useExecuteLogin } from 'hooks/query/useQueryUser';
+import useMessageFloat from 'hooks/useMessageFloat';
 
 const StartLogin = (props) => {
   const navigate = useNavigate();
-
-  //아이디, 비밀번호 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  // 유효성 검사
-  const [isUsername, setIsUsername] = useState(false);
-  const [isPassword, setIsPassword] = useState(false);
+  const toast = useMessageFloat();
 
   const setLoginStatus = useSetRecoilState(isLogin);
 
@@ -58,8 +50,9 @@ const StartLogin = (props) => {
       
       if (result === true) {
         setToken(data.accessToken, data.refreshToken);
+        toast("로그인 되었습니다");
         setLoginStatus(true);
-        navigate("/");
+        navigate("/moum");
       } else if (result === false) {
         Swal.fire({
           icon: "error",
@@ -92,13 +85,6 @@ const StartLogin = (props) => {
           <input type="text" ref={idRef} placeholder='아이디' autoComplete='username'/>
           <input type="password" ref={pwRef} placeholder='비밀번호' autoComplete='password'/>
         </LoginInputBox>
-        {/* <KeepingLogin>
-          <LoginImgBox>
-            <CircleImg src={circle} alt=""/>
-            <CheckImg src={check} alt="" />
-          </LoginImgBox>
-          <p>로그인 상태 유지</p>
-        </KeepingLogin> */}
         <LoginBtn>로그인</LoginBtn>
       </form>
        <TabBox>
@@ -156,32 +142,6 @@ const LoginInputBox = styled.div`
     `}
   }
 `;
-
-// 로그인 유지
-// const KeepingLogin = styled.div`
-//   display:flex;
-//   align-items:center;
-//   margin-bottom:33px;
-//   p { 
-//     color:#909090;
-//   }
-// `;
-
-// const LoginImgBox = styled.div`
-//    position:relative;
-//    cursor: pointer;
-// `;
-
-// const CircleImg = styled.img`
-//  margin-right:6.83px;
-// `
-// const CheckImg = styled.img`
-//   width: 9.17px;
-//   height:6.33px;
-//   position:absolute;
-//   top: 7.5px;
-//   left: 5.5px;
-// `
 
 const LoginBtn = styled.button`
   background: #9E67FF;

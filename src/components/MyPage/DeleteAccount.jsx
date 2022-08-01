@@ -7,14 +7,16 @@ import { useMutation } from "react-query";
 import Modal from "react-modal";
 // axios
 import { instance } from "shared/axios"
-import Swal from "sweetalert2";
 import { removeToken } from 'shared/localStorage';
+import useMessageFloat from 'hooks/useMessageFloat';
 
 Modal.setAppElement("#root");
 
 const DeleteAccount = () => {
-//  modal
-const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const toast = useMessageFloat();
+
+  //  modal
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
 
   // 회원 탈퇴 
 	const clickDelete = () => {
@@ -27,16 +29,12 @@ const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
       return response.data;
     },
     {
-      onSuccess: (data) => {
-        Swal.fire({
-          icon: "success",
-          title: "성공적으로 탈퇴되었습니다."
-        }).then(
-          () => {
-            removeToken();
-				    window.location.replace("/")
-          }
-        )
+      onSuccess: ({result}) => {
+        if (result) {
+          toast("계정 탈퇴가 완료되었습니다");
+          removeToken();
+          window.location.replace("/")
+        }
       },
 			onError: (err) => {
 			}
@@ -78,7 +76,7 @@ const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
             <RemoveAccountBtn 
             onClick={() => {clickDelete(); setDeleteModalIsOpen(false);}}
             >탈퇴하기</RemoveAccountBtn>
-            <div>										
+            <div>
             </div>
           </ModalBtnWrap>
       </Modal>
@@ -96,9 +94,7 @@ const DeleteAccountArticle = styled.div`
 const DeleteAccountBtn = styled.p`
 	color: #8b8b8b;
 	font-size: 14px;
-  ${tw`
-    underline cursor-pointer
-  `}
+  ${tw`underline cursor-pointer `}
 `;
 
 // modal
@@ -109,9 +105,7 @@ const ModalDeleteAccountHeader = styled.div`
 	h1 {
 		color:#303030;
 		font-size:20px;
-    ${tw`
-      font-semibold
-    `}
+    ${tw`font-semibold `}
 	}
 `;
 const ModalBtnWrap = styled.div`
@@ -131,12 +125,8 @@ const CancelBtn = styled.button`
 `;
 
 const RemoveAccountBtn = styled.button`
-	font-size:14px;
-	line-height:14px;
-	background-color: #ECECEC;
-	color:#949494;
   ${tw`
-    w-[103px] h-[48px] rounded-[50px] p-[18px] border-none 
+    w-[103px] h-[48px] rounded-[50px] p-[18px] border-none text-14 leading-14 bg-[#9152FF] text-[#FFFFFF]
   `}
 `;
 

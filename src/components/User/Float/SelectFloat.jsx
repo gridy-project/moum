@@ -2,16 +2,16 @@ import iconMove from "assets/images/pages/moum/move_icon.png";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import styled, { css } from "styled-components";
 import { atomFloatItemActive, atomFloatStatus, atomSelectedItems } from "state/user";
-import { useParams } from "react-router-dom";
 import { globalPopup } from "state/common/popup";
 import MoveSelectPopup from "components/Common/Popup/MoveSelectPopup";
 import useCustomQuery from "hooks/useCustomQuery";
 import { instance } from "shared/axios";
 import useCustomMutate from "hooks/useCustomMutate";
 
-import Swal from "sweetalert2";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function SelectFloat () {
+  const toast = useMessageFloat();
   const floatStatus = useRecoilValue(atomFloatStatus);
   const floatItemActive = useRecoilValue(atomFloatItemActive);
   const selectedItems = useRecoilValue(atomSelectedItems);
@@ -37,10 +37,7 @@ function SelectFloat () {
             confirm={async (moum) => {
               const {result} = await savePieces({moumId: moum.id, data:selectedItems.map(v => ({id: v}))});
               if (result) {
-                Swal.fire({
-                  icon: "success",
-                  title: "저장 완료"
-                });
+                toast("조각이 저장되었습니다");
                 resetSelectedItems();
               }
             }}

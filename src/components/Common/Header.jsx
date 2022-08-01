@@ -1,19 +1,16 @@
 import styled, { css } from "styled-components";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { removeToken } from "shared/localStorage";
 import { useRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import { useEffect, useState } from "react";
 import logoSvg from "assets/common/Header/logo.svg";
 
-import presentImg from "assets/once/present.png";
-import runSvg from "assets/once/run.svg";
-
 import tw from "twin.macro";
+import Swal from "sweetalert2";
 
-function Header({selected}) {
+function Header({selected = 0}) {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
   const [headerFixed, setHeaderFixed] = useState(false);
@@ -32,22 +29,25 @@ function Header({selected}) {
     return () => {
       window.removeEventListener("scroll", scrollEvt);
     }
-  }, [headerFixed])
+  }, [headerFixed]);
+
+  const loginAlert = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "로그인이 필요한 페이지입니다",
+      showCancelButton: true,
+      confirmButtonText: "로그인",
+      cancelButtonText: "취소",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login");
+      }
+    });
+  }
 
   return (
     <Container isFixed={headerFixed}>
-      {
-        !(location.pathname === "/login" || location.pathname === "/register") &&
-        <Banner onClick={() => {
-          window.open("https://docs.google.com/forms/d/e/1FAIpQLSeh0TbZXtvfmEyEbbPSyS8w9pOLZmrK7FCidbZUGdl2IdNnjw/viewform?usp=sf_link");
-        }}>
-          <img className="img-present" src={presentImg} alt="event" />
-          <div>
-            7월 31일(일)까지 단 4일! moum <span>설문조사 참여하고 이벤트 상품</span> 받아가세요
-          </div>
-          <img className="img-run" src={runSvg} alt="run" />
-        </Banner>
-      }
       <Box>
         <Logo>
           <Link 
@@ -58,34 +58,44 @@ function Header({selected}) {
         <Menu>
           <nav>
             <ul>
-              <Item isActive={selected === 0}>
-                <Link to="/" tabIndex={-1}>moum 소개</Link>
+              <Item onClick={() => {
+                if (loginStatus) {
+                  navigate("/moum");
+                } else {
+                  loginAlert();
+                }
+              }} isActive={selected === 1}>
+                나의 모음
               </Item>
-              {loginStatus && (
-                <>
-                  <Item isActive={selected === 1}>
-                    <Link to="/moum">나의 모음</Link>
-                  </Item>
-                  <Item isActive={selected === 2}>
-                    <Link to="/search">전체 모음</Link>
-                    </Item>
-                  <Item isActive={selected === 3}>
-                    <Link to="/mypage">마이페이지</Link>
-                  </Item>
-                </>
-              )
-              }
+              <Item onClick={() => {
+                if (loginStatus) {
+                  navigate("/search");
+                } else {
+                  loginAlert();
+                }
+              }} isActive={selected === 2}>
+                전체 모음
+              </Item>
+              <Item onClick={() => {
+                if (loginStatus) {
+                  navigate("/mypage");
+                } else {
+                  loginAlert();
+                }
+              }} isActive={selected === 3}>
+                마이페이지
+              </Item>
             </ul>
           </nav>
           {loginStatus ? 
             (
-              <button className="btn-logout" onClick={() => {
+              <button className="font-semibold bg-transparent border border-solid border-[#777777] text-[#949494]" onClick={() => {
                 removeToken();
                 setLoginStatus(false);
                 navigate("/");
               }}>로그아웃</button>
             ) : (
-              <button className="btn-login" onClick={() => { navigate("/login") }}>로그인</button>
+              <button className="font-semibold bg-[#FFFFFF]" onClick={() => { navigate("/login") }}>로그인</button>
             )
           }
         </Menu>
@@ -96,32 +106,14 @@ function Header({selected}) {
 
 const Container = styled.div`
   ${tw`
-    absolute top-0 left-0 w-full h-[160px] flex flex-col items-center z-[5]
+    absolute top-0 left-0 w-full h-[90px] flex flex-col items-center z-[5]
   `}
 
   ${props => props.isFixed && css`
     ${tw`
-      bg-[#FFFFFF] h-[160px] fixed
+      bg-[#FFFFFF] h-[90px] fixed
     `}
   `}
-`;
-
-const Banner = styled.div`
-  ${tw`
-    flex w-full h-[70px] justify-center items-center bg-[#9E67FF] font-normal text-[#F7F3FD] cursor-pointer text-[19px]
-  `}
-
-  span {
-    ${tw`font-medium text-[#FFFFFF]`}
-  }
-
-  img {
-    ${tw`mx-[10px]`}
-  }
-
-  img.img-present {
-    ${tw`w-[22px]`}
-  }
 `;
 
 const Box = styled.div`
@@ -131,9 +123,7 @@ const Box = styled.div`
 `;
 
 const Logo = styled.div`
-  ${tw`
-    flex font-bold items-center h-full
-  `}
+  ${tw`flex items-center h-full font-bold `}
 
   a {
     ${tw`
@@ -148,7 +138,6 @@ const Logo = styled.div`
   }
 `;
 
-const marginLeft = "40px";
 const Menu = styled.div`
   ${tw`flex items-center`}
 
@@ -161,32 +150,19 @@ const Menu = styled.div`
       }
 
       li + li {
-        ${tw`ml-[${marginLeft}]`}
+        ${tw`ml-40`}
       }
     }
   }
 
   div {
-    ${tw`ml-[${marginLeft}]`}
+    ${tw`ml-40`}
   }
 
   button {
     ${tw`
-    ml-[${marginLeft}]
-    w-[90px] h-[35px] border border-solid border-[#BF98FF] text-[#BF98FF] rounded-[10px] cursor-pointer
+    ml-40 w-[90px] h-[35px] border border-solid border-[#BF98FF] text-[#BF98FF] rounded-[10px] cursor-pointer
     `}
-
-    &.btn-login {
-      ${tw`
-        font-semibold bg-[#FFFFFF]
-      `}
-    }
-
-    &.btn-logout {
-      ${tw`
-        font-semibold bg-transparent border border-solid border-[#777777] text-[#949494]
-      `}
-    }
   }
 
   button:hover {
@@ -198,11 +174,13 @@ const Menu = styled.div`
 `;
 
 const Item = styled.li`
-  ${tw`
-    font-semibold
-  `}
+  ${tw`font-semibold cursor-pointer`}
+  &:hover {
+    ${tw`text-[#333333]`}
+  }
+
   ${({isActive}) => isActive && css`
-    color: #721EFC;
+    ${tw`text-[#721EFC]`};
   `};
 `;
 

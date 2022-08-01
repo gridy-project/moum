@@ -19,9 +19,11 @@ import { globalPopup } from "state/common/popup";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import useCustomMutate from "hooks/useCustomMutate";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumFolderCard ({moum, sortable}) {
   const navigate = useNavigate();
+  const toast = useMessageFloat();
   const {folderId: viewFolderId = 0} = useParams();
   
   const runFolder = () => {
@@ -40,10 +42,7 @@ function MoumFolderCard ({moum, sortable}) {
     setButtonState(false);
     const {result} = await remove([{ id: moum.id }]);
     if (result) {
-      Swal.fire({
-        icon: "success",
-        title: "삭제 완료"
-      })
+      toast("모음이 삭제되었습니다");
       queryClient.invalidateQueries("mine/moums");
     } else {
       Swal.fire({
@@ -76,6 +75,7 @@ function MoumFolderCard ({moum, sortable}) {
   });
 
   const changeShareStateFolder = (e) => {
+    setButtonState(false);
     if (moum.status === "PUBLIC") {
       sharedChange({id: moum.id, status: "PRIVATE"});
     } else {

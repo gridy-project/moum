@@ -1,60 +1,63 @@
 import iconMove from "assets/images/pages/moum/move_icon.png";
 import iconDelete from "assets/images/pages/moum/delete_icon.png";
-import { atomSelectedItems } from "state/moum";
+import { atomPieceSelectMode, atomSelectedItems } from "state/moum";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { useQueryClient } from "react-query";
-import useCustomMutate from "hooks/useCustomMutate";
 import styled, { css } from "styled-components";
 import { useParams } from "react-router-dom";
 
 import Swal from "sweetalert2"
-import { instance } from "shared/axios";
 import { globalPopup } from "state/common/popup";
 import MoveSelectPopup from "components/Common/Popup/MoveSelectPopup";
-import useCustomQuery from "hooks/useCustomQuery";
-import { removePieceMultiAxios } from "utils/api/piece";
+import useMessageFloat from "hooks/useMessageFloat";
+import { useMovePiece, useRemovePiece } from "hooks/query/useQueryPiece";
+import { useGetMoumSimple } from "hooks/query/useQueryMoum";
+import tw from "twin.macro";
 
 function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
   const {folderId: viewFolderId = 0} = useParams();
 
   const queryClient = useQueryClient();
   const selectedItemList = useRecoilValue(atomSelectedItems);
+  const selectMode = useSetRecoilState(atomPieceSelectMode);
   const resetSelected = useResetRecoilState(atomSelectedItems);
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
+  const toast = useMessageFloat();
 
-  const mutatePieceRemove = useCustomMutate(({folderId, list}) => removePieceMultiAxios(folderId, list), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("mine/pieces")
-      Swal.fire({
-        icon: "success",
-        title: "삭제 성공"
-      });
-    }
-  });
+  const {mutateAsync: removePiece} = useRemovePiece();
+  const {mutateAsync: movePiece} = useMovePiece();
+  const moumsQuery = useGetMoumSimple();
 
-  const removeFolders = (e) => {
+  const removeFolders = async (e) => {
     if (selectedItemList.length === 0) {
       Swal.fire({
         icon: "error",
         title: "조각을 선택해주세요"
-      })
+      });
     } else {
-      mutatePieceRemove.mutate({folderId: viewFolderId, list: selectedItemList.map((v) => ({id: v}))});
+      const {result} = await removePiece({folderId: viewFolderId, data: selectedItemList.map((v) => ({id: v}))});
+      if (result) {
+        queryClient.invalidateQueries("mine/profile");
+        queryClient.invalidateQueries("mine/pieces");
+        selectMode(false);
+        toast("조각이 삭제되었습니다");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "조각 삭제 실패"
+        });
+      }
       resetSelected();
     }
   }
 
-
-  const {mutateAsync: movePiece} = useCustomMutate(({moumId, pieces}) => instance.post(`/folder/${moumId}`, {boardList: [...pieces]}));
-
-  const moumsQuery = useCustomQuery(["mine/moums/all"], () => instance.get("/folders"), {staleTime : 100000});
   const moveFolders = (e) => {
     if (selectedItemList.length === 0) {
       Swal.fire({
         icon: "error",
         title: "조각을 선택해주세요"
-      })
+      });
     } else {
       setPopup({
         state: true,
@@ -63,13 +66,11 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
             query={moumsQuery}
             close={resetPopup}
             confirm={async (moum) => {
-              const {result} = await movePiece({moumId: moum.id, pieces: selectedItemList.map((v) => ({id: v}))});
+              const {result} = await movePiece({folderId: moum.id, data: selectedItemList.map((v) => ({id: v}))});
               if (result) {
-                Swal.fire({
-                  icon: "success",
-                  title: "이동 성공"
-                });
+                toast("조각이 이동되었습니다");
                 queryClient.invalidateQueries("mine/pieces");
+                selectMode(false);
                 resetSelected();
               }
             }}
@@ -94,33 +95,24 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
 
 
 const FloatingBox = styled.div`
-  position: fixed;
-  bottom: -100px;
-  display: flex;
-  gap: 16px;
+  ${tw`flex fixed bottom-[-100px] gap-16`};
   transition: bottom .3s;
+
   ${props => props.isActive && css`
-    bottom: 50px;
+    ${tw`bottom-50`};
   `}
 `;
 
 const FloatItem = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #E0D6FF;
+  ${tw`w-60 h-60 rounded-[50%] flex justify-center items-center bg-[#E0D6FF]`}
   box-shadow: 0px 0px 20px 1px #E8E1FC;
   transition: background-color .3s, box-shadow .3s;
   ${props => props.isActive && css`
-    background-color: #9E67FF;
+    ${tw`bg-[#9E67FF] cursor-pointer`};
     box-shadow: 0px 0px 20px 1px #D2BAFF;
-    cursor: pointer;
   `}
   img {
-    pointer-events: none;
+    ${tw`pointer-events-none`};
   }
 `;
 

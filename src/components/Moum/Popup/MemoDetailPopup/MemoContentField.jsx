@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import PopupButtonGroup from "../LinkDetailPopup/PopupButtonGroup";
 
@@ -14,16 +14,26 @@ function MemoContentField ({finish, close, setter, getter, handleChange}) {
 
   return (
     <Box>
-      <form>
-        <label className="subject-label" htmlFor="subject">제목</label>
-        <input id="subject" type="text" placeholder="해당 링크에 대한 제목을 적어주세요." onChange={handleChange("subject")} ref={ref.subject} defaultValue={getter.subject}/>
-        <label className="content-label" htmlFor="content">내용</label>
+      <form className="relative flex flex-col w-full h-full">
+        <label className="mt-36" htmlFor="subject">제목</label>
+        <input 
+          id="subject" 
+          type="text" 
+          placeholder="해당 링크에 대한 제목을 적어주세요." 
+          onChange={handleChange("subject")} 
+          ref={ref.subject} defaultValue={getter.subject}
+          maxLength="30"
+          className="mt-16 bg-[#F5F5F5] border-0 h-50 rounded-20 p-18 align-top"
+        />
+        <label className="mt-36" htmlFor="content">내용</label>
         <textarea 
           id="content"
           placeholder="해당 링크에 대한 설명을 적어주세요."
           onChange={handleChange("content")}
           ref={ref.content}
           defaultValue={getter.content}
+          maxLength="250"
+          className="mt-16 h-80 bg-[#F5F5F5] resize-none border-0 rounded-20 p-18"
         ></textarea>
         <PopupButtonGroup finish={finishContent} close={close} />
       </form>
@@ -37,37 +47,6 @@ const Box = styled.div`
   height: calc(100% - 130px);
   flex-direction: column;
   padding: 0 24px 24px 24px;
-  form {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-
-    label {
-      margin-top: 36px;
-    }
-
-    input {
-      margin-top: 16px;
-      background-color: #F5F5F5;
-      border: none;
-      height: 80px;
-      border-radius: 20px;
-      padding: 18px;
-      vertical-align: top;
-    }
-
-    textarea {
-      margin-top: 16px;
-      height: 80px;
-      background-color: #F5F5F5;
-      resize: none;
-      border: none;
-      border-radius: 20px;
-      padding: 18px;
-    }
-  }
 `;
 
 export default MemoContentField;

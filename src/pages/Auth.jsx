@@ -44,7 +44,7 @@ const Auth = () => {
 
   return (
     <Container>
-      <Header selected={3}/>
+      <Header/>
       <img src={background} alt=""/>
       <Box>
         <ChangeContainer>

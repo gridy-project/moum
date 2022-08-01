@@ -1,8 +1,7 @@
 import useCustomMutate from "hooks/useCustomMutate";
 import useHandleChange from "hooks/useHandleChange";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
 import { instance } from "shared/axios";
 import styled from "styled-components";
 import DetailPopupHeader from "./DetailPopupHeader";

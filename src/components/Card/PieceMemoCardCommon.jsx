@@ -32,47 +32,27 @@ function PieceMemoCardCommon ({piece, setButtonState}) {
 
 
 const CardHeader = styled.div`
-  height: 50px;
-  flex-shrink: 0;
-  border-bottom: 1px solid #E8E1FC;
-  display: flex;
-  justify-content: space-between;
+  ${tw`h-50 shrink-0 border-b-1 border-solid border-[#E8E1FC] flex justify-between`};
 `;
 
 const Category = styled.div`
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
+  ${tw`flex items-center px-16`};
 `;
 
 const PrivateIcon = styled.div`
-  width: 28px;
-  height: 28px;
-  padding-bottom: 2px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #9152FF;
-  margin-right: 8px;
+  ${tw`w-28 h-28 pb-2 rounded-[50%] flex justify-center items-center bg-[#9152FF] mr-8`};
 `;
 
 const More = styled.div`
-  margin: 12px;
-  width: 28px;
-  height: 28px;
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  cursor: pointer;
+  ${tw`m-12 w-28 h-28 bg-[#FFFFFF] rounded-8 flex justify-center items-center z-1 cursor-pointer`};
 
   img {
-    width: 18px;
-    height: 18px;
-    object-fit: cover;
+    ${tw`object-cover w-18 h-18`};
+  }
+  
+  transition: background .3s;
+  &:hover {
+    ${tw`bg-[#DDDDDD]`}
   }
 `;
 

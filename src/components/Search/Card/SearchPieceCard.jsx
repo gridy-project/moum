@@ -12,8 +12,10 @@ import useCustomMutate from "hooks/useCustomMutate";
 import { atomSelectedItems, atomSelectItemsAll, atomSelectMode } from "state/user";
 
 import Swal from "sweetalert2";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function SearchPieceCard ({piece}) {
+  const toast = useMessageFloat();
   const [optionState, setOptionState] = useState(false);
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
@@ -35,6 +37,7 @@ function SearchPieceCard ({piece}) {
       name: "내 모음에 저장하기",
       image: saveSvg,
       onClick: () => {
+        setOptionState(false);
         setPopup({
           state: true,
           component: (
@@ -44,10 +47,7 @@ function SearchPieceCard ({piece}) {
               confirm={async (moum) => {
                 const {result} = await movePiece({moumId: moum.id, pieceId: piece.id});
                 if (result) {
-                  Swal.fire({
-                    icon: "success",
-                    title: "저장 성공"
-                  });
+                  toast("조각이 저장되었습니다");
                 }
               }}
               title={"저장할 모음 선택하기"} 
@@ -59,20 +59,17 @@ function SearchPieceCard ({piece}) {
     {
       name: "신고하기",
       image: reportSvg,
-      onClick: async() => {
+      onClick: async () => {
+        setOptionState(false);
         const {result, message} = await report(piece.id);
         if (result) {
-          Swal.fire({
-            icon: "success",
-            title: "신고 성공"
-          });
+          toast("신고되었습니다");
         } else {
           Swal.fire({
             icon: "error",
             title: message
           });
         }
-        setOptionState(false);
       }
     }
   ]

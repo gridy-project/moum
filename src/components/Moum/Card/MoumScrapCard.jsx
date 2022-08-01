@@ -12,8 +12,10 @@ import MoumCard from "components/Card/MoumCard";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Swal from "sweetalert2";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumScrapCard ({moum}) {
+  const toast = useMessageFloat();
   const navigate = useNavigate();
   const {folderId: viewFolderId = 0} = useParams();
   
@@ -35,10 +37,7 @@ function MoumScrapCard ({moum}) {
     setButtonState(false);
     const {result} = await cancel(moum.id);
     if (result) {
-      Swal.fire({
-        icon: "success",
-        title: "스크랩 취소 성공"
-      });
+      toast("스크랩이 취소되었습니다");
     } else {
       Swal.fire({
         icon: "error",

@@ -1,83 +1,36 @@
 import styled, { css } from "styled-components";
 import detailAdd from "assets/images/pages/moum/popup/detail-add-logo.png";
+import tw from "twin.macro";
 
 function DetailPopupHeader ({setPageNum, pageNum, menu}) {
   return (
-    <PopHeaderView>
-      <PopHeaderTitle>
-        <div className="image-circle"><img src={detailAdd} alt="자세히 작성하기" /></div>
-        <div className="title">자세히 작성하기</div>
-      </PopHeaderTitle>
-      <PopHeaderNavigation>
-        <NavigationList>
+    <div className="flex flex-col px-24 pt-24 border-b-2 border-solid border-[#F7F3FD] w-full h-130">
+      <div className="flex items-center">
+        <div className="w-44 h-44 rounded-[50%] bg-[#E8E1FC] flex justify-center items-center"><img src={detailAdd} alt="자세히 작성하기" /></div>
+        <div className="ml-12 font-medium text-20">자세히 작성하기</div>
+      </div>
+      <div className="pt-20">
+        <div className="flex gap-24">
           {menu.map((v, i) => {
-            return <NavigationItem onClick={
+            return <Item onClick={
               () => {
                 setPageNum(i)
               }
-            } key={i} isActive={i === pageNum}>{v}</NavigationItem>
+            } key={i} isActive={i === pageNum}>{v}</Item>
           })}
-        </NavigationList>
-      </PopHeaderNavigation>
-    </PopHeaderView>
+        </div>
+      </div>
+    </div>
   );
 }
 
-
-const PopHeaderView = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 24px 24px 0 24px;
-  border-bottom: 2px solid #F7F3FD;
-  width: 100%;
-  height: 130px;
-`;
-
-const PopHeaderTitle = styled.div`
-  display: flex;
-  align-items: center;
-
-  .image-circle {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: #E8E1FC;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .title {
-    margin-left: 12px;
-    font-size: 20px;
-    font-weight: 500;
-  }
-`;
-
-const PopHeaderNavigation = styled.div`
-  padding-top: 20px;
-`;
-
-const NavigationList = styled.ul`
-  display: flex;
-  gap: 24px;
-`;
-
-const NavigationItem = styled.li`
-  width: 95px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 2px solid transparent;
-  position: relative;
-  color: #777777;
-  top: 2px;
-  cursor: pointer;
+const Item = styled.li`
+  ${tw`
+    w-95 h-40 flex justify-center items-center border-b-2 border-solid border-transparent relative text-[#777777] top-2 cursor-pointer
+  `}
 
   ${props => props.isActive && css`
-    color: #721EFC;
-    border-bottom: 2px solid #BE9AFF;
+    ${tw`text-[#721EFC] border-2 border-solid border-[#BE9AFF]`};
   `}
 `;
 

@@ -1,5 +1,5 @@
 // image
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import searchIcon from "assets/images/pages/search/icon-search-white.png";
@@ -24,7 +24,7 @@ function SearchForm () {
 }
 
 const Form = styled.form`
-  ${tw`flex justify-center pt-[200px] shadow-[]`};
+  ${tw`flex justify-center pt-[150px]`};
   
   input {
     ${tw`w-[700px] h-[50px] rounded-[25px] border-0 bg-[#FAFAFA] px-[20px] text-[16px] font-normal outline-0`};

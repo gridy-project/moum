@@ -7,10 +7,12 @@ import styled from "styled-components";
 
 import Swal from "sweetalert2";
 import ghostImg from "assets/common/Card/ghost.png";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function UserStatusView({user, isOther}) {
   const {userId} = useParams();
   const queryClient = useQueryClient();
+  const toast = useMessageFloat();
   
   const {mutateAsync: follow} = useCustomMutate((id) => {
     return instance.post(`/follow/${id}`, {
@@ -29,10 +31,7 @@ function UserStatusView({user, isOther}) {
   const handleFollow = async () => {
     const {result, message} = await follow(userId);
     if (result) {
-      Swal.fire({
-        icon: "success",
-        title: message
-      });
+      toast("팔로우 완료");
       queryClient.invalidateQueries("user");
     } else {
       Swal.fire({
@@ -46,10 +45,7 @@ function UserStatusView({user, isOther}) {
   const handleUnFollow = async () => {
     const {result, status} = await unfollow(userId);
     if (result) {
-      Swal.fire({
-        icon: "success",
-        title: "팔로우 취소 성공"
-      });
+      toast("팔로우 취소 완료");
       queryClient.invalidateQueries("user");
     } else {
       if (status === 500) {

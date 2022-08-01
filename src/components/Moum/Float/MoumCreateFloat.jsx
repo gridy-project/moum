@@ -1,15 +1,14 @@
-import styled from "styled-components";
 import fastCreateOptionModify from "assets/images/pages/moum/fast-create-option-modify.png";
 import fastCreateOptionArrow from "assets/images/pages/moum/fast-create-option-arrow.png";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import LinkDetailPopup from "../Popup/LinkDetailPopup";
 import MemoDetailPopup from "../Popup/MemoDetailPopup";
-import { globalFloat, globalPopup } from "state/common/popup";
+import { globalBottomFloat, globalPopup } from "state/common/popup";
 
 function MoumCreateFloat ({piece}) {
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
-  const setFloat = useSetRecoilState(globalFloat);
+  const setFloat = useSetRecoilState(globalBottomFloat);
 
   const closeModal = () => {
     resetPopup();
@@ -35,56 +34,23 @@ function MoumCreateFloat ({piece}) {
   }
 
   return (
-    <Wrap>
+    <div className="flex items-center justify-between w-full h-full pr-16 pl-28 ">
       <img src={fastCreateOptionModify} alt="modify" />
-      <div className="desc">
-        <em>
+      <div>
+        <em className="font-semibold">
           {piece.folderName}
         </em>
-        <p>에 조각 저장 완료</p>
+        <p className="mt-5 font-normal text-13">에 조각 저장 완료</p>
       </div>
-      <button onClick={runModifyPopup}>
+      <button 
+        className="w-150 h-50 bg-[#FFFFFF] border-0 rounded-25 text-[#721EFC] flex justify-center items-center" 
+        onClick={runModifyPopup}
+      >
         자세히 작성하기
-        <img src={fastCreateOptionArrow} alt="modify" />
+        <img className="ml-5" src={fastCreateOptionArrow} alt="modify" />
       </button>
-    </Wrap>
+    </div>
   )
 }
-
-
-const Wrap = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px 0 28px;
-
-  .desc {
-    em {
-      font-weight: 600;
-    }
-    p {
-      font-size: 13px;
-      font-weight: 400;
-      margin-top: 5px;
-    }
-  }
-
-  button {
-    width: 150px;
-    height: 50px;
-    background-color: #FFFFFF;
-    border: none;
-    border-radius: 25px;
-    color: #721EFC;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      margin-left: 5px;
-    }
-  }
-`;
 
 export default MoumCreateFloat;

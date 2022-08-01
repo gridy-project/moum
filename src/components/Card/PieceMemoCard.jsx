@@ -49,7 +49,7 @@ function PieceMemoCard ({
 }
 
 const Card = styled.div`
-  ${tw`relative flex w-full h-[314px] bg-[#FFFFFF] rounded-[15px] border-0 flex-col justify-start`}
+  ${tw`relative flex w-full h-[314px] bg-[#FFFFFF] rounded-[15px] border-0 flex-col justify-start cursor-pointer`};
   
   ${props => props.isSelected && css`
     ${tw`bg-[#E0D6FF] border-2 border-solid border-[#AC7DFF]`};

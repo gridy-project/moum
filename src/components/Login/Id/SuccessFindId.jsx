@@ -1,15 +1,15 @@
 // React
-import React, { useState } from 'react';
+import React from 'react';
 // Recoil
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { numberLoginState, viewAccountState } from 'state/login';
 // css
 import styled from "styled-components";
 import tw from "twin.macro";
 
 const SuccessFindId = () => {
-  const [viewId, setViewID] = useRecoilState(viewAccountState)
-  const [numberState, setNumberState] = useRecoilState(numberLoginState)
+  const [viewId] = useRecoilState(viewAccountState)
+  const setNumberState = useSetRecoilState(numberLoginState)
 
   const goToLogin = () => {
     window.location.reload();
@@ -83,9 +83,7 @@ const FoundIdBox = styled.div`
   p {
     color: #721EFC;
     font-size: 16px;
-    ${tw`
-    text-center table-cell align-middle font-semibold
-  `}
+    ${tw`table-cell font-semibold text-center align-middle `}
   }
 `
 
