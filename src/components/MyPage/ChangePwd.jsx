@@ -356,7 +356,7 @@ const ExistPwdWrap = styled.div`
 	}
 	img {
 		${tw`
-			absolute block top-[42px] right-[15px]
+			absolute block top-[51px] right-[15px]
 		`}
 	}
 `
@@ -372,7 +372,7 @@ const PwdWrap = styled.div`
 	}
 	img {
 		${tw`
-			absolute top-[42px] right-[15px]
+			absolute top-[51px] right-[15px]
 		`}
 	}
 `
@@ -388,7 +388,7 @@ const RePwdWrap = styled.div`
 	}
 	img {
 		${tw`
-			absolute top-[42px] right-[15px]
+			absolute top-[51px] right-[15px]
 		`}
 	}
 `
