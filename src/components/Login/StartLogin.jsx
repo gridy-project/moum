@@ -9,8 +9,6 @@ import Swal from "sweetalert2";
 import styled from "styled-components";
 import moumlogo from "../../assets/images/pages/login/moum_logo.png"
 import line from "../../assets/images/pages/login/Line.png";
-// import check from "../../assets/images/pages/login/check.png";
-// import circle from "../../assets/images/pages/login/circle.png";
 // shared
 import { setToken } from "shared/localStorage";
 // component
@@ -28,6 +26,9 @@ const StartLogin = (props) => {
   const idRef = React.useRef(null);
   const pwRef = React.useRef(null);
 
+  //오류메시지 상태저장
+  const [usernameMessage, setUsernameMessage] = React.useState("");
+
   // 로그인
   const {mutateAsync: login} = useExecuteLogin();
 
@@ -37,12 +38,7 @@ const StartLogin = (props) => {
     let password = pwRef.current.value; 
 
     if (username === "" || password === "") {
-      Swal.fire({
-        icon: "error",
-        title: "로그인 실패",
-        text: "아이디, 비밀번호를 모두 입력해주세요"
-      });
-      return false;
+      setUsernameMessage("아이디와 비밀번호를 입력해주세요.");
     }
 
     try {
@@ -84,7 +80,11 @@ const StartLogin = (props) => {
         <LoginInputBox>
           <input type="text" ref={idRef} placeholder='아이디' autoComplete='username'/>
           <input type="password" ref={pwRef} placeholder='비밀번호' autoComplete='password'/>
+        <ErrorMessage>
+          {usernameMessage}
+        </ErrorMessage>
         </LoginInputBox>
+      
         <LoginBtn>로그인</LoginBtn>
       </form>
        <TabBox>
@@ -130,7 +130,7 @@ const LineBox = styled.div`
 
 const LoginInputBox = styled.div`
   ${tw`
-      mb-[16px]
+      mb-[24px]
     `}
   input {
     border: #B7B7B7;
@@ -141,7 +141,15 @@ const LoginInputBox = styled.div`
       w-[360px] h-[44px] border-solid border-[1px] rounded-[10px] p-[14px] mb-[12px]
     `}
   }
+
 `;
+const ErrorMessage = styled.span`
+   color:#FF5C5C;
+    font-size: 13px;
+    ${tw`
+      font-medium
+    `}
+`
 
 const LoginBtn = styled.button`
   background: #9E67FF;
@@ -156,7 +164,7 @@ const TabBox = styled.div`
     w-[310px] flex justify-center items-center mt-[14px] ml-[15px]
   `}
   span {
-    color:#A4A4A4;
+    color:#A4A4A4; 
   }
 `;
 
