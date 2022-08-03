@@ -95,7 +95,7 @@ const Location = styled.div`
   ${tw`text-[#949494] flex gap-[4px]`}
 
   span {
-    ${tw`p-[6px] text-[18px]`}
+    ${tw`p-[6px] text-[19px]`}
   }
 
   .location-home {

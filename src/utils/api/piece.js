@@ -32,6 +32,9 @@ export const apiPiece = {
   },
   movePiece: ({ folderId, data }) => {
     return instance.post(`/folder/${folderId}`, { boardList: [...data] });
+  },
+  orderPiece: ({ folderId, boardId, afterOrder }) => {
+    return instance.post("/boards", { folderId, boardId, afterOrder });
   }
 }
 

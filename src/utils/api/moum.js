@@ -26,8 +26,8 @@ export const apiMoum = {
   getMoumSimple: () => {
     return instance.get("/folders");
   },
-  modifyMoumOrder: () => {
-
+  orderMoum: ({ folderId, afterOrder }) => {
+    return instance.post(`/folders`, { folderId, afterOrder });
   }
 }
 

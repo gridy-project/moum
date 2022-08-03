@@ -81,6 +81,7 @@ function Router() {
         <Route path="/user/:userId" element={<User />} />
         <Route path="/user/:userId/:folderId" element={<User />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/test/:name" element={<Test />} />
         <Route path="/" element={<Intro />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

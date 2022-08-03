@@ -61,3 +61,7 @@ export function useRemovePiece (option) {
 export function useMovePiece (option) {
   return useMutation(apiPiece.movePiece, option);
 }
+
+export function useOrderPiece (option) {
+  return useMutation(apiPiece.orderPiece, option);
+}

@@ -7,27 +7,34 @@ import { useState } from "react";
 import { useEffect } from "react";
 import MoumPieceCard from "components/Moum/Card/MoumPieceCard";
 import { useParams } from "react-router-dom";
-import useCustomMutate from "hooks/useCustomMutate";
-import { instance } from "shared/axios";
-import { useGetPiecesMineInfinite } from "hooks/query/useQueryPiece";
+import { useGetPiecesMineInfinite, useOrderPiece } from "hooks/query/useQueryPiece";
 import { useInView } from "react-intersection-observer";
+import useMessageFloat from "hooks/useMessageFloat";
+import { useQueryClient } from "react-query";
+import PieceAddCard from "../Card/PieceAddCard";
 
 function PieceList ({search}) {
   const {folderId: viewFolderId = 0} = useParams();
+  const toast = useMessageFloat();
+  const query = useQueryClient();
 
   const categories = useRecoilValue(atomSelectedCategories);
   const sortState = useRecoilValue(atomMoumSort);
 
-  const {data: pieces, fetchNextPage} = useGetPiecesMineInfinite({folderId: viewFolderId, categories, search, sortState});
+  const {data: pieces, fetchNextPage} = useGetPiecesMineInfinite({folderId: viewFolderId, categories, search, sortState}, {
+    refetchOnWindowFocus: true,
+    retry: 0
+  });
 
   const [sortablePieceList, setSortablePieceList] = useState([]);
-  const {mutateAsync: order} = useCustomMutate(
-    ({folderId, boardId, afterOrder}) => instance.post("/boards", {folderId, boardId, afterOrder}));
+  const {mutateAsync: order} = useOrderPiece();
 
   const onSortEnd = async (oldIndex, newIndex) => {
+    setSortablePieceList((array) => arrayMove(array, oldIndex, newIndex));
     const {result} = await order({folderId: viewFolderId, boardId: sortablePieceList[oldIndex].id, afterOrder: sortablePieceList[newIndex].boardOrder});
     if (result) {
-      setSortablePieceList((array) => arrayMove(array, oldIndex, newIndex));
+      query.invalidateQueries("mine/pieces");
+      toast("조각 순서가 변경 되었습니다");
     }
   }
 
@@ -65,12 +72,13 @@ function PieceList ({search}) {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   return (
     <List>
-      { sortState === "최신 조각순" && sortablePieceList.length > 0 && (
+      { sortState === "최신 조각순" && (
         <div className="list">
+          <PieceAddCard />
           {
             sortablePieceList.map(
               (piece) => <MoumPieceCard 
@@ -83,7 +91,7 @@ function PieceList ({search}) {
         </div>
       )
       }
-      { sortState === "사용자 지정순" && sortablePieceList.length > 0 && (
+      { sortState === "사용자 지정순" && (
         <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged">
           {
             sortablePieceList.map(
@@ -93,9 +101,9 @@ function PieceList ({search}) {
         </SortableList>
       )
       }
-      {
+      {/* {
         pieces && sortablePieceList.length === 0 && <div className="no-piece">조각을 생성해 주세요</div>
-      }
+      } */}
       <div className="w-[100%]" ref={ref}></div>
     </List>
   );
