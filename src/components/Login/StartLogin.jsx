@@ -89,11 +89,11 @@ const StartLogin = (props) => {
       </form>
        <TabBox>
         <Tab onClick={() => {
-          props.runid()
+          navigate("/auth/id");
         }}>아이디 찾기</Tab>
         <span>|</span>
         <Tab onClick={() => {
-          props.runpwd()
+          navigate("/auth/pw");
         }}>비밀번호 재발급</Tab>
         <span>|</span>
         <Tab onClick={() => {
@@ -146,17 +146,17 @@ const LoginInputBox = styled.div`
 const ErrorMessage = styled.span`
    color:#FF5C5C;
     font-size: 13px;
-    ${tw`
-      font-medium
-    `}
+    ${tw`font-medium `}
 `
 
 const LoginBtn = styled.button`
-  background: #9E67FF;
-  color:#fff;
   ${tw`
-    w-[360px] h-[44px] border-none rounded-[50px] cursor-pointer
+    w-[360px] h-[44px] border-none rounded-[50px] cursor-pointer bg-[#9E67FF] text-[#FFFFFF] transition-colors duration-300
   `}
+
+  &:hover {
+    background-color: #7240c9;
+  }
 `;
 
 const TabBox = styled.div`
@@ -169,11 +169,13 @@ const TabBox = styled.div`
 `;
 
 const Tab = styled.p`
-  color:#606060;
-  font-size: 12px;
   ${tw`
-    p-[12px 20px] cursor-pointer
+    p-[12px 20px] cursor-pointer text-[#606060] text-12 transition-colors duration-300
   `}
+
+  &:hover {
+    color: #000000;
+  }
 `;
 
 export default StartLogin;

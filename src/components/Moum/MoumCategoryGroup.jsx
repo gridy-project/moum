@@ -115,9 +115,10 @@ const CategoryGroup = styled.div`
 
   .category-list {
     width: 100%;
-    height: 80px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 10px;
   }
 `;
 

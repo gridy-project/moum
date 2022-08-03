@@ -71,6 +71,7 @@ function Router() {
       <Routes>
         <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Auth />} />
+        <Route path="/auth/:page" element={<Auth />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:keyword" element={<Result />} />
         <Route path="/mypage" element={<MyPage />} />

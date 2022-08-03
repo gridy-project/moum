@@ -110,9 +110,7 @@ const ChangeDesc = () => {
 
 // Desc
 const DescArticle = styled.div`
-	${tw`
-		relative
-	`}
+	${tw`relative `}
 `;
 
 const Desc = styled.p`

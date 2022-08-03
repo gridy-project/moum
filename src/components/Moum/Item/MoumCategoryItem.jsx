@@ -35,10 +35,6 @@ const Category = styled.li`
     color: #555555;
   `}
 
-  & + & {
-    margin-left: 10px;
-  }
-
   span {
     display: flex;
     align-items: center;

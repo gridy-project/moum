@@ -26,6 +26,10 @@ const Auth = () => {
       setNumberState(0);
     } else if (match.pathname === "/register") {
       setNumberState(3);
+    } else if (match.pathname === "/auth/id") {
+      setNumberState(2);
+    } else if (match.pathname === "/auth/pw") {
+      setNumberState(1);
     }
   }, [match, setNumberState]);
 
@@ -94,7 +98,7 @@ const ChangeContainer = styled.div`
     width: 500px;
   }
   ${tw`
-    w-[540px] h-[100%] rounded-[24px] float-right flex justify-center items-center
+    w-[540px] h-[100%] rounded-[24px] float-right flex justify-center items-center relative
   `}
 `;
 

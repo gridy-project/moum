@@ -10,6 +10,8 @@ import useCustomMutate from "hooks/useCustomMutate";
 
 import useMessageFloat from "hooks/useMessageFloat";
 
+import saveTooltipImage from "assets/common/Tooltip/tooltip_save.png";
+
 function SelectFloat () {
   const toast = useMessageFloat();
   const floatStatus = useRecoilValue(atomFloatStatus);
@@ -85,6 +87,33 @@ const FloatItem = styled.div`
     box-shadow: 0px 0px 20px 1px #D2BAFF;
     cursor: pointer;
   `}
+
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 65px;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity .5s, top .5s;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &:hover::before {
+    opacity: 1;
+    top: -70px;
+  }
+
+  &:nth-of-type(1)::before {
+    width: 148px;
+    height: 68px;
+    background-image: url(${saveTooltipImage});
+  }
 `;
 
 
