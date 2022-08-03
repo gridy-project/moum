@@ -13,9 +13,11 @@ import { atomSelectedItems, atomSelectItemsAll, atomSelectMode } from "state/use
 
 import Swal from "sweetalert2";
 import useMessageFloat from "hooks/useMessageFloat";
+import { useQueryClient } from "react-query";
 
 function SearchPieceCard ({piece}) {
   const toast = useMessageFloat();
+  const queryClient = useQueryClient();
   const [optionState, setOptionState] = useState(false);
   const setPopup = useSetRecoilState(globalPopup);
   const resetPopup = useResetRecoilState(globalPopup);
@@ -48,6 +50,7 @@ function SearchPieceCard ({piece}) {
                 const {result} = await movePiece({moumId: moum.id, pieceId: piece.id});
                 if (result) {
                   toast("조각이 저장되었습니다");
+                  queryClient.invalidateQueries("mine/pieces");
                 }
               }}
               title={"저장할 모음 선택하기"} 

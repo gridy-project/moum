@@ -89,7 +89,7 @@ function SortGroup () {
           </div> :
           <button className="piece-select-button" onClick={toggleSelectMode}>
             <img src={pieceSelect} alt="select" />
-            <span>조각 선택 및 정리</span>
+            <span>조각 선택</span>
           </button>
         )}
       </Option>

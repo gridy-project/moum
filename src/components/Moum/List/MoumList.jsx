@@ -9,9 +9,13 @@ import { atomMoumSearch, atomMoumSort, atomSelectedCategories } from "state/moum
 import { changeMoumOrder } from "utils/api/moum";
 import useCustomMutate from "hooks/useCustomMutate";
 import { useInView } from "react-intersection-observer";
-import { useGetMoumMineInfinite } from "hooks/query/useQueryMoum";
+import { useGetMoumMineInfinite, useOrderMoum } from "hooks/query/useQueryMoum";
+import { useQueryClient } from "react-query";
+import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumList () {
+  const queryClient = useQueryClient();
+  const toast = useMessageFloat();
   const [moums, setMoums] = useState([]);
   const sortState = useRecoilValue(atomMoumSort);
   const search = useRecoilValue(atomMoumSearch);
@@ -20,15 +24,15 @@ function MoumList () {
 
   const { data, fetchNextPage } = useGetMoumMineInfinite({categories, search, sortState});
 
-  const {mutateAsync: order} = useCustomMutate(
-    ({folderId, afterOrder}) => changeMoumOrder(folderId, afterOrder));
+  const {mutateAsync: order} = useOrderMoum();
 
   const onSortEnd = async (oldIndex, newIndex) => {
     const oldId = moums[oldIndex].id;
-
+    setMoums((array) => arrayMove(array, oldIndex, newIndex));
     const {result} = await order({folderId: oldId, afterOrder: moums[newIndex].folderOrder});
     if (result) {
-      setMoums((array) => arrayMove(array, oldIndex, newIndex));
+      queryClient.invalidateQueries("mine/moums");
+      toast("모음 순서가 변경 되었습니다");
     }
   }
 

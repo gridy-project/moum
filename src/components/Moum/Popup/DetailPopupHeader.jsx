@@ -30,7 +30,7 @@ const Item = styled.li`
   `}
 
   ${props => props.isActive && css`
-    ${tw`text-[#721EFC] border-2 border-solid border-[#BE9AFF]`};
+    ${tw`text-[#721EFC] border-b-2 border-solid border-[#BE9AFF]`};
   `}
 `;
 

@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { apiMoum } from "utils/api/moum";
 
 export const moumQueryKey = {
@@ -27,10 +27,10 @@ export function useGetMoumMineInfinite ({categories, search, sortState}, option)
   );
 }
 
-export function useGetMoumSimple () {
-  return useQuery(["mine/moums/all"], () => apiMoum.getMoumSimple(), {staleTime : 100000});
+export function useGetMoumSimple (option) {
+  return useQuery(["mine/moums/all"], () => apiMoum.getMoumSimple(), {staleTime : 100000, ...option});
 }
 
-export function useSortMoum () {
-
+export function useOrderMoum (option) {
+  return useMutation(apiMoum.orderMoum, option);
 }

@@ -53,6 +53,7 @@ const Location = styled.div`
 
   span {
     padding: 6px;
+    font-size: 19px;
   }
 
   .location-home {
