@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
-import tw from "twin.macro";
 // React Query
 import { useMutation } from "react-query";
 // modal
 import Modal from "react-modal";
+// css
+import styled from 'styled-components';
+import tw from "twin.macro";
+import deletebtn from "../../assets/images/pages/mypage/delete.png";
+import exclamation from "../../assets/images/pages/mypage/exclamation.png"
 // axios
 import { instance } from "shared/axios"
 import { removeToken } from 'shared/localStorage';
@@ -61,21 +64,38 @@ const DeleteAccount = () => {
             borderRadius:"30px",
             color: "#111",
             width: "438px",
-            height: "248px",
+            height: "410px",
             top: "25%",
             left: "39%",
             padding:"24px"
           },
         }}
       >								
-          <ModalDeleteAccountHeader>					
-            <h1>정말 탈퇴하시겠습니까?</h1>
+          <ModalDeleteAccountHeader>			
+            <div>
+              <img src={deletebtn} alt="" />
+            </div>		
+            <h1>탈퇴하기</h1>
           </ModalDeleteAccountHeader>
+          <ModalContent>
+            <h2>moum을 떠나신다니 아쉬워요</h2>
+            <CheckBox>
+              <BoxHeader>
+                <img src={exclamation} alt="" />
+                <span>아래 내용을 꼭 확인하세요</span>
+              </BoxHeader>
+              <BoxContent>
+                <span>탈퇴시 계정 프로필과 조각 등 모든 정보가 삭제되며,</span>
+                <br/>
+                <span>탈퇴 이후 해당 정보는 복구할 수 없습니다.</span>
+              </BoxContent>    
+            </CheckBox>
+          </ModalContent>
           <ModalBtnWrap>
-            <CancelBtn onClick={() => setDeleteModalIsOpen(false)}>취소</CancelBtn>
             <RemoveAccountBtn 
             onClick={() => {clickDelete(); setDeleteModalIsOpen(false);}}
             >탈퇴하기</RemoveAccountBtn>
+            <CancelBtn onClick={() => setDeleteModalIsOpen(false)}>취소하기</CancelBtn>
             <div>
             </div>
           </ModalBtnWrap>
@@ -100,14 +120,75 @@ const DeleteAccountBtn = styled.p`
 // modal
 const ModalDeleteAccountHeader = styled.div`
 		color:#303030;
-		font-size:23px;
+		font-size:21px;
+    display:flex;
+    align-items:center;
     ${tw`
-      font-semibold mt-[10px] ml-[5px]
+      font-semibold mt-[10px] ml-[5px] mb-[30px]
+    `}
+    div {
+      width: 44px;
+      height: 44px;
+      background-color:#E8E1FC;
+      border-radius:100%;
+      margin-right:12px;
+      img {
+        position:relative;
+        top:13px;
+        left:13px;
+      }
+    }
+`;
+
+const ModalContent = styled.div`
+  h2 {
+    color:#555555;
+    font-size: 21px;
+    ${tw`
+      font-semibold mb-[30px]
+    `}
+  }
+`;
+
+const CheckBox = styled.div`
+  background-color:#F2EDFA;
+   ${tw`
+      w-[390px] h-[135px] rounded-[20px] p-[26px 41px 24px 24px]
     `}
 `;
+
+const BoxHeader = styled.div`
+  color:#6A25E2;
+  font-size: 18px;
+  ${tw` 
+     flex items-center font-medium mb-[13px] font-medium 
+  `}
+  img {
+    color:#9152FF;
+  }
+  span {
+    margin-left:8px;
+  }
+`;
+
+const BoxContent = styled.div`
+  span {
+    color:#555555;
+    line-height:28px;
+  }
+`
 const ModalBtnWrap = styled.div`
   ${tw`
     flex absolute bottom-[24px] right-[24px]
+  `}
+`;
+
+const RemoveAccountBtn = styled.button`
+	font-size:14px;
+	line-height:14px;
+	background-color: #F7F3FD;
+  ${tw`
+    w-[88px] h-[48px] rounded-[50px] p-[18px] border-none text-14 leading-14 text-[#9E67FF] font-semibold mr-[12px]
   `}
 `;
 
@@ -117,19 +198,11 @@ const CancelBtn = styled.button`
 	line-height:14px;
 	color:#9E67FF;
   ${tw`
-    w-[62px] h-[48px] rounded-[26px] p-[18px] mr-[12px] border-none cursor-pointer
+    w-[88px] h-[48px] rounded-[26px] p-[18px] mr-[12px] border-none cursor-pointer
+    bg-[#9152FF] text-[#FFFFFF] font-semibold
   `}
 `;
 
-const RemoveAccountBtn = styled.button`
-	font-size:14px;
-	line-height:14px;
 
-	background-color: #ECECEC;
-	color:#949494;
-  ${tw`
-    w-[103px] h-[48px] rounded-[50px] p-[18px] border-none text-14 leading-14 bg-[#9152FF] text-[#FFFFFF]
-  `}
-`;
 
 export default DeleteAccount;
