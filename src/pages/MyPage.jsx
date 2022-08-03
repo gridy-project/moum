@@ -11,8 +11,17 @@ import ChangeDesc from "../components/MyPage/ChangeDesc";
 import ChangeEmail from "../components/MyPage/ChangeEmail";
 import ChangePwd from "../components/MyPage/ChangePwd";
 import DeleteAccount from "../components/MyPage/DeleteAccount";
+import useCustomQuery from "hooks/useCustomQuery";
+import { instance } from "shared/axios";
 
 function MyPage() {
+	const { data } = useCustomQuery(
+    "profile",
+    async () => {
+      const response = await instance.get("/user/profile");
+      return response.data;
+    }
+  );
 
 	return (
 		<CustomContainer>
@@ -29,7 +38,7 @@ function MyPage() {
 							<ChangeNickname/>
 							<ChangeDesc/>
 							<ChangeEmail/>
-							<ChangePwd/>
+							{ data?.loginType === "user" && <ChangePwd/>}
 							<DeleteAccount/>
 						</TextArea>
 					</Content>

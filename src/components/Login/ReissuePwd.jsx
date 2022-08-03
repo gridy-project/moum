@@ -143,6 +143,8 @@ const ReissuePwd = () => {
   }
 
   return (
+    <>
+    <div onClick={() => {navigate(-1)}} className="absolute top-0 left-0">뒤로가기</div>
     <PwdContainer>
       <PwdTitle>비밀번호 재발급하기</PwdTitle>
       <PwdCheckId>
@@ -170,6 +172,7 @@ const ReissuePwd = () => {
       </PwdCheckEmail>
       <PwdBtn onClick={clickSendNewPwd}>새 비밀번호 받기</PwdBtn>
     </PwdContainer>
+    </>
   )
  }
 

@@ -14,6 +14,9 @@ import { useMovePiece, useRemovePiece } from "hooks/query/useQueryPiece";
 import { useGetMoumSimple } from "hooks/query/useQueryMoum";
 import tw from "twin.macro";
 
+import moveTooltipImage from "assets/common/Tooltip/tooltip_move.png";
+import removeTooltipImage from "assets/common/Tooltip/tooltip_remove.png";
+
 function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
   const {folderId: viewFolderId = 0} = useParams();
 
@@ -107,12 +110,48 @@ const FloatItem = styled.div`
   ${tw`w-60 h-60 rounded-[50%] flex justify-center items-center bg-[#E0D6FF]`}
   box-shadow: 0px 0px 20px 1px #E8E1FC;
   transition: background-color .3s, box-shadow .3s;
+  position: relative;
   ${props => props.isActive && css`
     ${tw`bg-[#9E67FF] cursor-pointer`};
     box-shadow: 0px 0px 20px 1px #D2BAFF;
+    &:hover {
+      background-color: #814edb;
+    }
   `}
   img {
     ${tw`pointer-events-none`};
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 65px;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity .5s, top .5s;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &:hover::before {
+    opacity: 1;
+    top: -70px;
+  }
+
+  &:nth-of-type(1)::before {
+    width: 148px;
+    height: 68px;
+    background-image: url(${moveTooltipImage});
+  }
+
+  &:nth-of-type(2)::before {
+    width: 136px;
+    height: 68px;
+    background-image: url(${removeTooltipImage});
   }
 `;
 
