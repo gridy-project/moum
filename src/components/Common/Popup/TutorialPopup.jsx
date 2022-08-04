@@ -91,7 +91,7 @@ function TutorialPopup ({close}) {
       <div className="h-325 mt-50"></div>
       <PageGroup>
         {[null, null, null].map((v, i) => {
-          return <Page isActive={page === i} onClick={() => {setPage(i)}}></Page>  
+          return <Page key={i} isActive={page === i} onClick={() => {setPage(i)}}></Page>  
         })}
       </PageGroup>
       <ButtonGroup>

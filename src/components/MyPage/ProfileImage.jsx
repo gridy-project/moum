@@ -1,8 +1,7 @@
 // React-redux
 import React, { useRef } from "react";
 // React Query
-import {  useMutation, useQuery } from "react-query";
-import queryClient from "shared/query";
+import {  useMutation, useQuery, useQueryClient } from "react-query";
 // axios
 import { instance } from "shared/axios"
 // css
@@ -12,6 +11,7 @@ import styled from 'styled-components';
 import Swal from "sweetalert2";
 
 const ProfileImage = () => {
+	const queryClient = useQueryClient();
 
 	// 계정 조회
 	const { data } = useQuery(
@@ -96,9 +96,7 @@ const ProfileImage = () => {
 
 const ImageArea = styled.div``;
 const ImageBox = styled.div`
-	${tw`
-    relative
-  `}
+	${tw`relative `}
 `;
 const Image = styled.div`
   background-color:#c9aaff;

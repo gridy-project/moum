@@ -1,23 +1,22 @@
 // module
 import styled from "styled-components";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 // image
 import { instance } from "shared/axios";
-import queryClient from "shared/query";
 
 import deleteSvg from "assets/common/OptionMenu/delete.svg";
 import MoumCard from "components/Card/MoumCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
 import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumScrapCard ({moum}) {
+  const queryClient = useQueryClient();
   const toast = useMessageFloat();
   const navigate = useNavigate();
-  const {folderId: viewFolderId = 0} = useParams();
   
   const runFolder = () => {
     navigate(`/scrap/${moum.userId}/${moum.id}`);

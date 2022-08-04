@@ -39,10 +39,9 @@ function Moum ({isScrap}) {
       setPopup({
         state: true,
         component: <TutorialPopup close={resetPopup} />
-      })
-      console.log("쿠키 없음");
+      });
     }
-  }, [cookies]);
+  }, [cookies.tutorial, resetPopup, setPopup]);
 
   return (
     <div className="flex flex-col items-center">

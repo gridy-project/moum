@@ -8,8 +8,7 @@ import tw from "twin.macro";
 // modal
 import Modal from "react-modal";
 // React Query
-import {  useMutation, useQuery } from "react-query";
-import queryClient from "shared/query";
+import {  useMutation, useQueryClient } from "react-query";
 // axios
 import { instance } from "shared/axios"
 import useCustomQuery from "hooks/useCustomQuery";
@@ -17,6 +16,7 @@ import useCustomQuery from "hooks/useCustomQuery";
 Modal.setAppElement("#root");
 
 const ChangeNickname = () => {
+	const queryClient = useQueryClient();
   const nicknameRef = useRef(null);
   
   // 닉네임 변경 input
@@ -151,9 +151,7 @@ const NicknameArticle = styled.div`
 `;
 const Nickname = styled.p`
 	font-size: 24px;
-	${tw`
-    font-medium
-  `}
+	${tw`font-medium `}
 `;
 const NicknameBtn = styled.button`
 	color: #9152ff;
@@ -177,9 +175,7 @@ const ModalNicknameHeader = styled.div`
 	h1 {
 		color:#303030;
 		font-size:20px;
-		${tw`
-    font-semibold
-  	`}
+		${tw`font-semibold `}
 	}
 `;
 

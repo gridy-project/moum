@@ -10,15 +10,16 @@ import useHandleChange from "hooks/useHandleChange";
 
 // image
 import arrowSave from "assets/images/pages/moum/arrow-moum-save.png"
-import queryClient from "shared/query";
 import fastCreateBottom from "assets/images/pages/moum/fast-create-select-bottom.png";
 import MoumCreateFloat from "../Float/MoumCreateFloat";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import tw from "twin.macro";
 import { useAddPiece } from "hooks/query/useQueryPiece";
+import { useQueryClient } from "react-query";
 
 function MoumTitleCreateForm () {
+  const queryClient = useQueryClient();
   const {folderId: viewFolderId = 0} = useParams();
 
   const setFloat = useSetRecoilState(globalBottomFloat);

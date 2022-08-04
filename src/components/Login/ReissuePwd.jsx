@@ -13,6 +13,7 @@ import tw from "twin.macro";
 import PulseLoader from "react-spinners/PulseLoader";
 import { useExecuteChangePasswordCode } from 'hooks/query/useQueryUser';
 import useMessageFloat from 'hooks/useMessageFloat';
+import SvgAuthBack from 'assets/code/Auth/SvgAuthBack';
 
 const override = {
   display: "block",
@@ -143,9 +144,10 @@ const ReissuePwd = () => {
   }
 
   return (
-    <>
-    <div onClick={() => {navigate(-1)}} className="absolute top-0 left-0">뒤로가기</div>
     <PwdContainer>
+      <BtnBack onClick={() => {navigate(-1)}}>
+        <SvgAuthBack />
+      </BtnBack>
       <PwdTitle>비밀번호 재발급하기</PwdTitle>
       <PwdCheckId>
         <p>아이디</p>
@@ -172,14 +174,23 @@ const ReissuePwd = () => {
       </PwdCheckEmail>
       <PwdBtn onClick={clickSendNewPwd}>새 비밀번호 받기</PwdBtn>
     </PwdContainer>
-    </>
   )
  }
 
+const BtnBack = styled.div`
+  ${tw`w-37 h-37 bg-[#FFFFFF] border-2 border-solid border-[#D9D9D9] rounded-[50%] justify-center items-center flex pr-2 mb-30 cursor-pointer`};
+  &:hover {
+    ${tw`bg-[#E5D6FF] border-0`}
+    svg {
+      path {
+        stroke: #9152FF;
+      }
+    }
+  }
+`;
+
 const PwdContainer = styled.div`
-  ${tw`
-    relative top-[-37px]
-  `}
+  ${tw`relative pt-60`}
 `;
 
 const PwdTitle = styled.h1`

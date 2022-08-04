@@ -1,5 +1,7 @@
 import { instance } from "shared/axios";
 
+let refreshPromise = null;
+
 export const apiUser = {
   signUp: ({ username, nickname, password, email, imageUrl }) => {
     return instance.post(`/user/signup`, {
@@ -17,7 +19,13 @@ export const apiUser = {
     return instance.post(`/user/social`, {}, { headers: { code } });
   },
   refresh: ({ refreshToken }) => {
-    return instance.post(`/user/refresh`, {}, { headers: { RefreshToken: `Bearer ${refreshToken}` } });
+    if (refreshPromise === null) {
+      refreshPromise = instance.post(`/user/refresh`, {}, { headers: { RefreshToken: `Bearer ${refreshToken}` } }).then(token => {
+        refreshPromise = null;
+        return token;
+      });
+    }
+    return refreshPromise;
   },
   executeCheckUsername: ({ username }) => {
     return instance.get(`/user/emailDupCheck/${username}`);

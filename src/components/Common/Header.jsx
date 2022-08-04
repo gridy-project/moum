@@ -1,15 +1,18 @@
 import styled, { css } from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { removeToken } from "shared/localStorage";
 import { useRecoilState } from "recoil";
 import { isLogin } from "state/common/user";
 import { useEffect, useState } from "react";
-import logoSvg from "assets/common/Header/logo.svg";
+import logoBasicImage from "assets/common/Header/logo_basic.png";
+import logoWhiteImage from "assets/common/Header/logo_white.png";
 
 import tw from "twin.macro";
 import Swal from "sweetalert2";
 
 function Header({selected = 0}) {
+  const {pathname : path} = useLocation();
+  const isWhite = path === "/" || path.includes("/login") || path.includes("/register") || path.includes("/auth");
   const navigate = useNavigate();
 
   const [loginStatus, setLoginStatus] = useRecoilState(isLogin);
@@ -47,13 +50,13 @@ function Header({selected = 0}) {
   }
 
   return (
-    <Container isFixed={headerFixed}>
+    <Container isFixed={headerFixed} isWhite={isWhite}>
       <Box>
         <Logo>
           <Link 
             to="/" 
             tabIndex={-1}
-          ><img src={logoSvg} alt="moum" /></Link>
+          >{(!headerFixed && isWhite) ?<img src={logoWhiteImage} alt="moum" /> : <img src={logoBasicImage} alt="moum" />}</Link>
         </Logo>
         <Menu>
           <nav>
@@ -114,6 +117,10 @@ const Container = styled.div`
       bg-[#FFFFFF] h-[90px] fixed
     `}
   `}
+
+  ${props => (!props.isFixed && props.isWhite) && tw`
+    text-[#FFFFFF]
+  `};
 `;
 
 const Box = styled.div`

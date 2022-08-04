@@ -60,18 +60,15 @@ import tw from "twin.macro";
  }
 
  const IdContainer = styled.div`
-  ${tw`
-    relative top-[-37px]
-  `}
+  ${tw`relative`}
 `;
 
 const IdTitle = styled.h1`
-  font-size:28px;
-  font-weight: 600;
-  color:#303030;
-  ${tw`
-    mb-[52px] font-semibold
-  `}
+  ${tw`mb-[52px] font-semibold text-28 font-[600] text-[#303030]`};
+
+  @media screen and (max-width: 1600px) {
+    ${tw`text-24 mb-45`}
+  }
 `;
 const IdContent = styled.div`
   p {
@@ -79,6 +76,10 @@ const IdContent = styled.div`
     ${tw`
     mb-[18px]
     `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`mb-16 text-15`}
+    }
   }
   input {
     border: #B7B7B7;
@@ -86,8 +87,12 @@ const IdContent = styled.div`
       outline: 1px solid #9152FF;
     } 
     ${tw`
-      w-[360px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
+      w-[360px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px] text-14
     `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 w-330`}
+    }
   }
 `;
 
@@ -96,8 +101,12 @@ const IdBtn = styled.button`
   color:#fff;
   font-size: 17px;
    ${tw`
-      w-[360px] h-[44px] rounded-[50px] border-none mt-[32px] font-semibold cursor-pointer
-    `}
+    w-[360px] h-[44px] rounded-[50px] border-none mt-[32px] font-semibold cursor-pointer
+  `}
+
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-330 mt-26 text-15`}
+  }
 `;
 
 export default LookUpId;

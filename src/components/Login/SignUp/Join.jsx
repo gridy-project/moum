@@ -128,11 +128,11 @@ const Join = (props) => {
     }
   }
   const filledCode = (e)=> {
-        if (ref.certification.current.value.length > 0){
-        setCodeLen(true)
-      } else {
-        setCodeLen(false)
-      }
+    if (ref.certification.current.value.length > 0){
+      setCodeLen(true)
+    } else {
+      setCodeLen(false)
+    }
   }
   const filledId = (e)=> {
         if (ref.username.current.value.length > 0){
@@ -206,93 +206,96 @@ const Join = (props) => {
   return (
     <JoinContainer>
       <JoinTitle>회원가입</JoinTitle>
-        <JoinCheckBox>
-          <p>이메일로 본인 확인</p>
-          <JoinEmailBox>
-            <input 
-            type="text" 
-            ref={ref.email} 
-            placeholder='이메일' 
-            autoComplete="email"
-            required
-            onChange={
-              (e)=> {
-                setJoinEmailState(e.target.value);
-                filledEmail();
-              }
-            }
-            />
-            <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>
-              {sendStatus ? <PulseLoader color={"#000000"} cssOverride={override} size={5} /> : "인증요청" }
-            </SendMail>
-          </JoinEmailBox>
-          <JoinCodeBox isActive={active}>
-            <input 
-            type="text"  
-            required       
-            onChange={() => {
-              checkInputCount();
-              filledCode();
-              }
-            }
-            autoComplete="code"
-            placeholder='인증코드를 입력해주세요.'
-            ref={ref.certification}  />
-            <button 
-            onClick={clickEmailCheck}>
-            확인</button>
-          </JoinCodeBox>
-        </JoinCheckBox>
-        <CreateBox>
-          <p>계정 만들기</p>
+      <JoinCheckBox>
+        <p>이메일로 본인 확인</p>
+        <JoinEmailBox>
           <input 
           type="text" 
-          ref={ref.username} 
-          placeholder='아이디'
+          ref={ref.email} 
+          placeholder='이메일' 
+          autoComplete="email"
           required
-          autoComplete="username"
-          onChange={(e)=> {
-            setJoinIdState(e.target.value)
-            filledId();
-          }
+          onChange={
+            (e)=> {
+              setJoinEmailState(e.target.value);
+              filledEmail();
+            }
           }
           />
+          <SendMail onClick={CheckEmailRegister} disabled={sendStatus}>
+            {sendStatus ? <PulseLoader color={"#000000"} cssOverride={override} size={5} /> : "인증요청" }
+          </SendMail>
+        </JoinEmailBox>
+        <JoinCodeBox isActive={active}>
           <input 
-          type="password" 
-          ref={ref.password} 
-          autoComplete="password" 
-          required
-          placeholder='비밀번호 (숫자, 영문자 포함 4자 이상)'
-          onChange={(e)=> {
-            setJoinPwdState(e.target.value)
-            filledPwd();
+          type="text"  
+          required       
+          onChange={() => {
+            checkInputCount();
+            filledCode();
+            }
           }
+          autoComplete="code"
+          placeholder='인증코드를 입력해주세요.'
+          ref={ref.certification}  />
+          <button 
+          onClick={clickEmailCheck}>
+          확인</button>
+        </JoinCodeBox>
+      </JoinCheckBox>
+      <CreateBox>
+        <p>계정 만들기</p>
+        <input 
+        type="text" 
+        ref={ref.username} 
+        placeholder='아이디'
+        required
+        autoComplete="username"
+        onChange={(e)=> {
+          setJoinIdState(e.target.value)
+          filledId();
+        }
+        }
+        />
+        <input 
+        type="password" 
+        ref={ref.password} 
+        autoComplete="password" 
+        required
+        placeholder='비밀번호 (숫자, 영문자 포함 4자 이상)'
+        onChange={(e)=> {
+          setJoinPwdState(e.target.value)
+          filledPwd();
+        }
 
-          }
-          />
-          <input type="password" ref={ref.passwordConfirm} autoComplete="new-password" placeholder='비밀번호 확인'
-          onChange={filledRePwd}
-          required
-          />
-        </CreateBox>
-        <JoinBtn 
-        type="button" 
-        disabled={!(emailLen && codeLen && idLen && PwdLen && rePwdLen)}
-        onClick={nextPage}>다음</JoinBtn>
+        }
+        />
+        <input type="password" ref={ref.passwordConfirm} autoComplete="new-password" placeholder='비밀번호 확인'
+        onChange={filledRePwd}
+        required
+        />
+      </CreateBox>
+      <JoinBtn 
+      type="button" 
+      disabled={!(emailLen && codeLen && idLen && PwdLen && rePwdLen)}
+      onClick={nextPage}>다음</JoinBtn>
     </JoinContainer>
   )
  }
 
  // Join
  const JoinContainer = styled.div`
-  ${tw`relative `}
+  ${tw`relative flex flex-col items-center justify-center w-full h-full`}
 `;
 
 const JoinTitle = styled.h1`
-  font-size: 28px;
   ${tw`
-    mb-[52px]
+    w-full text-28 mb-[52px]
   `}
+  @media screen and (max-width: 1600px) {
+    font-size: 24px;
+    margin-bottom: 45px;
+  }
 `;
 
 const JoinCheckBox = styled.div`
@@ -304,6 +307,14 @@ const JoinCheckBox = styled.div`
     ${tw`
     mb-[18px]
     `}
+  }
+
+  @media screen and (max-width: 1600px) {
+    p {
+      font-size: 15px; 
+      margin-bottom: 16px;
+    }
+    margin-bottom: 35px;
   }
 `;
 const JoinEmailBox = styled.div`
@@ -319,6 +330,11 @@ const JoinEmailBox = styled.div`
     w-[268px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
     `}
   }
+  @media screen and (max-width: 1600px) {
+    input {
+      ${tw`h-40 w-244 text-14`}
+    }
+  }
 `;
 
 const SendMail = styled.button`
@@ -330,6 +346,9 @@ const SendMail = styled.button`
   ${props => props.disabled && css`
     background: #EEEEEE;
   `}
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-76 text-14`}
+  }
 `;
 
 const JoinCodeBox = styled.div`
@@ -341,6 +360,9 @@ const JoinCodeBox = styled.div`
     ${tw`
     w-[268px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px]
     `}
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 w-244`}
+    }
   }
   button {
     background: #ECECEC;
@@ -360,15 +382,34 @@ const JoinCodeBox = styled.div`
         color: #9152ff;     
       `
     }
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 w-76 text-14`}
+    }
+  }
+
+
+  @media screen and (max-width: 1600px) {
+    input {
+      ${tw`text-14`}
+    }
   }
 `;
 const CreateBox = styled.div`
+  width: 360px;
+
+  @media screen and (max-width: 1600px) {
+    ${tw`w-330`}
+  }
   p {
     color:#303030;
     font-size: 17px;
     ${tw`
     mb-[18px]
     `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`mb-16 text-15`}
+    }
   }
   input {
     border: #B7B7B7;
@@ -378,24 +419,32 @@ const CreateBox = styled.div`
     ${tw`
     w-[360px] h-[44px] rounded-[10px] border-solid border-[1px] p-[14px] mb-[12px]
     `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 mb-12 w-330 text-15`}
+    }
   }
 `;
 const JoinBtn = styled.button`
   ${tw`
     w-[360px] h-[44px] rounded-[50px] border-none mt-[16px]
   `}
-      ${(props) =>
-      props.disabled ? 
-      css`
-        background-color: #f6f5fb;
-        color: #9152ff;
-      `:
-      css`
-        background-color: #9152ff;
-				color: #ffffff;
-        cursor: pointer;
-      `
-    }
+  ${(props) =>
+    props.disabled ? 
+    css`
+      background-color: #f6f5fb;
+      color: #9152ff;
+    `:
+    css`
+      background-color: #9152ff;
+      color: #ffffff;
+      cursor: pointer;
+    `
+  }
+
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-330`}
+  }
 `
 
 export default Join;

@@ -84,28 +84,24 @@ const Container = styled.div`
 
 const Box = styled.div`
   transform: translateX(-50%) translateY(-50%);
-  @media screen and (max-width: 1600px) {
-    height: 660px;
-  }
   ${tw`
     w-[1300px] h-[700px] absolute top-[50%] left-[50%]
   `}
+  @media screen and (max-width: 1600px) {
+    height: 620px;
+  }
 `;
 
 const ChangeContainer = styled.div`
   background-color:#fff;
-  @media screen and (max-width: 1600px) {
-    width: 500px;
-  }
   ${tw`
-    w-[540px] h-[100%] rounded-[24px] float-right flex justify-center items-center relative
+    w-[540px] h-[100%] rounded-[24px] float-right flex justify-center relative
   `}
+  @media screen and (max-width: 1600px) {
+    width: 480px;
+  }
 `;
 
-const Content = styled.div`
-  ${tw`
-    w-[370px]
-  `}
-`;
+const Content = styled.div``;
 
 export default Auth;

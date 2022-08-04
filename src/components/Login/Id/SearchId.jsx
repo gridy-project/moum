@@ -1,6 +1,9 @@
 // React
+import SvgAuthBack from 'assets/code/Auth/SvgAuthBack';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import tw from 'twin.macro';
 // component
 import LookUpId from '../Id/LookUpId';
 import SuccessFindId from '../Id/SuccessFindId'
@@ -17,8 +20,10 @@ const SearchId = () => {
   }
 
   return (
-    <div>
-      <div onClick={() => {navigate(-1)}} className="absolute top-0 left-0">뒤로가기</div>
+    <div className="pt-60">
+      <BtnBack onClick={() => {navigate(-1)}}>
+        <SvgAuthBack />
+      </BtnBack>
       {searchIdState === 0 && <LookUpId
         runFindId={runSearchId}
         runSuccessFindId={runSuccessId}
@@ -27,5 +32,17 @@ const SearchId = () => {
     </div>
   );
 };
+
+const BtnBack = styled.div`
+${tw`w-37 h-37 bg-[#FFFFFF] border-2 border-solid border-[#D9D9D9] rounded-[50%] justify-center items-center flex pr-2 mb-30 cursor-pointer`};
+  &:hover {
+    ${tw`bg-[#E5D6FF] border-0`}
+    svg {
+      path {
+        stroke: #9152FF;
+      }
+    }
+  }
+`;
 
 export default SearchId;

@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 import { addMoumAxios } from "utils/api/moum";
 import useHandleChange from "hooks/useHandleChange";
-import queryClient from "shared/query";
 import PopupTopView from "components/Common/PopupTopView";
 import moumAdd from "assets/svg/moum_add.svg";
 import CancelButton from "components/Common/CancelButton";
@@ -10,8 +9,10 @@ import ToggleSwitch from "components/Common/ToggleSwitch";
 import useCustomMutate from "hooks/useCustomMutate";
 import Swal from "sweetalert2";
 import useMessageFloat from "hooks/useMessageFloat";
+import { useQueryClient } from "react-query";
 
 function MoumAddPopup ({close}) {
+  const queryClient = useQueryClient();
   const toast = useMessageFloat();
   const {input, setInput, handleChange} = useHandleChange({
     name: "",

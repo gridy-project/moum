@@ -33,7 +33,7 @@ function Router() {
     const token = getRefreshToken();
     if (token) {
       try {
-        const response = await apiUser.refresh({refreshToken: token});
+        const response = await apiUser.refresh({ refreshToken: token });
         setToken(response.data.accessToken, response.data.refreshToken);
         setLogin(true);
       } catch (err) {
@@ -56,7 +56,7 @@ function Router() {
   useEffect(() => {
     if (scrollState) {
       scrollRef.current.scrollIntoView({ 
-        // behavior: 'smooth', 
+        behavior: 'smooth', 
         block: 'end', 
         inline: 'nearest'
       });
