@@ -1,11 +1,10 @@
 // module
 import styled from "styled-components";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 // image
 import { instance } from "shared/axios";
-import queryClient from "shared/query";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 
 import folderSvg from "assets/common/OptionMenu/folder.svg";
@@ -22,6 +21,7 @@ import useCustomMutate from "hooks/useCustomMutate";
 import useMessageFloat from "hooks/useMessageFloat";
 
 function MoumFolderCard ({moum, sortable}) {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const toast = useMessageFloat();
   const {folderId: viewFolderId = 0} = useParams();

@@ -35,9 +35,7 @@ const SuccessFindId = () => {
  }  
 
 const IdContainer = styled.div`
-  ${tw`
-    relative top-[-37px]
-  `}
+  ${tw`relative flex flex-col`}
 `;
 
 const IdTitle = styled.h1`
@@ -46,6 +44,9 @@ const IdTitle = styled.h1`
   ${tw`
     mb-[52px] font-semibold
   `}
+  @media screen and (max-width: 1600px) {
+    ${tw`text-24 mb-45`}
+  }
 `;
 
 const IdContent = styled.div`
@@ -54,6 +55,9 @@ const IdContent = styled.div`
     ${tw`
     mb-[18px] 
     `}
+    @media screen and (max-width: 1600px) {
+      ${tw`mb-16 text-15`}
+    }
   }
   input {
     border: #B7B7B7;
@@ -63,6 +67,9 @@ const IdContent = styled.div`
     ${tw`
     w-[360px] h-[44px] border-solid border-[1px] p-[14px]
     `}
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 text-14 w-330`}
+    }
   }
 `;
 
@@ -73,6 +80,9 @@ const IdBtn = styled.button`
   ${tw`
   w-[360px] h-[44px] rounded-[50px] border-none mt-[32px] font-semibold cursor-pointer
   `}
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-330 text-15 mt-26`};
+  }
 `;
 
 const FoundIdBox = styled.div`
@@ -85,6 +95,9 @@ const FoundIdBox = styled.div`
     font-size: 16px;
     ${tw`table-cell font-semibold text-center align-middle `}
   }
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-330 text-15`};
+  }
 `
 
 const IdPwdBtn = styled.button`
@@ -95,6 +108,9 @@ const IdPwdBtn = styled.button`
   ${tw`
   w-[360px] h-[44px] rounded-[50px] font-semibold mt-[12px] cursor-pointer border-solid border-[1px]
   `}
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-330 text-15`};
+  }
 `;
 
 export default SuccessFindId;

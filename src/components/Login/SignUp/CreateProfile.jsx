@@ -183,68 +183,86 @@ const CreateProfile = () => {
 
 const Container = styled.div`
   ${tw`
-    w-[360px] h-[565px]
+    w-[360px] h-[100%] flex flex-col justify-center
   `}
+
+  @media screen and (max-width: 1600px) {
+    ${tw`w-330`}
+  }
 `
 const ProfileTitle = styled.div`
-/* margin-bottom:42px; */
- ${tw`
-    mb-[28px]
-  `}
-h1, h2 {
-  font-size: 24px;
-  color:#303030;
-   ${tw`font-semibold `}
-}
+  ${tw`mb-[28px]`}
+  h1, h2 {
+    ${tw`text-24 text-[#303030] font-semibold`}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`text-22`}
+    }
+  }
+
+  @media screen and (max-width: 1600px) {
+    ${tw`mb-36`}
+  }
 `;
 
 const NicknameBox = styled.div`
-p {
-  font-size: 17px;
-  color:#303030;
-  ${tw`
-    font-medium mb-[15px]
-  `}
-}
+  p {
+    ${tw`font-medium mb-[15px] text-17 text-[#303030]`};
+
+    @media screen and (max-width: 1600px) {
+      ${tw`text-15`}
+    }
+  }
 `;
 
 const InputBox = styled.div`
  ${tw`
     mb-[28px]
   `}
-input {
-  border: #B7B7B7;
-  font-size: 16px;
-  color:#949494;
-  &:focus {
-		  outline: 1px solid #9152FF;
-	  }
-  ${tw`
-    w-[264px] h-[44px] border-solid border-[1px] rounded-[10px] mr-[8px] p-[14px] font-medium
-  `}
-}
-button {
-  background: #9E67FF;
-  color:#fff;
-  ${tw`
-    w-[88px] h-[44px] border-solid border-none cursor-pointer rounded-[10px]
-  `}
-}
+  input {
+    border: #B7B7B7;
+    font-size: 16px;
+    color:#949494;
+    &:focus {
+        outline: 1px solid #9152FF;
+      }
+    ${tw`
+      w-[264px] h-[44px] border-solid border-[1px] rounded-[10px] mr-[8px] p-[14px] font-medium
+    `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 w-244 text-14`}
+    }
+  }
+  button {
+    ${tw`
+      w-[88px] h-[44px] border-solid border-none cursor-pointer rounded-[10px] bg-[#9E67FF] text-[#FFFFFF]
+    `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`h-40 w-76 text-14`}
+    }
+  }
 `
 const SelectProfileBox = styled.div`
-p {
-  font-size: 17px;
-  color:#303030;
-  ${tw`
-    font-medium mb-[22px]
-  `}
-}
+  p {
+    font-size: 17px;
+    color:#303030;
+    ${tw`
+      font-medium mb-[22px]
+    `}
+
+    @media screen and (max-width: 1600px) {
+      ${tw`text-15`}
+    }
+  }
 `
 const ProfileImg = styled.img`
   ${tw`
     mb-[17px] w-[100px] h-[100px] cursor-pointer
   `}
-    ${(props) =>
+
+  ${(props) =>
     props.isActive ? 
     css`   
       border: 3px solid #9152FF;
@@ -255,17 +273,27 @@ const ProfileImg = styled.img`
       border-radius:100%;
     `
   }
+
+  @media screen and (max-width: 1600px) {
+    ${tw`h-88 w-88 text-14`}
+  }
 `;
 
 const ImageBox = styled.div`
 grid-template-columns: 130px 130px 130px;
 grid-template-rows: 120px 120px;
- ${tw`relative grid `}
+${tw`relative grid`}
+
+
+@media screen and (max-width: 1600px) {
+  grid-template-columns: 120px 120px 120px;
+  grid-template-rows: 105px 100px;
+}
 `
 const CheckImgCircle = styled.div`
   background: #9152FF;
   ${tw`
-    w-[32px] h-[31.7px] relative rounded-[100%] top-[-120px] left-[75px]
+    w-[32px] h-[31.7px] relative rounded-[100%] top-[-120px] left-[75px] flex justify-center items-center
   `}
   ${(props) =>
     props.isActive ? 
@@ -276,11 +304,15 @@ const CheckImgCircle = styled.div`
       visibility: hidden;
     `
   }
+
+  @media screen and (max-width: 1600px) {
+    ${tw`left-65 top-[-105px] h-28 w-28 text-14`}
+  }
 `
 
 const CheckImg = styled.img`
   ${tw`
-    w-[12.73px] h-[8.93px] relative top-[7.5px] left-[10.34px]
+    w-[12.73px] h-[8.93px] relative
   `}
   ${(props) =>
     props.isActive ? 
@@ -300,5 +332,8 @@ const StartBtn = styled.button`
   ${tw`
     w-[360px] h-[44px] mt-[20px] rounded-[50px] font-semibold border-none cursor-pointer
   `}
+  @media screen and (max-width: 1600px) {
+    ${tw`h-40 w-330`}
+  }
 `
 export default CreateProfile;

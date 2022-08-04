@@ -12,10 +12,15 @@ import exclamation from "../../assets/images/pages/mypage/exclamation.png"
 import { instance } from "shared/axios"
 import { removeToken } from 'shared/localStorage';
 import useMessageFloat from 'hooks/useMessageFloat';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { isLogin } from 'state/common/user';
 
 Modal.setAppElement("#root");
 
 const DeleteAccount = () => {
+  const navigate = useNavigate();
+  const setLogin = useSetRecoilState(isLogin);
   const toast = useMessageFloat();
 
   //  modal
@@ -27,16 +32,16 @@ const DeleteAccount = () => {
 	};
 
 	const { mutate: RemoveAccount } = useMutation(
-    async () => {
-      const response = await instance.delete("/user/getout/");
-      return response.data;
+    () => {
+      return instance.delete("/user/getout/");
     },
     {
       onSuccess: ({result}) => {
         if (result) {
           toast("계정 탈퇴가 완료되었습니다");
           removeToken();
-          window.location.replace("/")
+          setLogin(false);
+          navigate("/");
         }
       },
 			onError: (err) => {

@@ -4,14 +4,15 @@ import React, { useState } from "react";
 import styled, {css} from 'styled-components';
 import tw from "twin.macro";
 // React Query
-import { useMutation } from "react-query";
-import queryClient from "shared/query";
+import { useMutation, useQueryClient } from "react-query";
 // axios
 import { instance } from "shared/axios"
 import useCustomQuery from "hooks/useCustomQuery";
 import Swal from "sweetalert2";
 
 const ChangeDesc = () => {
+	const queryClient = useQueryClient();
+
 	// textArea onChange 값 저장하기
 	const [descText, setDescText] = useState("")
 

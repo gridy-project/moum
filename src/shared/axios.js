@@ -53,20 +53,20 @@ instance.interceptors.response.use(
       removeToken();
       window.location.replace("/");
     }
+
+    // 리프레시 만료시 510
     const originalRequest = config;
     if (status === 410 && !originalRequest._retry) {
       originalRequest._retry = true;
-      if (originalRequest.url !== "/user/refresh") {
-        const token = getRefreshToken();
-        if (token) {
-          try {
-            const response = await apiUser.refresh({ refreshToken: token });
-            setToken(response.data.accessToken, response.data.refreshToken);
-            return instance(originalRequest);
-          } catch (err) {
-            removeToken();
-            window.location.replace("/");
-          }
+      const token = getRefreshToken();
+      if (token) {
+        try {
+          const response = await apiUser.refresh({ refreshToken: token });
+          setToken(response.data.accessToken, response.data.refreshToken);
+          return instance(originalRequest);
+        } catch (err) {
+          removeToken();
+          window.location.replace("/");
         }
       }
     }

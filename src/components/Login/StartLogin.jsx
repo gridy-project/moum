@@ -66,7 +66,7 @@ const StartLogin = (props) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center w-full h-full">
       <MoumLogo>
         <img src={moumlogo} alt="" />
       </MoumLogo>
@@ -126,22 +126,33 @@ const LineBox = styled.div`
       m-[0 9px]
     `}
   }
+
+  @media screen and (max-width: 1600px) {
+    ${tw`m-[30px 0]`}
+    img {
+      ${tw`w-148`}
+    }
+    p {
+      ${tw`text-13`}
+    }
+  }
 `;
 
 const LoginInputBox = styled.div`
-  ${tw`
-      mb-[24px]
-    `}
+  ${tw`w-360 mb-[24px]`}
   input {
     border: #B7B7B7;
     &:focus {
 		  outline: 1px solid #9152FF;
 	  }
     ${tw`
-      w-[360px] h-[44px] border-solid border-[1px] rounded-[10px] p-[14px] mb-[12px]
+      w-[100%] h-[44px] border-solid border-[1px] rounded-[10px] p-[14px] mb-[12px]
     `}
   }
 
+  @media screen and (max-width: 1600px) {
+    ${tw`w-330`};
+  }
 `;
 const ErrorMessage = styled.span`
    color:#FF5C5C;
@@ -153,6 +164,10 @@ const LoginBtn = styled.button`
   ${tw`
     w-[360px] h-[44px] border-none rounded-[50px] cursor-pointer bg-[#9E67FF] text-[#FFFFFF] transition-colors duration-300
   `}
+  
+  @media screen and (max-width: 1600px) {
+    ${tw`w-330`};
+  }
 
   &:hover {
     background-color: #7240c9;
@@ -161,7 +176,7 @@ const LoginBtn = styled.button`
 
 const TabBox = styled.div`
   ${tw`
-    w-[310px] flex justify-center items-center mt-[14px] ml-[15px]
+    w-[310px] flex justify-center items-center mt-[14px]
   `}
   span {
     color:#A4A4A4; 

@@ -98,7 +98,7 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
 
 
 const FloatingBox = styled.div`
-  ${tw`flex fixed bottom-[-100px] gap-16`};
+  ${tw`flex fixed bottom-[-100px] gap-16 z-1`};
   transition: bottom .3s;
 
   ${props => props.isActive && css`
