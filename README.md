@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# 항해 99 7기 D반 6조 프론트엔드
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Moum (모음)
+![OG](https://user-images.githubusercontent.com/87969561/182757470-a9d5e986-eb55-4ab2-afe8-15926e58147e.png)
 
-## Available Scripts
+## 바로가기
 
-In the project directory, you can run:
+- 사이트 바로가기 : https://moum.cloud/
+- 프론트엔드 GitHub : https://github.com/reality023/moum
+- 백엔드 GitHub : https://github.com/Mmuseng/hanghae99_finally_project_6
 
-### `yarn start`
+### 프론트엔드 팀원
+- 지송이
+- 박수봉
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 기획 배경
+- 가끔 급하게 카카오톡이나 메모장에 링크 혹은 메모를 붙여넣고 나중에 가져다 쓰신 적이 있지 않으신가요?
+- 모음(moum)은 그런 메모와 링크 혹은 그 이외의 간단한 정보들을 따로 모아서 빠르게 추가하고 보관할 수 있다면 어떨까? 라는 생각에서 나왔습니다
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 핵심 기능 소개
+- 간편한 모음(폴더), 조각(링크, 메모) 추가 및 관리
+- 모음, 조각을 다른 유저들에게 공유
+- 다른 유저의 조각을 나의 조각으로 가져가는 기능
+- 다른 유저 팔로우, 모음 스크랩
 
-### `yarn test`
+### 전체 기능 소개
+- 일반 로그인
+- 소셜 로그인 (구글)
+- 액세스 토큰 만료시 리프레시 토큰을 사용한 토큰 재발급
+- 모음 CRUD
+- 조각 CRUD
+- 모음 및 조각 검색
+- 유저 팔로우, 언팔로우
+- 팔로우한 유저 목록
+- 모음 스크랩, 스크랩한 모음 목록 보기
+- 다른 유저의 조각을 내 조각으로 저장하기
+- 빠른 조각 추가시 하단 플로팅 박스로 상세 작성하기 가능
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 유저 피드백 이후 개선한 점
+- 모음 페이지 사용법에 대한 설명 팝업 제작
+- 하단에서 최상단으로 가는 스크롤 버튼 생성
+- 각 버튼에 인터렉션 추가
+- 더 작은 화면에서 로그인 화면이 깨지지 않도록 스타일 조정
+- 소셜 로그인 잘 보이게 컬러 수정
+- 각 이벤트 성공시 나오던 팝업 -> 토스트 메시지로 교체
+- 로그인 이후 홈 화면 -> 나의 모음으로 변경
+- 나의 모음 하단에서도 조각을 추가할 수 있도록 하단에 조각 추가 팝업 제작
+- 모음 소개 메뉴 삭제 -> 홈 화면이 모음 소개 페이지
+- 로그인시 입력 값이 없을 경우 안내 문구 추가
+- 각종 버그 FIX
+  
+더 자세한 설명을 보시려면 아래 노션 링크를 참고해 주세요
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[노션링크 바로가기](https://neat-apartment-b02.notion.site/moum-625b66e189ee4151b21f2f60e8935582)
