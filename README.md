@@ -58,7 +58,6 @@
 더 자세한 설명을 보시려면 아래 노션 링크를 참고해 주세요
 
 [노션링크 바로가기](https://neat-apartment-b02.notion.site/moum-625b66e189ee4151b21f2f60e8935582)
-<<<<<<< HEAD
 
 
 ### 기술스택
@@ -81,5 +80,3 @@
   <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">
   <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
 <br>
-=======
->>>>>>> 4289db10dd1b8e696edce00ebb1a3b191f526bab
