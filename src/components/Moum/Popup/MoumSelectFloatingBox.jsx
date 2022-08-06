@@ -88,6 +88,7 @@ function MoumSelectFloatingBox ({floatStatus, floatItemStatus}) {
     <FloatingBox isActive={floatStatus}>
       <FloatItem isActive={floatItemStatus} onClick={moveFolders}>
         <img src={iconMove} alt="move" />
+        <img src={moveTooltipImage} className="absolute w-[300px]" alt="" />
       </FloatItem>
       <FloatItem isActive={floatItemStatus} onClick={removeFolders}>
         <img src={iconDelete} alt="remove"/>
