@@ -17,6 +17,12 @@
 - 가끔 급하게 카카오톡이나 메모장에 링크 혹은 메모를 붙여넣고 나중에 가져다 쓰신 적이 있지 않으신가요?
 - 모음(moum)은 그런 메모와 링크 혹은 그 이외의 간단한 정보들을 따로 모아서 빠르게 추가하고 보관할 수 있다면 어떨까? 라는 생각에서 나왔습니다
 
+### 서비스 아키텍처
+<img width="1100" alt="그림1" src="https://user-images.githubusercontent.com/87969561/183245200-66e20ad3-68ba-4aa5-b020-3f7da5169ed4.png">
+
+### 🗓 프로젝트 기간
+- 2022년 7월 01일 ~ 2022년 08월 05일
+
 ### 핵심 기능 소개
 - 간편한 모음(폴더), 조각(링크, 메모) 추가 및 관리
 - 모음, 조각을 다른 유저들에게 공유
@@ -52,6 +58,7 @@
 더 자세한 설명을 보시려면 아래 노션 링크를 참고해 주세요
 
 [노션링크 바로가기](https://neat-apartment-b02.notion.site/moum-625b66e189ee4151b21f2f60e8935582)
+<<<<<<< HEAD
 
 
 ### 기술스택
@@ -74,3 +81,5 @@
   <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">
   <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
 <br>
+=======
+>>>>>>> 4289db10dd1b8e696edce00ebb1a3b191f526bab
