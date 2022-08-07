@@ -1,19 +1,42 @@
-# 항해 99 7기 D반 6조 프론트엔드
-
-## Moum (모음)
+## [모음 - moum](https://moum.cloud/)
 ![OG](https://user-images.githubusercontent.com/87969561/182757470-a9d5e986-eb55-4ab2-afe8-15926e58147e.png)
 
-## 바로가기
+## 관련 자료
 
-- 사이트 바로가기 : https://moum.cloud/
-- 프론트엔드 GitHub : https://github.com/reality023/moum
-- 백엔드 GitHub : https://github.com/Mmuseng/hanghae99_finally_project_6
+발표영상 [바로가기](https://youtu.be/iqAPE-S5U0Y) <br />
+발표자료 [바로가기](https://docs.google.com/presentation/d/1oUR1FTfab3gZJ-425_0NAHIrWwfS60ne/edit?usp=sharing&ouid=114270280051508663065&rtpof=true&sd=true) <br />
+팀 노션 주소 [바로가기](https://hanghae.notion.site/moum-d1945da49e7b40deaf5edb9103614d1f) <br />
+사이트 바로가기 : [바로가기](https://moum.cloud/) <br />
 
-### 프론트엔드 팀원
-- 지송이
-- 박수봉
+## Github
 
-### 기획 배경
+프론트엔드 GitHub : [바로가기](https://github.com/reality023/moum) <br />
+백엔드 GitHub : [바로가기](https://github.com/Mmuseng/hanghae99_finally_project_6) <br />
+
+### 팀원 소개
+<details>
+  <summary>DESIGNER</summary>
+  <ul>
+    <li>윤수현</li>
+  </ul>
+</details>
+<details>
+  <summary>FRONTEND</summary>
+  <ul>
+    <li>박수봉 (팀장)</li>
+    <li>지송이</li>
+  </ul>
+</details>
+<details>
+  <summary>BACKEND</summary>
+  <ul>
+    <li>김민주 (부팀장)</li>
+    <li>백현명</li>
+    <li>서다빈</li>
+  </ul>
+</details>
+
+### 모음(moum) 소개
 - 가끔 급하게 카카오톡이나 메모장에 링크 혹은 메모를 붙여넣고 나중에 가져다 쓰신 적이 있지 않으신가요?
 - 모음(moum)은 그런 메모와 링크 혹은 그 이외의 간단한 정보들을 따로 모아서 빠르게 추가하고 보관할 수 있다면 어떨까? 라는 생각에서 나왔습니다
 
@@ -21,7 +44,7 @@
 <img width="1100" alt="그림1" src="https://user-images.githubusercontent.com/87969561/183245200-66e20ad3-68ba-4aa5-b020-3f7da5169ed4.png">
 
 ### 🗓 프로젝트 기간
-- 2022년 7월 01일 ~ 2022년 08월 05일
+- 2022년 6월 24일 ~ 2022년 08월 05일
 
 ### 핵심 기능 소개
 - 간편한 모음(폴더), 조각(링크, 메모) 추가 및 관리
