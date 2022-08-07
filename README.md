@@ -36,23 +36,87 @@
   </ul>
 </details>
 
-### 모음(moum) 소개
+### <span>모음(moum)</span> 소개
 - 가끔 급하게 카카오톡이나 메모장에 링크 혹은 메모를 붙여넣고 나중에 가져다 쓰신 적이 있지 않으신가요?
 - 모음(moum)은 그런 메모와 링크 혹은 그 이외의 간단한 정보들을 따로 모아서 빠르게 추가하고 보관할 수 있다면 어떨까? 라는 생각에서 나왔습니다
 
 ### 서비스 아키텍처
 <img width="1100" alt="그림1" src="https://user-images.githubusercontent.com/87969561/183245200-66e20ad3-68ba-4aa5-b020-3f7da5169ed4.png">
 
+### 기술 선정 이유
+
+프론트엔드에서는 프론트엔드가 백엔드보다 인원이 적은 점을 고려하여 빠른 작업속도에 초점을 맞추어 기술을 선정하게 되었습니다. 각 프레임워크의 기술 선정 이유는 아래에서 확인할 수 있습니다.
+
+<details>
+  <summary>React</summary>
+  <ul>
+    <li>프론트 프레임워크 중에서 가장 많이 사랑받고 있는 프레임워크이며, 인터넷에서 더 많은 레퍼런스를 참고할 수 있고, 타 프레임워크에 비해 javascript에 대한 더 많은 이해도를 요구하기 때문에 학습용으로 더 적합하다 판단하여 사용했습니다.</li>
+  </ul>
+</details>
+<details>
+  <summary>Axios</summary>
+  <ul>
+    <li>React에서 가장 많이 사용되는 HTTP 비동기 통신 라이브러리로, fetch api와 다르게 라이브러리이기 때문에 더 많은 편의 기능을 제공해주어 사용했습니다.</li>
+  </ul>
+</details>
+<details>
+  <summary>React Query</summary>
+  <ul>
+    <li>기존에 리덕스 툴킷을 사용하여 서버 상태관리와 전역 상태관리를 하였는데, 프론트 인원이 더 적어 백엔드의 구현속도에 따라 가기 위해 더 빠르게 작업할 방법을 찾다 서버 상태관리를 대신 해주는 React Query를 알게 되었습니다. 알게 된 이후, 빠르게 서버 상태 관리 코드를 전부 리액트 쿼리로 교체하고 작업하게 되었습니다.</li>
+  </ul>
+</details>
+<details>
+  <summary>Recoil</summary>
+  <ul>
+    <li>더 빠른 작업 속도를 위해 리액트 쿼리를 도입하고 나서 전역 상태 관리에 대해서도 고민하게 되었습니다. 서버 상태 관리가 리액트 쿼리로 빠지면서 관리해야 할 전역 상태의 크기가 작아졌고, 그에 따라 전역 상태를 리덕스로 관리하는 것보다 더욱 쉽게 관리할 수 있는 전역 상태 관리 라이브러리를 사용해도 되겠다고 판단하였습니다. 그래서 useState와 같이 전역 상태를 관리할 수 있는 Recoil이라는 전역 상태 관리 라이브러리를 알게 되었고 적용하게 되었습니다.</li>
+  </ul>
+</details>
+<details>
+  <summary>Styled Components</summary>
+  <ul>
+    <li>CSS-in-JS의 대표적인 라이브러리로 컴포넌트 자체에 바로 CSS를 작성할 수 있기 때문에 css, sass 파일을 작성하여 임포트하는 것보다 작업 속도와 유지 보수 측면에서의 이점을 가지고 있어 사용하게 되었습니다.</li>
+  </ul>
+</details>
+<details>
+  <summary>tailwind CSS</summary>
+  <ul>
+    <li>styled-components로 작업을 진행하다가 tailwind CSS라는 것을 알게 되었습니다. tailwind CSS를 사용하면 css 작업 속도가 훨씬 빨라진다는 점을 알게 되었지만, styled-components를 이미 많이 작성한 상태였습니다. 여기서 twin.macro를 사용하면 두개를 병행하여 사용할 수 있고 서로의 장단점을 어느정도 상충할 수 있다는 것도 알게 되어 바로 적용하게 되었습니다.</li>
+  </ul>
+</details>
+
 ### 🗓 프로젝트 기간
 - 2022년 6월 24일 ~ 2022년 08월 05일
 
-### 핵심 기능 소개
-- 간편한 모음(폴더), 조각(링크, 메모) 추가 및 관리
-- 모음, 조각을 다른 유저들에게 공유
-- 다른 유저의 조각을 나의 조각으로 가져가는 기능
-- 다른 유저 팔로우, 모음 스크랩
+### 모음 페이지 소개
+<details>
+  <summary>펼치기</summary>
+  <div>
 
-### 전체 기능 소개
+> 홈
+> 
+> ![Aug-07-2022 20-22-05](https://user-images.githubusercontent.com/87969561/183288156-022fc975-8390-40e6-a6de-9daf7c6517be.gif)
+
+> 로그인
+> 
+> ![Aug-07-2022 20-29-59](https://user-images.githubusercontent.com/87969561/183288411-fdeef1ff-9d14-458e-8208-ce3aaa71a2d5.gif)
+
+> 나의 모음
+>
+> ![Aug-07-2022 20-32-29](https://user-images.githubusercontent.com/87969561/183288488-d8568a7f-129f-4c6e-a440-b05f08ea0f78.gif)
+
+> 전체 모음
+> 
+> ![Aug-07-2022 20-35-03](https://user-images.githubusercontent.com/87969561/183288598-c048ca6e-1f3d-4e90-9bce-d0bbf110368f.gif)
+
+
+> 다른 사용자 모음
+> 
+> ![Aug-07-2022 20-36-35](https://user-images.githubusercontent.com/87969561/183288657-39f9e7c9-8c1f-4269-985c-2197bbc1541d.gif)
+
+  <div>
+</details>
+
+### 모음 기능 소개
 - 일반 로그인
 - 소셜 로그인 (구글)
 - 액세스 토큰 만료시 리프레시 토큰을 사용한 토큰 재발급
