@@ -6,7 +6,6 @@
 발표영상 [바로가기](https://youtu.be/iqAPE-S5U0Y) <br />
 발표자료 [바로가기](https://docs.google.com/presentation/d/1oUR1FTfab3gZJ-425_0NAHIrWwfS60ne/edit?usp=sharing&ouid=114270280051508663065&rtpof=true&sd=true) <br />
 팀 노션 주소 [바로가기](https://hanghae.notion.site/moum-d1945da49e7b40deaf5edb9103614d1f) <br />
-사이트 바로가기 : [바로가기](https://moum.cloud/) <br />
 
 ## Github
 
